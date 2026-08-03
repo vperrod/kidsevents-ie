@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Events Ireland</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
+        .header { background: #3b82f6; color: white; padding: 1rem 2rem; }
+        .header h1 { font-size: 1.5rem; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; }
+        .filters { background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .filters select, .filters input { padding: 0.5rem; margin: 0.25rem; border: 1px solid #ddd; border-radius: 4px; }
+        .event { background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .event-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .event-title { font-size: 1.1rem; font-weight: 600; color: #1e40af; }
+        .event-date { background: #e0f2fe; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; }
+        .event-details { font-size: 0.9rem; color: #555; margin-top: 0.5rem; }
+        .event-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .tag { background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; }
+        .source-badge { font-size: 0.75rem; background: #f3f4f6; padding: 0.15rem 0.5rem; border-radius: 4px; }
+        @media (max-width: 768px) { .header h1 { font-size: 1.2rem; } .container { padding: 0.5rem; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧒 Kids Events Ireland</h1>
+        <p>Find family-friendly activities across Ireland</p>
+    </div>
+    <div class="container">
+        <div class="filters">
+            <input type="text" id="search" placeholder="Search events..." style="width:200px;">
+            <select id="ageFilter">
+                <option value="">All Ages</option>
+                <option value="0-2">Ages 0-2</option>
+                <option value="2-5">Ages 2-5</option>
+                <option value="5-10">Ages 5-10</option>
+                <option value="10+">Ages 10+</option>
+            </select>
+            <select id="countyFilter">
+                <option value="">All Counties</option>
+                <option value="Dublin">Dublin</option>
+                <option value="Cork">Cork</option>
+                <option value="Galway">Galway</option>
+            </select>
+            <button onclick="loadEvents()" style="padding:0.5rem 1rem;background:#3b82f6;color:white;border:none;border-radius:4px;cursor:pointer;">Refresh</button>
+        </div>
+        <div id="events">Loading events...</div>
+    </div>
+    <script>
+        let allEvents = [];
+        async function loadEvents() {
+            try {
+                const resp = await fetch('/api/events');
+                allEvents = await resp.json();
+                renderEvents();
+            } catch(e) {
+                document.getElementById('events').innerHTML = '<p style="color:red">Error: '+e+'</p>';
+            }
+        }
+        function renderEvents() {
+            const search = document.getElementById('search').value.toLowerCase();
+            const filtered = allEvents.filter(e => {
+                const t = (e.title||'').toLowerCase()+(e.description||'').toLowerCase();
+                return !search || t.includes(search);
+            });
+            if(filtered.length === 0) {
+                document.getElementById('events').innerHTML = '<p>No events found.</p>'; return;
+            }
+            document.getElementById('events').innerHTML = filtered.map(e => `
+                <div class="event">
+                    <div class="event-header">
+                        <div class="event-title">${escapeHtml(e.title||'')}</div>
+                        <div class="event-date">${formatDate(e.start_date)}</div>
+                    </div>
+                    <div class="event-details">
+                        ${e.venue_name?`<strong>📍 ${escapeHtml(e.venue_name)}</strong><br>`:''}
+                        ${e.venue_address?escapeHtml(e.venue_address)+'<br>':''}
+                        ${e.city?escapeHtml(e.city)+'<br>':''}
+                        ${e.cost?`<strong>🎫 ${escapeHtml(e.cost)}</strong><br>`:''}
+                        ${e.age_group?`<span class="tag">👶 ${escapeHtml(e.age_group)}</span>`:''}
+                        ${e.url?`<a href="${e.url}" target="_blank">View on ${e.source.split(':')[0]}</a>`:''}
+                    </div>
+                    <div class="event-meta">
+                        <span class="source-badge">${escapeHtml(e.source.split(':')[0])}</span>
+                        <span class="source-badge">conf: ${e.confidence}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
+        function formatDate(s) { try { const d=new Date(s); return d.toLocaleDateString('en-IE',{weekday:'short',year:'numeric',month:'short',day:'numeric'}); } catch { return s; } }
+        document.getElementById('search').addEventListener('input',renderEvents);
+        document.getElementById('ageFilter').addEventListener('change',renderEvents);
+        document.getElementById('countyFilter').addEventListener('change',renderEvents);
+        loadEvents();
+        setInterval(loadEvents, 300000);
+    </script>
+</body>
+</html>

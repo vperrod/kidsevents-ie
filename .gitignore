@@ -1,0 +1,19 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+.env.local
+
+# Scraper output
+events_output.json
+
+# Playwright browsers (downloaded separately)
+~/.cache/ms-playwright/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -170,8 +170,8 @@ def main():
     parser = argparse.ArgumentParser(description="Kids Events Ireland scraper pipeline")
     parser.add_argument("--tiers", default="1,2",
                         help="Tiers to run (default: '1,2'). 1=Tier 1 (YourDaysOut+AllEvents), 2=Facebook, 3=Instagram")
-    parser.add_argument("--output", default="/tmp/kidsevents_scraper/events_output.json",
-                        help="Output file path")
+    parser.add_argument("--output", default="events_output.json",
+                        help="Output file path (relative to working directory)")
     parser.add_argument("--limit", type=int, default=10,
                         help="Max events to scrape per source (default: 10)")
     parser.add_argument("--no-dedup", action="store_true",
