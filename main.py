@@ -100,7 +100,7 @@ def run_tier3() -> list[dict]:
         print(f"  To enable: set INSTAGRAM_SESSIONID env var (see docstring)")
         return []
 
-    print(f"\n=== Tier 3: Instagram Hashtags ({len(INSTAGRAM_HASHTAGS)} hashtags) ===")
+    print(f"\n=== Tier 3: Instagram Hashtags ({len(KIDS_EVENT_HASHTAGS)} hashtags) ===")
     events = asyncio.run(scrape_instagram_hashtags())
     print(f"  Scraped {len(events)} events")
     return events

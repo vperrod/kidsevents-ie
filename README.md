@@ -8,8 +8,8 @@ Aggregator for kids/family events across Ireland. Scrapes multiple sources, dedu
 |--------|------|---------------|-------|
 | YourDaysOut.ie | 1 | No | JSON-LD schema.org/Event parsing |
 | AllEvents.in | 1 | No | JSON-LD schema.org/Event parsing |
-| Facebook Groups | 2 | No (scraped via Playwright) | Visible text extraction from group /events/ pages |
-| Instagram Hashtags | 3 | **Yes** (sessionid cookie) | Playwright intercepts GraphQL API responses |
+| Facebook Groups | 2 | No (Playwright) | Visible text extraction from group event pages |
+| Instagram Hashtags | 3 | **Yes** (sessionid cookie) | Uses instagrapi library (private API) |
 
 ## Quick Start
 
@@ -23,19 +23,22 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
+# Install Playwright browser (for Facebook scraper / Tier 2)
+playwright install chromium
+
 # Run Tier 1 (YourDaysOut + AllEvents only)
 python3 main.py --tiers 1
 
-# Run Tier 1 + 2 (add Facebook)
-python3 main.py --tiers 1,2
+# Run Tier 1 + 3 (add Instagram — requires sessionid)
+python3 main.py --tiers 1,3
 
-# Run all tiers (requires Instagram setup — see below)
+# Run all tiers
 python3 main.py --tiers 1,2,3
 ```
 
 ## Instagram Setup (Required for Tier 3)
 
-Instagram blocks all public/no-auth access. You must provide your Instagram session cookie.
+Instagram blocks all public/no-auth scraping. You must provide your Instagram session cookie.
 
 ### Option A: Use your own Instagram account (recommended)
 
@@ -48,11 +51,26 @@ Instagram blocks all public/no-auth access. You must provide your Instagram sess
 export INSTAGRAM_SESSIONID="your_sessionid_cookie_here"
 ```
 
-5. Optionally also export `INSTAGRAM_CSRFTOKEN` and `INSTAGRAM_DS_USER_ID` for better reliability.
+5. Optionally also set `INSTAGRAM_CSRFTOKEN` and `INSTAGRAM_DS_USER_ID` for reliability.
+
+**⚠️ Important:** Instagram's API blocks requests from datacenter/cloud IPs. The sessionid must be used from a residential IP address. If you get `403 Forbidden` or `login_required` errors, either:
+- Run the scraper locally from your home machine
+- Use a residential proxy service (BrightData, ScraperAPI, etc.)
+- Use `INSTAGRAM_PROXY` environment variable to set an HTTP proxy
 
 ### Option B: Official Instagram Graph API (Business account)
 
-Requires converting a personal account to Business/Creator + Facebook App with App Review. See the docstring at the top of `instagram_scraper.py` for full instructions.
+Requires converting a personal account to Business/Creator + Facebook App with App Review (2-4 weeks). See the docstring at the top of `instagram_scraper.py` for full instructions.
+
+## Running the Scraper
+
+```bash
+# Quick run (Tier 1 only, no auth needed)
+./run_pipeline.sh
+
+# Or run manually
+python3 main.py --tiers "1,3" --limit 15
+```
 
 ## Output Format
 
@@ -94,12 +112,14 @@ Confidence scoring: YourDaysOut=1.0, AllEvents=0.9, Facebook=0.5, Instagram=0.3
 ## Architecture
 
 ```
-cron (every 2-4 hours) → main.py →
-  Tier 1 (2s):  YourDaysOut + AllEvents → JSON-LD → ~40 events
-  Tier 2 (60s): Facebook 2+ groups     → Playwright → ~30 events
-  Tier 3 (30s): Instagram 14 hashtags  → Playwright intercept → ~100 events
+cron (every 4 hours) → main.py →
+  Tier 1 (2s):  YourDaysOut + AllEvents → JSON-LD → ~25 events
+  Tier 2 (60s): Facebook groups     → Playwright → ~20 events (optional)
+  Tier 3 (10s): Instagram hashtags  → instagrapi → ~50 events (optional)
   Dedup:        Fuzzy match by title/date/geo
-  → events_output.json → web frontend
+  → events_output.json → Flask API + web frontend
+
+Live at: https://claude-dev-vperrod.westeurope.cloudapp.azure.com/kidsevents/
 ```
 
 ## Requirements
@@ -108,6 +128,7 @@ cron (every 2-4 hours) → main.py →
 instagrapi>=0.12.2
 playwright>=1.40.0
 requests>=2.31.0
+flask>=3.0.0
 ```
 
 Plus Playwright browsers:

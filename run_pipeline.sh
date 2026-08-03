@@ -2,12 +2,12 @@
 # Runner script for Kids Events Ireland scraper pipeline
 set -e
 
-cd /home/azureuser/kidsevents-ie
+cd "$(dirname "$0")"
 source venv/bin/activate
 
-# Run the scraper with Tier 1 + 3 (Facebook requires Playwright, Instagram needs INSTAGRAM_SESSIONID)
-# To enable Facebook: ensure chromium is installed via playwright
-# To enable Instagram: export INSTAGRAM_SESSIONID="your_cookie_here"
-python3 main.py --tiers "1" --limit 15 2>&1
+# Run scraper with Tier 1 + Instagram (when sessionid is available)
+# Tier 2 (Facebook) requires Playwright/chromium — can add with --tiers "1,2,3"
+# Instagram will be skipped automatically if INSTAGRAM_SESSIONID is not set
+python3 main.py --tiers "1,3" --limit 20 --output events_output.json 2>&1
 
 echo "Pipeline complete at $(date)"
