@@ -1,5 +1,29 @@
 [
   {
+    "title": "Neon Painting: Disco Ball",
+    "description": "Paint A Neon Canvas. Music. UV Lights. Prizes. No Experience Needed To Take Part.",
+    "start_date": "2026-04-11T19:00:00+01:00",
+    "end_date": "2026-08-08T19:00:00+01:00",
+    "venue_name": "Pawn Shop | Dame Street",
+    "venue_address": "15 Dame Street",
+    "city": "Dublin 2",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3440614",
+    "longitude": "-6.265263399999998",
+    "url": "https://allevents.in/dublin-2/neon-painting-disco-ball/100001986204531220",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin-2/neon-painting-disco-ball/100001986204531220",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-2/neon-painting-disco-ball/100001986204531220"
+    ]
+  },
+  {
     "title": "GoKidsGo | General Admisson",
     "description": "Go Kids Go\r\n\r\nAt Go Kids Go, we are an indoor play and party centre created for children of different ages, with space - Please Like & Share",
     "start_date": "2026-04-16",
@@ -24,6 +48,30 @@
     ]
   },
   {
+    "title": "Neon Painting: Flamingos",
+    "description": "Paint A Neon Canvas. Music. UV Lights. Prizes. No Experience Needed To Take Part.",
+    "start_date": "2026-04-19T17:00:00+01:00",
+    "end_date": "2026-08-22T19:00:00+01:00",
+    "venue_name": "Pawn Shop | Dame Street",
+    "venue_address": "15 Dame Street",
+    "city": "Dublin 2",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3440614",
+    "longitude": "-6.265263399999998",
+    "url": "https://allevents.in/dublin-2/neon-painting-flamingos/100001983550921201",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin-2/neon-painting-flamingos/100001983550921201",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-2/neon-painting-flamingos/100001983550921201"
+    ]
+  },
+  {
     "title": "Bubble Brunch",
     "description": "Our Bubble-licious Brunch is back by popular demand\r\n\r\nGet ready for a truly magical morning where bubble fun &amp;  - Please Like & Share",
     "start_date": "2026-06-07",
@@ -45,6 +93,30 @@
     ],
     "all_urls": [
       "https://yourdaysout.com/events-on-in-county-dublin-ireland/bubble-brunch-6312"
+    ]
+  },
+  {
+    "title": "Summer in Dublin",
+    "description": "Dublin City Council&rsquo;s Summer in Dublin returns this July and August with a packed programme of free family-friendly events acr - Please Like & Share",
+    "start_date": "2026-07-04",
+    "end_date": "2026-08-09",
+    "venue_name": "Summer in Dublin",
+    "venue_address": "",
+    "city": " County Dublin Dublin Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.351295",
+    "longitude": "-6.260795",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/summer-in-dublin-6366",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-dublin-ireland/summer-in-dublin-6366",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/summer-in-dublin-6366"
     ]
   },
   {
@@ -96,6 +168,30 @@
     ]
   },
   {
+    "title": "Brigit's Garden | Summer Camps",
+    "description": "Brigit&rsquo;s Garden is looking forward to a summer of woodland adventures with forest school inspired summer camps.The  - Please Like & Share",
+    "start_date": "2026-07-13",
+    "end_date": "2026-08-21",
+    "venue_name": "Brigit's Garden | Summer Camps",
+    "venue_address": "",
+    "city": " County Galway Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.385838",
+    "longitude": "-9.212856",
+    "url": "https://yourdaysout.com/events-on-in-county-galway-ireland/brigits-garden-summer-camps-4221",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-galway-ireland/brigits-garden-summer-camps-4221",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-galway-ireland/brigits-garden-summer-camps-4221"
+    ]
+  },
+  {
     "title": "Newgrange Farm Archaeological Park and Newgrange Monument Tour",
     "description": "Newgrange Farm is delighted to team up with Anthony Murphy of Mythical Ireland again for the Newgrange Farm Archaeological P - Please Like & Share",
     "start_date": "2026-07-15",
@@ -120,6 +216,198 @@
     ]
   },
   {
+    "title": "Seafront Funfair",
+    "description": " - Please Like & Share",
+    "start_date": "2026-07-18",
+    "end_date": "2026-08-03",
+    "venue_name": "Seafront Funfair",
+    "venue_address": "",
+    "city": " County Wicklow Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.200981",
+    "longitude": "-6.095997",
+    "url": "https://yourdaysout.com/events-on-in-county-wicklow-ireland/seafront-funfair-6353",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-wicklow-ireland/seafront-funfair-6353",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-wicklow-ireland/seafront-funfair-6353"
+    ]
+  },
+  {
+    "title": "Birr Vintage Week and Arts Festival",
+    "description": "Birr Vintage Week &amp; Arts Festival 2026\r\nBirr, Co. Offaly | 31st July &ndash; 7th August 2026\r\n\r\nBirr  - Please Like & Share",
+    "start_date": "2026-07-31",
+    "end_date": "2026-08-07",
+    "venue_name": "Birr Vintage Week and Arts Festival",
+    "venue_address": "",
+    "city": " County Offaly Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.097618",
+    "longitude": "-7.911851",
+    "url": "https://yourdaysout.com/events-on-in-county-offaly-ireland/birr-vintage-week-and-arts-festival-2821",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-offaly-ireland/birr-vintage-week-and-arts-festival-2821",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-offaly-ireland/birr-vintage-week-and-arts-festival-2821"
+    ]
+  },
+  {
+    "title": "Summer skies ignite: Epic fireworks an",
+    "description": " - Please Like & Share",
+    "start_date": "2026-08-03",
+    "end_date": "2026-08-03",
+    "venue_name": "Epic fireworks along Bray Seafront",
+    "venue_address": "",
+    "city": " County Wicklow Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.200981",
+    "longitude": "-6.095997",
+    "url": "https://yourdaysout.com/events-on-in-county-wicklow-ireland/summer-skies-ignite-epic-fireworks-an-6356",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-wicklow-ireland/summer-skies-ignite-epic-fireworks-an-6356",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-wicklow-ireland/summer-skies-ignite-epic-fireworks-an-6356"
+    ]
+  },
+  {
+    "title": "Summer Animation Camp in Tipperary Town",
+    "description": "Location: N.23 Cafe & Bistro, 23 Main Street, Tipperary Town E34 K123.\r\nDates:&nbsp;Tuesday  - Please Like & Share",
+    "start_date": "2026-08-04",
+    "end_date": "2026-08-07",
+    "venue_name": "Summer Animation Camp in Tipperary Town",
+    "venue_address": "",
+    "city": " County Tipperary Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.476421",
+    "longitude": "-8.165136",
+    "url": "https://yourdaysout.com/events-on-in-county-tipperary-ireland/summer-animation-camp-in-tipperary-town-6288",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-tipperary-ireland/summer-animation-camp-in-tipperary-town-6288",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-tipperary-ireland/summer-animation-camp-in-tipperary-town-6288"
+    ]
+  },
+  {
+    "title": "Dublin Horse Show",
+    "description": "Dublin Horse Show 2026\r\n\r\nRDS, Dublin | 5&ndash;9&nbsp;August\r\n\r\nThe RDS Dublin Horse Show is &lsquo;A D - Please Like & Share",
+    "start_date": "2026-08-05",
+    "end_date": "2026-08-09",
+    "venue_name": "Dublin Horse Show",
+    "venue_address": "",
+    "city": " County Dublin Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.325722",
+    "longitude": "-6.229699",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-horse-show-2512",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-horse-show-2512",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-horse-show-2512"
+    ]
+  },
+  {
+    "title": " Donabate Portrane Summer Festival",
+    "description": "Donabate Portrane Summer Festival 2026\r\nDonabate &amp; Portrane, Co. Dublin | 7th &ndash; 9th August 2026\r\n\r - Please Like & Share",
+    "start_date": "2026-08-07",
+    "end_date": "2026-08-09",
+    "venue_name": "Donabate Portrane Summer Festival",
+    "venue_address": "",
+    "city": " County Dublin Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.4939",
+    "longitude": "-6.110567",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/donabate-portrane-summer-festival-5858",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-dublin-ireland/donabate-portrane-summer-festival-5858",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/donabate-portrane-summer-festival-5858"
+    ]
+  },
+  {
+    "title": "Howth Roots & Blues Festival",
+    "description": "Howth Roots &amp; Blues Festival 2026\r\nHowth, Co. Dublin | 7th - 9th August, 2026\r\n\r\nThe internationally  - Please Like & Share",
+    "start_date": "2026-08-07",
+    "end_date": "2026-08-09",
+    "venue_name": "Howth Roots & Blues Festival",
+    "venue_address": "",
+    "city": " County Dublin Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.389088",
+    "longitude": "-6.074495",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/howth-roots-blues-festival-2826",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-dublin-ireland/howth-roots-blues-festival-2826",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/howth-roots-blues-festival-2826"
+    ]
+  },
+  {
+    "title": "Loughcrew Opera: Madama Butterfly",
+    "description": "MADAMA BUTTERFLY: An Enchanting Evening of OperaJoin us for a spectacular night of music, culture, and exquisite dining - Please Like & Share",
+    "start_date": "2026-08-08",
+    "end_date": "2026-08-09",
+    "venue_name": "Loughcrew Opera",
+    "venue_address": "",
+    "city": " County Meath Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.734463",
+    "longitude": "-7.143708",
+    "url": "https://yourdaysout.com/events-on-in-county-meath-ireland/loughcrew-opera-madama-butterfly-6339",
+    "cost": "",
+    "age_group": "",
+    "source": "https://yourdaysout.com/events-on-in-county-meath-ireland/loughcrew-opera-madama-butterfly-6339",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-meath-ireland/loughcrew-opera-madama-butterfly-6339"
+    ]
+  },
+  {
     "title": "Pakistan Mela 2026",
     "description": "Pakistan Mela 2026 – A family celebration of Pakistani culture, food, music, shopping and entertainment in Dublin. Everyone welcome!",
     "start_date": "2026-08-08T12:00:00+01:00",
@@ -141,6 +429,78 @@
     ],
     "all_urls": [
       "https://allevents.in/dublin/pakistan-mela-2026/100001993016154970"
+    ]
+  },
+  {
+    "title": "Irish Card Market - Summer 2026",
+    "description": "A fun, family-friendly day of Pokémon and TCGs. Trade, play, learn, open packs and meet other fans. Perfect for noobs, kids and collectors!",
+    "start_date": "2026-08-15T11:00:00+01:00",
+    "end_date": "2026-08-15T17:00:00+01:00",
+    "venue_name": "Royal Marine Hotel",
+    "venue_address": "Marine Road",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.2934668",
+    "longitude": "-6.1348241",
+    "url": "https://allevents.in/dublin/irish-card-market-summer-2026/100001984774519015",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin/irish-card-market-summer-2026/100001984774519015",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/irish-card-market-summer-2026/100001984774519015"
+    ]
+  },
+  {
+    "title": "CINEMAGIC DUBLIN: AN INTRO TO SFX MAKE-UP WITH DAWN BUTLER (FOR AGES: 8-14) 1.30PM-3.30PM SESSION",
+    "description": "Learn the basics of creating realistic SFX makeup design!\n\nAN INTRODUCTION TO SFX MAKE-UP - Learn the basics of creating realistic SFX makeup design!\n\nJoin Cinemagic for a thrilling SFX Makeup Workshop designed specifically for kids! In this hands-on event, children will learn the basics of the art",
+    "start_date": "2026-08-15T13:30:00+01:00",
+    "end_date": "2026-08-15T15:30:00+01:00",
+    "venue_name": "The Liffey Trust Studios",
+    "venue_address": "The Green Room, 149 Sheriff Street Upper, Dublin, County Dublin, 1, Ireland",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.349721192381",
+    "longitude": "-6.2303120771425",
+    "url": "https://allevents.in/dublin/cinemagic-dublin-an-intro-to-sfx-make-up-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin/cinemagic-dublin-an-intro-to-sfx-make-up-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/cinemagic-dublin-an-intro-to-sfx-make-up-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935"
+    ]
+  },
+  {
+    "title": "Creative Stars Inclusive Summer Camp 2026",
+    "description": "Inclusive summer camp for ages 6–12 with puppetry, music, art & play.",
+    "start_date": "2026-08-17T13:30:00+01:00",
+    "end_date": "2026-08-17T16:30:00+01:00",
+    "venue_name": "LexIcon Library and Cultural Centre",
+    "venue_address": "Queen's Road",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.2930978",
+    "longitude": "-6.1307593",
+    "url": "https://allevents.in/dublin/creative-stars-inclusive-summer-camp-2026/100001988469691375",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin/creative-stars-inclusive-summer-camp-2026/100001988469691375",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/creative-stars-inclusive-summer-camp-2026/100001988469691375"
     ]
   },
   {
@@ -189,6 +549,30 @@
     ],
     "all_urls": [
       "https://allevents.in/dublin-1/paddy-mcdonnell-gouts-out/100001990873105050"
+    ]
+  },
+  {
+    "title": "The Milk Carton Kids",
+    "description": "Nearby AttractionsThe Milk Carton Kids has 20 upcoming events.AccessibilityTo purchase accessible tickets please click purchase link below.\nFor further information please visit help.ticketmaster.ie\nYou can now update your accessible information in \"My AccountNote: Under 14s must be accompanied by an",
+    "start_date": "2027-01-19T19:00:00+00:00",
+    "end_date": "2027-01-19T21:00:00+00:00",
+    "venue_name": "3Olympia Theatre",
+    "venue_address": "",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.34431800",
+    "longitude": "-6.26611400",
+    "url": "https://allevents.in/dublin/the-milk-carton-kids/210006455647068",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin/the-milk-carton-kids/210006455647068",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/the-milk-carton-kids/210006455647068"
     ]
   }
 ]
