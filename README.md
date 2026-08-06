@@ -4,12 +4,22 @@ Aggregator for kids/family events across Ireland. Scrapes multiple sources, dedu
 
 ## Data Sources
 
-| Source | Tier | Auth Required | Notes |
-|--------|------|---------------|-------|
-| YourDaysOut.ie | 1 | No | JSON-LD schema.org/Event parsing |
-| AllEvents.in | 1 | No | JSON-LD schema.org/Event parsing |
-| Facebook Groups | 2 | No (Playwright) | Visible text extraction from group event pages |
-| Instagram Hashtags | 3 | **Yes** (sessionid cookie) | Uses instagrapi library (private API) — **requires residential IP** |
+| Source | Tier | Auth Required | Scraped via | Notes |
+|--------|------|---------------|-------------|-------|
+| YourDaysOut.ie | 1 | No | `requests` + JSON-LD | 100+ events, high quality |
+| AllEvents.in | 1 | No | `requests` + JSON-LD | 15+ events, patchy coverage |
+| FamilyFun.ie | 1 | No | `requests` + WP REST API | 100+ events, WordPress JSON-LD |
+| IrelandMe.com | 1 | No | `requests` + HTML parsing | 2000+ events (filtered to ~50-100 family-relevant) |
+| The Ark | 1 | No | `requests` + HTML parsing | Dublin children's cultural centre |
+| Limerick.ie | 1 | No | `requests` + HTML parsing | City council events |
+| Facebook Groups (Dublin) | 2 | No | Playwright | 2 Dublin family groups |
+| Facebook Groups (Extended) | 2 | No | Playwright | Limerick + extended groups |
+| DublinFamilyFun.ie | 2 | No | Playwright + JSON-LD | Next.js SPA with schema.org/Event |
+| TotsSpots.com | 2 | No | Playwright + HTML | Ireland's largest kids classes directory |
+| Meetup.com | 2 | No | Playwright + HTML | Public events across 5 cities |
+| Eventbrite.ie | — | Yes (OAuth) | Blocked | Cloudflare bot protection blocks scraping; API requires OAuth2 |
+| Instagram | 3 | Yes (sessionid) | `instagrapi` library | **Requires residential IP** — see setup below |
+| Reddit | — | No | Playwright + PRAW | Community-shared events (not implemented yet) |
 
 ## Quick Start
 
@@ -23,18 +33,40 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-# Install Playwright browser (for Facebook scraper / Tier 2)
+# Install Playwright browser (for Tier 2 scrapers)
 playwright install chromium
 
-# Run Tier 1 (YourDaysOut + AllEvents only)
+# Run Tier 1 only (fast, no Playwright needed)
 python3 main.py --tiers 1
 
-# Run Tier 1 + 3 (add Instagram — requires sessionid)
-python3 main.py --tiers 1,3
+# Run Tier 1 + 2 (includes Facebook, DublinFamilyFun, TotsSpots, Meetup)
+python3 main.py --tiers "1,2" --limit 20
 
-# Run all tiers
-python3 main.py --tiers 1,2,3
+# Run with Instagram (requires sessionid — see below)
+export INSTAGRAM_SESSIONID="your_sessionid_cookie_here"
+python3 main.py --tiers "1,2,3" --limit 20
 ```
+
+## Tier Structure
+
+- **Tier 1 (fast)**: No browser needed. Uses `requests` + HTML/JSON-LD parsing. Runs in 5-10 seconds.
+  - YourDaysOut.ie — JSON-LD schema.org/Event
+  - AllEvents.in — JSON-LD schema.org/Event  
+  - FamilyFun.ie — WordPress REST API + JSON-LD
+  - IrelandMe.com — HTML table/list parsing
+  - The Ark — HTML h3 heading parsing
+  - Limerick.ie — LocalGov Drupal article parsing
+
+- **Tier 2 (Playwright)**: Requires chromium browser. Runs in 30-120 seconds.
+  - Facebook Groups — visible text extraction from group `/events/` pages
+  - Extended Facebook — Limerick regional groups
+  - DublinFamilyFun.ie — Next.js SPA, extracts JSON-LD blocks
+  - TotsSpots.com — listing cards parsed from town/county pages
+  - Meetup.com — public event search results across 5 cities
+
+- **Tier 3 (Instagram)**: Requires Instagram sessionid cookie + residential IP.
+  - Uses `instagrapi` library (private API)
+  - Blocked from cloud/datacenter IPs
 
 ## Instagram Setup — IMPORTANT
 
@@ -130,7 +162,25 @@ rsync -avz events_output.json server:/home/azureuser/kidsevents-ie/events_output
 ./run_pipeline.sh
 
 # Or run manually
-python3 main.py --tiers "1,3" --limit 15
+python3 main.py --tiers "1,2" --limit 15
+```
+
+## Testing Individual Sources
+
+```bash
+# Test a specific scraper
+python3 scrapers.py yourdaysout    # Tier 1a
+python3 scrapers.py allevents     # Tier 1b
+python3 scrapers.py familyfun     # Tier 1c
+python3 scrapers.py irelandme     # Tier 1d
+python3 scrapers.py ark           # Tier 1e
+python3 scrapers.py limerick      # Tier 1f
+python3 scrapers.py all           # All Tier 1 sources
+
+# Test Playwright scrapers
+python3 dublinfamilyfun_scraper.py
+python3 totsspots_scraper.py
+python3 meetup_scraper.py
 ```
 
 ## Output Format
@@ -168,19 +218,51 @@ Events from different sources are matched by:
 3. Same title + same location (city/county)
 4. Same date + geo proximity (<5km) + title similarity > 0.5
 
-Confidence scoring: YourDaysOut=1.0, AllEvents=0.9, Facebook=0.5, Instagram=0.3
+Confidence scoring: YourDaysOut=1.0, AllEvents=0.9, FamilyFun=0.8, IrelandMe=0.7, The Ark=0.8, Limerick.ie=0.7, Facebook=0.5, DublinFamilyFun=0.7, TotsSpots=0.7, Meetup=0.6, Instagram=0.3
 
 ## Architecture
 
 ```
 cron (every 4 hours) → main.py →
-  Tier 1 (2s):  YourDaysOut + AllEvents → JSON-LD → ~25 events
-  Tier 2 (60s): Facebook groups     → Playwright → ~20 events (optional)
-  Tier 3 (10s): Instagram hashtags  → instagrapi → ~50 events (local only)
-  Dedup:        Fuzzy match by title/date/geo
+  Tier 1 (5-10s):
+    YourDaysOut     → requests + JSON-LD → ~25 events
+    AllEvents.in    → requests + JSON-LD → ~15 events
+    FamilyFun.ie    → WP REST API + JSON-LD → ~100 events
+    IrelandMe.com   → requests + HTML → ~50-100 events
+    The Ark         → requests + HTML → ~14 events
+    Limerick.ie     → requests + HTML → ~5-10 events
+
+  Tier 2 (30-120s, requires chromium):
+    Facebook Groups → Playwright → ~40 events
+    DublinFamilyFun → Playwright + JSON-LD → ~20 events
+    TotsSpots       → Playwright + HTML → ~50-100 listings
+    Meetup.com      → Playwright + HTML → ~20 events
+
+  Dedup: Fuzzy match by title/date/geo
   → events_output.json → Flask API + web frontend
 
 Live at: https://claude-dev-vperrod.westeurope.cloudapp.azure.com/kidsevents/
+```
+
+## File Structure
+
+```
+kidsevents-ie/
+├── main.py                        # Orchestrator — runs tiers, deduplicates, outputs JSON
+├── scrapers.py                    # Tier 1 scrapers (fast, no browser)
+├── facebook_scraper.py            # Tier 2a: Facebook groups (Playwright)
+├── facebook_extended_scraper.py   # Tier 2b: Extended Facebook groups
+├── dublinfamilyfun_scraper.py     # Tier 2c: DublinFamilyFun.ie (Playwright + JSON-LD)
+├── totsspots_scraper.py           # Tier 2d: TotsSpots.com (Playwright)
+├── meetup_scraper.py              # Tier 2e: Meetup.com (Playwright)
+├── instagram_scraper.py           # Tier 3: Instagram hashtags (requires sessionid)
+├── deduplicator.py                # Fuzzy event matching + dedup
+├── server.py                      # Flask API serving events + web frontend
+├── web/
+│   └── index.html                 # Frontend with calendar + event browser
+├── run_pipeline.sh                # Quick run script (Tier 1 only)
+├── requirements.txt
+└── events_output.json             # Generated output (gitignored)
 ```
 
 ## Requirements

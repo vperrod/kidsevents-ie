@@ -2,26 +2,16 @@
 Main orchestrator: Kids Events Ireland scraper pipeline
 
 Runs all tiers in sequence:
-  1. Tier 1: YourDaysOut.ie + AllEvents.in (fast, reliable, JSON-LD)
-  2. Tier 2: Facebook group events (Playwright, ~30-60s for 2 groups)
-  3. Tier 3: Instagram hashtag API (requires Instagram account session cookies)
-  
+  1. Tier 1 (fast): YourDaysOut.ie + AllEvents.in + FamilyFun.ie + IrelandMe.com + The Ark + Limerick.ie
+  2. Tier 2 (Playwright): Facebook groups + DublinFamilyFun.ie + TotsSpots.com + Meetup.com
+
 Then deduplicates across all sources and outputs a clean JSON feed.
 
 Usage:
   python3 main.py                     # Run tiers 1+2
   python3 main.py --tiers "1"         # Only fast sources
-  python3 main.py --tiers "1,3"        # YourDaysOut + Instagram
-  
-Instagram setup:
-  Export your Instagram sessionid cookie:
-  export INSTAGRAM_SESSIONID="your_session_cookie_here"
-  
-  To get a sessionid: install instagra-cli and run 'instagra-cli login'
-  or use instagrapi Python library to login programmatically.
-  
-  WARNING: Instagram requires an authenticated account session to access
-  hashtag data. No-scraper approach (public API) is blocked since 2024.
+  python3 main.py --limit 20          # Scrape more events per source
+  python3 main.py --no-dedup          # Skip deduplication (debug)
 """
 import argparse
 import asyncio
@@ -36,23 +26,29 @@ from scrapers import (
     scrape_yourdaysout_event,
     scrape_allevents_listing,
     scrape_allevents_event,
+    scrape_familyfun_listing,
+    scrape_familyfun_event,
+    scrape_irelandme_events,
+    scrape_ark_events,
+    scrape_limerick_events,
 )
 
-# Tier 2: Facebook (requires Playwright + chromium)
+# Tier 2: Playwright-based scrapers (requires chromium)
 from facebook_scraper import scrape_facebook_all
-
-# Tier 3: Instagram (requires sessionid cookie)
-from instagram_scraper import scrape_instagram_hashtags, KIDS_EVENT_HASHTAGS
+from facebook_extended_scraper import scrape_extended_facebook_all
+from dublinfamilyfun_scraper import scrape_dublinfamilyfun_all
+from totsspots_scraper import scrape_totsspots_all
+from meetup_scraper import scrape_meetup_all
 
 # Deduplication
 from deduplicator import deduplicate_events, to_dict
 
 
 def run_tier1(limit: int = 10) -> list[dict]:
-    """Run YourDaysOut + AllEvents scrapers. Fast, no auth needed."""
+    """Run fast HTML scrapers (no auth, no browser needed)."""
     raw_events = []
 
-    print("\n=== Tier 1: YourDaysOut.ie ===")
+    print("\n=== Tier 1a: YourDaysOut.ie ===")
     ydo_urls = scrape_yourdaysout_listing()
     print(f"  Found {len(ydo_urls)} event URLs (limit: {limit})")
     scraped = 0
@@ -63,7 +59,7 @@ def run_tier1(limit: int = 10) -> list[dict]:
             scraped += 1
     print(f"  Scraped {scraped}/{len(ydo_urls)} events")
 
-    print("\n=== Tier 1: AllEvents.in ===")
+    print("\n=== Tier 1b: AllEvents.in ===")
     ae_urls = scrape_allevents_listing()
     print(f"  Found {len(ae_urls)} event URLs (limit: {limit})")
     scraped_ae = 0
@@ -74,36 +70,85 @@ def run_tier1(limit: int = 10) -> list[dict]:
             scraped_ae += 1
     print(f"  Scraped {scraped_ae}/{len(ae_urls)} events")
 
+    print("\n=== Tier 1c: FamilyFun.ie ===")
+    ff_urls = scrape_familyfun_listing()
+    print(f"  Found {len(ff_urls)} event URLs (limit: {limit})")
+    scraped_ff = 0
+    for url in ff_urls[:limit]:
+        evt = scrape_familyfun_event(url)
+        if evt:
+            raw_events.append(evt)
+            scraped_ff += 1
+    print(f"  Scraped {scraped_ff}/{len(ff_urls)} events")
+
+    print("\n=== Tier 1d: IrelandMe.com ===")
+    im_events = scrape_irelandme_events(limit=limit * 3)
+    print(f"  Found {len(im_events)} events")
+    raw_events.extend(im_events)
+
+    print("\n=== Tier 1e: The Ark ===")
+    ark_events = scrape_ark_events()
+    print(f"  Found {len(ark_events)} events")
+    raw_events.extend(ark_events)
+
+    print("\n=== Tier 1f: Limerick.ie ===")
+    limerick_events = scrape_limerick_events()
+    print(f"  Found {len(limerick_events)} events")
+    raw_events.extend(limerick_events)
+
     return raw_events
 
 
 async def run_tier2_async() -> list[dict]:
-    """Run Facebook group scrapers. Requires Playwright."""
-    return await scrape_facebook_all()
+    """Run all Playwright-based scrapers. Requires chromium."""
+    all_events = []
+
+    print("\n=== Tier 2a: Facebook Events ===")
+    try:
+        fb_events = await scrape_facebook_all()
+        print(f"  Scraped {len(fb_events)} events")
+        all_events.extend(fb_events)
+    except Exception as e:
+        print(f"  Facebook scraping failed: {e}")
+
+    print("\n=== Tier 2b: Extended Facebook Groups ===")
+    try:
+        ext_events = await scrape_extended_facebook_all()
+        print(f"  Scraped {len(ext_events)} events")
+        all_events.extend(ext_events)
+    except Exception as e:
+        print(f"  Extended FB scraping failed: {e}")
+
+    print("\n=== Tier 2c: DublinFamilyFun.ie ===")
+    try:
+        dff_events = await scrape_dublinfamilyfun_all()
+        print(f"  Scraped {len(dff_events)} events")
+        all_events.extend(dff_events)
+    except Exception as e:
+        print(f"  DublinFamilyFun scraping failed: {e}")
+
+    print("\n=== Tier 2d: Tots Spots ===")
+    try:
+        ts_events = await scrape_totsspots_all()
+        print(f"  Scraped {len(ts_events)} events")
+        all_events.extend(ts_events)
+    except Exception as e:
+        print(f"  Tots Spots scraping failed: {e}")
+
+    print("\n=== Tier 2e: Meetup.com ===")
+    try:
+        meetup_events = await scrape_meetup_all()
+        print(f"  Scraped {len(meetup_events)} events")
+        all_events.extend(meetup_events)
+    except Exception as e:
+        print(f"  Meetup scraping failed: {e}")
+
+    return all_events
 
 
 def run_tier2() -> list[dict]:
-    """Run Facebook group scrapers. Requires Playwright."""
-    print("\n=== Tier 2: Facebook Events ===")
-    events = asyncio.run(run_tier2_async())
-    print(f"  Scraped {len(events)} events")
-    return events
-
-
-def run_tier3() -> list[dict]:
-    """Run Instagram hashtag scraper. Requires sessionid cookie."""
-    sessionid = os.environ.get("INSTAGRAM_SESSIONID", "")
-    if not sessionid:
-        print("\n=== Tier 3: Instagram Hashtags ===")
-        print(f"  SKIP: No INSTAGRAM_SESSIONID cookie set")
-        print(f"  Hashtags to monitor: {KIDS_EVENT_HASHTAGS}")
-        print(f"  To enable: set INSTAGRAM_SESSIONID env var (see docstring)")
-        return []
-
-    print(f"\n=== Tier 3: Instagram Hashtags ({len(KIDS_EVENT_HASHTAGS)} hashtags) ===")
-    events = asyncio.run(scrape_instagram_hashtags())
-    print(f"  Scraped {len(events)} events")
-    return events
+    """Run all Playwright-based scrapers."""
+    return asyncio.run(run_tier2_async())
 
 
 def deduplicate_and_output(raw_events: list[dict], output_file: str = None):
@@ -169,7 +214,7 @@ def deduplicate_and_output(raw_events: list[dict], output_file: str = None):
 def main():
     parser = argparse.ArgumentParser(description="Kids Events Ireland scraper pipeline")
     parser.add_argument("--tiers", default="1,2",
-                        help="Tiers to run (default: '1,2'). 1=Tier 1 (YourDaysOut+AllEvents), 2=Facebook, 3=Instagram")
+                        help="Tiers to run (default: '1,2'). 1=Tier 1 (fast), 2=Playwright (all browser-based)")
     parser.add_argument("--output", default="events_output.json",
                         help="Output file path (relative to working directory)")
     parser.add_argument("--limit", type=int, default=10,
@@ -186,9 +231,6 @@ def main():
 
     if 2 in tiers:
         all_raw.extend(run_tier2())
-
-    if 3 in tiers:
-        all_raw.extend(run_tier3())
 
     if args.no_dedup:
         results = [to_dict(e) if hasattr(e, "to_dict") else e for e in all_raw]
