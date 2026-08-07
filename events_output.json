@@ -18,16 +18,16 @@
     "confidence": 0.7,
     "all_sources": [
       "theark:Central Library: Creative Hubs Summer Programme 20",
-      "theark:Ballyfermot Library: Creative Hubs Summer Programm",
-      "theark:Cabra Library: Creative Hubs Summer Programme 2026",
       "theark:Coolock Library: Creative Hubs Summer Programme 20",
-      "theark"
+      "theark",
+      "theark:Ballyfermot Library: Creative Hubs Summer Programm",
+      "theark:Cabra Library: Creative Hubs Summer Programme 2026"
     ],
     "all_urls": [
-      "https://ark.ie/events/view/creative-hubs-summer-2026-central",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-coolock",
       "https://ark.ie/events/view/creative-hubs-summer-2026-ballyfermot",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-cabra"
+      "https://ark.ie/events/view/creative-hubs-summer-2026-central",
+      "https://ark.ie/events/view/creative-hubs-summer-2026-cabra",
+      "https://ark.ie/events/view/creative-hubs-summer-2026-coolock"
     ]
   },
   {
@@ -775,6 +775,30 @@
     ]
   },
   {
+    "title": "Neon Painting: Sail Away",
+    "description": "Paint A Neon Canvas. Music. UV Lights. Prizes. No Experience Needed To Take Part.",
+    "start_date": "2026-04-23T18:30:00+01:00",
+    "end_date": "2026-08-20T18:30:00+01:00",
+    "venue_name": "Pawn Shop | Dame Street",
+    "venue_address": "15 Dame Street",
+    "city": "Dublin 2",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3440614",
+    "longitude": "-6.265263399999998",
+    "url": "https://allevents.in/dublin-2/neon-painting-sail-away/100001983606667941",
+    "cost": "",
+    "age_group": "",
+    "source": "https://allevents.in/dublin-2/neon-painting-sail-away/100001983606667941",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-2/neon-painting-sail-away/100001983606667941"
+    ]
+  },
+  {
     "title": "Bubble Brunch",
     "description": "Our Bubble-licious Brunch is back by popular demand\r\n\r\nGet ready for a truly magical morning where bubble fun &amp;  - Please Like & Share",
     "start_date": "2026-06-07",
@@ -1129,8 +1153,8 @@
     "confidence": 0.7,
     "all_sources": [
       "https",
-      "https://irelandme.com/events/fermanagh-family-melvin-studios-arts-crafts-morning-2026-08-03",
-      "https://irelandme.com/events/fermanagh-family-melvin-studios-arts-crafts-afternoon-2026-08-03"
+      "https://irelandme.com/events/fermanagh-family-melvin-studios-arts-crafts-afternoon-2026-08-03",
+      "https://irelandme.com/events/fermanagh-family-melvin-studios-arts-crafts-morning-2026-08-03"
     ],
     "all_urls": [
       "https://irelandme.com/events/fermanagh-family-melvin-studios-arts-crafts-morning-2026-08-03/",
@@ -2698,7 +2722,7 @@
     ]
   },
   {
-    "title": "CINEMAGIC DUBLIN: AN INTRO TO SFX MAKE-UP WITH DAWN BUTLER (FOR AGES: 8-14) 1.30PM-3.30PM SESSION",
+    "title": "15 AUG CINEMAGIC DUBLIN: INTRO TO SFX MAKEUP WITH DAWN BUTLER (FOR AGES: 8-14) 1.30PM-3.30PM SESSION",
     "description": "Learn the basics of creating realistic SFX makeup design!\n\nAN INTRODUCTION TO SFX MAKE-UP - Learn the basics of creating realistic SFX makeup design!\n\nJoin Cinemagic for a thrilling SFX Makeup Workshop designed specifically for kids! In this hands-on event, children will learn the basics of the art",
     "start_date": "2026-08-15T13:30:00+01:00",
     "end_date": "2026-08-15T15:30:00+01:00",
@@ -2709,40 +2733,16 @@
     "country": "IE",
     "latitude": "53.349721192381",
     "longitude": "-6.2303120771425",
-    "url": "https://allevents.in/dublin/cinemagic-dublin-an-intro-to-sfx-make-up-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935",
+    "url": "https://allevents.in/dublin/15-aug-cinemagic-dublin-intro-to-sfx-makeup-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935",
     "cost": "",
     "age_group": "",
-    "source": "https://allevents.in/dublin/cinemagic-dublin-an-intro-to-sfx-make-up-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935",
+    "source": "https://allevents.in/dublin/15-aug-cinemagic-dublin-intro-to-sfx-makeup-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935",
     "confidence": 0.9,
     "all_sources": [
       "allevents"
     ],
     "all_urls": [
-      "https://allevents.in/dublin/cinemagic-dublin-an-intro-to-sfx-make-up-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935"
-    ]
-  },
-  {
-    "title": "Childrens' Music Camp",
-    "description": "Get ready for a fun-filled day of singing, dancing, and making music with kids just like you!",
-    "start_date": "2026-08-17T10:00:00+01:00",
-    "end_date": "2026-08-21T14:00:00+01:00",
-    "venue_name": "Wesley House",
-    "venue_address": "Leeson Park",
-    "city": "Dublin",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.3283861",
-    "longitude": "-6.2518169",
-    "url": "https://allevents.in/dublin/childrens-music-camp/100001987931681172",
-    "cost": "",
-    "age_group": "",
-    "source": "https://allevents.in/dublin/childrens-music-camp/100001987931681172",
-    "confidence": 0.9,
-    "all_sources": [
-      "allevents"
-    ],
-    "all_urls": [
-      "https://allevents.in/dublin/childrens-music-camp/100001987931681172"
+      "https://allevents.in/dublin/15-aug-cinemagic-dublin-intro-to-sfx-makeup-with-dawn-butler-for-ages-8-14-130pm-330pm-session/200030438723935"
     ]
   },
   {
