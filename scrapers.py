@@ -447,7 +447,7 @@ def scrape_ark_events() -> list[dict]:
             "country": "IE",
             "latitude": "53.3438",
             "longitude": "-6.2654",
-            "source": f"theark:{title[:50]}",
+            "source": f"theark:{link}",
         })
 
     return events[:50]

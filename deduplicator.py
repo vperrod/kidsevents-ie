@@ -22,6 +22,9 @@ from difflib import SequenceMatcher
 SOURCE_PRIORITY = {
     "yourdaysout": 100,
     "allevents": 90,
+    "irelandme": 70,
+    "familyfun": 60,
+    "theark": 55,
     "facebook": 50,
     "instagram": 30,
 }
@@ -230,8 +233,17 @@ def merge_events(existing: Event, new: Event) -> Event:
 
     merged = existing
 
-    # Track all sources
-    merged.all_sources = list(set(existing.all_sources + [existing.source, new.source]))
+    # Track all sources (normalized to source_type prefix)
+    def normalize_src(s: str) -> str:
+        """Normalize a source string to its source_type prefix."""
+        for prefix in ["yourdaysout", "allevents", "facebook", "instagram", "irelandme", "familyfun", "theark"]:
+            if prefix in s:
+                return prefix
+        return s.split(":")[0] if ":" in s else s
+    all_srcs = set(existing.all_sources)
+    all_srcs.add(normalize_src(existing.source))
+    all_srcs.add(normalize_src(new.source))
+    merged.all_sources = list(all_srcs)
     merged.all_urls = list(set(existing.all_urls + [existing.url, new.url]))
 
     # Merge fields: prefer non-empty values from higher priority source
@@ -280,6 +292,12 @@ def deduplicate_events(raw_events: list[dict]) -> list[Event]:
             source_type = "facebook"
         elif "instagram" in source or "instagram" in url:
             source_type = "instagram"
+        elif "irelandme" in source or "irelandme" in url:
+            source_type = "irelandme"
+        elif "familyfun" in source or "familyfun" in url:
+            source_type = "familyfun"
+        elif "theark" in source or "theark" in url:
+            source_type = "theark"
         else:
             source_type = source.split(":")[0] if ":" in source else "unknown"
 
@@ -298,7 +316,7 @@ def deduplicate_events(raw_events: list[dict]) -> list[Event]:
             url=raw.get("url", ""),
             cost=raw.get("cost", ""),
             age_group=raw.get("age_group", ""),
-            source=raw.get("source", source_type),
+            source=f"{source_type}:{raw.get('url', '')}",
             confidence=SOURCE_PRIORITY.get(source_type, 10) / 100.0,
             all_sources=[source_type],
             all_urls=[raw.get("url", "")],
