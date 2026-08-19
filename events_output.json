@@ -596,10 +596,34 @@
       "theark"
     ],
     "all_urls": [
-      "https://ark.ie/events/view/creative-hubs-summer-2026-ballyfermot",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-coolock",
       "https://ark.ie/events/view/creative-hubs-summer-2026-central",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-cabra"
+      "https://ark.ie/events/view/creative-hubs-summer-2026-cabra",
+      "https://ark.ie/events/view/creative-hubs-summer-2026-coolock",
+      "https://ark.ie/events/view/creative-hubs-summer-2026-ballyfermot"
+    ]
+  },
+  {
+    "title": "Culture Night: Sample Me! Create Your Own Music",
+    "description": "",
+    "start_date": "",
+    "end_date": "",
+    "venue_name": "The Ark, Dublin",
+    "venue_address": "21a Eustace Street, Temple Bar, Dublin 8",
+    "city": "Dublin",
+    "county": "Dublin",
+    "country": "IE",
+    "latitude": "53.3438",
+    "longitude": "-6.2654",
+    "url": "https://ark.ie/events/view/culture-night-sample-me",
+    "cost": "",
+    "age_group": "",
+    "source": "theark:https://ark.ie/events/view/culture-night-sample-me",
+    "confidence": 0.55,
+    "all_sources": [
+      "theark"
+    ],
+    "all_urls": [
+      "https://ark.ie/events/view/culture-night-sample-me"
     ]
   },
   {
@@ -675,30 +699,6 @@
     ]
   },
   {
-    "title": "GoKidsGo | Birthday Parties",
-    "description": "Birthday Parties RoomsWe specialise in children&rsquo;s birthday parties, offering both laser parties and themed p - Please Like & Share",
-    "start_date": "2026-01-01",
-    "end_date": "2030-12-31",
-    "venue_name": "GoKidsGo | Birthday Parties",
-    "venue_address": "",
-    "city": " County Dublin Dublin Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.384537",
-    "longitude": "-6.401467",
-    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
-    ]
-  },
-  {
     "title": "GoKidsGo | General Admisson",
     "description": "Go Kids Go\r\n\r\nAt Go Kids Go, we are an indoor play and party centre created for children of different ages, with space - Please Like & Share",
     "start_date": "2026-04-16",
@@ -720,6 +720,30 @@
     ],
     "all_urls": [
       "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-general-admisson-6260"
+    ]
+  },
+  {
+    "title": "Neon Painting: Flamingos",
+    "description": "Paint A Neon Canvas. Music. UV Lights. Prizes. No Experience Needed To Take Part.",
+    "start_date": "2026-04-19T17:00:00+01:00",
+    "end_date": "2026-08-22T19:00:00+01:00",
+    "venue_name": "Pawn Shop | Dame Street",
+    "venue_address": "15 Dame Street",
+    "city": "Dublin 2",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3440614",
+    "longitude": "-6.265263399999998",
+    "url": "https://allevents.in/dublin-2/neon-painting-flamingos/100001983550921201",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin-2/neon-painting-flamingos/100001983550921201",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-2/neon-painting-flamingos/100001983550921201"
     ]
   },
   {
@@ -1008,30 +1032,6 @@
     ],
     "all_urls": [
       "https://yourdaysout.com/events-on-in-county-dublin-ireland/summer-of-robotics-explorium-6379"
-    ]
-  },
-  {
-    "title": "Rose of Tralee International Festival",
-    "description": "Rose of Tralee International Festival 2026\r\nTralee, Co. Kerry | 14th &ndash; 18th August 2026\r\n\r\nCelebrat - Please Like & Share",
-    "start_date": "2026-08-14",
-    "end_date": "2026-08-18",
-    "venue_name": "Rose of Tralee International Festival",
-    "venue_address": "",
-    "city": " County Kerry Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "52.263546",
-    "longitude": "-9.700798",
-    "url": "https://yourdaysout.com/events-on-in-county-kerry-ireland/rose-of-tralee-international-festival-2634",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kerry-ireland/rose-of-tralee-international-festival-2634",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-kerry-ireland/rose-of-tralee-international-festival-2634"
     ]
   },
   {
@@ -1488,8 +1488,8 @@
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/cork-lgbt-archive-open-day-heritage-week-2026-08-16/",
-      "https://irelandme.com/events/cork-lgbt-archive-open-day-2026-08-16/"
+      "https://irelandme.com/events/cork-lgbt-archive-open-day-2026-08-16/",
+      "https://irelandme.com/events/cork-lgbt-archive-open-day-heritage-week-2026-08-16/"
     ]
   },
   {
@@ -1729,8 +1729,8 @@
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/galway-heritage-athenry-walled-towns-day-2026-08-16/",
-      "https://irelandme.com/events/galway-festivals-athenry-walled-towns-2026-08-16/"
+      "https://irelandme.com/events/galway-festivals-athenry-walled-towns-2026-08-16/",
+      "https://irelandme.com/events/galway-heritage-athenry-walled-towns-day-2026-08-16/"
     ]
   },
   {
@@ -2384,51 +2384,99 @@
     ]
   },
   {
-    "title": "Childrens' Music Camp",
-    "description": "Get ready for a fun-filled day of singing, dancing, and making music with kids just like you!",
-    "start_date": "2026-08-17T10:00:00+01:00",
-    "end_date": "2026-08-21T14:00:00+01:00",
-    "venue_name": "Wesley House",
-    "venue_address": "Leeson Park",
-    "city": "Dublin",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.3283861",
-    "longitude": "-6.2518169",
-    "url": "https://allevents.in/dublin/childrens-music-camp/100001987931681172",
+    "title": "IFI Family Festival",
+    "description": "IFI Family Festival 2026\r\nDublin | 21st - 23rd August 2026\r\n\r\nIFI Family Festival returns to the Irish Film Institute f - Please Like & Share",
+    "start_date": "2026-08-21",
+    "end_date": "2026-08-23",
+    "venue_name": "IFI Family Festival",
+    "venue_address": "",
+    "city": " County Dublin Dublin Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.344646",
+    "longitude": "-6.264868",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/ifi-family-festival-2845",
     "cost": "",
     "age_group": "",
-    "source": "allevents:https://allevents.in/dublin/childrens-music-camp/100001987931681172",
-    "confidence": 0.9,
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/ifi-family-festival-2845",
+    "confidence": 1.0,
     "all_sources": [
-      "allevents"
+      "yourdaysout"
     ],
     "all_urls": [
-      "https://allevents.in/dublin/childrens-music-camp/100001987931681172"
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/ifi-family-festival-2845"
     ]
   },
   {
-    "title": "Creative Stars Inclusive Summer Camp 2026",
-    "description": "Inclusive summer camp for ages 6–12 with puppetry, music, art & play.",
-    "start_date": "2026-08-17T13:30:00+01:00",
-    "end_date": "2026-08-17T16:30:00+01:00",
-    "venue_name": "LexIcon Library and Cultural Centre",
-    "venue_address": "Queen's Road",
-    "city": "Dublin",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.2930978",
-    "longitude": "-6.1307593",
-    "url": "https://allevents.in/dublin/creative-stars-inclusive-summer-camp-2026/100001988469691375",
+    "title": "Tales from Acorn Wood |Limerick",
+    "description": "Julia Donaldson and Axel Scheffler&rsquo;s beloved Tales from Acorn Wood stories are brought to life on stage for the first time in  - Please Like & Share",
+    "start_date": "2026-08-22",
+    "end_date": "2026-08-22",
+    "venue_name": "Tales from Acorn Wood |Limerick",
+    "venue_address": "",
+    "city": " County Limerick Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.674358",
+    "longitude": "-8.574073",
+    "url": "https://yourdaysout.com/events-on-in-county-limerick-ireland/tales-from-acorn-wood-limerick-6386",
     "cost": "",
     "age_group": "",
-    "source": "allevents:https://allevents.in/dublin/creative-stars-inclusive-summer-camp-2026/100001988469691375",
-    "confidence": 0.9,
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-limerick-ireland/tales-from-acorn-wood-limerick-6386",
+    "confidence": 1.0,
     "all_sources": [
-      "allevents"
+      "yourdaysout"
     ],
     "all_urls": [
-      "https://allevents.in/dublin/creative-stars-inclusive-summer-camp-2026/100001988469691375"
+      "https://yourdaysout.com/events-on-in-county-limerick-ireland/tales-from-acorn-wood-limerick-6386"
+    ]
+  },
+  {
+    "title": "End Of Summer Party | Castle Adventure Open Farm",
+    "description": "End of Summer Party at Castle Adventure Open Farm\r\n23rd August 2026\r\n\r\nCastle Adventure Open Farm is celebrating the fi - Please Like & Share",
+    "start_date": "2026-08-23",
+    "end_date": "2026-08-23",
+    "venue_name": "End Of Summer Party",
+    "venue_address": "",
+    "city": " County Donegal Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "54.514236",
+    "longitude": "-8.237378",
+    "url": "https://yourdaysout.com/events-on-in-county-donegal-ireland/end-of-summer-party-castle-adventure-open-farm-6385",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-donegal-ireland/end-of-summer-party-castle-adventure-open-farm-6385",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-donegal-ireland/end-of-summer-party-castle-adventure-open-farm-6385"
+    ]
+  },
+  {
+    "title": "Tales from Acorn Wood |Dublin",
+    "description": "Julia Donaldson and Axel Scheffler&rsquo;s beloved Tales from Acorn Wood stories are brought to life on stage for the first time in  - Please Like & Share",
+    "start_date": "2026-08-27",
+    "end_date": "2026-08-30",
+    "venue_name": "Tales from Acorn Wood |Dublin",
+    "venue_address": "",
+    "city": " County Dublin Ireland",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.293922",
+    "longitude": "-6.133967",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/tales-from-acorn-wood-dublin-6387",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/tales-from-acorn-wood-dublin-6387",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/tales-from-acorn-wood-dublin-6387"
     ]
   },
   {
@@ -2576,6 +2624,30 @@
     ]
   },
   {
+    "title": "Dublin, Ireland - Kidding Around Yoga Teacher Training",
+    "description": "Passionate about helping children function better in school and at home? Looking for ways to make a difference in the lives of children in your community while earning income? LOVE music? \nLearn how to teach yoga, mindfulness and meditation to kids in schools, at home, and within community settings",
+    "start_date": "2026-10-10T09:30:00+01:00",
+    "end_date": "",
+    "venue_name": "River Holistic Centre",
+    "venue_address": "10 Main Street, Dublin, County Dublin, D05 DE88, Ireland",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.37955",
+    "longitude": "-6.17541",
+    "url": "https://allevents.in/dublin/dublin-ireland-kidding-around-yoga-teacher-training/200030398943750",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin/dublin-ireland-kidding-around-yoga-teacher-training/200030398943750",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/dublin-ireland-kidding-around-yoga-teacher-training/200030398943750"
+    ]
+  },
+  {
     "title": "Cornmaze Massacre",
     "description": "Step into pure terror at&nbsp;Cornmaze Massacre, Wexford&#39;s ultimate Halloween scare experience, set across the eerie grounds of  - Please Like & Share",
     "start_date": "2026-10-16",
@@ -2624,30 +2696,6 @@
     ]
   },
   {
-    "title": "Jurassic Haunt",
-    "description": "Get ready for a roarsome Halloween adventure with Jurassic Haunt, Jurassic Newpark&rsquo;s 2026 Halloween Experience in Kilkenny! - Please Like & Share",
-    "start_date": "2026-10-24",
-    "end_date": "2026-11-01",
-    "venue_name": "Jurassic Newpark’s Halloween Experience, 24th October to 1st November",
-    "venue_address": "",
-    "city": " County Kilkenny Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "52.664631",
-    "longitude": "-7.248838",
-    "url": "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/jurassic-haunt-6382",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kilkenny-ireland/jurassic-haunt-6382",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/jurassic-haunt-6382"
-    ]
-  },
-  {
     "title": "Paddy McDonnell: Gout's Out",
     "description": "Belfast comedian Paddy McDonnell brings his brand new show to The Laughter Lounge",
     "start_date": "2026-10-25T18:00:00+00:00",
@@ -2669,30 +2717,6 @@
     ],
     "all_urls": [
       "https://allevents.in/dublin-1/paddy-mcdonnell-gouts-out/100001990873105050"
-    ]
-  },
-  {
-    "title": "The Witching Hour",
-    "description": "When darkness falls, the dinosaurs come alive&hellip; The Witching Hour is Jurassic Newpark&rsquo;s&nbsp;brand-new& - Please Like & Share",
-    "start_date": "2026-10-30",
-    "end_date": "2026-10-31",
-    "venue_name": "Jurassic Newpark’s Afterdark Halloween Experience, 30th and 31st of October 2026",
-    "venue_address": "",
-    "city": " County Kilkenny Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "52.664631",
-    "longitude": "-7.248838",
-    "url": "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/the-witching-hour-6383",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kilkenny-ireland/the-witching-hour-6383",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/the-witching-hour-6383"
     ]
   },
   {
