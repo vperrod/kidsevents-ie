@@ -536,6 +536,38 @@ def event_key(event):
     ]).lower()
 
 
+# Republic of Ireland county codes as used by allevents.in's schema.org
+# addressRegion field — raw codes like "DN" were leaking straight to parents.
+_COUNTY_CODES = {
+    "CW": "Carlow", "CN": "Cavan", "CE": "Clare", "CO": "Cork", "DL": "Donegal",
+    "DN": "Dublin", "GY": "Galway", "KY": "Kerry", "KE": "Kildare", "KK": "Kilkenny",
+    "LS": "Laois", "LM": "Leitrim", "LK": "Limerick", "LD": "Longford", "LH": "Louth",
+    "MO": "Mayo", "MH": "Meath", "MN": "Monaghan", "OY": "Offaly", "RN": "Roscommon",
+    "SO": "Sligo", "TA": "Tipperary", "WD": "Waterford", "WH": "Westmeath",
+    "WX": "Wexford", "WW": "Wicklow",
+}
+
+
+def normalize_location(city, county):
+    """Clean up county codes and "County X [X]" city strings from scraped sources.
+
+    yourdaysout's URL-derived city can come through as "County Dublin" or
+    "County Dublin Dublin" (a doubled county name with no real city); allevents'
+    JSON-LD hands county through as a raw code ("DN") instead of a name.
+    """
+    city = (city or "").strip()
+    county = _COUNTY_CODES.get((county or "").strip().upper(), (county or "").strip())
+    if city.lower().startswith("county "):
+        words, deduped = city[7:].split(), []
+        for w in words:
+            if not deduped or deduped[-1].lower() != w.lower():
+                deduped.append(w)
+        cleaned = " ".join(deduped)
+        county = county or cleaned
+        city = "" if cleaned.lower() == county.lower() else cleaned
+    return city, county
+
+
 def normalize_event(raw):
     """Map a factory event onto the published contract shape.
 
@@ -543,6 +575,7 @@ def normalize_event(raw):
     (date / venue_coords / cost_detail) and the JSON-LD one (start / end /
     venue / price). Missing values stay empty — never guessed.
     """
+    city, county = normalize_location(raw.get("city", ""), raw.get("county", ""))
     coords = raw.get("venue_coords") or []
     lat = coords[0] if len(coords) > 0 else None
     lon = coords[1] if len(coords) > 1 else None
@@ -558,8 +591,8 @@ def normalize_event(raw):
         "end_date": raw.get("end_date") or raw.get("end") or start_date,
         "venue_name": raw.get("venue_name") or raw.get("venue") or "",
         "venue_address": raw.get("venue_address", ""),
-        "city": raw.get("city", ""),
-        "county": raw.get("county", ""),
+        "city": city,
+        "county": county,
         "country": raw.get("country", "IE"),
         "latitude": "" if lat is None else str(lat),
         "longitude": "" if lon is None else str(lon),
