@@ -255,7 +255,7 @@ kidsevents-ie/
 ├── dublinfamilyfun_scraper.py     # Tier 2c: DublinFamilyFun.ie (Playwright + JSON-LD)
 ├── totsspots_scraper.py           # Tier 2d: TotsSpots.com (Playwright)
 ├── meetup_scraper.py              # Tier 2e: Meetup.com (Playwright)
-├── instagram_scraper.py           # Tier 3: Instagram hashtags (requires sessionid)
+├── staging.py                     # Social candidate staging desk (fed from the mini PC)
 ├── deduplicator.py                # Fuzzy event matching + dedup
 ├── server.py                      # Flask API serving events + web frontend
 ├── web/

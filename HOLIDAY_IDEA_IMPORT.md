@@ -5,13 +5,12 @@ must retain its original source link and a place that can open in Google Maps.
 
 ## TikTok collection handoff
 
-TikTok collections are private to the account that saved them. The preferred
-path is the authenticated OpenCLI browser collection reader used by WanderTold:
-set `TIKTOK_COLLECTION_URL` in the protected `.env`, connect OpenCLI to the
-account owner's Chrome profile, and run `social_collection_ingest.py`. It only
-stages discovered post URLs for review. Do not share account cookies or
-passwords. A curator should verify practical details on the destination's own
-website before publishing an entry.
+TikTok collections are private to the account that saved them, so they are read
+on the mini PC by the OpenCLI collector that owns the authenticated Chrome
+profile. It pipes discovered posts into `staging.py append` on this VM, which
+only stages them for review — see `SOCIAL_COLLECTION_ACTIVATION.md`. Do not
+share account cookies or passwords. A curator should verify practical details
+on the destination's own website before publishing an entry.
 
 ```json
 [

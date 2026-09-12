@@ -18,6 +18,9 @@ firebase-service-account*.json
 # Scraper output
 events_output.json
 
+# Social review queue (runtime state)
+staged/
+
 # Playwright browsers (downloaded separately)
 ~/.cache/ms-playwright/
 

@@ -695,6 +695,7 @@
           ><button data-view="content">Content</button
           ><button data-view="sources">Sources</button
           ><button data-view="pipeline">Pipeline</button
+          ><button data-view="social">Social</button
           ><button data-view="logs">Run log</button>
         </nav>
         <div class="rail-foot">
@@ -720,7 +721,8 @@
           <button class="tab active" data-view="desk">Overview</button
           ><button class="tab" data-view="content">Editorial review</button
           ><button class="tab" data-view="sources">Coverage</button
-          ><button class="tab" data-view="pipeline">Collection</button>
+          ><button class="tab" data-view="pipeline">Collection</button
+          ><button class="tab" data-view="social">Social</button>
         </div>
         <section class="view active" id="view-desk">
           <div class="hero">
@@ -873,6 +875,50 @@
             </section>
           </div>
         </section>
+        <section class="view" id="view-social">
+          <div class="head">
+            <div>
+              <h2 class="section-title">Social review</h2>
+              <p class="section-copy">
+                Saved collections and tag searches are read on the mini PC and
+                arrive here as candidates. Nothing publishes until you approve
+                it.
+              </p>
+            </div>
+            <button class="button secondary" id="refresh-social">Refresh</button>
+          </div>
+          <div class="metrics">
+            <article class="metric">
+              <span>Waiting for review</span><b class="warn" id="soc-total">—</b
+              ><span>Instagram and TikTok candidates</span>
+            </article>
+          </div>
+          <div class="two">
+            <section class="panel">
+              <div class="head">
+                <div>
+                  <h3>Where they came from</h3>
+                  <p class="muted">Collection or tag that surfaced each post.</p>
+                </div>
+              </div>
+              <div class="coverage" id="soc-found-via"></div>
+            </section>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Post</th>
+                  <th>Platform</th>
+                  <th>Found via</th>
+                  <th>Captured</th>
+                  <th>Decision</th>
+                </tr>
+              </thead>
+              <tbody id="social"></tbody>
+            </table>
+          </div>
+        </section>
         <section class="view" id="view-logs">
           <div class="head">
             <div>
@@ -952,11 +998,16 @@
               "Collection run",
               "Run and monitor the web collection pipeline.",
             ],
+            social: [
+              "Social review",
+              "Candidates collected from saved collections and tag searches.",
+            ],
             logs: ["Run log", "The latest system output, in one place."],
           }[n];
           $("#page-title").textContent = x[0];
           $("#page-subtitle").textContent = x[1];
           if (n === "logs") logs();
+          if (n === "social") socialQueue();
           scrollTo({ top: 0 });
         }
         function dashboard() {
@@ -1128,6 +1179,66 @@
             $("#log").textContent = "Could not load the run log.";
           }
         }
+        async function socialQueue() {
+          let d;
+          try {
+            d = await get(API + "/admin/api/social/staged");
+          } catch (e) {
+            $("#social").innerHTML =
+              '<tr><td colspan="5" class="empty">Could not load social candidates.</td></tr>';
+            return;
+          }
+          let a = d.candidates || [];
+          $("#soc-total").textContent = d.total || 0;
+          let g = d.found_via || {},
+            m = Math.max(1, ...Object.values(g));
+          $("#soc-found-via").innerHTML =
+            Object.entries(g)
+              .sort((x, y) => y[1] - x[1])
+              .map(
+                ([k, v]) =>
+                  `<div class="coverage-row"><span>${esc(k)}</span><div class="bar"><i style="width:${(100 * v) / m}%"></i></div><em>${v}</em></div>`,
+              )
+              .join("") ||
+            '<div class="empty">Nothing waiting for review.</div>';
+          $("#social").innerHTML =
+            a
+              .map((x) => {
+                let u = esc(x.source_url);
+                return `<tr><td><div class="item-title">${esc(x.author || "Unknown account")}</div><div class="item-sub">${esc((x.caption || "No caption captured").slice(0, 180))}</div><a class="item-sub" href="${u}" target="_blank" rel="noopener">Original post ↗</a></td><td><span class="tag">${esc(x.platform || "social")}</span></td><td>${x.found_via ? esc(x.found_via) : '<span class="tag missing">Unattributed</span>'}</td><td>${esc(x.captured_at || "—")}</td><td><button class="button primary" data-approve="${u}">Approve</button> <button class="button secondary" data-reject="${u}">Reject</button></td></tr>`;
+              })
+              .join("") ||
+            '<tr><td colspan="5" class="empty">No social candidates are waiting for review.</td></tr>';
+        }
+        async function decide(url, action) {
+          let b = [
+            ...document.querySelectorAll(
+              `[data-approve="${CSS.escape(url)}"],[data-reject="${CSS.escape(url)}"]`,
+            ),
+          ];
+          b.forEach((x) => (x.disabled = true));
+          try {
+            let r = await fetch(API + "/admin/api/social/" + action, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ source_url: url }),
+              }),
+              d = await r.json();
+            if (!r.ok) throw Error(d.message || d.error || "Request failed");
+            toast(
+              action === "approve"
+                ? d.published
+                  ? "Published to the live feed"
+                  : "Approved — already in the feed"
+                : "Candidate rejected",
+            );
+            socialQueue();
+            if (action === "approve") load();
+          } catch (e) {
+            toast(e.message || "Could not save that decision");
+            b.forEach((x) => (x.disabled = false));
+          }
+        }
         async function run() {
           let b = [...document.querySelectorAll(".run")];
           b.forEach((x) => {
@@ -1222,6 +1333,14 @@
           .querySelectorAll(".run")
           .forEach((x) => x.addEventListener("click", run));
         $("#refresh-log").addEventListener("click", logs);
+        $("#refresh-social").addEventListener("click", socialQueue);
+        $("#social").addEventListener("click", (e) => {
+          let t = e.target.closest("[data-approve],[data-reject]");
+          if (!t) return;
+          t.dataset.approve
+            ? decide(t.dataset.approve, "approve")
+            : decide(t.dataset.reject, "reject");
+        });
         view("desk");
         document.querySelectorAll(".chip").forEach((chip) =>
           chip.setAttribute(

@@ -8,8 +8,6 @@ ADOPTED FROM WANDERTOLD FACTORY PATTERNS:
 - Hermes LLM pipeline with quality-first fallback chain
 - Structured metadata model with facets/tags
 - Human review workflow (staged → approved → published)
-- Platform-aware social fetching (agent-reach pattern: Playwright for Instagram,
-  TikTok oEmbed + stealth fallback)
 - schema.org/Event JSON-LD extraction where available
 
 Pipeline per event: discovered -> researched -> enriched -> tagged -> staged
@@ -379,141 +377,6 @@ def web_search(query, limit=3, kind=None):
 
 
 # ---------------------------------------------------------------------------
-# Platform-aware social fetch (agent-reach pattern from WanderTold)
-# ---------------------------------------------------------------------------
-
-def _stealth_fetch_url(url, timeout=40):
-    """Stealth browser fetch for blocked sites (Instagram, TikTok via Playwright)."""
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:
-        return ""
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.set_extra_http_headers({"User-Agent": SEARCH_UA["User-Agent"]})
-            page.goto(url, timeout=timeout * 1000)
-            page.wait_for_timeout(5000)
-            content = page.content()
-            # Try to extract structured data
-            import json as _json
-            # Look for embedded JSON in script tags
-            m = re.search(r'<script[^>]*>(.*?)</script>', content, re.S)
-            if m:
-                data = m.group(1).strip()
-                if data.startswith("{"):
-                    try:
-                        obj = _json.loads(data)
-                        # Try to extract description
-                        for field in ("description", "content", "text", "caption"):
-                            if obj.get(field):
-                                return obj[field][:4000]
-                    except _json.JSONDecodeError:
-                        pass
-            # Fallback: extract visible text
-            text = page.inner_text("body", timeout=5000)
-            browser.close()
-            return text[:4000] if len(text) > 20 else ""
-    except Exception as e:
-        log(f"stealth fetch failed for {url}: {e}")
-        return ""
-
-
-def _fetch_instagram(url):
-    """Fetch Instagram content via Playwright (agent-reach pattern).
-
-    WanderTold factory uses ig_read.py with cookie auth. We do the same:
-    launch a headless browser, load cookies if available, extract post content.
-    """
-    sessionid = ENV.get("INSTAGRAM_SESSIONID", "")
-    cookies_file = ENV.get("INSTAGRAM_COOKIES", "")
-
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:
-        return ""
-
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-
-            # Set cookies if available
-            if cookies_file and Path(cookies_file).exists():
-                try:
-                    raw_cookies = json.loads(Path(cookies_file).read_text())
-                    for name, value in raw_cookies.items():
-                        page.context.add_cookies([{
-                            "name": name, "value": value,
-                            "domain": ".instagram.com", "path": "/",
-                            "httpOnly": True, "secure": True, "sameSite": "Lax",
-                        }])
-                except Exception:
-                    pass
-            elif sessionid:
-                page.context.add_cookies([{
-                    "name": "sessionid", "value": sessionid,
-                    "domain": ".instagram.com", "path": "/",
-                    "httpOnly": True, "secure": True, "sameSite": "Lax",
-                }])
-
-            page.goto(url, timeout=30000)
-            page.wait_for_timeout(3000)
-
-            # Try to find the post caption/description
-            content = page.content()
-
-            # Look for meta description or og:description
-            m = re.search(r'<meta\\s+(?:property="og:description"|name="description")\\s+content="([^"]*)"', content, re.I)
-            if m:
-                return m.group(1)[:4000]
-
-            # Fallback: extract text content
-            text = page.inner_text("body", timeout=5000)
-            browser.close()
-            return text[:4000] if len(text) > 20 else ""
-    except Exception as e:
-        log(f"instagram fetch failed for {url}: {e}")
-        return ""
-
-
-def _fetch_tiktok(url):
-    """Fetch TikTok content via oEmbed API, falling back to stealth fetch.
-    (WanderTold pattern: TikTok oEmbed for video posts)
-    """
-    # Public oEmbed API — no auth, no bot-detection risk
-    try:
-        oembed_url = "https://www.tiktok.com/oembed?url=" + urllib.parse.quote(url, safe="")
-        req = urllib.request.Request(oembed_url, headers=SEARCH_UA)
-        with urllib.request.urlopen(req, timeout=15) as r:
-            data = json.loads(r.read())
-        text = f"{data.get('title', '')} — by {data.get('author_name', '')}".strip(" —")
-        if text:
-            return text[:4000]
-    except Exception:
-        pass
-
-    # Fallback: stealth fetch
-    text = _stealth_fetch_url(url)
-    return text if text else ""
-
-
-def fetch_social(url):
-    """Platform-aware fetch for Instagram/TikTok/etc. (WanderTold agent-reach pattern)."""
-    host = urllib.parse.urlparse(url).netloc.lower()
-    if "instagram.com" in host or "instagr.am" in host:
-        return _fetch_instagram(url)
-    if "tiktok.com" in host:
-        return _fetch_tiktok(url)
-    # Generic pages: crawl4AI first, stealth fallback
-    pages = _crawl_pages([{"url": url, "title": ""}], 1, skip_chrome_filter=True)
-    if pages:
-        return pages[0].get("markdown", "")
-    return _stealth_fetch_url(url)
-
-
-# ---------------------------------------------------------------------------
 # schema.org Event JSON-LD extraction
 # ---------------------------------------------------------------------------
 
@@ -657,13 +520,94 @@ def discover_events(city, query, limit=20):
     return unique_pages
 
 
+# ---------------------------------------------------------------------------
+# Public event contract (see EVENT_DATA_CONTRACT.md / deduplicator.to_dict)
+# ---------------------------------------------------------------------------
+
+_CONFIDENCE_SCORES = {"high": 0.8, "medium": 0.6, "low": 0.4}
+
+
+def event_key(event):
+    """Merge identity of a published event: title + start date + venue."""
+    return ":".join([
+        str(event.get("title", "")),
+        str(event.get("start_date", "")),
+        str(event.get("venue_name", "")),
+    ]).lower()
+
+
+def normalize_event(raw):
+    """Map a factory event onto the published contract shape.
+
+    Handles both raw shapes that reach events_output.json: the LLM-enriched one
+    (date / venue_coords / cost_detail) and the JSON-LD one (start / end /
+    venue / price). Missing values stay empty — never guessed.
+    """
+    coords = raw.get("venue_coords") or []
+    lat = coords[0] if len(coords) > 0 else None
+    lon = coords[1] if len(coords) > 1 else None
+    start_date = raw.get("start_date") or raw.get("date") or raw.get("start") or ""
+    url = raw.get("url") or raw.get("website") or ""
+    confidence = raw.get("confidence", "")
+    if isinstance(confidence, str):
+        confidence = _CONFIDENCE_SCORES.get(confidence.lower(), 0.5)
+    return {
+        "title": raw.get("title", ""),
+        "description": raw.get("description", ""),
+        "start_date": start_date,
+        "end_date": raw.get("end_date") or raw.get("end") or start_date,
+        "venue_name": raw.get("venue_name") or raw.get("venue") or "",
+        "venue_address": raw.get("venue_address", ""),
+        "city": raw.get("city", ""),
+        "county": raw.get("county", ""),
+        "country": raw.get("country", "IE"),
+        "latitude": "" if lat is None else str(lat),
+        "longitude": "" if lon is None else str(lon),
+        "url": url,
+        "cost": raw.get("cost") or raw.get("cost_detail") or raw.get("price") or "",
+        "age_group": raw.get("age_group", ""),
+        "source": raw.get("source", ""),
+        "confidence": round(float(confidence), 2),
+        "all_sources": raw.get("all_sources", []),
+        "all_urls": raw.get("all_urls") or ([url] if url else []),
+    }
+
+
+def promote_candidate(candidate):
+    """Turn one staged social candidate into a publishable event, or None.
+
+    None means the caption carried no usable date — the candidate stays staged
+    until someone supplies the missing information by hand.
+    """
+    caption = candidate.get("caption") or ""
+    source_url = candidate.get("source_url", "")
+    platform = candidate.get("platform", "social")
+    enriched, _model = enrich_event(
+        {"title": caption[:120], "url": source_url, "source": platform},
+        caption,
+        {"llm": 1},
+    )
+    if not enriched or not enriched.get("date"):
+        return None
+    website = enriched.get("website", "")
+    enriched["title"] = enriched.get("title") or caption[:120]
+    # The contract wants the page the event was captured from, not an organiser
+    # page the model inferred — the organiser link rides along in all_urls.
+    enriched["url"] = source_url
+    enriched["source"] = f"{platform}:{source_url[:100]}"
+    enriched["all_sources"] = [source_url]
+    enriched["all_urls"] = [source_url] + ([website] if website else [])
+    enriched["confidence"] = "medium"
+    return normalize_event(enriched)
+
+
 def extract_events_from_pages(pages, city, today, horizon):
     """Extract structured events from crawled pages using LLM enrichment + JSON-LD."""
     events = []
 
     # First: try schema.org JSON-LD extraction (no LLM needed)
     jsonld_events = _extract_jsonld_events([{"url": p["url"]} for p in pages], today, horizon)
-    events.extend(jsonld_events)
+    events.extend(normalize_event(e) for e in jsonld_events)
 
     # Second: LLM enrichment for free-text pages
     for page in pages:
@@ -674,36 +618,19 @@ def extract_events_from_pages(pages, city, today, horizon):
             "url": page["url"],
             "source": f"web:{page.get('url', '')[:100]}",
         }
-        enriched, model = enrich_event(raw_event, page["markdown"], {"llm": 1})
+        enriched, _model = enrich_event(raw_event, page["markdown"], {"llm": 1})
         if enriched and enriched.get("date"):
-            event = {
-                "title": enriched.get("title") or raw_event.get("title", ""),
-                "date": enriched.get("date", ""),
-                "time": enriched.get("time", ""),
-                "duration_hours": enriched.get("duration_hours", 0),
-                "venue_name": enriched.get("venue_name", ""),
-                "venue_address": enriched.get("venue_address", ""),
+            website = enriched.get("website", "")
+            events.append(normalize_event({
+                **enriched,
+                "title": enriched.get("title") or raw_event["title"],
                 "city": enriched.get("city") or city,
-                "venue_coords": enriched.get("venue_coords", [None, None]),
-                "description": enriched.get("description", ""),
-                "category": enriched.get("category", "special"),
-                "age_group": enriched.get("age_group", ""),
-                "cost": enriched.get("cost", ""),
-                "cost_detail": enriched.get("cost_detail", ""),
-                "suitable_for": enriched.get("suitable_for", "general"),
-                "website": enriched.get("website", ""),
-                "phone": enriched.get("phone", ""),
-                "booking_required": enriched.get("booking_required", "none"),
-                "booking_url": enriched.get("booking_url", ""),
-                "contact_email": enriched.get("contact_email", ""),
-                "image_url": enriched.get("image_url", ""),
-                "image_alt": enriched.get("image_alt", ""),
+                "url": page["url"],
+                "source": raw_event["source"],
                 "all_sources": [page["url"]],
+                "all_urls": [page["url"]] + ([website] if website else []),
                 "confidence": "high",
-                "model_used": model,
-                "status": "staged",
-            }
-            events.append(event)
+            }))
 
     return events
 
@@ -745,7 +672,7 @@ def run_discovery_cycle():
         # Deduplicate by title + date
         seen = set()
         for ev in events:
-            key = f"{ev.get('title', '')}:{ev.get('date', '')}:{ev.get('venue_name', '')}".lower()
+            key = event_key(ev)
             if key not in seen:
                 seen.add(key)
                 all_events.append(ev)
@@ -759,16 +686,12 @@ def run_discovery_cycle():
             pass
 
     # Deduplicate against existing
-    existing_keys = set()
-    for ev in existing:
-        key = f"{ev.get('title', '')}:{ev.get('date', '')}:{ev.get('venue_name', '')}".lower()
-        existing_keys.add(key)
-
-    new_events = [ev for ev in all_events if f"{ev.get('title', '')}:{ev.get('date', '')}:{ev.get('venue_name', '')}".lower() not in existing_keys]
+    existing_keys = {event_key(ev) for ev in existing}
+    new_events = [ev for ev in all_events if event_key(ev) not in existing_keys]
 
     # Merge and write
     existing.extend(new_events)
-    existing.sort(key=lambda e: (e.get("date", ""), -len(e.get("all_sources", []))))
+    existing.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
 
     OUTPUT_FILE.write_text(json.dumps(existing, indent=2, ensure_ascii=False))
     log(f"Total events: {len(existing)} ({len(new_events)} new)")
@@ -778,88 +701,6 @@ def run_discovery_cycle():
     save_state(state)
 
     return len(new_events)
-
-
-def run_social_scrape():
-    """Scrape Instagram/TikTok for kids events via agent-reach pattern."""
-    log("Running social media scrape...")
-
-    # Read hashtags / queries from env or defaults
-    instagram_hashtags = ENV.get("INSTAGRAM_HASHTAGS",
-        "kidseventsireland,kidsactivitiesireland,familyfriendlyireland,dublinwithkids,corkfamily"
-    ).split(",")
-
-    tiktok_queries = ENV.get("TIKTOK_QUERIES",
-        "kids events Dublin Ireland,Cork family activities,Galway kids things to do"
-    ).split(",")
-
-    all_events = []
-
-    # Instagram: discover via search gateway, then fetch each post
-    for tag in instagram_hashtags:
-        tag = tag.strip()
-        if not tag:
-            continue
-        # Discover Instagram post URLs via search gateway
-        discovered = _src_gateway(f"site:instagram.com {tag}", 5)
-        for d in discovered:
-            text = fetch_social(d["url"])
-            if text and len(text) > 20:
-                raw = text
-                enriched, model = enrich_event(
-                    {"title": f"Instagram #{tag}", "url": d["url"], "source": "instagram"},
-                    raw,
-                    {"llm": 1}
-                )
-                if enriched and enriched.get("date"):
-                    all_events.append({
-                        "title": enriched.get("title", f"Instagram #{tag}"),
-                        "date": enriched.get("date", ""),
-                        "time": enriched.get("time", ""),
-                        "venue_name": enriched.get("venue_name", ""),
-                        "venue_address": enriched.get("venue_address", ""),
-                        "city": enriched.get("city", ""),
-                        "description": enriched.get("description", ""),
-                        "category": enriched.get("category", "special"),
-                        "age_group": enriched.get("age_group", ""),
-                        "cost": enriched.get("cost", ""),
-                        "website": enriched.get("website", d["url"]),
-                        "all_sources": [d["url"]],
-                        "confidence": "medium",
-                        "model_used": model,
-                        "status": "staged",
-                    })
-
-    # TikTok: fetch each query result
-    for q in tiktok_queries:
-        q = q.strip()
-        if not q:
-            continue
-        discovered = _src_gateway(q, 3)
-        for d in discovered:
-            text = fetch_social(d["url"])
-            if text and len(text) > 20:
-                enriched, model = enrich_event(
-                    {"title": q, "url": d["url"], "source": "tiktok"},
-                    text,
-                    {"llm": 1}
-                )
-                if enriched and enriched.get("date"):
-                    all_events.append({
-                        "title": enriched.get("title", q),
-                        "date": enriched.get("date", ""),
-                        "venue_name": enriched.get("venue_name", ""),
-                        "city": enriched.get("city", ""),
-                        "description": enriched.get("description", ""),
-                        "category": enriched.get("category", "special"),
-                        "all_sources": [d["url"]],
-                        "confidence": "medium",
-                        "model_used": model,
-                        "status": "staged",
-                    })
-
-    log(f"Social scrape: extracted {len(all_events)} events")
-    return all_events
 
 
 def _web_block(pages):
@@ -877,16 +718,11 @@ def _web_block(pages):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Kids Events Ireland factory worker")
-    parser.add_argument("--social", action="store_true", help="Run social media scrape (Instagram/TikTok)")
     parser.add_argument("--city", default=None, help="Run for specific city only")
-    args = parser.parse_args()
+    parser.parse_args()
 
-    if args.social:
-        events = run_social_scrape()
-        log(f"Social scrape complete: {len(events)} events extracted")
-    else:
-        n = run_discovery_cycle()
-        log(f"Discovery cycle complete: {n} new events")
+    n = run_discovery_cycle()
+    log(f"Discovery cycle complete: {n} new events")
 
 
 if __name__ == "__main__":

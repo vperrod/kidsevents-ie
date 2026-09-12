@@ -10,7 +10,10 @@ import os
 import subprocess
 import time
 import threading
-from datetime import datetime
+from datetime import datetime, timezone
+
+import factory_worker
+import staging
 
 app = Flask(__name__, 
             static_folder="web",
@@ -382,6 +385,82 @@ def admin_events():
             pass
     events.sort(key=lambda e: e.get("start_date", ""))
     return jsonify({"events": events})
+
+@app.route("/admin/api/social/staged")
+def admin_social_staged():
+    """Social candidates awaiting a review decision, plus per-source counts."""
+    pending = [c for c in staging.load_staged() if c.get("status") == "needs_review"]
+    found_via = {}
+    for candidate in pending:
+        key = candidate.get("found_via") or "Unattributed"
+        found_via[key] = found_via.get(key, 0) + 1
+    return jsonify({
+        "candidates": pending,
+        "total": len(pending),
+        "found_via": found_via,
+    })
+
+
+def _set_candidate_status(source_url, status, note=None):
+    """Mark one staged candidate. Candidates are never deleted — audit trail."""
+    candidates = staging.load_staged()
+    for candidate in candidates:
+        if candidate.get("source_url") == source_url:
+            candidate["status"] = status
+            candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+            if note:
+                candidate["review_note"] = note
+            staging.save_staged(candidates)
+            return candidate
+    return None
+
+
+@app.route("/admin/api/social/approve", methods=["POST"])
+def admin_social_approve():
+    """Enrich one staged candidate and publish it if it yields a usable date."""
+    source_url = (request.get_json(silent=True) or {}).get("source_url", "")
+    candidate = next(
+        (c for c in staging.load_staged() if c.get("source_url") == source_url), None
+    )
+    if not candidate:
+        return jsonify({"error": "Candidate not found"}), 404
+
+    event = factory_worker.promote_candidate(candidate)
+    if not event:
+        return jsonify({
+            "error": "still needs manual info",
+            "message": "No usable date could be read from this post — it stays staged.",
+        }), 422
+
+    events = []
+    if os.path.exists(EVENTS_FILE):
+        try:
+            with open(EVENTS_FILE, "r") as f:
+                events = json.load(f)
+        except Exception:
+            events = []
+    key = factory_worker.event_key(event)
+    added = not any(factory_worker.event_key(e) == key for e in events)
+    if added:
+        events.append(event)
+        events.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
+        with open(EVENTS_FILE, "w") as f:
+            json.dump(events, f, indent=2, ensure_ascii=False)
+
+    _set_candidate_status(source_url, "approved")
+    return jsonify({"status": "approved", "published": added, "event": event})
+
+
+@app.route("/admin/api/social/reject", methods=["POST"])
+def admin_social_reject():
+    body = request.get_json(silent=True) or {}
+    candidate = _set_candidate_status(
+        body.get("source_url", ""), "rejected", body.get("note", "")
+    )
+    if not candidate:
+        return jsonify({"error": "Candidate not found"}), 404
+    return jsonify({"status": "rejected"})
+
 
 def _update_factory_state(success, events_count, duration):
     """Update admin_state.json with run results."""
