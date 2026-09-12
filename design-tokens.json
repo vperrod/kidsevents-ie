@@ -1,0 +1,40 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "canvas": { "$value": "#F5F7F2", "$type": "color" },
+    "surface": { "$value": "#FFFFFF", "$type": "color" },
+    "ink": { "$value": "#17312D", "$type": "color" },
+    "ink-muted": { "$value": "#46615B", "$type": "color" },
+    "atlantic": { "$value": "#1B5C63", "$type": "color" },
+    "atlantic-soft": { "$value": "#A8C7C0", "$type": "color" },
+    "lichen": { "$value": "#DDE8D7", "$type": "color" },
+    "gorse": { "$value": "#F1C84B", "$type": "color" },
+    "coral": { "$value": "#E48A78", "$type": "color" },
+    "border": { "$value": "#9FB2AA", "$type": "color" },
+    "danger": { "$value": "#A23F3A", "$type": "color" }
+  },
+  "font": {
+    "display": { "$value": "Bricolage Grotesque", "$type": "fontFamily" },
+    "body": { "$value": "Atkinson Hyperlegible", "$type": "fontFamily" }
+  },
+  "radius": {
+    "control": { "$value": "12px", "$type": "dimension" },
+    "card": { "$value": "20px", "$type": "dimension" },
+    "round": { "$value": "999px", "$type": "dimension" }
+  },
+  "space": {
+    "1": { "$value": "4px", "$type": "dimension" },
+    "2": { "$value": "8px", "$type": "dimension" },
+    "3": { "$value": "12px", "$type": "dimension" },
+    "4": { "$value": "16px", "$type": "dimension" },
+    "6": { "$value": "24px", "$type": "dimension" },
+    "8": { "$value": "32px", "$type": "dimension" },
+    "12": { "$value": "48px", "$type": "dimension" },
+    "16": { "$value": "64px", "$type": "dimension" }
+  },
+  "motion": {
+    "fast": { "$value": "120ms", "$type": "duration" },
+    "standard": { "$value": "220ms", "$type": "duration" },
+    "ease-out": { "$value": [0.23, 1, 0.32, 1], "$type": "cubicBezier" }
+  }
+}

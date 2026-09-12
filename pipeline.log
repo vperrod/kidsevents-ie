@@ -1,0 +1,96 @@
+
+=== Tier 1a: YourDaysOut.ie ===
+  Found 19 event URLs (limit: 20)
+  Scraped 19/19 events
+
+=== Tier 1b: AllEvents.in ===
+  Found 15 event URLs (limit: 20)
+  Scraped 10/15 events
+
+=== Tier 1c: FamilyFun.ie ===
+  Found 100 event URLs (limit: 20)
+  Scraped 20/100 events
+
+=== Tier 1d: IrelandMe.com ===
+  Found 60 events
+
+=== Tier 1e: The Ark ===
+  Found 16 events
+
+=== Tier 1f: Limerick.ie ===
+  Found 0 events
+
+=== Deduplication ===
+  Input: 125 raw events
+  Output: 124 unique events
+  Saved to events_output.json
+
+=== Event Feed Summary ===
+  Total unique events: 124
+    irelandme: 60
+    familyfun: 20
+    yourdaysout: 19
+    theark: 16
+    allevents: 9
+
+  By location:
+    Dublin: 51
+    Unknown: 11
+    DN: 9
+    County Dublin Dublin Ireland: 5
+    Tipperary: 3
+    Limerick: 3
+    Longford: 3
+    Waterford: 2
+    Cork: 2
+    County Dublin Ireland: 2
+
+  Upcoming (next 14 days): 11
+    2026-09-10: Shoreline Arts Festival
+    2026-09-11T17:00:00+01:00: YouthClub @Crosscare
+    2026-09-12: Dublin Liffey Festival
+    2026-09-12T11:00:00+01:00: Dublin's Biggest Second Hand Fashion Market!
+    2026-09-15: National Ploughing Championship
+    2026-09-16T15:00:00+01:00: Dance Around the World – Kids Dance Classes Open Day
+    2026-09-16T19:00:00+01:00: The Neighborhood Kids at Lost Lane Dublin 16/9/26
+    2026-09-17: Clifden Arts Festival
+    2026-09-18: Culture Night
+    2026-09-18: Cromane SeaFest
+
+=== Sample events ===
+
+  Title: Beyond the Trees Avondale Wicklow events
+  Date: 
+  Venue: 
+  Location: , 
+  Sources: ['familyfun']
+  URLs: ['https://www.familyfun.ie/beyond-the-trees-avondale-wicklow-events/']
+
+  Title: Beyond the Trees Avondale
+  Date: 
+  Venue: 
+  Location: , 
+  Sources: ['familyfun']
+  URLs: ['https://www.familyfun.ie/beyond-the-trees-avondale-easter/']
+
+  Title: Waterford St Patrick&#039;s Festival
+  Date: 
+  Venue: 
+  Location: Waterford, Waterford
+  Sources: ['familyfun']
+  URLs: ['https://www.familyfun.ie/st-patricks-day-festival-waterford/']
+
+  Title: Cork St Patrick&#039;s Festival Information on Times and Events
+  Date: 
+  Venue: 
+  Location: Cork, Cork
+  Sources: ['familyfun']
+  URLs: ['https://www.familyfun.ie/cork-st-patricks-festival/']
+
+  Title: Dublin Book Festival in the Farmleigh Dublin
+  Date: 
+  Venue: 
+  Location: Dublin, Dublin
+  Sources: ['familyfun']
+  URLs: ['https://www.familyfun.ie/dublin-book-festival/']
+Pipeline complete at Mon Sep  7 05:42:59 UTC 2026

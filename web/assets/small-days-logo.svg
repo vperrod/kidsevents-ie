@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 238 48" role="img" aria-labelledby="title">
+  <title id="title">Small Days</title>
+  <rect width="48" height="48" rx="15" fill="#1B5C63"/>
+  <circle cx="16" cy="15" r="6" fill="#F1C84B"/>
+  <path d="M10 35c6-8 12-4 17-10 3-3 4-7 11-10" fill="none" stroke="#F5F7F2" stroke-width="4" stroke-linecap="round"/>
+  <text x="62" y="34" fill="#17312D" font-family="Bricolage Grotesque, Arial, sans-serif" font-size="29" font-weight="700" letter-spacing="-1.5">Small Days</text>
+</svg>

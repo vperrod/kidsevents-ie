@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#1B5C63" />
+    <title>Small Days — Editor desk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/small-days-mark.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        --ink: #143d35;
+        --ink2: #24574b;
+        --lime: #c5ec70;
+        --paper: #f7f6ef;
+        --white: #fffefa;
+        --mist: #e7eee8;
+        --line: #cbd8cf;
+        --quiet: #64776f;
+        --red: #a94636;
+        --amber: #a8791b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          15px/1.45 "DM Sans",
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      a {
+        color: inherit;
+      }
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 236px minmax(0, 1fr);
+      }
+      .rail {
+        background: var(--ink);
+        color: #eaf2df;
+        padding: 24px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 8px;
+        font:
+          700 20px/1 Fraunces,
+          serif;
+        letter-spacing: -0.04em;
+      }
+      .mark {
+        display: grid;
+        place-items: center;
+        width: 29px;
+        height: 29px;
+        border-radius: 50% 50% 43% 50%;
+        background: var(--lime);
+        color: var(--ink);
+        font:
+          700 21px/1 Fraunces,
+          serif;
+      }
+      .nav {
+        display: grid;
+        gap: 4px;
+      }
+      .nav button {
+        text-align: left;
+        border: 0;
+        border-radius: 9px;
+        background: transparent;
+        color: #c2d2c7;
+        padding: 11px 12px;
+        font-weight: 600;
+      }
+      .nav button:hover {
+        background: #24574b;
+        color: #fff;
+      }
+      .nav button.active {
+        background: var(--lime);
+        color: var(--ink);
+      }
+      .rail-foot {
+        margin-top: auto;
+        padding: 12px 8px;
+        border-top: 1px solid #346257;
+        color: #b7c8ba;
+        font-size: 12px;
+      }
+      .rail-foot a {
+        display: block;
+        margin-top: 7px;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .page {
+        min-width: 0;
+        padding: 34px clamp(18px, 4vw, 58px) 56px;
+        max-width: 1500px;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: flex-start;
+        margin-bottom: 30px;
+      }
+      h1 {
+        margin: 0;
+        font:
+          600 clamp(34px, 4vw, 54px) / 0.98 Fraunces,
+          serif;
+        letter-spacing: -0.055em;
+      }
+      .sub {
+        margin: 10px 0 0;
+        max-width: 580px;
+        color: var(--quiet);
+      }
+      .live {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+        padding-top: 5px;
+        color: var(--quiet);
+        font-size: 12px;
+      }
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #75a74a;
+        box-shadow: 0 0 0 4px #e1efd0;
+      }
+      .tabs {
+        display: flex;
+        gap: 5px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 28px;
+        overflow: auto;
+      }
+      .tab {
+        border: 0;
+        background: none;
+        padding: 0 2px 12px;
+        margin-right: 20px;
+        color: var(--quiet);
+        font-weight: 600;
+        white-space: nowrap;
+        border-bottom: 3px solid transparent;
+      }
+      .tab.active {
+        color: var(--ink);
+        border-color: var(--lime);
+      }
+      .view {
+        display: none;
+      }
+      .view.active {
+        display: block;
+      }
+      .hero {
+        background: var(--ink);
+        color: #eff6e8;
+        border-radius: 20px;
+        padding: clamp(22px, 3vw, 36px);
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(230px, 0.8fr);
+        gap: 28px;
+        margin-bottom: 25px;
+      }
+      .eyebrow {
+        color: #a9c6b6;
+        font:
+          500 11px/1 "DM Mono",
+          monospace;
+      }
+      .hero h2 {
+        margin: 10px 0;
+        font:
+          600 clamp(26px, 3.2vw, 41px) / 1.02 Fraunces,
+          serif;
+        letter-spacing: -0.045em;
+      }
+      .hero p {
+        color: #c5d7cc;
+        max-width: 570px;
+        margin: 0;
+      }
+      .actions {
+        margin-top: 23px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .button {
+        min-height: 43px;
+        border: 1px solid transparent;
+        border-radius: 9px;
+        padding: 0 15px;
+        font-weight: 700;
+      }
+      .primary {
+        background: var(--lime);
+        color: var(--ink);
+      }
+      .secondary {
+        background: transparent;
+        border-color: #608074;
+        color: #eff6e8;
+      }
+      .pulse {
+        align-self: end;
+        border-left: 1px solid #38665a;
+        padding-left: 26px;
+      }
+      .pulse b {
+        display: block;
+        margin: 7px 0 3px;
+        font:
+          600 39px/1 Fraunces,
+          serif;
+        color: var(--lime);
+        letter-spacing: -0.05em;
+      }
+      .pulse span {
+        color: #b9cfc0;
+        font-size: 13px;
+      }
+      .pulse hr {
+        border: 0;
+        border-top: 1px solid #38665a;
+        margin: 18px 0;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin: 0 0 25px;
+      }
+      .metric,
+      .panel {
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+      }
+      .metric {
+        padding: 17px;
+        min-height: 123px;
+      }
+      .metric b {
+        display: block;
+        margin: 12px 0 4px;
+        font:
+          600 35px/1 Fraunces,
+          serif;
+        letter-spacing: -0.05em;
+      }
+      .metric span {
+        color: var(--quiet);
+        font-size: 13px;
+      }
+      .good {
+        color: #477a41;
+      }
+      .warn {
+        color: var(--amber);
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 20px;
+      }
+      .panel {
+        padding: 21px;
+        min-width: 0;
+      }
+      .panel h3 {
+        margin: 0;
+        font-size: 17px;
+        letter-spacing: -0.02em;
+      }
+      .head {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 10px;
+      }
+      .muted,
+      .section-copy {
+        color: var(--quiet);
+        font-size: 13px;
+      }
+      .link {
+        border: 0;
+        background: none;
+        color: var(--ink2);
+        text-decoration: underline;
+        font-size: 13px;
+        font-weight: 700;
+        padding: 2px;
+      }
+      .queue {
+        display: grid;
+      }
+      .queue-item {
+        display: grid;
+        grid-template-columns: 9px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 11px;
+        padding: 14px 0;
+        border-top: 1px solid var(--mist);
+      }
+      .queue-item:first-child {
+        border-top: 0;
+      }
+      .flag {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--amber);
+      }
+      .flag.red {
+        background: var(--red);
+      }
+      .queue-title {
+        font-weight: 700;
+      }
+      .queue-detail {
+        color: var(--quiet);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+      .count {
+        font:
+          500 12px/1 "DM Mono",
+          monospace;
+        color: var(--quiet);
+      }
+      .coverage {
+        padding-top: 3px;
+        display: grid;
+        gap: 14px;
+      }
+      .coverage-row {
+        display: grid;
+        grid-template-columns: 92px 1fr 32px;
+        gap: 10px;
+        align-items: center;
+        font-size: 13px;
+      }
+      .bar {
+        height: 7px;
+        background: var(--mist);
+        border-radius: 99px;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--ink2);
+        border-radius: 99px;
+      }
+      .coverage-row em {
+        font-style: normal;
+        color: var(--quiet);
+        text-align: right;
+        font:
+          11px "DM Mono",
+          monospace;
+      }
+      .section-title {
+        margin: 0 0 6px;
+        font:
+          600 29px/1 Fraunces,
+          serif;
+        letter-spacing: -0.04em;
+      }
+      .section-copy {
+        margin: 0 0 20px;
+      }
+      .filterbar {
+        display: flex;
+        gap: 9px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 17px;
+        flex-wrap: wrap;
+      }
+      .search {
+        min-height: 42px;
+        width: min(100%, 340px);
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--ink);
+      }
+      .filters {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+      }
+      .chip {
+        border: 1px solid var(--line);
+        background: #fff;
+        border-radius: 99px;
+        padding: 7px 11px;
+        color: var(--ink);
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .chip.active {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--white);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 700px;
+      }
+      th {
+        text-align: left;
+        color: var(--quiet);
+        font:
+          500 10px "DM Mono",
+          monospace;
+        letter-spacing: 0.03em;
+        padding: 13px 15px;
+        border-bottom: 1px solid var(--line);
+      }
+      td {
+        padding: 14px 15px;
+        border-bottom: 1px solid var(--mist);
+        vertical-align: top;
+      }
+      tr:last-child td {
+        border: 0;
+      }
+      .item-title {
+        font-weight: 700;
+        max-width: 330px;
+      }
+      .item-sub {
+        font-size: 12px;
+        color: var(--quiet);
+        margin-top: 3px;
+        max-width: 380px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .tag {
+        display: inline-block;
+        padding: 3px 7px;
+        border-radius: 5px;
+        background: var(--mist);
+        color: var(--ink2);
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .tag.missing {
+        background: #f8edd0;
+        color: #855e13;
+      }
+      .status {
+        font:
+          500 11px "DM Mono",
+          monospace;
+      }
+      .status.ok {
+        color: #477a41;
+      }
+      .status.issue {
+        color: var(--amber);
+      }
+      .source-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .source {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px;
+        background: var(--white);
+      }
+      .source b {
+        display: block;
+        font-size: 15px;
+      }
+      .source p {
+        font-size: 12px;
+        color: var(--quiet);
+        margin: 4px 0 13px;
+      }
+      .source a {
+        font-size: 12px;
+        color: var(--ink2);
+        word-break: break-word;
+      }
+      .source-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 5px;
+        border-top: 1px solid var(--mist);
+        padding-top: 10px;
+        font-size: 11px;
+        color: var(--quiet);
+      }
+      .stage {
+        display: grid;
+        grid-template-columns: 24px 1fr auto;
+        gap: 11px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--mist);
+        align-items: center;
+      }
+      .stage:last-child {
+        border: 0;
+      }
+      .stage-num {
+        font:
+          500 11px "DM Mono",
+          monospace;
+        color: var(--quiet);
+      }
+      .stage b {
+        font-size: 14px;
+      }
+      .stage span {
+        font-size: 12px;
+        color: var(--quiet);
+      }
+      .log {
+        max-height: 440px;
+        overflow: auto;
+        background: #102d27;
+        color: #d8e6d6;
+        border-radius: 10px;
+        padding: 16px;
+        font:
+          12px/1.7 "DM Mono",
+          monospace;
+        white-space: pre-wrap;
+      }
+      .empty {
+        padding: 30px;
+        color: var(--quiet);
+        text-align: center;
+      }
+      .toast {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 5;
+        background: var(--ink);
+        color: #fff;
+        padding: 12px 15px;
+        border-radius: 9px;
+        box-shadow: 0 10px 24px #173f3533;
+        display: none;
+      }
+      .toast.show {
+        display: block;
+      }
+      @media (max-width: 900px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        .rail {
+          height: auto;
+          position: static;
+          padding: 15px 17px;
+          gap: 13px;
+        }
+        .rail-foot {
+          display: none;
+        }
+        .nav {
+          display: flex;
+          overflow: auto;
+          margin: 0 -5px;
+        }
+        .nav button {
+          white-space: nowrap;
+          padding: 8px 10px;
+        }
+        .page {
+          padding: 25px 18px 44px;
+        }
+        .hero,
+        .two {
+          grid-template-columns: 1fr;
+        }
+        .pulse {
+          border-left: 0;
+          border-top: 1px solid #38665a;
+          padding: 18px 0 0;
+        }
+        .metrics {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .source-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 520px) {
+        .top {
+          display: block;
+        }
+        .live {
+          margin-top: 12px;
+        }
+        .metric {
+          padding: 14px;
+          min-height: 110px;
+        }
+        .metric b {
+          font-size: 29px;
+        }
+        .hero {
+          border-radius: 15px;
+          padding: 21px;
+        }
+        .tabs {
+          margin-right: -18px;
+        }
+        .source-grid {
+          grid-template-columns: 1fr;
+        }
+        .button {
+          flex: 1;
+        }
+        .filterbar {
+          align-items: stretch;
+        }
+        .search {
+          width: 100%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+    </style>
+    <link rel="stylesheet" href="admin-brand.css?v=2" />
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="rail">
+        <div class="brand">
+          <span class="mark"><img src="assets/small-days-mark.svg" alt="" /></span>
+          Small Days
+        </div>
+        <nav class="nav" aria-label="Editor desk">
+          <button class="active" data-view="desk">Today</button
+          ><button data-view="content">Content</button
+          ><button data-view="sources">Sources</button
+          ><button data-view="pipeline">Pipeline</button
+          ><button data-view="logs">Run log</button>
+        </nav>
+        <div class="rail-foot">
+          Small Days editorial desk<a href="/kidsevents/" target="_blank" rel="noopener"
+            >View public site ↗</a
+          >
+        </div>
+      </aside>
+      <main class="page">
+        <header class="top">
+          <div>
+            <h1 id="page-title">Today’s desk</h1>
+            <p class="sub" id="page-subtitle">
+              A clear view of what parents can see, what needs a decision, and
+              what the next collection run will change.
+            </p>
+          </div>
+          <div class="live">
+            <i class="dot"></i><span id="refresh-label">Loading live data</span>
+          </div>
+        </header>
+        <div class="tabs">
+          <button class="tab active" data-view="desk">Overview</button
+          ><button class="tab" data-view="content">Editorial review</button
+          ><button class="tab" data-view="sources">Coverage</button
+          ><button class="tab" data-view="pipeline">Collection</button>
+        </div>
+        <section class="view active" id="view-desk">
+          <div class="hero">
+            <div>
+              <div class="eyebrow">Small Days editorial desk</div>
+              <h2 id="desk-title">
+                Your local guide is ready for its next polish.
+              </h2>
+              <p id="desk-copy">
+                Loading the current collection and quality checks.
+              </p>
+              <div class="actions">
+                <button class="button primary run">Run a collection</button
+                ><button class="button secondary" data-view="content">
+                  Review content
+                </button>
+              </div>
+            </div>
+            <aside class="pulse">
+              <span>Published now</span><b id="hero-total">—</b
+              ><span>events and family ideas</span>
+              <hr />
+              <span>Last collection</span
+              ><b id="hero-last" style="font-size: 25px">—</b
+              ><span id="hero-result">Checking the factory</span>
+            </aside>
+          </div>
+          <div class="metrics">
+            <article class="metric">
+              <span>Published items</span><b id="m-total">—</b
+              ><span id="m-total-note">Loading</span>
+            </article>
+            <article class="metric">
+              <span>Ready for parents</span><b class="good" id="m-ready">—</b
+              ><span>date, place, age and cost</span>
+            </article>
+            <article class="metric">
+              <span>Need context</span><b class="warn" id="m-context">—</b
+              ><span>missing useful planning details</span>
+            </article>
+            <article class="metric">
+              <span>Places & holidays</span><b id="m-holidays">—</b
+              ><span>saved guides</span>
+            </article>
+          </div>
+          <div class="two">
+            <section class="panel">
+              <div class="head">
+                <div>
+                  <h3>What needs attention</h3>
+                  <p class="muted">A practical queue, not system noise.</p>
+                </div>
+                <button class="link" data-view="content">Open review</button>
+              </div>
+              <div class="queue" id="attention"></div>
+            </section>
+            <section class="panel">
+              <div class="head">
+                <div>
+                  <h3>Where we’re covering</h3>
+                  <p class="muted">Published items by county or city.</p>
+                </div>
+              </div>
+              <div class="coverage" id="coverage"></div>
+            </section>
+          </div>
+        </section>
+        <section class="view" id="view-content">
+          <h2 class="section-title">Editorial review</h2>
+          <p class="section-copy">
+            Check the facts families use to choose: timing, place, age fit,
+            price and original source.
+          </p>
+          <div class="filterbar">
+            <input
+              class="search"
+              id="search"
+              aria-label="Search title, place or county"
+              placeholder="Search title, place, county…"
+              type="search"
+            />
+            <div class="filters">
+              <button class="chip active" data-filter="all">
+                All <span id="all-count"></span></button
+              ><button class="chip" data-filter="needs">
+                Need details <span id="need-count"></span></button
+              ><button class="chip" data-filter="ready">Ready</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Listing</th>
+                  <th>When</th>
+                  <th>Family details</th>
+                  <th>Source</th>
+                  <th>Quality</th>
+                </tr>
+              </thead>
+              <tbody id="events"></tbody>
+            </table>
+          </div>
+        </section>
+        <section class="view" id="view-sources">
+          <h2 class="section-title">Coverage map</h2>
+          <p class="section-copy">
+            These sites currently feed discovery. Being listed here does not
+            make an item publish-ready.
+          </p>
+          <div class="metrics">
+            <article class="metric">
+              <span>Discovery sources</span><b id="s-total">—</b
+              ><span>across <span id="s-regions">—</span> regions</span>
+            </article>
+            <article class="metric">
+              <span>Sources represented</span><b id="s-used">—</b
+              ><span>in published content</span>
+            </article>
+            <article class="metric">
+              <span>Social import</span><b class="warn">Paused</b
+              ><span>awaiting account session</span>
+            </article>
+            <article class="metric">
+              <span>Holidays</span><b id="s-holidays">—</b
+              ><span>curated ideas</span>
+            </article>
+          </div>
+          <div class="source-grid" id="sources"></div>
+        </section>
+        <section class="view" id="view-pipeline">
+          <div class="head">
+            <div>
+              <h2 class="section-title">Collection run</h2>
+              <p class="section-copy">
+                Web discovery and extraction only. Social collections remain in
+                review until account access is restored.
+              </p>
+            </div>
+            <button class="button primary run">Run a collection</button>
+          </div>
+          <div class="two">
+            <section class="panel">
+              <h3>Run status</h3>
+              <div id="stages"></div>
+            </section>
+            <section class="panel">
+              <h3>Recent runs</h3>
+              <div id="history"></div>
+            </section>
+          </div>
+        </section>
+        <section class="view" id="view-logs">
+          <div class="head">
+            <div>
+              <h2 class="section-title">Run log</h2>
+              <p class="section-copy">
+                The latest collection output, useful when a source needs
+                attention.
+              </p>
+            </div>
+            <button class="button secondary" id="refresh-log">Refresh</button>
+          </div>
+          <div class="log" id="log">Loading…</div>
+        </section>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script>
+      (() => {
+        const match = location.pathname.match(/^(.*)\/admin/),
+          API = match ? match[1] : "";
+        $ = (s) => document.querySelector(s);
+        const esc = (v) =>
+          String(v || "").replace(
+            /[&<>"']/g,
+            (c) =>
+              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+          );
+        let S = { events: [], sources: [], holidays: [], filter: "all" };
+        const get = async (u, o) => {
+            let r = await fetch(u, o);
+            if (!r.ok) throw Error(r.status);
+            return r.json();
+          },
+          src = (e) =>
+            (e.source || "Unknown").split(":")[0].replace(/[_-]/g, " "),
+          place = (e) => !!(e.venue_name || e.city || e.county),
+          ready = (e) => !!(e.start_date && place(e) && e.age_group && e.cost),
+          ago = (v) => {
+            if (!v) return "Not recorded";
+            let n = Date.now() - new Date(v);
+            let h = Math.floor(n / 36e5);
+            return h < 1
+              ? "just now"
+              : h < 24
+                ? h + "h ago"
+                : Math.floor(h / 24) + "d ago";
+          },
+          toast = (t) => {
+            let e = $("#toast");
+            e.textContent = t;
+            e.classList.add("show");
+            setTimeout(() => e.classList.remove("show"), 3500);
+          };
+        function view(n) {
+          document
+            .querySelectorAll(".view")
+            .forEach((e) => e.classList.toggle("active", e.id === "view-" + n));
+          document.querySelectorAll("[data-view]").forEach((e) => {
+            const active = e.dataset.view === n;
+            e.classList.toggle("active", active);
+            e.setAttribute("aria-pressed", String(active));
+          });
+          let x = {
+            desk: [
+              "Today’s desk",
+              "A clear view of what parents can see, what needs a decision, and what the next collection run will change.",
+            ],
+            content: [
+              "Editorial review",
+              "The details that turn a listing into a confident family plan.",
+            ],
+            sources: [
+              "Coverage map",
+              "See what is feeding Small Days and where the feed is thin.",
+            ],
+            pipeline: [
+              "Collection run",
+              "Run and monitor the web collection pipeline.",
+            ],
+            logs: ["Run log", "The latest system output, in one place."],
+          }[n];
+          $("#page-title").textContent = x[0];
+          $("#page-subtitle").textContent = x[1];
+          if (n === "logs") logs();
+          scrollTo({ top: 0 });
+        }
+        function dashboard() {
+          let e = S.events,
+            total = e.length,
+            date = e.filter((x) => x.start_date).length,
+            loc = e.filter(place).length,
+            age = e.filter((x) => x.age_group).length,
+            cost = e.filter((x) => x.cost).length,
+            full = e.filter(ready).length;
+          $("#hero-total").textContent = total;
+          $("#hero-last").textContent = ago(S.status?.last_run);
+          $("#hero-result").textContent =
+            S.status?.last_run_result ||
+            (S.status?.factory_timer === "active"
+              ? "Scheduled collection is on"
+              : "Collection is not scheduled");
+          $("#m-total").textContent = total;
+          $("#m-total-note").textContent =
+            `from ${Object.keys(S.stats?.sources_by_type || {}).length} represented sources`;
+          $("#m-ready").textContent = full;
+          $("#m-context").textContent = total - full;
+          $("#m-holidays").textContent = S.holidays.length;
+          $("#desk-title").textContent = total
+            ? `${total} things to do are live. Make the next run more useful, not just bigger.`
+            : "Start with a first collection of family plans.";
+          $("#desk-copy").textContent = total
+            ? `${date} have a date, ${loc} have a place and ${full} have the full parent-facing essentials.`
+            : "Run a collection to build the first editorial queue.";
+          let q = [
+            [
+              "Listings without a date",
+              total - date,
+              "Families cannot plan these yet",
+              "red",
+            ],
+            [
+              "Listings without an age range",
+              total - age,
+              "Add a broad fit such as “3–7” or “all ages”",
+              "",
+            ],
+            [
+              "Listings without price details",
+              total - cost,
+              "Add free, paid or “check source”",
+              "",
+            ],
+            [
+              "Listings without a usable location",
+              total - loc,
+              "Add a venue, town or county",
+              "",
+            ],
+          ];
+          $("#attention").innerHTML = q
+            .map(
+              (x) =>
+                `<div class="queue-item"><i class="flag ${x[3]}"></i><div><div class="queue-title">${x[0]}</div><div class="queue-detail">${x[2]}</div></div><span class="count">${x[1]}</span></div>`,
+            )
+            .join("");
+          let g = {};
+          e.forEach((x) => {
+            let k = x.county || x.city || "Location missing";
+            g[k] = (g[k] || 0) + 1;
+          });
+          let m = Math.max(1, ...Object.values(g));
+          $("#coverage").innerHTML =
+            Object.entries(g)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 6)
+              .map(
+                ([k, v]) =>
+                  `<div class="coverage-row"><span>${esc(k)}</span><div class="bar"><i style="width:${(100 * v) / m}%"></i></div><em>${v}</em></div>`,
+              )
+              .join("") ||
+            '<div class="empty">No locations available yet.</div>';
+        }
+        function events() {
+          let q = $("#search").value.toLowerCase(),
+            e = S.events.filter((x) => {
+              let t = [
+                x.title,
+                x.venue_name,
+                x.city,
+                x.county,
+                x.description,
+                src(x),
+              ]
+                .join(" ")
+                .toLowerCase();
+              return (
+                (!q || t.includes(q)) &&
+                (S.filter === "all" ||
+                  (S.filter === "ready" && ready(x)) ||
+                  (S.filter === "needs" && !ready(x)))
+              );
+            });
+          $("#all-count").textContent = S.events.length;
+          $("#need-count").textContent = S.events.filter(
+            (x) => !ready(x),
+          ).length;
+          $("#events").innerHTML =
+            e
+              .slice(0, 150)
+              .map((x) => {
+                let d = [
+                  x.age_group && `Ages ${x.age_group}`,
+                  x.cost || "Cost to check",
+                  place(x)
+                    ? x.venue_name || x.city || x.county
+                    : "Place to add",
+                ].filter(Boolean);
+                return `<tr><td><div class="item-title">${esc(x.title || "Untitled")}</div><div class="item-sub">${esc(x.description || "No description")}</div></td><td>${x.start_date ? esc(x.start_date) : '<span class="tag missing">Date needed</span>'}</td><td>${d.map((v) => `<span class="tag ${v === "Cost to check" || v === "Place to add" ? "missing" : ""}">${esc(v)}</span>`).join(" ")}</td><td><div class="item-sub">${esc(src(x))}</div><a class="item-sub" href="${esc(x.url)}" target="_blank">Original link ↗</a></td><td><span class="status ${ready(x) ? "ok" : "issue"}">${ready(x) ? "Ready" : "Needs details"}</span></td></tr>`;
+              })
+              .join("") ||
+            '<tr><td colspan="5" class="empty">No listings match this view.</td></tr>';
+        }
+        function sources() {
+          let a = S.sources,
+            r = new Set(a.map((x) => x.city).filter(Boolean));
+          $("#s-total").textContent = a.length;
+          $("#s-regions").textContent = r.size;
+          $("#s-used").textContent = Object.keys(
+            S.stats?.sources_by_type || {},
+          ).length;
+          $("#s-holidays").textContent = S.holidays.length;
+          $("#sources").innerHTML =
+            a
+              .map(
+                (x) =>
+                  `<article class="source"><b>${esc(x.name || x.type || "Source")}</b><p>${esc(x.city || "Ireland")} · ${esc(x.type || "web")}</p><a href="${esc(x.url)}" target="_blank">${esc(x.url)}</a><div class="source-meta"><span>Discovery enabled</span><span>Web</span></div></article>`,
+              )
+              .join("") || '<div class="empty">No sources loaded.</div>';
+        }
+        function renderPipeline() {
+          let p = S.pipeline || {},
+            a = [
+              ["Discover URLs", p.url_discovery],
+              ["Crawl source pages", p.crawling],
+              ["Extract event details", p.extraction],
+              ["Remove duplicates", p.deduplication],
+              ["Publish feed", p.output],
+            ];
+          $("#stages").innerHTML = a
+            .map(
+              (x, i) =>
+                `<div class="stage"><span class="stage-num">0${i + 1}</span><div><b>${x[0]}</b><br><span>${x[1] === "idle" ? "Waiting for the next collection" : x[1] || "Unknown"}</span></div><span class="status ${x[1] === "error" ? "issue" : "ok"}">${esc(x[1] || "idle")}</span></div>`,
+            )
+            .join("");
+          a = p.history || [];
+          $("#history").innerHTML = a.length
+            ? a
+                .slice()
+                .reverse()
+                .map(
+                  (x) =>
+                    `<div class="stage"><span class="stage-num">${x.success ? "OK" : "NO"}</span><div><b>${esc(x.time)}</b><br><span>${x.events_count || 0} items · ${x.sources_count || 0} sources · ${esc(x.duration || "—")}</span></div><span class="status ${x.success ? "ok" : "issue"}">${x.success ? "Complete" : "Failed"}</span></div>`,
+                )
+                .join("")
+            : '<div class="empty">No collection history yet.</div>';
+        }
+        async function logs() {
+          try {
+            $("#log").textContent = (
+              await get(API + "/admin/api/logs")
+            ).lines.join("\n");
+          } catch (e) {
+            $("#log").textContent = "Could not load the run log.";
+          }
+        }
+        async function run() {
+          let b = [...document.querySelectorAll(".run")];
+          b.forEach((x) => {
+            x.disabled = true;
+            x.textContent = "Collection running…";
+          });
+          try {
+            let d = await get(API + "/admin/api/pipeline/run", {
+              method: "POST",
+            });
+            toast(d.message || "Collection started");
+            let t = setInterval(async () => {
+              let x = await get(API + "/admin/api/pipeline/run");
+              if (x.status !== "running") {
+                clearInterval(t);
+                b.forEach((y) => {
+                  y.disabled = false;
+                  y.textContent = "Run a collection";
+                });
+                load();
+                toast(
+                  x.success
+                    ? "Collection complete"
+                    : "Collection finished — check the run log",
+                );
+              }
+            }, 4000);
+          } catch (e) {
+            toast("Could not start collection");
+            b.forEach((x) => {
+              x.disabled = false;
+              x.textContent = "Run a collection";
+            });
+          }
+        }
+        async function load() {
+          try {
+            let [stats, status, pipeline, sourceData, holidays] =
+              await Promise.all([
+                get(API + "/admin/api/stats"),
+                get(API + "/admin/api/status"),
+                get(API + "/admin/api/pipeline"),
+                get(API + "/admin/api/sources"),
+                get(API + "/api/holidays"),
+              ]);
+            S = {
+              ...S,
+              stats,
+              status,
+              pipeline,
+              sources: sourceData.sources || [],
+              events: stats.all_events || [],
+              holidays: Array.isArray(holidays)
+                ? holidays
+                : holidays.holidays || [],
+            };
+            dashboard();
+            events();
+            sources();
+            renderPipeline();
+            $("#refresh-label").textContent =
+              "Updated " +
+              new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+          } catch (e) {
+            $("#refresh-label").textContent = "Could not load live data";
+            console.error(e);
+          }
+        }
+        document
+          .querySelectorAll("[data-view]")
+          .forEach((x) =>
+            x.addEventListener("click", () => view(x.dataset.view)),
+          );
+        $("#search").addEventListener("input", events);
+        document.querySelectorAll(".chip").forEach((x) =>
+          x.addEventListener("click", () => {
+            S.filter = x.dataset.filter;
+            document
+              .querySelectorAll(".chip")
+              .forEach((y) => {
+                const active = x === y;
+                y.classList.toggle("active", active);
+                y.setAttribute("aria-pressed", String(active));
+              });
+            events();
+          }),
+        );
+        document
+          .querySelectorAll(".run")
+          .forEach((x) => x.addEventListener("click", run));
+        $("#refresh-log").addEventListener("click", logs);
+        view("desk");
+        document.querySelectorAll(".chip").forEach((chip) =>
+          chip.setAttribute(
+            "aria-pressed",
+            String(chip.classList.contains("active")),
+          ),
+        );
+        load();
+        setInterval(load, 60000);
+      })();
+    </script>
+  </body>
+</html>

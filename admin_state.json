@@ -1,0 +1,20 @@
+{
+  "run_history": [
+    {
+      "time": "2026-09-09 16:28:34",
+      "success": true,
+      "events_count": 126,
+      "duration": "37s",
+      "sources_count": 15
+    },
+    {
+      "time": "2026-09-09 16:33:09",
+      "success": true,
+      "events_count": 126,
+      "duration": "117s",
+      "sources_count": 15
+    }
+  ],
+  "last_run": "2026-09-09T16:33:09.655590",
+  "last_result": "OK \u2014 126 events in 117s"
+}

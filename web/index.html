@@ -1,272 +1,2270 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kids Events Ireland</title>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#1B5C63" />
+    <title>Small Days — family ideas around Ireland</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="assets/small-days-mark.svg" type="image/svg+xml" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; }
-        .header { background: #3b82f6; color: white; padding: 1rem 2rem; }
-        .header h1 { font-size: 1.5rem; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 1rem 2rem; }
-        .filters { background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .filters select, .filters input { padding: 0.5rem; margin: 0.25rem; border: 1px solid #ddd; border-radius: 4px; }
-        .layout { display: flex; gap: 1rem; height: 70vh; }
-        .calendar-panel { flex: 0 0 300px; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-y: auto; }
-        .events-panel { flex: 1; background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-y: auto; }
-        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .calendar-nav button { background: #f3f4f6; border: 1px solid #ddd; padding: 0.25rem 0.5rem; border-radius: 4px; cursor: pointer; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-        .calendar-day-header { text-align: center; font-size: 0.75rem; font-weight: 600; color: #6b7280; padding: 0.25rem; text-transform: uppercase; }
-        .calendar-day { padding: 0.5rem; text-align: center; min-height: 40px; cursor: pointer; border-radius: 4px; position: relative; }
-        .calendar-day:hover { background: #f9fafb; }
-        .calendar-day.selected { background: #3b82f6; color: white; }
-        .calendar-day.other-month { color: #d1d5db; }
-        .calendar-day-number { font-size: 0.8rem; }
-        .has-events::after { content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; background: #3b82f6; border-radius: 50%; }
-        .calendar-day.selected .has-events::after { background: white; }
-        .event { background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-left: 4px solid #3b82f6; cursor: pointer; transition: box-shadow 0.2s; }
-        .event:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-        .event.active { background: #eff6ff; border-left-color: #2563eb; }
-        .event-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .event-title { font-size: 1.1rem; font-weight: 600; color: #1e40af; }
-        .event-date { background: #e0f2fe; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; }
-        .event-details { font-size: 0.9rem; color: #555; margin-top: 0.5rem; }
-        .event-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-        .tag { background: #f1f5f9; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; }
-        .source-badge { font-size: 0.75rem; background: #f3f4f6; padding: 0.15rem 0.5rem; border-radius: 4px; }
-        .no-events { color: #9ca3af; font-style: italic; padding: 2rem; text-align: center; }
-        @media (max-width: 768px) { .header h1 { font-size: 1.2rem; } .container { padding: 0.5rem; } .layout { flex-direction: column; height: auto; } .calendar-panel { flex: none; max-width: 100%; } }
+      :root {
+        --paper: #fbfaf4;
+        --ink: #17352d;
+        --pine: #17483c;
+        --leaf: #c5ec70;
+        --coral: #f17c64;
+        --mist: #eaf0e7;
+        --line: #c8d2c8;
+        --quiet: #5e6d65;
+        --white: #fff;
+        --serif: Newsreader, Georgia, serif;
+        --sans: "Noto Sans", Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: #dbe5da;
+      }
+      body {
+        margin: 0;
+        background: #dbe5da;
+        color: var(--ink);
+        font: 15px/1.45 var(--sans);
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .app {
+        max-width: 1240px;
+        min-height: 100vh;
+        margin: auto;
+        background: var(--paper);
+        overflow: hidden;
+      }
+      .skip {
+        position: absolute;
+        left: -999px;
+      }
+      .skip:focus {
+        left: 14px;
+        top: 12px;
+        z-index: 30;
+        background: var(--leaf);
+        padding: 10px;
+        color: var(--ink);
+      }
+      .topline {
+        min-height: 34px;
+        padding: 8px clamp(18px, 4vw, 54px);
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        background: var(--pine);
+        color: #e9f0e9;
+        font-size: 12px;
+      }
+      .topline a {
+        color: inherit;
+      }
+      .mast {
+        height: 86px;
+        padding: 0 clamp(18px, 4vw, 54px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        font: 700 31px var(--serif);
+        letter-spacing: -0.065em;
+        color: var(--pine);
+      }
+      .brand span {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        border-radius: 50%;
+        background: var(--leaf);
+        color: var(--pine);
+        font: 600 14px var(--serif);
+      }
+      nav {
+        display: flex;
+        gap: 23px;
+        align-items: center;
+      }
+      nav button {
+        border: 0;
+        background: transparent;
+        color: var(--quiet);
+        padding: 11px 0;
+      }
+      nav button.active {
+        font-weight: 700;
+        color: var(--pine);
+        border-bottom: 2px solid var(--pine);
+      }
+      .member {
+        border: 1px solid var(--line);
+        background: var(--white);
+        padding: 10px 13px;
+        min-height: 44px;
+        color: var(--pine);
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .screen {
+        display: none;
+        min-height: calc(100vh - 120px);
+        padding: clamp(30px, 5vw, 70px) clamp(18px, 4vw, 54px) 100px;
+      }
+      .screen.active {
+        display: block;
+      }
+      .eyebrow {
+        margin: 0 0 7px;
+        font-size: 12px;
+        color: var(--quiet);
+      }
+      h1 {
+        margin: 0;
+        font: 600 clamp(45px, 7vw, 82px) / 0.9 var(--serif);
+        letter-spacing: -0.07em;
+        max-width: 760px;
+      }
+      .intro {
+        max-width: 560px;
+        margin: 17px 0 32px;
+        color: var(--quiet);
+        font-size: 17px;
+      }
+      .dayline {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        min-height: 70px;
+        margin: 28px 0 38px;
+        border-top: 2px solid var(--pine);
+        border-bottom: 1px solid var(--line);
+      }
+      .day {
+        padding: 12px 19px 10px 0;
+        font: 600 23px/1 var(--serif);
+        letter-spacing: -0.04em;
+      }
+      .day small {
+        display: block;
+        margin-top: 5px;
+        font: 500 11px var(--sans);
+        color: var(--quiet);
+      }
+      .daynote {
+        padding: 14px 18px;
+        border-left: 1px solid var(--line);
+        align-self: center;
+        font-weight: 600;
+      }
+      .daynote b {
+        color: var(--pine);
+      }
+      .daynext {
+        border: 0;
+        background: var(--leaf);
+        padding: 11px 15px;
+        font-weight: 700;
+      }
+      .homegrid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.85fr);
+        border-top: 1px solid var(--line);
+      }
+      .lead {
+        min-height: 420px;
+        display: flex;
+        align-items: flex-end;
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        padding: 27px;
+        background: var(--pine);
+        color: #fff;
+      }
+      .lead::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        width: min(38vw, 460px);
+        aspect-ratio: 1;
+        right: -13%;
+        top: -18%;
+        border: 1px solid rgba(197, 236, 112, 0.6);
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 26px rgba(197, 236, 112, 0.06),
+          0 0 0 52px rgba(197, 236, 112, 0.045),
+          0 0 0 78px rgba(197, 236, 112, 0.03);
+      }
+      .lead::after {
+        content: "SMALL DAYS";
+        position: absolute;
+        z-index: -1;
+        right: 28px;
+        top: 34px;
+        color: var(--leaf);
+        font: 500 10px var(--sans);
+        letter-spacing: 0.15em;
+        writing-mode: vertical-rl;
+        opacity: 0.9;
+      }
+      .lead > div {
+        max-width: 610px;
+      }
+      .lead h2 {
+        margin: 8px 0;
+        font: 600 clamp(37px, 4vw, 57px) / 0.93 var(--serif);
+        letter-spacing: -0.06em;
+        max-width: 560px;
+      }
+      .lead p {
+        margin: 0;
+        max-width: 500px;
+      }
+      .lead .eyebrow {
+        color: #e4f0e0;
+      }
+      .openlead {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        width: 48px;
+        height: 48px;
+        border: 0;
+        background: var(--leaf);
+        font-size: 22px;
+        color: var(--ink);
+      }
+      .shortlist {
+        padding: 23px 0 0 24px;
+        border-left: 1px solid var(--line);
+      }
+      .listhead {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .listhead h2 {
+        margin: 0 0 14px;
+        font: 600 31px/1 var(--serif);
+        letter-spacing: -0.05em;
+      }
+      .linkbutton {
+        border: 0;
+        background: none;
+        color: var(--pine);
+        font-weight: 700;
+        text-decoration: underline;
+        padding: 4px 0;
+      }
+      .event {
+        display: grid;
+        grid-template-columns: 65px 1fr 42px;
+        gap: 13px;
+        align-items: center;
+        padding: 18px 0;
+        border-top: 1px solid var(--line);
+      }
+      .eventdate {
+        font: 600 20px/0.95 var(--serif);
+        color: var(--pine);
+      }
+      .eventdate small {
+        display: block;
+        margin-top: 5px;
+        font: 500 10px var(--sans);
+        color: var(--quiet);
+      }
+      .eventmain button {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--ink);
+        font: 600 18px/1.1 var(--serif);
+        letter-spacing: -0.03em;
+        text-align: left;
+      }
+      .eventmain span {
+        display: block;
+        margin-top: 4px;
+        color: var(--quiet);
+        font-size: 12px;
+      }
+      .badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 8px;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        padding: 2px 7px;
+        border: 1px solid var(--line);
+        color: var(--quiet);
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .badge.free {
+        border-color: var(--pine);
+        background: var(--leaf);
+        color: var(--ink);
+      }
+      .save {
+        height: 40px;
+        width: 40px;
+        border: 1px solid var(--pine);
+        background: transparent;
+        color: var(--pine);
+        font-size: 20px;
+      }
+      .save[aria-pressed="true"] {
+        background: var(--pine);
+        color: #fff;
+      }
+      .route {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 38px;
+        padding: 22px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .route h2 {
+        margin: 0;
+        font: 600 28px/1 var(--serif);
+        letter-spacing: -0.045em;
+      }
+      .route p {
+        margin: 6px 0 0;
+        max-width: 530px;
+        color: var(--quiet);
+      }
+      .solid {
+        min-height: 45px;
+        border: 0;
+        padding: 10px 16px;
+        background: var(--pine);
+        color: #fff;
+        font-weight: 700;
+      }
+      .findhead {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 24px;
+        padding-bottom: 26px;
+        border-bottom: 1px solid var(--line);
+      }
+      .search {
+        display: flex;
+        width: min(410px, 100%);
+        min-height: 50px;
+        border: 1px solid var(--pine);
+        background: #fff;
+      }
+      .search input {
+        min-width: 0;
+        flex: 1;
+        border: 0;
+        padding: 12px;
+        color: var(--ink);
+      }
+      .search button {
+        border: 0;
+        background: var(--pine);
+        color: #fff;
+        padding: 0 16px;
+        font-weight: 700;
+      }
+      .findgrid {
+        display: grid;
+        grid-template-columns: 230px 1fr;
+        gap: 39px;
+        padding-top: 27px;
+      }
+      .filters h2 {
+        margin: 0 0 15px;
+        font: 600 27px/1 var(--serif);
+        letter-spacing: -0.045em;
+      }
+      .filtergroup {
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+      }
+      .filtergroup b {
+        display: block;
+        margin-bottom: 8px;
+      }
+      .filtergroup label {
+        display: block;
+        padding: 5px 0;
+      }
+      .filtergroup input {
+        accent-color: var(--pine);
+        width: 17px;
+        height: 17px;
+        vertical-align: -3px;
+        margin-right: 7px;
+      }
+      .filtergroup input[type="date"] {
+        width: 100%;
+        min-height: 42px;
+        padding: 7px;
+        border: 1px solid var(--line);
+        accent-color: auto;
+      }
+      .datechoices {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 9px;
+      }
+      .datechoices button,
+      .mapspot {
+        min-height: 34px;
+        padding: 6px 9px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--pine);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .datechoices button.active,
+      .mapspot.active {
+        background: var(--pine);
+        border-color: var(--pine);
+        color: #fff;
+      }
+      .resultshead {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .resultshead p {
+        margin: 0;
+        color: var(--quiet);
+      }
+      .results .event {
+        grid-template-columns: 78px 1fr 42px;
+        padding: 20px 0;
+      }
+      .results .eventdate {
+        font-size: 25px;
+      }
+      .mobilefilter {
+        display: none;
+      }
+      .guidegrid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        margin-top: 36px;
+        border-top: 1px solid var(--line);
+      }
+      .holidayintro {
+        max-width: 610px;
+        margin: 16px 0 30px;
+        color: var(--quiet);
+        font-size: 17px;
+      }
+      .holidaytools {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.8fr) 1.2fr;
+        gap: 26px;
+        padding: 20px 0;
+        border-top: 2px solid var(--pine);
+        border-bottom: 1px solid var(--line);
+      }
+      .holidaymap {
+        position: relative;
+        min-height: 220px;
+        overflow: hidden;
+        background: var(--mist);
+      }
+      .holidaymap svg {
+        width: 100%;
+        height: 220px;
+      }
+      .holidaymap path {
+        fill: #d4e1d0;
+        stroke: var(--pine);
+        stroke-width: 2;
+      }
+      .mapspot {
+        position: absolute;
+      }
+      .mapspot[data-region="Leinster"] {
+        right: 11%;
+        top: 42%;
+      }
+      .mapspot[data-region="Connacht"] {
+        left: 11%;
+        top: 35%;
+      }
+      .mapspot[data-region="Munster"] {
+        left: 27%;
+        bottom: 13%;
+      }
+      .mapspot[data-region="Ulster"] {
+        left: 38%;
+        top: 9%;
+      }
+      .holidayfilters h2 {
+        margin: 0 0 10px;
+        font: 600 29px/1 var(--serif);
+        letter-spacing: -0.05em;
+      }
+      .holidayfilters p {
+        color: var(--quiet);
+        margin: 0 0 15px;
+      }
+      .holidaycards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        border-top: 1px solid var(--line);
+        margin-top: 30px;
+      }
+      .holidaycard {
+        padding: 23px 23px 26px 0;
+        margin-right: 23px;
+        border-right: 1px solid var(--line);
+      }
+      .holidaycard:last-child {
+        border-right: 0;
+        margin-right: 0;
+      }
+      .holidaycard h2 {
+        margin: 10px 0;
+        font: 600 33px/0.98 var(--serif);
+        letter-spacing: -0.055em;
+      }
+      .holidaycard p {
+        color: var(--quiet);
+      }
+      .holidayfacts {
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        font-size: 12px;
+      }
+      .holidayfacts b {
+        color: var(--ink);
+      }
+      .holidaylinks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .holidaylinks a {
+        color: var(--pine);
+        font-weight: 700;
+      }
+      .guidelead {
+        padding: 0 30px 28px 0;
+        border-right: 1px solid var(--line);
+      }
+      .guideimage {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        width: 100%;
+        height: 270px;
+        overflow: hidden;
+        margin: 20px 0 12px;
+        padding: 18px;
+        background: var(--mist);
+        color: var(--pine);
+      }
+      .guideimage::before,
+      .guideimage::after {
+        content: "";
+        position: absolute;
+        border: 1px solid var(--pine);
+        border-radius: 50%;
+      }
+      .guideimage::before {
+        width: 240px;
+        height: 240px;
+        right: -50px;
+        top: -74px;
+      }
+      .guideimage::after {
+        width: 150px;
+        height: 150px;
+        right: 32px;
+        top: -22px;
+        background: var(--leaf);
+        border: 0;
+      }
+      .guideimage span {
+        position: relative;
+        z-index: 1;
+        font: 500 11px var(--sans);
+        letter-spacing: 0.14em;
+      }
+      .guideimage b {
+        position: absolute;
+        right: 29px;
+        bottom: 20px;
+        z-index: 1;
+        font: 32px var(--serif);
+      }
+      .guidelead img {
+        width: 100%;
+        height: 270px;
+        object-fit: cover;
+        margin: 20px 0 12px;
+      }
+      .guidelead h2 {
+        margin: 8px 0;
+        font: 600 45px/0.98 var(--serif);
+        letter-spacing: -0.06em;
+      }
+      .guidelead p,
+      .guiderow p {
+        color: var(--quiet);
+      }
+      .guidelist {
+        padding-left: 30px;
+      }
+      .guiderow {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .guiderow button {
+        padding: 0;
+        border: 0;
+        background: none;
+        text-align: left;
+        color: var(--ink);
+        font: 600 28px/1.02 var(--serif);
+        letter-spacing: -0.045em;
+      }
+      .savedpanel {
+        max-width: 740px;
+        margin-top: 34px;
+        border-top: 2px solid var(--pine);
+      }
+      .savedpanel h2 {
+        margin: 23px 0 9px;
+        font: 600 42px/0.95 var(--serif);
+        letter-spacing: -0.06em;
+      }
+      .empty {
+        padding: 34px 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--quiet);
+      }
+      .sync {
+        margin-top: 19px;
+        padding: 17px;
+        background: var(--mist);
+        border-left: 3px solid var(--leaf);
+      }
+      .sync b {
+        display: block;
+        font: 600 24px/1 var(--serif);
+        letter-spacing: -0.04em;
+      }
+      .sync p {
+        margin: 7px 0;
+        color: var(--quiet);
+      }
+      .detail {
+        position: fixed;
+        z-index: 20;
+        inset: 0;
+        display: block;
+        overflow: auto;
+        background: var(--paper);
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(var(--detail-y, 18px));
+        transition:
+          opacity 180ms ease,
+          transform 360ms cubic-bezier(0.22, 1, 0.36, 1),
+          visibility 0s linear 360ms;
+        will-change: transform, opacity;
+      }
+      .detail.open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+        transition-delay: 0s;
+      }
+      .detail.dragging {
+        transition: none;
+        user-select: none;
+      }
+      .detailbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 70px;
+        padding: 11px clamp(18px, 4vw, 54px);
+        background: var(--paper);
+        border-bottom: 1px solid var(--line);
+      }
+      .back {
+        border: 0;
+        background: none;
+        color: var(--pine);
+        font-weight: 700;
+        padding: 10px 0;
+      }
+      .detailinner {
+        max-width: 900px;
+        margin: auto;
+        padding: 36px 20px 100px;
+      }
+      .detail h2 {
+        margin: 0;
+        font: 600 clamp(47px, 6vw, 76px) / 0.92 var(--serif);
+        letter-spacing: -0.07em;
+        max-width: 760px;
+      }
+      .location {
+        margin: 14px 0 24px;
+        color: var(--quiet);
+        font-size: 17px;
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .fact {
+        padding: 14px;
+        border-right: 1px solid var(--line);
+      }
+      .fact:last-child {
+        border: 0;
+      }
+      .fact b {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 11px;
+        color: var(--quiet);
+      }
+      .fact span {
+        font-weight: 700;
+      }
+      .description {
+        max-width: 720px;
+        margin: 28px 0;
+        font-size: 17px;
+        white-space: pre-line;
+      }
+      .detailactions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .detailactions a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 45px;
+        padding: 10px 14px;
+        border: 1px solid var(--pine);
+        color: var(--pine);
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .detailactions a:first-child {
+        background: var(--pine);
+        color: #fff;
+      }
+      .sourcenote {
+        max-width: 720px;
+        margin-top: 30px;
+        padding: 15px;
+        background: var(--mist);
+        border-left: 3px solid var(--leaf);
+        color: var(--quiet);
+      }
+      .sourcenote b {
+        color: var(--ink);
+      }
+      .toast {
+        position: fixed;
+        z-index: 40;
+        bottom: 20px;
+        left: 50%;
+        transform: translate(-50%, 120px);
+        padding: 12px 16px;
+        background: var(--pine);
+        color: #fff;
+        transition: transform 0.18s ease;
+      }
+      .toast.show {
+        transform: translate(-50%, 0);
+      }
+      .bottomnav {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(1240px, 100%);
+        height: 76px;
+        background: rgba(255, 255, 255, 0.84);
+        backdrop-filter: blur(18px) saturate(140%);
+        -webkit-backdrop-filter: blur(18px) saturate(140%);
+        border-top: 1px solid var(--line);
+        justify-content: space-around;
+      }
+      .bottomnav button {
+        border: 0;
+        background: none;
+        color: var(--quiet);
+        min-width: 62px;
+        padding: 8px 2px;
+        font-size: 11px;
+      }
+      .bottomnav button.active {
+        color: var(--pine);
+        font-weight: 700;
+      }
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+      button:active,
+      .openEvent:active {
+        transform: scale(0.97);
+        transition: transform 90ms ease-out;
+      }
+      @media (max-width: 760px) {
+        body {
+          background: var(--paper);
+        }
+        .mast {
+          height: 70px;
+        }
+        .desktopnav,
+        .member {
+          display: none;
+        }
+        .screen {
+          padding: 28px 20px 94px;
+        }
+        .screen h1 {
+          font-size: 53px;
+        }
+        .intro {
+          font-size: 15px;
+          margin-bottom: 21px;
+        }
+        .dayline {
+          grid-template-columns: 1fr auto;
+          margin: 24px 0 30px;
+        }
+        .day {
+          padding: 12px 0;
+        }
+        .daynote {
+          grid-column: 1/-1;
+          border-left: 0;
+          border-top: 1px solid var(--line);
+          padding: 11px 0;
+        }
+        .daynext {
+          grid-row: 1;
+          grid-column: 2;
+        }
+        .homegrid {
+          display: block;
+        }
+        .lead {
+          min-height: 360px;
+          padding: 22px;
+        }
+        .lead h2 {
+          font-size: 42px;
+        }
+        .shortlist {
+          padding: 22px 0 0;
+          border-left: 0;
+        }
+        .route {
+          align-items: flex-start;
+          flex-direction: column;
+          margin-top: 30px;
+        }
+        .bottomnav {
+          display: flex;
+        }
+        .findhead {
+          display: block;
+        }
+        .findhead h1 {
+          font-size: 53px;
+          margin-bottom: 21px;
+        }
+        .search {
+          width: 100%;
+        }
+        .findgrid {
+          display: block;
+          padding-top: 15px;
+        }
+        .filters {
+          display: none;
+        }
+        .filters.open {
+          display: block;
+          margin-bottom: 17px;
+          padding: 0 14px 14px;
+          border: 1px solid var(--line);
+          background: var(--mist);
+        }
+        .mobilefilter {
+          display: block;
+          width: 100%;
+          min-height: 48px;
+          margin-bottom: 15px;
+          padding: 11px 13px;
+          border: 1px solid var(--pine);
+          background: var(--mist);
+          color: var(--pine);
+          font-weight: 700;
+          text-align: left;
+        }
+        .results .event {
+          grid-template-columns: 56px 1fr 40px;
+          gap: 10px;
+        }
+        .results .eventdate {
+          font-size: 20px;
+        }
+        .guidegrid {
+          display: block;
+          margin-top: 24px;
+        }
+        .holidaytools {
+          display: block;
+        }
+        .holidaymap {
+          margin-bottom: 20px;
+        }
+        .holidaycards {
+          display: block;
+          margin-top: 22px;
+        }
+        .holidaycard {
+          padding: 20px 0;
+          margin: 0;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+        .guidelead {
+          padding: 0 0 24px;
+          border-right: 0;
+        }
+        .guidelead img {
+          height: 225px;
+          margin-top: 14px;
+        }
+        .guidelead h2 {
+          font-size: 39px;
+        }
+        .guidelist {
+          padding-left: 0;
+          border-top: 1px solid var(--line);
+        }
+        .guiderow button {
+          font-size: 25px;
+        }
+        .facts {
+          grid-template-columns: 1fr 1fr;
+        }
+        .fact:nth-child(2) {
+          border-right: 0;
+        }
+        .fact:nth-child(-n + 2) {
+          border-bottom: 1px solid var(--line);
+        }
+        .detailinner {
+          padding-top: 27px;
+        }
+        .detail h2 {
+          font-size: 52px;
+        }
+        .toast {
+          bottom: 88px;
+          width: max-content;
+          max-width: calc(100% - 32px);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *:before,
+        *:after {
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+        .detail {
+          transform: none;
+        }
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--coral);
+        outline-offset: 3px;
+      }
+
+      /* Day Board direction: a planning surface with a stronger visual signature. */
+      :root {
+        --paper: #ede9df;
+        --ink: #182f2a;
+        --pine: #183f35;
+        --leaf: #c5ec70;
+        --coral: #f08a6c;
+        --mist: #e2e5da;
+        --line: #aebbb0;
+        --quiet: #55665f;
+        --serif: Fraunces, Georgia, serif;
+        --sans: "Space Grotesk", Arial, sans-serif;
+      }
+      html,
+      body {
+        background: #d8ddd3;
+      }
+      .app {
+        max-width: 1330px;
+        background: var(--paper);
+      }
+      .topline {
+        display: none;
+      }
+      .mast {
+        height: 84px;
+        border-bottom: 0;
+      }
+      .brand {
+        font-family: var(--sans);
+        font-weight: 700;
+        letter-spacing: -0.08em;
+      }
+      .brand span {
+        width: 22px;
+        height: 22px;
+        margin-right: 7px;
+        border-radius: 4px 50% 50% 50%;
+        background: var(--coral);
+        color: transparent;
+        vertical-align: -2px;
+      }
+      nav button,
+      .member {
+        font-family: var(--sans);
+      }
+      .member {
+        border: 0;
+        background: transparent;
+        padding: 10px 0;
+      }
+      .screen {
+        padding-top: 38px;
+      }
+      #today > .eyebrow,
+      #today > .intro {
+        display: none;
+      }
+      #today > h1 {
+        max-width: none;
+        padding: 18px 0 16px;
+        border-bottom: 3px solid var(--ink);
+        font-family: var(--sans);
+        font-size: clamp(50px, 8vw, 92px);
+        font-weight: 700;
+        line-height: 0.84;
+        letter-spacing: -0.105em;
+      }
+      .dayline {
+        grid-template-columns: 1fr auto;
+        min-height: 66px;
+        margin: 0 0 14px;
+        border-top: 0;
+        border-bottom: 0;
+      }
+      .day {
+        display: none;
+      }
+      .daynote {
+        display: none;
+      }
+      .daynext {
+        grid-column: 2;
+        grid-row: 1;
+        margin-top: 14px;
+        border: 1px solid var(--ink);
+        background: transparent;
+        color: var(--ink);
+      }
+      .homegrid {
+        grid-template-columns: minmax(0, 1.25fr) minmax(330px, 0.75fr);
+        gap: 12px;
+        border-top: 0;
+      }
+      .lead {
+        min-height: 472px;
+        padding: 22px;
+        background: var(--leaf);
+        color: var(--ink);
+        border: 1px solid var(--ink);
+      }
+      .lead::before {
+        display: none;
+      }
+      .lead::after {
+        content: "FEATURED / SMALL DAYS";
+        top: 20px;
+        right: 20px;
+        color: var(--ink);
+        font: 500 10px "DM Mono", monospace;
+        letter-spacing: 0.04em;
+        writing-mode: initial;
+      }
+      .lead h2 {
+        max-width: 560px;
+        margin: 28px 0 10px;
+        font-family: var(--sans);
+        font-size: clamp(37px, 4.3vw, 58px);
+        font-weight: 700;
+        line-height: 0.88;
+        letter-spacing: -0.095em;
+      }
+      .lead .eyebrow {
+        color: var(--ink);
+        font: 500 10px "DM Mono", monospace;
+      }
+      .openlead {
+        top: 16px;
+        right: 16px;
+        width: 38px;
+        height: 38px;
+        background: transparent;
+        border: 0;
+        font-size: 25px;
+      }
+      .shortlist {
+        padding: 0;
+        border: 0;
+      }
+      .listhead {
+        display: none;
+      }
+      #todayList {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      #todayList .event {
+        min-height: 230px;
+        display: block;
+        position: relative;
+        padding: 20px;
+        border: 1px solid var(--line);
+        background: #fffdf6;
+      }
+      #todayList .event:nth-child(2) {
+        background: var(--pine);
+        color: #fff;
+      }
+      #todayList .event:nth-child(3) {
+        background: var(--coral);
+      }
+      #todayList .eventdate {
+        display: block;
+        font: 500 10px "DM Mono", monospace;
+        color: inherit;
+      }
+      #todayList .eventdate small {
+        display: inline;
+        margin: 0 0 0 5px;
+        color: inherit;
+        font: inherit;
+      }
+      #todayList .eventmain {
+        margin-top: 27px;
+      }
+      #todayList .eventmain button {
+        color: inherit;
+        font-family: var(--sans);
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 0.92;
+        letter-spacing: -0.08em;
+      }
+      #todayList .eventmain span {
+        color: inherit;
+        margin-top: 12px;
+        font-size: 12px;
+      }
+      #todayList .badges {
+        margin-top: 13px;
+      }
+      #todayList .badge {
+        border-color: currentColor;
+        color: inherit;
+        background: transparent;
+      }
+      #todayList .badge.free {
+        background: var(--leaf);
+        color: var(--ink);
+        border-color: var(--ink);
+      }
+      #todayList .save {
+        position: absolute;
+        top: 13px;
+        right: 13px;
+        width: 30px;
+        height: 30px;
+        border: 0;
+        color: inherit;
+      }
+      .route {
+        border-top: 2px solid var(--ink);
+        border-bottom: 0;
+        margin-top: 26px;
+        padding: 14px 0 0;
+      }
+      .route h2,
+      .route p {
+        display: none;
+      }
+      .route .solid {
+        margin-left: auto;
+        background: transparent;
+        color: var(--ink);
+        border: 0;
+        padding: 0;
+        text-decoration: underline;
+      }
+      #find h1,
+      #holidays h1,
+      #guides h1,
+      #saved h1 {
+        font-family: var(--sans);
+        font-weight: 700;
+        letter-spacing: -0.105em;
+      }
+      .findhead {
+        border-bottom: 3px solid var(--ink);
+      }
+      .search {
+        border-color: var(--ink);
+        background: #f8f5ec;
+      }
+      .search button {
+        background: var(--ink);
+      }
+      .results .event {
+        border: 1px solid var(--line);
+        margin-top: 12px;
+        padding: 20px;
+        background: #fffdf6;
+      }
+      .results .eventmain button {
+        font-family: var(--sans);
+        font-weight: 700;
+        letter-spacing: -0.06em;
+      }
+      .filters {
+        border-right: 1px solid var(--line);
+        padding-right: 22px;
+      }
+      .holidaytools,
+      .guidegrid,
+      .savedpanel {
+        border-top-width: 3px;
+        border-top-color: var(--ink);
+      }
+      .holidaycard h2,
+      .guidelead h2,
+      .guiderow button,
+      .savedpanel h2 {
+        font-family: var(--sans);
+        font-weight: 700;
+        letter-spacing: -0.08em;
+      }
+      @media (max-width: 760px) {
+        .mast {
+          height: 70px;
+        }
+        .screen {
+          padding-top: 22px;
+        }
+        #today > h1 {
+          font-size: 53px;
+          padding-top: 22px;
+        }
+        .dayline {
+          min-height: 58px;
+        }
+        .homegrid {
+          display: block;
+        }
+        .lead {
+          min-height: 360px;
+          margin-bottom: 12px;
+        }
+        #todayList {
+          grid-template-columns: 1fr 1fr;
+        }
+        #todayList .event {
+          min-height: 220px;
+          padding: 15px;
+        }
+        #todayList .eventmain {
+          margin-top: 24px;
+        }
+        #todayList .eventmain button {
+          font-size: 24px;
+        }
+        #todayList .badges {
+          margin-top: 10px;
+        }
+        #todayList .save {
+          top: 9px;
+          right: 9px;
+        }
+        .route {
+          margin-top: 22px;
+        }
+      }
     </style>
-</head>
-<body>
-    <div class="header">
-        <h1>🧒 Kids Events Ireland</h1>
-        <p>Find family-friendly activities across Ireland</p>
+    <link rel="stylesheet" href="small-days.css?v=2" />
+  </head>
+  <body>
+    <div class="app">
+      <a class="skip" href="#content">Skip to content</a>
+      <div class="topline">
+        <span>Independent ideas for family life in Ireland</span
+        ><a href="/kidsevents/member.html">Keep a plan across devices</a>
+      </div>
+      <header class="mast">
+        <button class="brand" data-page="today" aria-label="Small Days home">
+          <img src="assets/small-days-mark.svg" alt="" />
+          <span>Small Days</span>
+        </button>
+        <nav class="desktopnav" aria-label="Primary">
+          <button data-page="today" class="active" aria-current="page">Today</button
+          ><button data-page="find">Find</button
+          ><button data-page="holidays">Holidays</button
+          ><button data-page="guides">Guides</button
+          ><button data-page="saved">
+            Saved <span id="savedCount"></span>
+          </button>
+        </nav>
+        <a class="member" href="/kidsevents/member.html">Sign in</a>
+      </header>
+      <main id="content">
+        <section id="today" class="screen active">
+          <p class="eyebrow">Family ideas, clearly sourced</p>
+          <h1>Make a day of it.</h1>
+          <p class="intro">
+            Find something that suits your people, your budget and the
+            weather—not an endless feed.
+          </p>
+          <div class="dayline">
+            <div class="day">Today<small id="todayDate"></small></div>
+            <div class="daynote">
+              <b>Start with one thing.</b> Check the source, then leave room for
+              the rest of the day.
+            </div>
+            <button class="daynext" data-page="find">Browse all ideas</button>
+          </div>
+          <div class="homegrid">
+            <article class="lead">
+              <button
+                class="openlead"
+                id="openLead"
+                aria-label="Open featured event"
+              >
+                ↗
+              </button>
+              <div>
+                <p class="eyebrow" id="leadMeta">Loading the latest listing</p>
+                <h2 id="leadTitle">Small days are loading.</h2>
+                <p id="leadCopy">
+                  We are checking the current event listings for you.
+                </p>
+              </div>
+            </article>
+            <section class="shortlist">
+              <div class="listhead">
+                <h2>Also worth a look</h2>
+                <button class="linkbutton" data-page="find">See all</button>
+              </div>
+              <div id="todayList">
+                <p class="empty">Loading local ideas…</p>
+              </div>
+            </section>
+          </div>
+          <div class="route">
+            <div>
+              <h2>Need a rain plan?</h2>
+              <p>
+                Guides are separate from event search, so practical reading does
+                not get in the way of finding something on.
+              </p>
+            </div>
+            <button class="solid" data-page="guides">
+              Open rainy-day guide
+            </button>
+          </div>
+        </section>
+        <section id="find" class="screen">
+          <div class="findhead">
+            <div>
+              <p class="eyebrow">Search the real event feed</p>
+              <h1>Make a shortlist.</h1>
+            </div>
+            <form class="search" onsubmit="return false">
+              <input
+                id="searchInput"
+                type="search"
+                placeholder="Try ‘free’, ‘museum’ or ‘Cork’"
+                aria-label="Search events"
+              /><button id="searchButton" type="button">Search</button>
+            </form>
+          </div>
+          <div class="findgrid">
+            <aside class="filters" id="eventFilters">
+              <h2>Refine</h2>
+              <div class="filtergroup">
+                <b>Calendar</b>
+                <label for="calendarDate">Choose a day</label>
+                <input id="calendarDate" type="date" />
+                <div class="datechoices">
+                  <button type="button" data-date-shortcut="today">Today</button
+                  ><button type="button" data-date-shortcut="weekend">
+                    This weekend
+                  </button>
+                </div>
+              </div>
+              <div class="filtergroup">
+                <b>Location</b
+                ><label
+                  ><input type="checkbox" data-filter="dublin" /> Dublin</label
+                ><label><input type="checkbox" data-filter="cork" /> Cork</label
+                ><label
+                  ><input type="checkbox" data-filter="galway" /> Galway</label
+                >
+              </div>
+              <div class="filtergroup">
+                <b>What kind of day?</b
+                ><label><input type="checkbox" data-filter="free" /> Free</label
+                ><label><input type="checkbox" data-filter="paid" /> Paid</label
+                ><label
+                  ><input type="checkbox" data-filter="indoor" /> Indoor</label
+                ><label
+                  ><input type="checkbox" data-filter="outdoor" />
+                  Outdoor</label
+                ><label
+                  ><input type="checkbox" data-filter="museum" /> Museum</label
+                ><label
+                  ><input type="checkbox" data-filter="workshop" />
+                  Workshop</label
+                ><label
+                  ><input type="checkbox" data-filter="performance" /> Show or
+                  performance</label
+                >
+              </div>
+              <div class="filtergroup">
+                <b>Age guidance</b
+                ><label
+                  ><input type="checkbox" data-filter="toddlers" />
+                  Toddlers</label
+                ><label
+                  ><input type="checkbox" data-filter="preschool" />
+                  Preschool</label
+                ><label
+                  ><input type="checkbox" data-filter="school-age" /> School
+                  age</label
+                ><label
+                  ><input type="checkbox" data-filter="all-ages" /> All
+                  ages</label
+                >
+              </div>
+              <button class="linkbutton" id="clearFilters">
+                Clear filters
+              </button>
+            </aside>
+            <div class="results">
+              <button
+                class="mobilefilter"
+                type="button"
+                id="mobileFilter"
+                aria-expanded="false"
+                aria-controls="eventFilters"
+              >
+                Filters and location
+              </button>
+              <div class="resultshead">
+                <p id="resultText" role="status" aria-live="polite">Loading events…</p>
+                <button class="linkbutton" id="clearSearch">
+                  Clear search
+                </button>
+              </div>
+              <div id="resultsList"></div>
+            </div>
+          </div>
+        </section>
+        <section id="holidays" class="screen">
+          <p class="eyebrow">Places that hold a whole day</p>
+          <h1>Go somewhere good.</h1>
+          <p class="holidayintro">
+            Evergreen family ideas, separate from dated events. Start on the
+            map, weigh up the price range and open the original source before
+            you leave.
+          </p>
+          <div class="holidaytools">
+            <div
+              class="holidaymap"
+              aria-label="Choose a region on the Ireland map"
+            >
+              <svg
+                viewBox="0 0 260 220"
+                role="img"
+                aria-label="Stylised map of Ireland"
+              >
+                <path
+                  d="M100 13c26 3 47 17 55 36l20 13-2 33 20 20-12 29 10 36-26 24-10 38-34 16-38-14-13-28-28-16-4-34 14-23-2-33 25-22 3-33z"
+                />
+              </svg>
+              <button class="mapspot" type="button" data-region="Connacht">
+                Connacht</button
+              ><button class="mapspot" type="button" data-region="Leinster">
+                Leinster</button
+              ><button class="mapspot" type="button" data-region="Munster">
+                Munster</button
+              ><button class="mapspot" type="button" data-region="Ulster">
+                Ulster
+              </button>
+            </div>
+            <div class="holidayfilters">
+              <h2>Choose the shape of the day.</h2>
+              <p id="holidayResultText" role="status" aria-live="polite">Loading holiday ideas…</p>
+              <div class="filtergroup">
+                <b>Budget</b
+                ><label
+                  ><input type="checkbox" data-holiday-filter="free" /> Has a
+                  free option</label
+                ><label
+                  ><input type="checkbox" data-holiday-filter="paid" /> Ticketed
+                  option</label
+                >
+              </div>
+              <div class="filtergroup">
+                <b>Type</b
+                ><label
+                  ><input type="checkbox" data-holiday-filter="nature" />
+                  Nature</label
+                ><label
+                  ><input type="checkbox" data-holiday-filter="indoor" />
+                  Indoor</label
+                ><label
+                  ><input type="checkbox" data-holiday-filter="activity" />
+                  Activity</label
+                >
+              </div>
+              <button class="linkbutton" id="clearHolidayFilters">
+                Show all places
+              </button>
+            </div>
+          </div>
+          <div class="holidaycards" id="holidayCards"></div>
+        </section>
+        <section id="guides" class="screen">
+          <p class="eyebrow">Plan ahead, lightly</p>
+          <h1>Notes for the family calendar.</h1>
+          <div class="guidegrid">
+            <article class="guidelead">
+              <div class="guideimage" role="img" aria-label="A simple rainy-day planning card">
+                <span>RAINY DAY / NO BOOKING</span><b>↘</b>
+              </div>
+              <p class="eyebrow">School holidays</p>
+              <h2>Six ways to make a wet afternoon feel less long</h2>
+              <p>
+                Low-stakes plans that do not need a booking, a big budget or a
+                perfect mood.
+              </p>
+              <button class="linkbutton">Read the guide</button>
+            </article>
+            <div class="guidelist">
+              <article class="guiderow">
+                <p class="eyebrow">Places</p>
+                <button>Cafés where a buggy is not an inconvenience</button>
+                <p>What parents notice first: space, toilets and a welcome.</p>
+              </article>
+              <article class="guiderow">
+                <p class="eyebrow">Weekend</p>
+                <button>Choose one thing, then stop planning</button>
+                <p>A calmer way to make room for the unexpected.</p>
+              </article>
+              <article class="guiderow">
+                <p class="eyebrow">Outdoors</p>
+                <button>The small beach checklist for Irish weather</button>
+                <p>Not much, but enough.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+        <section id="saved" class="screen">
+          <p class="eyebrow">Kept on this device</p>
+          <h1>Your small plan.</h1>
+          <div class="savedpanel">
+            <h2 id="savedTitle">Nothing saved yet.</h2>
+            <div id="savedList">
+              <p class="empty">
+                Save ideas as you browse. There is no account required.
+              </p>
+            </div>
+            <div class="sync">
+              <b>Keep plans across devices.</b>
+              <p>
+                Sign in only when syncing is useful. Browsing remains public.
+              </p>
+              <a class="linkbutton" href="member.html">Create a free account</a>
+            </div>
+          </div>
+        </section>
+      </main>
+      <nav class="bottomnav" aria-label="Primary mobile">
+        <button class="active" data-page="today" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-6v-5h-4v5H4z"/></svg><span>Today</span></button
+        ><button data-page="find"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg><span>Find</span></button
+        ><button data-page="holidays"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></svg><span>Holidays</span></button
+        ><button data-page="guides"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 17h11M9 8h6M9 12h6"/></svg><span>Guides</span></button
+        ><button data-page="saved"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3-5 3z"/></svg><span>Saved</span></button>
+      </nav>
     </div>
-    <div class="container">
-        <div class="filters">
-            <input type="text" id="search" placeholder="Search events..."" style="width:200px;">
-            <select id="ageFilter">
-                <option value="">All Ages</option>
-                <option value="0-2">Ages 0-2</option>
-                <option value="2-5">Ages 2-5</option>
-                <option value="5-10">Ages 5-10</option>
-                <option value="10+">Ages 10+</option>
-            </select>
-            <select id="countyFilter">
-                <option value="">All Counties</option>
-                <option value="Dublin">Dublin</option>
-                <option value="Cork">Cork</option>
-                <option value="Galway">Galway</option>
-            </select>
-            <button onclick="loadEvents()" style="padding:0.5rem 1rem;background:#3b82f6;color:white;border:none;border-radius:4px;cursor:pointer;">Refresh</button>
+    <section class="detail" id="detail" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="detailTitle">
+      <div class="detailbar">
+        <button class="back" id="closeDetail">← Back to ideas</button
+        ><button
+          class="save"
+          id="detailSave"
+          aria-label="Save event"
+          aria-pressed="false"
+        >
+          ＋
+        </button>
+      </div>
+      <div class="detailinner">
+        <p class="eyebrow" id="detailSource"></p>
+        <h2 id="detailTitle"></h2>
+        <p class="location" id="detailLocation"></p>
+        <div class="facts">
+          <div class="fact"><b>Date</b><span id="detailDate"></span></div>
+          <div class="fact"><b>Cost</b><span id="detailCost"></span></div>
+          <div class="fact"><b>Ages</b><span id="detailAge"></span></div>
+          <div class="fact">
+            <b>Confidence</b><span id="detailConfidence"></span>
+          </div>
         </div>
-        <div class="layout">
-            <div class="calendar-panel">
-                <div class="calendar-nav">
-                    <button onclick="prevMonth()">‹</button>
-                    <div id="calendarMonth" style="font-weight:600;font-size:1rem;"></div>
-                    <button onclick="nextMonth()">›</button>
-                </div>
-                <div class="calendar-grid">
-                    <div class="calendar-day-header">Sun</div>
-                    <div class="calendar-day-header">Mon</div>
-                    <div class="calendar-day-header">Tue</div>
-                    <div class="calendar-day-header">Wed</div>
-                    <div class="calendar-day-header">Thu</div>
-                    <div class="calendar-day-header">Fri</div>
-                    <div class="calendar-day-header">Sat</div>
-                    <div id="calendarDays"></div>
-                </div>
-            </div>
-            <div class="events-panel">
-                <div id="selectedDate" style="font-weight:600;margin-bottom:0.5rem;"></div>
-                <div id="events">Select a date to see events.</div>
-            </div>
+        <p class="description" id="detailDescription"></p>
+        <div class="detailactions">
+          <a id="sourceLink" target="_blank" rel="noopener noreferrer"
+            >View original listing</a
+          ><a id="mapLink" target="_blank" rel="noopener noreferrer"
+            >Search Google Maps</a
+          >
         </div>
+        <p class="sourcenote">
+          <b>Original details, clearly labelled.</b> We show the original
+          description and link back to the page where the event was captured.
+          Always confirm timing and availability with the organiser.
+        </p>
+      </div>
+    </section>
+    <div class="toast" id="toast" aria-live="polite">
+      Saved to your small plan
     </div>
     <script>
-        let allEvents = [];
-        let currentDate = new Date();
-        let selectedDate = null;
-
-        function getEventDate(e) {
-            if (!e.start_date) return null;
+      const $ = (s) => document.querySelector(s),
+        $$ = (s) => [...document.querySelectorAll(s)];
+      let events = [],
+        saved = JSON.parse(localStorage.getItem("smalldays-saved") || "[]"),
+        current = null,
+        detailTrigger = null,
+        holidays = [],
+        holidayRegion = "",
+        calendarMode = "";
+      const clean = (v) =>
+        String(v || "")
+          .replace(/&amp;/g, "&")
+          .replace(/&#039;/g, "'")
+          .replace(/&#8217;/g, "’")
+          .replace(/&#8211;/g, "–");
+      const esc = (v) =>
+        clean(v).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      const key = (e) => e.url || `${e.title}|${e.start_date}|${e.city}`;
+      function sourceUrl(e) {
+        return (
+          [e.url, ...(e.all_urls || [])].find((u) => {
             try {
-                const s = e.start_date;
-                if (typeof s === 'string' && s.length <= 10) {
-                    // Format: YYYY-MM-DD
-                    const parts = s.split('-').map(Number);
-                    return new Date(parts[0], parts[1] - 1, parts[2]);
-                }
-                return new Date(s);
+              return ["http:", "https:"].includes(new URL(u).protocol);
             } catch {
-                return null;
+              return false;
             }
-        }
-
-        function getEventDayKey(d) {
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        }
-
-        async function loadEvents() {
-            try {
-                const resp = await fetch('api/events');
-                allEvents = await resp.json();
-                renderCalendar();
-                if (!selectedDate) {
-                    selectedDate = new Date();
-                }
-                renderEvents();
-            } catch(e) {
-                document.getElementById('events').innerHTML = '<p style="color:red">Error: '+e+'</p>';
-            }
-        }
-
-        function renderCalendar() {
-            const month = currentDate.getMonth();
-            const year = currentDate.getFullYear();
-            const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-            document.getElementById('calendarMonth').textContent = monthNames[month] + ' ' + year;
-
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const startDay = firstDay.getDay();
-            const daysInMonth = lastDay.getDate();
-
-            // Build events-by-date map
-            const eventsByDate = {};
-            allEvents.forEach(e => {
-                const d = getEventDate(e);
-                if (d) {
-                    const key = getEventDayKey(d);
-                    if (!eventsByDate[key]) eventsByDate[key] = [];
-                    eventsByDate[key].push(e);
-                }
+          }) || ""
+        );
+      }
+      function mapUrl(e) {
+        let q =
+          e.latitude && e.longitude
+            ? `${e.latitude},${e.longitude}`
+            : [
+                e.venue_name,
+                e.venue_address,
+                e.city,
+                e.county,
+                e.country || "Ireland",
+              ]
+                .filter(Boolean)
+                .join(", ") || clean(e.title);
+        return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query: q })}`;
+      }
+      function formatDate(value) {
+        if (!value) return "Check original listing";
+        let d = new Date(value);
+        return Number.isNaN(d.valueOf())
+          ? clean(value)
+          : d.toLocaleDateString("en-IE", {
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+              year: "numeric",
             });
-
-            let html = '';
-            // Previous month filler days
-            const prevMonth = new Date(year, month, 0);
-            const prevDays = prevMonth.getDate();
-            for (let i = startDay - 1; i >= 0; i--) {
-                const day = prevDays - i;
-                const d = new Date(year, month - 1, day);
-                const key = getEventDayKey(d);
-                const hasEvents = eventsByDate[key] && eventsByDate[key].length > 0;
-                html += `<div class="calendar-day other-month" onclick="selectDate(${year},${month - 1},${day})"><div class="calendar-day-number">${day}</div>${hasEvents ? '<div class="has-events"></div>' : ''}</div>`;
-            }
-
-            // Current month days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const d = new Date(year, month, day);
-                const key = getEventDayKey(d);
-                const hasEvents = eventsByDate[key] && eventsByDate[key].length > 0;
-                const isSelected = selectedDate && key === getEventDayKey(selectedDate);
-                const classes = ['calendar-day'];
-                if (isSelected) classes.push('selected');
-                if (hasEvents) classes.push('has-events');
-                html += `<div class="${classes.join(' ')}" onclick="selectDate(${year},${month},${day})"><div class="calendar-day-number">${day}</div></div>`;
-            }
-
-            // Next month filler days
-            const remaining = 42 - startDay - daysInMonth;
-            for (let day = 1; day <= remaining && day <= 6; day++) {
-                const d = new Date(year, month + 1, day);
-                const key = getEventDayKey(d);
-                const hasEvents = eventsByDate[key] && eventsByDate[key].length > 0;
-                html += `<div class="calendar-day other-month" onclick="selectDate(${year},${month + 1},${day})"><div class="calendar-day-number">${day}</div>${hasEvents ? '<div class="has-events"></div>' : ''}</div>`;
-            }
-
-            document.getElementById('calendarDays').innerHTML = html;
+      }
+      function eventText(e) {
+        return [
+          e.title,
+          e.description,
+          e.venue_name,
+          e.city,
+          e.county,
+          e.category,
+          e.cost,
+          e.age_group,
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+      }
+      function eventKinds(e) {
+        const text = eventText(e),
+          kinds = [];
+        if (/museum|gallery|heritage|exhibition/.test(text))
+          kinds.push("Museum");
+        if (/workshop|class|make |craft|coding|dance class/.test(text))
+          kinds.push("Workshop");
+        if (
+          /theatre|theater|show|concert|performance|festival|cinema/.test(text)
+        )
+          kinds.push("Performance");
+        if (/park|forest|beach|walk|outdoor|nature|farm|zoo|garden/.test(text))
+          kinds.push("Outdoor");
+        if (
+          /indoor|library|museum|gallery|theatre|theater|cinema|playcentre|play centre/.test(
+            text,
+          )
+        )
+          kinds.push("Indoor");
+        return kinds.length ? [...new Set(kinds)] : ["Activity"];
+      }
+      function priceLabel(e) {
+        const text = eventText(e);
+        if (/\bfree\b|€\s?0\b|\bno charge\b/.test(text)) return "Free";
+        if (e.cost || /€|\beuro\b|ticket|admission|paid/.test(text))
+          return clean(e.cost) || "Paid";
+        return "Cost to check";
+      }
+      function ageLabel(e) {
+        const raw = clean(e.age_group);
+        if (raw) return raw;
+        const match = eventText(e).match(
+          /(?:ages?|age|under)\s*(\d{1,2}\s*(?:[-–]\s*\d{1,2}|\+)?)/i,
+        );
+        return match ? `Ages ${match[1].replace(/\s/g, "")}` : "Ages to check";
+      }
+      function ageKind(e) {
+        const age = ageLabel(e).toLowerCase(),
+          numbers = age.match(/\d+/g)?.map(Number) || [],
+          youngest = numbers[0];
+        if (/all ages|family/.test(age)) return "all-ages";
+        if (/toddler|baby|under 3/.test(age) || youngest <= 3)
+          return "toddlers";
+        if (/preschool|pre-school/.test(age) || youngest <= 5)
+          return "preschool";
+        if (numbers.length || /kids|children/.test(age)) return "school-age";
+        return "";
+      }
+      function shortMeta(e) {
+        return (
+          [e.venue_name, e.city, e.county]
+            .filter(Boolean)
+            .map(clean)
+            .join(" · ") || "Details on the original listing"
+        );
+      }
+      function eventRow(e) {
+        let isSaved = saved.includes(key(e));
+        const badges = [...eventKinds(e), priceLabel(e), ageLabel(e)]
+          .slice(0, 4)
+          .map(
+            (label) =>
+              `<span class="badge ${label === "Free" ? "free" : ""}">${esc(label)}</span>`,
+          )
+          .join("");
+        return `<article class="event"><div class="eventdate">${esc(formatDate(e.start_date || e.date).split(" ")[0])}<small>${esc(formatDate(e.start_date || e.date).slice(4) || "LISTING")}</small></div><div class="eventmain"><button class="openEvent" data-event="${events.indexOf(e)}">${esc(e.title || "Untitled event")}</button><span>${esc(shortMeta(e))}</span><div class="badges">${badges}</div></div><button class="save" data-save="${events.indexOf(e)}" aria-label="Save ${esc(e.title)}" aria-pressed="${isSaved}">${isSaved ? "✓" : "＋"}</button></article>`;
+      }
+      function render() {
+        let selected = filtered();
+        $("#resultsList").innerHTML = selected.length
+          ? selected.map(eventRow).join("")
+          : '<p class="empty">No events match those filters. Try clearing one.</p>';
+        $("#resultText").textContent =
+          `${selected.length} event${selected.length === 1 ? "" : "s"} to consider`;
+        $("#todayList").innerHTML =
+          events.slice(1, 4).map(eventRow).join("") ||
+          '<p class="empty">No further listings yet.</p>';
+        let own = events.filter((e) => saved.includes(key(e)));
+        $("#savedCount").textContent = own.length ? `(${own.length})` : "";
+        $("#savedTitle").textContent = own.length
+          ? `${own.length} thing${own.length === 1 ? "" : "s"} worth keeping.`
+          : "Nothing saved yet.";
+        $("#savedList").innerHTML = own.length
+          ? own.map(eventRow).join("")
+          : '<p class="empty">Save ideas as you browse. There is no account required.</p>';
+        if (current) {
+          $("#detailSave").setAttribute(
+            "aria-pressed",
+            saved.includes(key(current)),
+          );
+          $("#detailSave").textContent = saved.includes(key(current))
+            ? "✓"
+            : "＋";
         }
-
-        function selectDate(year, month, day) {
-            selectedDate = new Date(year, month, day);
-            renderCalendar();
-            renderEvents();
+      }
+      function filtered() {
+        let q = $("#searchInput").value.trim().toLowerCase(),
+          on = [...$$("[data-filter]:checked")].map((x) => x.dataset.filter),
+          selectedDate = $("#calendarDate").value;
+        return events.filter((e) => {
+          let hay = eventText(e),
+            date = String(e.start_date || e.date || "").slice(0, 10),
+            weekday = date ? new Date(`${date}T12:00:00`).getDay() : -1;
+          const dateMatches = selectedDate
+            ? date === selectedDate
+            : calendarMode === "weekend"
+              ? [0, 6].includes(weekday)
+              : true;
+          return (
+            (!q || hay.includes(q)) &&
+            dateMatches &&
+            on.every((f) =>
+              f === "free"
+                ? priceLabel(e) === "Free"
+                : f === "paid"
+                  ? priceLabel(e) !== "Free" &&
+                    priceLabel(e) !== "Cost to check"
+                  : f === "indoor"
+                    ? eventKinds(e).includes("Indoor")
+                    : f === "outdoor"
+                      ? eventKinds(e).includes("Outdoor")
+                      : f === "museum"
+                        ? eventKinds(e).includes("Museum")
+                        : f === "workshop"
+                          ? eventKinds(e).includes("Workshop")
+                          : f === "performance"
+                            ? eventKinds(e).includes("Performance")
+                            : [
+                                  "toddlers",
+                                  "preschool",
+                                  "school-age",
+                                  "all-ages",
+                                ].includes(f)
+                              ? ageKind(e) === f
+                              : hay.includes(f),
+            )
+          );
+        });
+      }
+      function holidayMapUrl(item) {
+        const query =
+          item.latitude && item.longitude
+            ? `${item.latitude},${item.longitude}`
+            : item.location;
+        return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query })}`;
+      }
+      function filteredHolidays() {
+        const filters = $$("[data-holiday-filter]:checked").map(
+          (input) => input.dataset.holidayFilter,
+        );
+        return holidays.filter((item) => {
+          const text = [
+            item.category,
+            item.description,
+            item.price_range,
+            item.age_group,
+          ]
+            .join(" ")
+            .toLowerCase();
+          return (
+            (!holidayRegion || item.region === holidayRegion) &&
+            filters.every((filter) =>
+              filter === "free"
+                ? /free/.test(item.price_range.toLowerCase())
+                : filter === "paid"
+                  ? /paid|ticket/.test(item.price_range.toLowerCase())
+                  : text.includes(filter),
+            )
+          );
+        });
+      }
+      function renderHolidays() {
+        const selected = filteredHolidays();
+        $("#holidayResultText").textContent = selected.length
+          ? `${selected.length} place${selected.length === 1 ? "" : "s"} to consider${holidayRegion ? ` in ${holidayRegion}` : ""}.`
+          : "No places match that combination yet.";
+        $("#holidayCards").innerHTML = selected.length
+          ? selected
+              .map(
+                (item) =>
+                  `<article class="holidaycard"><p class="eyebrow">${esc(item.region)} · ${esc(item.category)}</p><h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks"><a href="${esc(item.source_url)}" target="_blank" rel="noopener noreferrer">Original source</a><a href="${esc(holidayMapUrl(item))}" target="_blank" rel="noopener noreferrer">Google Maps</a><a href="${esc(item.booking_url)}" target="_blank" rel="noopener noreferrer">Check options</a></div></article>`,
+              )
+              .join("")
+          : '<p class="empty">Try another region or show all places.</p>';
+        $$(".mapspot").forEach((spot) =>
+          spot.classList.toggle(
+            "active",
+            spot.dataset.region === holidayRegion,
+          ),
+        );
+      }
+      async function loadHolidays() {
+        try {
+          const response = await fetch("api/holidays");
+          if (!response.ok) throw new Error();
+          holidays = await response.json();
+          renderHolidays();
+        } catch {
+          $("#holidayResultText").textContent =
+            "Holiday ideas are temporarily unavailable.";
         }
-
-        function prevMonth() {
-            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-            renderCalendar();
+      }
+      function openEvent(e) {
+        current = e;
+        $("#detailSource").textContent =
+          `Captured from ${clean((e.source || e.all_sources?.[0] || "original listing").split(":")[0])}`;
+        $("#detailTitle").textContent = clean(e.title) || "Untitled event";
+        let loc = [e.venue_name, e.venue_address, e.city, e.county]
+          .filter(Boolean)
+          .map(clean)
+          .join(" · ");
+        $("#detailLocation").textContent =
+          loc || "Exact venue was not provided by the source";
+        $("#detailDate").textContent = formatDate(e.start_date || e.date);
+        $("#detailCost").textContent = priceLabel(e);
+        $("#detailAge").textContent = ageLabel(e);
+        $("#detailConfidence").textContent = e.confidence
+          ? `${Math.round(Number(e.confidence) * 100)}% captured`
+          : "Not provided";
+        $("#detailDescription").textContent =
+          clean(e.description) ||
+          "The original listing did not provide a description.";
+        let original = sourceUrl(e),
+          source = $("#sourceLink");
+        source.href = original || "#";
+        source.style.display = original ? "inline-flex" : "none";
+        let map = $("#mapLink");
+        map.href = mapUrl(e);
+        map.textContent =
+          e.latitude && e.longitude
+            ? "Open in Google Maps"
+            : "Search Google Maps";
+        $("#detail").style.setProperty("--detail-y", "18px");
+        $("#detail").setAttribute("aria-hidden", "false");
+        $("#detail").classList.add("open");
+        $(".app").inert = true;
+        requestAnimationFrame(() => $("#closeDetail").focus());
+        render();
+      }
+      function closeDetail() {
+        const detail = $("#detail");
+        detail.classList.remove("open");
+        detail.setAttribute("aria-hidden", "true");
+        detail.style.removeProperty("--detail-y");
+        $(".app").inert = false;
+        detailTrigger?.focus();
+      }
+      function notice(message) {
+        let t = $("#toast");
+        t.textContent = message;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 1800);
+      }
+      function toggle(e) {
+        let id = key(e);
+        saved = saved.includes(id)
+          ? saved.filter((x) => x !== id)
+          : [...saved, id];
+        localStorage.setItem("smalldays-saved", JSON.stringify(saved));
+        window.dispatchEvent(
+          new CustomEvent("small-days:save-change", {
+            detail: { eventKey: id, saved: saved.includes(id) },
+          }),
+        );
+        render();
+        notice(
+          saved.includes(id)
+            ? "Saved to your small plan"
+            : "Removed from your small plan",
+        );
+      }
+      document.addEventListener("click", (e) => {
+        let save = e.target.closest("[data-save]");
+        if (save) {
+          toggle(events[Number(save.dataset.save)]);
+          return;
         }
-
-        function nextMonth() {
-            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-            renderCalendar();
+        let open = e.target.closest(".openEvent");
+        if (open) {
+          detailTrigger = open;
+          openEvent(events[Number(open.dataset.event)]);
+          return;
         }
-
-        function renderEvents() {
-            const search = document.getElementById('search').value.toLowerCase();
-            let filtered = allEvents;
-
-            // Filter by selected date
-            if (selectedDate) {
-                const dayKey = getEventDayKey(selectedDate);
-                filtered = filtered.filter(e => {
-                    const d = getEventDate(e);
-                    return d && getEventDayKey(d) === dayKey;
-                });
-            }
-
-            // Filter by search
-            filtered = filtered.filter(e => {
-                const t = (e.title||'').toLowerCase()+(e.description||'').toLowerCase();
-                return !search || t.includes(search);
-            });
-
-            // Update selected date display
-            if (selectedDate) {
-                document.getElementById('selectedDate').textContent = selectedDate.toLocaleDateString('en-IE', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
-            }
-
-            if (filtered.length === 0) {
-                document.getElementById('events').innerHTML = '<p class="no-events">No events found for this date.</p>';
-                return;
-            }
-
-            document.getElementById('events').innerHTML = filtered.map(e => {
-                const d = getEventDate(e);
-                const isActive = selectedDate && d && getEventDayKey(d) === getEventDayKey(selectedDate);
-                return `
-                <div class="event ${isActive ? 'active' : ''}" onclick="showEventDetail(${JSON.stringify(e).replace(/"/g, '&quot;')})">
-                    <div class="event-header">
-                        <div class="event-title">${escapeHtml(e.title||'')}</div>
-                        <div class="event-date">${formatDate(e.start_date)}</div>
-                    </div>
-                    <div class="event-details">
-                        ${e.venue_name?`<strong>📍 ${escapeHtml(e.venue_name)}</strong><br>`:''}
-                        ${e.venue_address?escapeHtml(e.venue_address)+'<br>':''}
-                        ${e.city?escapeHtml(e.city)+'<br>':''}
-                        ${e.cost?`<strong>🎫 ${escapeHtml(e.cost)}</strong><br>`:''}
-                        ${e.age_group?`<span class="tag">👶 ${escapeHtml(e.age_group)}</span>`:''}
-                        ${e.url?`<a href="${e.url}" target="_blank">View on ${e.source.split(':')[0]}</a>`:''}
-                    </div>
-                    <div class="event-meta">
-                        <span class="source-badge">${escapeHtml(e.source.split(':')[0])}</span>
-                        <span class="source-badge">conf: ${e.confidence}</span>
-                    </div>
-                </div>`;
-            }).join('');
+        let page = e.target.closest("[data-page]");
+        if (page) {
+          let id = page.dataset.page;
+          $$(".screen").forEach((x) =>
+            x.classList.toggle("active", x.id === id),
+          );
+          $$("[data-page]").forEach((x) =>
+            x.classList.toggle("active", x.dataset.page === id),
+          );
+          $$(".desktopnav [data-page], .bottomnav [data-page]").forEach((x) => {
+            if (x.dataset.page === id) x.setAttribute("aria-current", "page");
+            else x.removeAttribute("aria-current");
+          });
+          const names = { today: "Today", find: "Find", holidays: "Holidays", guides: "Guides", saved: "Saved" };
+          document.title = `${names[id] || "Small Days"} — Small Days`;
+          window.scrollTo({ top: 0 });
+          const heading = $(`#${id} h1`);
+          heading?.setAttribute("tabindex", "-1");
+          heading?.focus({ preventScroll: true });
         }
-
-        function showEventDetail(e) {
-            // In this view, clicking an event could show a modal or detailed view
-            // For now, we'll keep the list item click for highlighting
+      });
+      $("#detailSave").onclick = () => current && toggle(current);
+      $("#closeDetail").onclick = closeDetail;
+      document.addEventListener("keydown", (event) => {
+        const detail = $("#detail");
+        if (!detail.classList.contains("open")) return;
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeDetail();
+          return;
         }
-
-        function escapeHtml(t) { const d=document.createElement('div'); d.textContent=t; return d.innerHTML; }
-        function formatDate(s) { try { const d=new Date(s); return d.toLocaleDateString('en-IE',{weekday:'short',year:'numeric',month:'short',day:'numeric'}); } catch { return s; } }
-
-        document.getElementById('search').addEventListener('input', renderEvents);
-        document.getElementById('ageFilter').addEventListener('change', renderEvents);
-        document.getElementById('countyFilter').addEventListener('change', renderEvents);
-
-        loadEvents();
-        setInterval(loadEvents, 300000);
+        if (event.key !== "Tab") return;
+        const focusable = [...detail.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),[tabindex]:not([tabindex="-1"])')];
+        if (!focusable.length) return;
+        const first = focusable[0], last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+      // On touch screens the detail surface follows the finger 1:1 and can be
+      // dismissed with a downward swipe. The gesture owns the current
+      // presentation value, so it can be interrupted at any point.
+      (() => {
+        const detail = $("#detail");
+        let drag = null;
+        detail.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "mouse" || event.clientY > 90) return;
+          detail.setPointerCapture(event.pointerId);
+          detail.classList.add("dragging");
+          drag = { id: event.pointerId, start: event.clientY, last: event.clientY, time: performance.now(), y: 0, velocity: 0 };
+        });
+        detail.addEventListener("pointermove", (event) => {
+          if (!drag || event.pointerId !== drag.id) return;
+          const now = performance.now();
+          const raw = event.clientY - drag.start;
+          drag.y = raw > 0 ? raw : raw * 0.2;
+          drag.velocity = (event.clientY - drag.last) / Math.max(1, now - drag.time) * 1000;
+          drag.last = event.clientY;
+          drag.time = now;
+          detail.style.setProperty("--detail-y", `${drag.y}px`);
+        });
+        detail.addEventListener("pointerup", (event) => {
+          if (!drag || event.pointerId !== drag.id) return;
+          const state = drag;
+          drag = null;
+          detail.releasePointerCapture(event.pointerId);
+          detail.classList.remove("dragging");
+          if (state.y > Math.min(150, innerHeight * 0.22) || state.velocity > 900) {
+            closeDetail();
+          } else {
+            detail.style.setProperty("--detail-y", "0px");
+          }
+        });
+        detail.addEventListener("pointercancel", () => {
+          drag = null;
+          detail.classList.remove("dragging");
+          detail.style.setProperty("--detail-y", "0px");
+        });
+      })();
+      $("#searchButton").onclick = render;
+      $("#searchInput").addEventListener("input", render);
+      $$("[data-filter]").forEach((x) => x.addEventListener("change", render));
+      $("#calendarDate").addEventListener("change", () => {
+        calendarMode = "";
+        $$("[data-date-shortcut]").forEach((x) => x.classList.remove("active"));
+        render();
+      });
+      $$("[data-date-shortcut]").forEach((button) =>
+        button.addEventListener("click", () => {
+          calendarMode = button.dataset.dateShortcut;
+          $("#calendarDate").value =
+            calendarMode === "today"
+              ? new Date().toISOString().slice(0, 10)
+              : "";
+          $$("[data-date-shortcut]").forEach((x) =>
+            x.classList.toggle("active", x === button),
+          );
+          render();
+        }),
+      );
+      $("#clearFilters").onclick = () => {
+        $$("[data-filter]").forEach((x) => (x.checked = false));
+        $("#calendarDate").value = "";
+        calendarMode = "";
+        $$("[data-date-shortcut]").forEach((x) => x.classList.remove("active"));
+        render();
+      };
+      $("#clearSearch").onclick = () => {
+        $("#searchInput").value = "";
+        render();
+      };
+      $("#mobileFilter").onclick = () => {
+        const filters = $(".filters"),
+          expanded = filters.classList.toggle("open");
+        $("#mobileFilter").setAttribute("aria-expanded", expanded);
+        $("#mobileFilter").textContent = expanded
+          ? "Hide filters"
+          : "Filters and location";
+      };
+      $$("[data-holiday-filter]").forEach((input) =>
+        input.addEventListener("change", renderHolidays),
+      );
+      $$(".mapspot").forEach((spot) =>
+        spot.addEventListener("click", () => {
+          holidayRegion =
+            holidayRegion === spot.dataset.region ? "" : spot.dataset.region;
+          renderHolidays();
+        }),
+      );
+      $("#clearHolidayFilters").onclick = () => {
+        holidayRegion = "";
+        $$("[data-holiday-filter]").forEach((input) => (input.checked = false));
+        renderHolidays();
+      };
+      $("#openLead").onclick = () => {
+        detailTrigger = $("#openLead");
+        events[0] && openEvent(events[0]);
+      };
+      window.addEventListener("small-days:remote-saves", (event) => {
+        saved = Array.isArray(event.detail) ? event.detail : saved;
+        localStorage.setItem("smalldays-saved", JSON.stringify(saved));
+        render();
+      });
+      async function load() {
+        try {
+          let response = await fetch("api/events");
+          if (!response.ok) throw new Error();
+          events = await response.json();
+          events.sort((a, b) =>
+            String(a.start_date || "9999").localeCompare(
+              String(b.start_date || "9999"),
+            ),
+          );
+          let lead = events[0];
+          if (lead) {
+            $("#leadTitle").textContent = clean(lead.title);
+            $("#leadMeta").textContent = shortMeta(lead);
+            $("#leadCopy").textContent =
+              clean(lead.description).slice(0, 190) +
+              (clean(lead.description).length > 190 ? "…" : "");
+          }
+          $("#todayDate").textContent = new Date().toLocaleDateString("en-IE", {
+            day: "numeric",
+            month: "long",
+          });
+          render();
+        } catch {
+          $("#leadTitle").textContent = "The latest ideas are unavailable.";
+          $("#leadCopy").textContent = "Please try again shortly.";
+          $("#todayList").innerHTML =
+            '<p class="empty">The event feed is temporarily unavailable.</p>';
+          $("#resultsList").innerHTML =
+            '<p class="empty">The event feed is temporarily unavailable.</p>';
+        }
+      }
+      load();
+      loadHolidays();
     </script>
-</body>
+    <script type="module" src="member-sync.js"></script>
+  </body>
 </html>

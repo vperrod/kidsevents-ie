@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#1B5C63" />
+    <title>Small Days — keep your plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #fbfaf4;
+        --ink: #17352d;
+        --pine: #17483c;
+        --leaf: #c5ec70;
+        --coral: #f17c64;
+        --mist: #eaf0e7;
+        --line: #c8d2c8;
+        --quiet: #5e6d65;
+        --serif: Newsreader, Georgia, serif;
+        --sans: "Noto Sans", Arial, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #dbe5da;
+        color: var(--ink);
+        font: 15px/1.45 var(--sans);
+      }
+      .app {
+        max-width: 940px;
+        min-height: 100vh;
+        margin: auto;
+        background: var(--paper);
+      }
+      header {
+        height: 78px;
+        padding: 0 clamp(20px, 5vw, 54px);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        font: 700 30px var(--serif);
+        letter-spacing: -0.06em;
+        color: var(--pine);
+      }
+      .brand span {
+        display: inline-grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 5px;
+        background: var(--coral);
+        color: #fff;
+        font: 600 14px var(--serif);
+      }
+      a {
+        color: var(--pine);
+        font-weight: 700;
+      }
+      main {
+        max-width: 720px;
+        padding: clamp(42px, 9vw, 100px) clamp(20px, 8vw, 84px) 70px;
+      }
+      .k {
+        font-size: 12px;
+        color: var(--quiet);
+        margin: 0 0 8px;
+      }
+      h1 {
+        font: 600 clamp(50px, 9vw, 82px) / 0.9 var(--serif);
+        letter-spacing: -0.065em;
+        margin: 0 0 18px;
+        max-width: 600px;
+      }
+      .intro {
+        font-size: 18px;
+        color: var(--quiet);
+        max-width: 550px;
+      }
+      .plan {
+        margin: 38px 0 28px;
+        border-top: 2px solid var(--pine);
+        border-bottom: 1px solid var(--line);
+      }
+      .plan-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .plan-top b {
+        font: 600 25px/1 var(--serif);
+        letter-spacing: -0.04em;
+      }
+      .count {
+        background: var(--leaf);
+        padding: 5px 9px;
+        font-weight: 700;
+      }
+      .item {
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: 68px 1fr;
+        gap: 14px;
+      }
+      .item:last-child {
+        border: 0;
+      }
+      .date {
+        font: 600 18px/0.95 var(--serif);
+        color: var(--pine);
+      }
+      .date small {
+        display: block;
+        color: var(--quiet);
+        font: 500 10px var(--sans);
+        margin-top: 4px;
+      }
+      .item b {
+        font: 600 19px/1 var(--serif);
+        letter-spacing: -0.025em;
+      }
+      .item span {
+        display: block;
+        color: var(--quiet);
+        font-size: 12px;
+        margin-top: 3px;
+      }
+      .account {
+        margin-top: 34px;
+        padding: 26px;
+        background: var(--mist);
+        border-left: 3px solid var(--leaf);
+      }
+      .account h2 {
+        font: 600 36px/0.95 var(--serif);
+        letter-spacing: -0.055em;
+        margin: 0 0 10px;
+      }
+      .account p {
+        max-width: 530px;
+        color: var(--quiet);
+        margin: 0 0 18px;
+      }
+      .provider {
+        display: block;
+        width: min(420px, 100%);
+        min-height: 49px;
+        background: #fff;
+        border: 1px solid var(--pine);
+        color: var(--pine);
+        font-weight: 700;
+        text-align: left;
+        padding: 12px 14px;
+        margin: 9px 0;
+      }
+      .google:before {
+        content: "G";
+        display: inline-grid;
+        place-items: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        margin-right: 9px;
+        background: #fff0eb;
+        color: #ce4939;
+      }
+      .email {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        width: min(420px, 100%);
+        margin-top: 12px;
+      }
+      .email label {
+        position: absolute;
+        left: -9999px;
+      }
+      .email input {
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-right: 0;
+        padding: 12px;
+        font: inherit;
+      }
+      .email button {
+        border: 0;
+        background: var(--pine);
+        color: #fff;
+        padding: 0 14px;
+        font-weight: 700;
+      }
+      .note {
+        font-size: 12px;
+        color: var(--quiet);
+        margin-top: 14px;
+      }
+      .status {
+        display: none;
+        margin-top: 14px;
+        background: var(--paper);
+        padding: 12px;
+        border-left: 3px solid var(--coral);
+      }
+      .status.show {
+        display: block;
+      }
+      @media (max-width: 560px) {
+        body {
+          background: var(--paper);
+        }
+        header {
+          height: 68px;
+        }
+        main {
+          padding-top: 45px;
+        }
+        .intro {
+          font-size: 16px;
+        }
+        .account {
+          margin-inline: -20px;
+          padding: 22px 20px;
+        }
+        .email {
+          display: block;
+        }
+        .email input,
+        .email button {
+          width: 100%;
+          min-height: 48px;
+          border: 1px solid var(--line);
+        }
+        .email button {
+          margin-top: 8px;
+          border: 0;
+        }
+        .plan {
+          margin-top: 30px;
+        }
+      }
+    </style>
+    <link rel="icon" href="assets/small-days-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="member-brand.css?v=2" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <a class="brand" href="./"><img src="assets/small-days-mark.svg" alt="" />Small Days</a>
+        <a href="./">Back to ideas</a>
+      </header>
+      <main>
+        <p class="k">Optional account</p>
+        <h1>Keep the good plans.</h1>
+        <p class="intro">
+          Your saved ideas currently live in this browser. A free parent account
+          keeps them when you move between your phone, laptop and the shared
+          family tablet.
+        </p>
+        <section class="plan" aria-label="Example saved plan">
+          <div class="plan-top">
+            <b>Saturday, loosely</b><span class="count">3 saved</span>
+          </div>
+          <div class="item">
+            <div class="date">SAT<small>13 SEP</small></div>
+            <div>
+              <b>Woodland story trail</b
+              ><span>Phoenix Park · ages 4–8 · free</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="date">SAT<small>13 SEP</small></div>
+            <div>
+              <b>Make a mini world</b
+              ><span>Galway Arts Centre · ages 3–7 · €8</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="date">SUN<small>14 SEP</small></div>
+            <div>
+              <b>Mini beasts in the museum</b
+              ><span>Cork Public Museum · ages 5+ · free</span>
+            </div>
+          </div>
+        </section>
+        <section class="account" aria-labelledby="accountHeading">
+          <h2 id="accountHeading">Sign in only when it helps.</h2>
+          <p>
+            Browsing remains public. An account is for syncing saved plans and
+            receiving the alerts you actively choose—not for building a public
+            profile.
+          </p>
+          <button id="google" class="provider google" type="button">
+            Continue with Google
+          </button>
+          <div class="email" id="emailActions">
+            <label for="address">Email address</label
+            ><input
+              id="address"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.ie"
+            /><button id="email" type="button">Send sign-in link</button>
+          </div>
+          <button id="signout" class="provider signout" type="button" hidden>
+            Sign out
+          </button>
+          <p class="note">
+            No passwords to remember. No child profile. No public location or
+            follower list.
+          </p>
+          <p class="status" id="status" role="status"></p>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="member-auth.js"></script>
+  </body>
+</html>

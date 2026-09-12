@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">Small Days daymark</title>
+  <rect width="48" height="48" rx="15" fill="#1B5C63"/>
+  <circle cx="16" cy="15" r="6" fill="#F1C84B"/>
+  <path d="M10 35c6-8 12-4 17-10 3-3 4-7 11-10" fill="none" stroke="#F5F7F2" stroke-width="4" stroke-linecap="round"/>
+</svg>

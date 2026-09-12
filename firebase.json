@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/firebase/firebase-tools/master/schema/firebase-config.json",
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Small Days",
+        "supportEmail": "vperrod@gmail.com",
+        "authorizedRedirectUris": [
+          "https://claude-dev-vperrod.westeurope.cloudapp.azure.com/kidsevents/member.html"
+        ]
+      }
+    }
+  }
+}

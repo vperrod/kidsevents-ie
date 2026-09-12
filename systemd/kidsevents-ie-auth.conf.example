@@ -1,0 +1,5 @@
+[Service]
+# Add to the active service, or create a root-owned service drop-in with this
+# directive. Keep the referenced service-account JSON readable only by the
+# service user.
+EnvironmentFile=/home/azureuser/kidsevents-ie/kidsevents-auth.env

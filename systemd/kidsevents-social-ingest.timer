@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly Small Days saved social collection ingest
+
+[Timer]
+OnCalendar=hourly
+RandomizedDelaySec=60
+Persistent=true
+Unit=kidsevents-social-ingest.service
+
+[Install]
+WantedBy=timers.target

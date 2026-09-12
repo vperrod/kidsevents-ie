@@ -528,81 +528,6 @@
     ]
   },
   {
-    "title": "Live Online Workshops for Broadband Connection Points 2026",
-    "description": "",
-    "start_date": "",
-    "end_date": "",
-    "venue_name": "The Ark, Dublin",
-    "venue_address": "21a Eustace Street, Temple Bar, Dublin 8",
-    "city": "Dublin",
-    "county": "Dublin",
-    "country": "IE",
-    "latitude": "53.3438",
-    "longitude": "-6.2654",
-    "url": "https://ark.ie/events/view/live-online-workshops-for-broadband-connection-points-2026",
-    "cost": "",
-    "age_group": "",
-    "source": "theark:https://ark.ie/events/view/live-online-workshops-for-broadband-connection-points-2026",
-    "confidence": 0.55,
-    "all_sources": [
-      "theark"
-    ],
-    "all_urls": [
-      "https://ark.ie/events/view/live-online-workshops-for-broadband-connection-points-2026"
-    ]
-  },
-  {
-    "title": "Summer Streaming for Broadband Connection Points 2026",
-    "description": "",
-    "start_date": "",
-    "end_date": "",
-    "venue_name": "The Ark, Dublin",
-    "venue_address": "21a Eustace Street, Temple Bar, Dublin 8",
-    "city": "Dublin",
-    "county": "Dublin",
-    "country": "IE",
-    "latitude": "53.3438",
-    "longitude": "-6.2654",
-    "url": "https://ark.ie/events/view/summer_bcps-26",
-    "cost": "",
-    "age_group": "",
-    "source": "theark:https://ark.ie/events/view/summer_bcps-26",
-    "confidence": 0.55,
-    "all_sources": [
-      "theark"
-    ],
-    "all_urls": [
-      "https://ark.ie/events/view/summer_bcps-26"
-    ]
-  },
-  {
-    "title": "Central Library: Creative Hubs Summer Programme 2026",
-    "description": "",
-    "start_date": "",
-    "end_date": "",
-    "venue_name": "The Ark, Dublin",
-    "venue_address": "21a Eustace Street, Temple Bar, Dublin 8",
-    "city": "Dublin",
-    "county": "Dublin",
-    "country": "IE",
-    "latitude": "53.3438",
-    "longitude": "-6.2654",
-    "url": "https://ark.ie/events/view/creative-hubs-summer-2026-central",
-    "cost": "",
-    "age_group": "",
-    "source": "theark:https://ark.ie/events/view/creative-hubs-summer-2026-central",
-    "confidence": 0.55,
-    "all_sources": [
-      "theark"
-    ],
-    "all_urls": [
-      "https://ark.ie/events/view/creative-hubs-summer-2026-ballyfermot",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-coolock",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-central",
-      "https://ark.ie/events/view/creative-hubs-summer-2026-cabra"
-    ]
-  },
-  {
     "title": "Culture Night: Sample Me! Create Your Own Music",
     "description": "",
     "start_date": "",
@@ -939,37 +864,37 @@
     ]
   },
   {
-    "title": " Basket Weaving Workshop ",
-    "description": "Event : Basket Weaving Workshop (5&nbsp;sessions)\r\n\r\nDate:&nbsp; Every Tuesday starting on&nbsp;8 Sep to 6 Oct (5 weeks)\r - Please Like & Share",
-    "start_date": "2025-03-04",
-    "end_date": "2026-09-08",
-    "venue_name": "Basket Weaving Workshop",
-    "venue_address": "",
-    "city": " County Leitrim Ireland",
+    "title": "Kidspace Rathcoole | Events",
+    "description": "Kidspace Playcentre, located in Rathcoole has been designed with both parents and children in mind. Our passion for excellence",
+    "start_date": "2022-03-25T00:00:00+00:00",
+    "end_date": "2026-12-31T00:00:00+00:00",
+    "venue_name": "Kidspace Indoor Playcentre Rathcoole",
+    "venue_address": "7GX9+HW Greenogue Business Park, County Dublin, Ireland",
+    "city": "County Dublin",
     "county": "",
     "country": "Ireland",
-    "latitude": "54.023548",
-    "longitude": "-7.863842",
-    "url": "https://yourdaysout.com/events-on-in-county-leitrim-ireland/basket-weaving-workshop-5688",
+    "latitude": "53.298897",
+    "longitude": "-6.480143",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157",
     "cost": "",
     "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-leitrim-ireland/basket-weaving-workshop-5688",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157",
     "confidence": 1.0,
     "all_sources": [
       "yourdaysout"
     ],
     "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-leitrim-ireland/basket-weaving-workshop-5688"
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
     ]
   },
   {
     "title": "GoKidsGo | General Admisson",
-    "description": "Go Kids Go\r\n\r\nAt Go Kids Go, we are an indoor play and party centre created for children of different ages, with space - Please Like & Share",
-    "start_date": "2026-04-16",
-    "end_date": "2026-04-16",
-    "venue_name": "GoKidsGo | General Admisson",
-    "venue_address": "",
-    "city": " County Dublin Dublin Ireland",
+    "description": "Go Kids Go At Go Kids Go, we are an indoor play and party centre created for children of different ages, with space",
+    "start_date": "2026-04-16T09:30:00+01:00",
+    "end_date": "2026-04-16T18:00:00+01:00",
+    "venue_name": "Go Kids Go",
+    "venue_address": "GoKidsGo! Porters Rd, Coolmine Industrial Estate, Dublin 15, D15 H6TX, Ireland",
+    "city": "County Dublin Dublin",
     "county": "",
     "country": "Ireland",
     "latitude": "53.384537",
@@ -1011,37 +936,133 @@
     ]
   },
   {
-    "title": "YouthClub @Crosscare",
-    "description": "We like to welcome you to The Underground Crew Youth Club\nIt will take place in Crosscare office in Swords.\nA welcoming & comfortable space for teenagers, with a pool table , foosball table, a number of computers and a playstation 5. The attendees can come to relax, socialise & play and the parents",
-    "start_date": "2026-06-19T17:00:00+01:00",
-    "end_date": "2026-09-04T17:00:00+01:00",
-    "venue_name": "17 main street swords",
-    "venue_address": "17 Main Street, Swords, County Dublin, K67 H3K4, Ireland",
-    "city": "Dublin",
-    "county": "DN",
+    "title": "Artmaking for Children - Creative Ireland Programme",
+    "description": "Community-based artmaking sessions for children aged 5-12 with artists in rural South Tipperary through Creative Ireland Programme.",
+    "start_date": "2026-06-01",
+    "end_date": "2026-09-11",
+    "venue_name": "South Tipperary Arts Centre",
+    "venue_address": "South Tipperary, Co. Tipperary",
+    "city": "Tipperary",
+    "county": "Tipperary",
     "country": "IE",
-    "latitude": "53.45846",
-    "longitude": "-6.21992",
-    "url": "https://allevents.in/dublin/youthclub-crosscare/200030243497348",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/artmaking-children-creative-ireland-2026-06-01/",
     "cost": "",
     "age_group": "",
-    "source": "allevents:https://allevents.in/dublin/youthclub-crosscare/200030243497348",
-    "confidence": 0.9,
+    "source": "irelandme:https://irelandme.com/events/artmaking-children-creative-ireland-2026-06-01/",
+    "confidence": 0.7,
     "all_sources": [
-      "allevents"
+      "irelandme"
     ],
     "all_urls": [
-      "https://allevents.in/dublin/youthclub-crosscare/200030243497348"
+      "https://irelandme.com/events/artmaking-children-creative-ireland-2026-06-01/"
+    ]
+  },
+  {
+    "title": "An Gailearaí Summer Exhibitions 2026",
+    "description": "An Gailearaí (The Gallery) in Gaoth Dobhair presents contemporary visual art exhibitions throughout the summer, featuring work by established and emerging artists from Donegal and internationally. Part of the Earagail Arts Festival visual arts programme.",
+    "start_date": "2026-06-01",
+    "end_date": "2026-09-11",
+    "venue_name": "An Gailearaí",
+    "venue_address": "Aislann Centre, Gaoth Dobhair, Co. Donegal",
+    "city": "Gaoth Dobhair",
+    "county": "Donegal",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/donegal-an-gailearai-summer-exhibitions-2026-06-01/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/donegal-an-gailearai-summer-exhibitions-2026-06-01/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/donegal-an-gailearai-summer-exhibitions-2026-06-01/"
+    ]
+  },
+  {
+    "title": "Fountain and Bishop Street Oral History Project",
+    "description": "An ongoing community oral history project in Derry seeking testimonies from past and present residents of the Fountain and Bishop Street areas throughout summer 2026.",
+    "start_date": "2026-06-08",
+    "end_date": "2026-09-07",
+    "venue_name": "Various locations in the Fountain and Bishop Street area",
+    "venue_address": "Bishop Street, Derry, BT48",
+    "city": "Derry",
+    "county": "Derry",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/derry-fountain-bishop-street-oral-history-project-2026-06-08/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/derry-fountain-bishop-street-oral-history-project-2026-06-08/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/derry-fountain-bishop-street-oral-history-project-2026-06-08/"
+    ]
+  },
+  {
+    "title": "The Moorings Hotel - Live Music",
+    "description": "Regular live music performances at The Moorings Hotel Restaurant & Bar, Portmagee throughout summer 2026.",
+    "start_date": "2026-06-13",
+    "end_date": "2026-09-10",
+    "venue_name": "The Moorings Hotel",
+    "venue_address": "Portmagee, Co. Kerry",
+    "city": "Portmagee",
+    "county": "Kerry",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/kerry-music-moorings-hotel-portmagee-live-music-2026-06/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/kerry-music-moorings-hotel-portmagee-live-music-2026-06/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/kerry-music-moorings-hotel-portmagee-live-music-2026-06/"
+    ]
+  },
+  {
+    "title": "Athlone Heritage Walking Tours",
+    "description": "Guided walking tours of Athlone explore the town's medieval origins, role in Irish history, architectural heritage, and riverfront landscape along the Shannon.",
+    "start_date": "2026-06-13",
+    "end_date": "2026-09-11",
+    "venue_name": "Athlone Town Centre",
+    "venue_address": "Athlone, Co. Westmeath",
+    "city": "Athlone",
+    "county": "Westmeath",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/athlone-heritage-walking-tours-recurring-2026-06-13/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/athlone-heritage-walking-tours-recurring-2026-06-13/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/athlone-heritage-walking-tours-recurring-2026-06-13/"
     ]
   },
   {
     "title": "Soundtrack to your Sunday: Big band classics return ",
-    "description": " - Please Like & Share",
-    "start_date": "2026-06-21",
-    "end_date": "2026-09-13",
-    "venue_name": "Sunday Summer Sounds",
-    "venue_address": "",
-    "city": " County Wicklow Ireland",
+    "description": "Sunday Summer Sounds returns to Bray’s iconic Victorian seafront bandstand and will take place on select Sundays throughout the summer, featuring big band.",
+    "start_date": "2026-06-21T14:30:00+01:00",
+    "end_date": "2026-09-13T16:00:00+01:00",
+    "venue_name": "Water refill station",
+    "venue_address": "Water refill station, 53 R766, Bray, Co. Wicklow, Ireland",
+    "city": "County Wicklow",
     "county": "",
     "country": "Ireland",
     "latitude": "53.200981",
@@ -1059,1578 +1080,1334 @@
     ]
   },
   {
-    "title": "Adare Country Market - Saturday",
-    "description": "Weekly Saturday market at Adare Village Hall from 11am-5pm featuring local produce and crafts.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Adare Village Hall",
-    "venue_address": "Village Hall, Adare Village, Co. Limerick",
-    "city": "Adare",
-    "county": "Limerick",
+    "title": "Artist Talks Series",
+    "description": "A series of talks and panel discussions featuring visual artists, curators, and arts professionals at Wexford Arts Centre. Monthly events running July through September exploring contemporary art practices and creative processes.",
+    "start_date": "2026-07-01",
+    "end_date": "2026-09-11",
+    "venue_name": "Wexford Arts Centre",
+    "venue_address": "High Street, Wexford, Co. Wexford",
+    "city": "Wexford Town",
+    "county": "Wexford",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/adare-country-market-saturday-weekly/",
+    "url": "https://irelandme.com/events/artist-talks-series-wexford-arts-centre-2026-07-01/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/adare-country-market-saturday-weekly/",
+    "source": "irelandme:https://irelandme.com/events/artist-talks-series-wexford-arts-centre-2026-07-01/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/adare-country-market-saturday-weekly/"
+      "https://irelandme.com/events/artist-talks-series-wexford-arts-centre-2026-07-01/"
     ]
   },
   {
-    "title": "The Wolfe Tones - SSE Arena Belfast",
-    "description": "Ireland's leading folk and ballad group the Wolfe Tones headline SSE Arena Belfast on 29 August 2026, performing their renowned repertoire of Irish ballad standards.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "SSE Arena Belfast",
-    "venue_address": "2 Queens Quay, Belfast, Co. Antrim",
-    "city": "Belfast",
-    "county": "Antrim",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/antrim-wolfe-tones-sse-arena-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/antrim-wolfe-tones-sse-arena-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/antrim-wolfe-tones-sse-arena-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Artisan Food and Craft Market - Portadown Magowan West",
-    "description": "Free artisan food and craft market at Magowan West Car Park, Portadown on Saturday 29 August 2026, from 10am to 3pm, with local food producers, artisan makers and craft stalls.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Magowan West Car Park",
-    "venue_address": "Magowan West, Portadown, Co. Armagh, BT62",
-    "city": "Portadown",
-    "county": "Armagh",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/armagh-artisan-market-portadown-magowan-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/armagh-artisan-market-portadown-magowan-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/armagh-artisan-market-portadown-magowan-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Athlone Farmers Market",
-    "description": "Weekly farmers market at Market Square in Athlone every Saturday, with organic vegetables, smoked fish, honey, cheese and home baking.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Market Square, Athlone",
-    "venue_address": "Market Square, Athlone, Co. Westmeath",
+    "title": "Athlone Irish Language & Cultural Heritage Events",
+    "description": "Athlone hosts Irish language cultural events, céilí nights, and heritage programmes celebrating Irish language, music, and traditional culture.",
+    "start_date": "2026-07-01",
+    "end_date": "2026-09-11",
+    "venue_name": "Athlone town venues",
+    "venue_address": "Athlone, Co. Westmeath",
     "city": "Athlone",
     "county": "Westmeath",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/athlone-farmers-market-2026-06-14/",
+    "url": "https://irelandme.com/events/athlone-irish-language-cultural-heritage-2026-07-01/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/athlone-farmers-market-2026-06-14/",
+    "source": "irelandme:https://irelandme.com/events/athlone-irish-language-cultural-heritage-2026-07-01/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/cahir-farmers-market-2026-06-20/",
-      "https://irelandme.com/events/clonmel-farmers-market-2026-06-20/",
-      "https://irelandme.com/events/athlone-farmers-market-2026-06-14/",
-      "https://irelandme.com/events/kerry-markets-tralee-farmers-market-recurring/"
+      "https://irelandme.com/events/athlone-irish-language-cultural-heritage-2026-07-01/"
     ]
   },
   {
-    "title": "BnM Tullamore Harriers Half Marathon",
-    "description": "Half marathon on Saturday, August 29, hosting the Leinster and Offaly Half Marathon Championships.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Harriers Stadium",
-    "venue_address": "Harriers Stadium, Tullamore, Co. Offaly",
-    "city": "Tullamore",
+    "title": "Clonmacnoise Monastic Site - Family Visits",
+    "description": "Ancient monastic site with free outdoor access year-round. Visitor centre closed March-September 2026 for renovation, but outdoor site and archaeology fully accessible. Free family admission during renovation.",
+    "start_date": "2026-07-13",
+    "end_date": "2026-09-11",
+    "venue_name": "Clonmacnoise Monastic Site",
+    "venue_address": "Clonmacnoise, Co. Offaly",
+    "city": "Clonmacnoise",
     "county": "Offaly",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/bnm-tullamore-harriers-half-marathon-2026-08-29/",
+    "url": "https://irelandme.com/events/clonmacnoise-monastic-site-family-visits-2026-07-01/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/bnm-tullamore-harriers-half-marathon-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/clonmacnoise-monastic-site-family-visits-2026-07-01/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/bnm-tullamore-harriers-half-marathon-2026-08-29/"
+      "https://irelandme.com/events/clonmacnoise-monastic-site-family-visits-2026-07-01/"
     ]
   },
   {
-    "title": "Bonagee United Home Fixture - Dry Arch Park",
-    "description": "Bonagee United open the new FAI National League at home to Home Farm DCU, Dry Arch Park, Letterkenny, Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Dry Arch Park",
-    "venue_address": "Dry Arch Park, Letterkenny, Co. Donegal",
-    "city": "Letterkenny",
-    "county": "Donegal",
+    "title": "St. Fiacra's Well Pilgrimage - Castlepollard",
+    "description": "St. Fiacra's Well in Castlepollard is an early Christian holy well site with a long tradition of pilgrimage, healing, and cultural heritage significance in Westmeath.",
+    "start_date": "2026-07-15",
+    "end_date": "2026-09-11",
+    "venue_name": "St. Fiacra's Well",
+    "venue_address": "Castlepollard, Co. Westmeath",
+    "city": "Castlepollard",
+    "county": "Westmeath",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/bonagee-united-home-fixture-2026-08-29/",
+    "url": "https://irelandme.com/events/castlepollard-st-fiacra-holy-well-pilgrimage-2026-07-15/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/bonagee-united-home-fixture-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/castlepollard-st-fiacra-holy-well-pilgrimage-2026-07-15/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/bonagee-united-home-fixture-2026-08-29/"
+      "https://irelandme.com/events/castlepollard-st-fiacra-holy-well-pilgrimage-2026-07-15/"
     ]
   },
   {
-    "title": "Boyle Origin Farmers Market",
-    "description": "Weekly farmers market in the courtyard of King House, Boyle, every Saturday from 10am to 2pm, with the next market on Saturday, 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "King House Courtyard",
-    "venue_address": "Main Street, Boyle, Co. Roscommon",
-    "city": "Boyle",
-    "county": "Roscommon",
-    "country": "IE",
+    "title": "Summer in the City - Armagh City Centre Saturdays",
+    "description": "Free Saturday afternoon community events in Armagh city centre every Saturday from 20 July to 7 September 2026, 12 to 4pm, with crafts, music, dance and family activities.",
+    "start_date": "2026-07-20",
+    "end_date": "2026-09-07",
+    "venue_name": "Armagh City Centre",
+    "venue_address": "Market Square and McCrum's Court, Armagh, Co. Armagh, BT61",
+    "city": "Armagh",
+    "county": "Armagh",
+    "country": "GB",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/boyle-origin-farmers-market-2026-06-20/",
+    "url": "https://irelandme.com/events/armagh-summer-in-the-city-2026-07-20/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/boyle-origin-farmers-market-2026-06-20/",
+    "source": "irelandme:https://irelandme.com/events/armagh-summer-in-the-city-2026-07-20/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/boyle-origin-farmers-market-2026-06-20/"
+      "https://irelandme.com/events/armagh-summer-in-the-city-2026-07-20/"
     ]
   },
   {
-    "title": "Brehon Brewhouse Tour and Tasting",
-    "description": "Brehon Brewhouse runs farm and brewery tours with a beer tasting most Saturdays at 12 noon at Dunelty near Carrickmacross, Co. Monaghan. Booking is essential.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Brehon Brewhouse",
-    "venue_address": "Dunelty, Inniskeen, Carrickmacross, Co. Monaghan A91 E170",
-    "city": "Carrickmacross",
-    "county": "Monaghan",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/brehon-brewhouse-tour-carrickmacross-weekly/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/brehon-brewhouse-tour-carrickmacross-weekly/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/brehon-brewhouse-tour-carrickmacross-weekly/"
-    ]
-  },
-  {
-    "title": "Brewery Tours at Bréifne Gael Brewing Company",
-    "description": "Bréifne Gael Brewing Company runs guided brewery tours every Saturday and Sunday afternoon at its premises in Cavan town.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Breifne Gael Brewing Company",
-    "venue_address": "Unit F1, Cavan Enterprise Centre, Dublin Road, Cavan, Co. Cavan",
-    "city": "Cavan",
-    "county": "Cavan",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/breifne-gael-brewery-tours-weekly/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/breifne-gael-brewery-tours-weekly/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/breifne-gael-brewery-tours-weekly/"
-    ]
-  },
-  {
-    "title": "Caherconnell International Furnace Festival 2026",
-    "description": "The Caherconnell International Furnace Festival runs 29-30 August 2026 at Caherconnell Stone Fort in the Burren, with free iron-smelting demonstrations, an open-air museum and bookable smelting courses.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-30",
-    "venue_name": "Caherconnell Stone Fort",
-    "venue_address": "Carran, Co. Clare",
-    "city": "Carran",
-    "county": "Clare",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/caherconnell-international-furnace-festival-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/caherconnell-international-furnace-festival-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/caherconnell-international-furnace-festival-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Castleblayney parkrun",
-    "description": "A free, timed 5km run and walk held every Saturday at 9:30am at Black Island, Lough Muckno, Castleblayney.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Lough Muckno Leisure Park",
-    "venue_address": "Black Island, Castleblayney, Co. Monaghan",
-    "city": "Castleblayney",
-    "county": "Monaghan",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/castleblayney-parkrun-weekly/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/castleblayney-parkrun-weekly/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/castleblayney-parkrun-weekly/"
-    ]
-  },
-  {
-    "title": "Clonmel parkrun",
-    "description": "Free timed 5km run and walk every Saturday at 9:30am at Gas House Bridge, New Quay, Clonmel. Open to all abilities.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Clonmel parkrun",
-    "venue_address": "Gas House Bridge, New Quay, Clonmel, Co. Tipperary",
-    "city": "Clonmel",
-    "county": "Tipperary",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/clonmel-parkrun-2026-06-20/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/clonmel-parkrun-2026-06-20/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/clonmel-parkrun-2026-06-20/"
-    ]
-  },
-  {
-    "title": "Club 30 - Over 30s Evening Club Night Cork",
-    "description": "Club 30 returns to Cyprus Avenue, Cork City, on Saturday 29 August 2026. The early evening nightclub for over-30s runs from 6pm, with DJs spinning 80s, 90s, 00s and current hits on the main floor and the Wavelength rooftop bar.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Cyprus Avenue",
-    "venue_address": "Caroline Street, Cork City, Co. Cork",
+    "title": "Sample-Studios Annual Members Summer Exhibition - Fitzgerald's Park 2026",
+    "description": "The annual Sample-Studios members summer exhibition, held at The Lord Mayor's Pavilion, Fitzgerald's Park, Cork City. 30 artists show painting, sculpture, photography and mixed media. 25 July to 7 September 2026.",
+    "start_date": "2026-07-25",
+    "end_date": "2026-09-07",
+    "venue_name": "The Lord Mayor's Pavilion, Fitzgerald's Park",
+    "venue_address": "Fitzgerald's Park, Cork City, Co. Cork",
     "city": "Cork City",
     "county": "Cork",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/club-30-over-30s-cork-2026-08-01/",
+    "url": "https://irelandme.com/events/sample-studios-summer-exhibition-fitzgeralds-park-2026-07-25/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/club-30-over-30s-cork-2026-08-01/",
+    "source": "irelandme:https://irelandme.com/events/sample-studios-summer-exhibition-fitzgeralds-park-2026-07-25/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/club-30-over-30s-cork-2026-08-01/"
+      "https://irelandme.com/events/sample-studios-summer-exhibition-fitzgeralds-park-2026-07-25/"
     ]
   },
   {
-    "title": "Club25 - The Comet Bar, Castleblayney",
-    "description": "Club25 runs weekly nightclub nights, mainly Saturdays, at the Comet Bar Lounge & Night Club, Main Street, Castleblayney. Next date Saturday, 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "The Comet Bar Lounge & Night Club",
-    "venue_address": "Main Street, Castleblayney, Co. Monaghan",
-    "city": "Castleblayney",
-    "county": "Monaghan",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/club25-comet-bar-castleblayney-weekly/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/club25-comet-bar-castleblayney-weekly/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/club25-comet-bar-castleblayney-weekly/"
-    ]
-  },
-  {
-    "title": "Aer Lingus College Football Classic - TCU v North Carolina",
-    "description": "TCU Horned Frogs take on North Carolina Tar Heels at the Aviva Stadium. American college football in Dublin, with tailgates, marching bands, and thousands of US fans.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Aviva Stadium",
-    "venue_address": "Lansdowne Road, Dublin 4",
-    "city": "Ballsbridge",
-    "county": "Dublin",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/college-football-classic-aviva/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/college-football-classic-aviva/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/college-football-classic-aviva/"
-    ]
-  },
-  {
-    "title": "Comedy Night at The Hill Comedy Club, Cahir",
-    "description": "The Hill Comedy Club's monthly stand-up night returns to The Hill Inn, Cahir, on Saturday, 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "The Hill Inn",
-    "venue_address": "The Hill Inn, Cahir, Co. Tipperary",
-    "city": "Cahir",
+    "title": "Lorrha Monastic Village Tours",
+    "description": "Weekly guided evening tours of the historic Lorrha monastic village continue every Thursday at 7:30pm through to 10 September 2026.",
+    "start_date": "2026-07-30",
+    "end_date": "2026-09-10",
+    "venue_name": "Lorrha Monastic Village",
+    "venue_address": "Lorrha, Co. Tipperary",
+    "city": "Lorrha",
     "county": "Tipperary",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/colin-murphy-hill-comedy-club-cahir-2026-06-27/",
+    "url": "https://irelandme.com/events/lorrha-monastic-village-tours/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/colin-murphy-hill-comedy-club-cahir-2026-06-27/",
+    "source": "irelandme:https://irelandme.com/events/lorrha-monastic-village-tours/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/colin-murphy-hill-comedy-club-cahir-2026-06-27/"
+      "https://irelandme.com/events/lorrha-monastic-village-tours/"
     ]
   },
   {
-    "title": "Conor Moore - Me, Myself and Them",
-    "description": "Impressionist and comedian Conor Moore brings his legendary show Me, Myself and Them to the Dean Crowe Theatre in Athlone for three nights, August 29-31, 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-31",
-    "venue_name": "Dean Crowe Theatre",
-    "venue_address": "Chapel Street, Athlone, Co. Westmeath",
-    "city": "Athlone",
-    "county": "Westmeath",
+    "title": "Donaghadee Summer Festival 2026",
+    "description": "Donaghadee's town-wide summer festival runs from 20 June to 9 September 2026, with over 100 events including Sunday band concerts, drama and an artisan market.",
+    "start_date": "2026-08-02",
+    "end_date": "2026-09-09",
+    "venue_name": "Donaghadee town centre",
+    "venue_address": "Donaghadee, Co. Down",
+    "city": "Donaghadee",
+    "county": "Down",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/down-festivals-donaghadee-summer-festival-2026-08-02/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/down-festivals-donaghadee-summer-festival-2026-08-02/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/down-festivals-donaghadee-summer-festival-2026-08-02/"
+    ]
+  },
+  {
+    "title": "Enniscorthy Visual Arts Festival",
+    "description": "A multi-week visual arts festival celebrating contemporary and traditional art across Enniscorthy and surrounding areas. Featuring exhibitions, installations, artist residencies, and public art projects.",
+    "start_date": "2026-08-20",
+    "end_date": "2026-09-10",
+    "venue_name": "Multiple venues across Enniscorthy",
+    "venue_address": "Enniscorthy, Co. Wexford",
+    "city": "Enniscorthy",
+    "county": "Wexford",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/conor-moore-me-myself-and-them-athlone-2026-08-29/",
+    "url": "https://irelandme.com/events/enniscorthy-visual-arts-festival-2026-08-20/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/conor-moore-me-myself-and-them-athlone-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/enniscorthy-visual-arts-festival-2026-08-20/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/conor-moore-me-myself-and-them-athlone-2026-08-29/"
+      "https://irelandme.com/events/enniscorthy-visual-arts-festival-2026-08-20/"
     ]
   },
   {
-    "title": "Dalkey Market",
-    "description": "Weekly craft and farmers market at the Tram Yard in Dalkey village, running every Saturday with food, crafts and artisan stalls.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "The Tram Yard",
-    "venue_address": "Castle Street, Dalkey, Co. Dublin",
-    "city": "Dalkey",
+    "title": "St Columbanus Road Public Realm Scheme Consultation",
+    "description": "Dun Laoghaire-Rathdown County Council's public consultation on Phase 2 of the St Columbanus Road public realm scheme in Dundrum, open from August 24 to September 7 2026.",
+    "start_date": "2026-08-24",
+    "end_date": "2026-09-07",
+    "venue_name": "St Columbanus Road (online consultation)",
+    "venue_address": "St Columbanus Road, Dundrum, Dublin 14",
+    "city": "Dundrum",
     "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/dalkey-market-2026-06-21/",
+    "url": "https://irelandme.com/events/dublin-civic-st-columbanus-road-consultation-2026-08-24/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/dalkey-market-2026-06-21/",
+    "source": "irelandme:https://irelandme.com/events/dublin-civic-st-columbanus-road-consultation-2026-08-24/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/dalkey-market-2026-06-21/"
+      "https://irelandme.com/events/dublin-civic-st-columbanus-road-consultation-2026-08-24/"
     ]
   },
   {
-    "title": "Weekend DJ Nights at Danny Byrne's, Mullingar",
-    "description": "Danny Byrne's on Pearse Street in Mullingar runs live bands four nights a week and a DJ at the weekend, in a pub open seven days from 10am to 2am.",
+    "title": "Water Safety Ireland Pool Lifeguard Course, Leitrim 2026",
+    "description": "A Water Safety Ireland Level 2 pool lifeguard qualification course running in Drumshanbo and Ballinamore from Saturday 29 August to Wednesday 9 September 2026.",
     "start_date": "2026-08-29",
+    "end_date": "2026-09-09",
+    "venue_name": "Drumshanbo and Ballinamore Riversdale swimming pools",
+    "venue_address": "Riversdale, Ballinamore, Co. Leitrim, N41 AY20",
+    "city": "Ballinamore",
+    "county": "Leitrim",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/leitrim-sport-water-safety-pool-lifeguard-course-2026-08-29/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/leitrim-sport-water-safety-pool-lifeguard-course-2026-08-29/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/leitrim-sport-water-safety-pool-lifeguard-course-2026-08-29/"
+    ]
+  },
+  {
+    "title": "UpDown Circus Festival 2026 - Cork City",
+    "description": "Pitch'd Productions' UpDown Circus Festival runs 1 to 8 September 2026 across Cork City venues including Dance Cork Firkin Crane, with the headline show RAPT on 5 September.",
+    "start_date": "2026-09-01",
+    "end_date": "2026-09-08",
+    "venue_name": "Dance Cork Firkin Crane and venues across Cork City",
+    "venue_address": "Firkin Crane Centre, John Redmond Street, Shandon, Cork City, Co. Cork",
+    "city": "Cork City",
+    "county": "Cork",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/cork-updown-circus-festival-2026-09-01/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/cork-updown-circus-festival-2026-09-01/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/cork-updown-circus-festival-2026-09-01/"
+    ]
+  },
+  {
+    "title": "Diocese of Raphoe Medjugorje Pilgrimage",
+    "description": "A seven-night pilgrimage to Medjugorje, Bosnia and Herzegovina, organized by the Diocese of Raphoe, departing September 2, 2026.",
+    "start_date": "2026-09-02",
+    "end_date": "2026-09-09",
+    "venue_name": "Medjugorje, Bosnia and Herzegovina",
+    "venue_address": "Medjugorje, Bosnia and Herzegovina",
+    "city": "Medjugorje",
+    "county": "Donegal",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/raphoe-diocese-medjugorje-pilgrimage-2026-09-02/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/raphoe-diocese-medjugorje-pilgrimage-2026-09-02/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/raphoe-diocese-medjugorje-pilgrimage-2026-09-02/"
+    ]
+  },
+  {
+    "title": "Tracing Your Irish Ancestors - Ulster Historical Foundation Conference 2026",
+    "description": "The Ulster Historical Foundation's flagship week-long family history and genealogy conference returns to Belfast from 2 to 9 September 2026, combining archive research, expert lectures and heritage tours.",
+    "start_date": "2026-09-02",
+    "end_date": "2026-09-09",
+    "venue_name": "Public Record Office of Northern Ireland (PRONI) and Belfast venues",
+    "venue_address": "2 Titanic Boulevard, Belfast, Co. Antrim BT3 9HQ",
+    "city": "Belfast",
+    "county": "Antrim",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/ulster-historical-foundation-conference-belfast-2026-09-02/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/ulster-historical-foundation-conference-belfast-2026-09-02/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/ulster-historical-foundation-conference-belfast-2026-09-02/"
+    ]
+  },
+  {
+    "title": "Harvest Time Blues Festival",
+    "description": "Annual blues festival across multiple venues in Monaghan town, running 3 - 7 September 2026. The festival opens 3 September, with the first ticketed Late Night Stage show on Friday 4 September.",
+    "start_date": "2026-09-03",
+    "end_date": "2026-09-07",
+    "venue_name": "Various venues, Monaghan town",
+    "venue_address": "Monaghan, Co. Monaghan",
+    "city": "Monaghan",
+    "county": "Monaghan",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/harvest-time-blues-festival-monaghan-2026-09-03/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/harvest-time-blues-festival-monaghan-2026-09-03/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/harvest-time-blues-festival-monaghan-2026-09-03/"
+    ]
+  },
+  {
+    "title": "Mountmellick Free Market",
+    "description": "A three-day free market event and community celebration in Mountmellick town centre featuring stalls, workshops, live entertainment and an exhibition.",
+    "start_date": "2026-09-05",
+    "end_date": "2026-09-07",
+    "venue_name": "O'Connell Square",
+    "venue_address": "O'Connell Square, Mountmellick, Co. Laois",
+    "city": "Mountmellick",
+    "county": "Laois",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/mountmellick-free-market-2026-09-05/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/mountmellick-free-market-2026-09-05/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/mountmellick-free-market-2026-09-05/"
+    ]
+  },
+  {
+    "title": "Dublin Fringe Festival",
+    "description": "Dublin Fringe Festival returns with a city-wide programme of theatre, comedy, dance, music, circus, cabaret, visual art and live performances by Irish and.",
+    "start_date": "2026-09-05T10:00:00+01:00",
+    "end_date": "2026-09-20T00:00:00+01:00",
+    "venue_name": "Dublin",
+    "venue_address": "Dublin, Ireland",
+    "city": "County Dublin Dublin",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.344837",
+    "longitude": "-6.265793",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-fringe-festival-2929",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-fringe-festival-2929",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-fringe-festival-2929"
+    ]
+  },
+  {
+    "title": "Sigur Rós with the Ulster Orchestra",
+    "description": "Icelandic post-rock band Sigur Rós performs at Bord Gais Energy Theatre Dublin on 6-7 September 2026 with the Ulster Orchestra.",
+    "start_date": "2026-09-06",
+    "end_date": "2026-09-07",
+    "venue_name": "Bord Gais Energy Theatre",
+    "venue_address": "Grand Canal Square, Docklands, Dublin 2, Co. Dublin",
+    "city": "Docklands",
+    "county": "Dublin",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/dublin-music-sigur-ros-ulster-orchestra-2026-09-06/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/dublin-music-sigur-ros-ulster-orchestra-2026-09-06/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/dublin-music-sigur-ros-ulster-orchestra-2026-09-06/"
+    ]
+  },
+  {
+    "title": "Sigur Ros at Bord Gais Energy Theatre",
+    "description": "Sigur Ros play two nights at Dublin's Bord Gais Energy Theatre in September. One of the most extraordinary live experiences you can have - ethereal, overwhelming, and beautiful.",
+    "start_date": "2026-09-06",
+    "end_date": "2026-09-07",
+    "venue_name": "Bord Gais Energy Theatre",
+    "venue_address": "Grand Canal Square, Docklands, Dublin 2",
+    "city": "Docklands",
+    "county": "Dublin",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/sigur-ros-bord-gais/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/sigur-ros-bord-gais/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/sigur-ros-bord-gais/"
+    ]
+  },
+  {
+    "title": "CIGS German Stammtisch, Limerick",
+    "description": "A free monthly German-language meetup at Sexton's Bar on Henry Street, Limerick, run by UL's Centre for Irish-German Studies on the first Monday of the month.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Danny Byrne's",
-    "venue_address": "27 Pearse Street, Mullingar, Co. Westmeath",
+    "venue_name": "Sexton's Bar",
+    "venue_address": "Henry Street, Limerick, Co. Limerick",
+    "city": "Limerick",
+    "county": "Limerick",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/cigs-german-stammtisch-monthly/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/cigs-german-stammtisch-monthly/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/cigs-german-stammtisch-monthly/"
+    ]
+  },
+  {
+    "title": "County Carlow Golf Classic 2026",
+    "description": "Three-day golf classic across Carlow Golf Club, Mount Wolseley and Bunclody Golf and Fishing Club, 7 to 9 September 2026, with a gala dinner at the Woodford Dolmen Hotel.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-09",
+    "venue_name": "Carlow Golf Club",
+    "venue_address": "Deerpark, Dublin Road, Carlow, Co. Carlow, R93 HX46",
+    "city": "Carlow",
+    "county": "Carlow",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/county-carlow-golf-classic-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/county-carlow-golf-classic-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/county-carlow-golf-classic-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Newry, Mourne and Down Council Meeting",
+    "description": "Monthly council meeting of Newry, Mourne and Down District Council on 7 September 2026 at 6:00pm.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Mourne Room, Downshire Civic Centre",
+    "venue_address": "Downshire Civic Centre, Newry, Co. Down",
+    "city": "Newry",
+    "county": "Down",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/down-civic-council-meeting-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/down-civic-council-meeting-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/down-civic-council-meeting-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Enniskillen Sarcoidosis Support Group",
+    "description": "Monthly meeting of the Enniskillen Sarcoidosis Support Group at Fermanagh House, Enniskillen, on the first Monday of each month.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Fermanagh House",
+    "venue_address": "Broadmeadow Place, Enniskillen, Co. Fermanagh, BT74 7HR",
+    "city": "Enniskillen",
+    "county": "Fermanagh",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/fermanagh-community-sarcoidosis-support-group-monthly/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/fermanagh-community-sarcoidosis-support-group-monthly/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/fermanagh-community-sarcoidosis-support-group-monthly/"
+    ]
+  },
+  {
+    "title": "Galway Races Autumn Meeting",
+    "description": "Two days of National Hunt racing return to Ballybrit Racecourse on September 7 and 8, 2026, outside the Summer Festival crowds.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-08",
+    "venue_name": "Ballybrit Racecourse",
+    "venue_address": "Ballybrit, Galway, Co. Galway",
+    "city": "Galway City",
+    "county": "Galway",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/galway-races-autumn-meeting-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/galway-races-autumn-meeting-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/galway-races-autumn-meeting-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Hibernian Vintage Antiques Fair - Autumn",
+    "description": "Ireland's largest collectors event featuring over 60 stands of antiques, paintings, vintage items, and militaria at Limerick Racecourse.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-08",
+    "venue_name": "Limerick Racecourse",
+    "venue_address": "Limerick Racecourse, Co. Limerick",
+    "city": "Limerick City",
+    "county": "Limerick",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/hibernian-antiques-fair-autumn-2026-09-05/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/hibernian-antiques-fair-autumn-2026-09-05/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/hibernian-antiques-fair-autumn-2026-09-05/"
+    ]
+  },
+  {
+    "title": "Age Action Free Computer Classes",
+    "description": "Free one-to-one computer training for people over 55 at Kilkenny Library branches, running in 5-week blocks and covering the internet, email, online shopping and more.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Kilkenny Library Branches",
+    "venue_address": "Various locations, Co. Kilkenny",
+    "city": "Countywide",
+    "county": "Kilkenny",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/kilkenny-civic-library-age-action-computer-classes-2026-06-13/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/kilkenny-civic-library-age-action-computer-classes-2026-06-13/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/kilkenny-civic-library-age-action-computer-classes-2026-06-13/"
+    ]
+  },
+  {
+    "title": "Kilkenny Bridge Centre Weekly Sessions",
+    "description": "Club bridge sessions running Monday to Thursday evenings, September to May, at the Kilkenny Bridge Centre on Bohernatounish Road, Kilkenny.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Kilkenny Bridge Centre",
+    "venue_address": "Bohernatounish Road, Kilkenny, Co. Kilkenny",
+    "city": "Kilkenny City",
+    "county": "Kilkenny",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/kilkenny-community-kilkenny-bridge-centre-weekly-sessions-2026-06-21/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/kilkenny-community-kilkenny-bridge-centre-weekly-sessions-2026-06-21/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/kilkenny-community-kilkenny-bridge-centre-weekly-sessions-2026-06-21/"
+    ]
+  },
+  {
+    "title": "The Glens Centre Junior Youth Theatre (Sept-Dec Season)",
+    "description": "Weekly drama programme for young performers aged 9-12 at The Glens Centre Manorhamilton. Ten-week season running Mondays Sept-Dec 2026.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-12-07",
+    "venue_name": "The Glens Centre",
+    "venue_address": "The New Line, Manorhamilton, Co. Leitrim",
+    "city": "Manorhamilton",
+    "county": "Leitrim",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/leitrim-family-glens-centre-junior-youth-theatre-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/leitrim-family-glens-centre-junior-youth-theatre-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/leitrim-family-glens-centre-junior-youth-theatre-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Castlebar Community 5K Fun Run",
+    "description": "Community 5K fun run and walk in Castlebar open to all ages and abilities.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Castlebar Town Park",
+    "venue_address": "Castlebar, Co. Mayo",
+    "city": "Castlebar",
+    "county": "Mayo",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/mayo-castlebar-5k-fun-run-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/mayo-castlebar-5k-fun-run-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/mayo-castlebar-5k-fun-run-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Meath County Council Ordinary Monthly Meeting",
+    "description": "Meath County Council holds its monthly ordinary meeting at Buvinda House, Navan, open to the public and media. Meetings are scheduled on the first Monday of each month except August.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Buvinda House",
+    "venue_address": "Dublin Road, Athlumney, Navan, Co. Meath, C15 Y291",
+    "city": "Navan",
+    "county": "Meath",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/meath-civic-county-council-monthly-meeting-2026-06-01/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/meath-civic-county-council-monthly-meeting-2026-06-01/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/meath-civic-county-council-monthly-meeting-2026-06-01/"
+    ]
+  },
+  {
+    "title": "Community Addiction Studies Course - Kells",
+    "description": "A Community Addiction Studies Course commences at Kells Resource Centre, Kells, Co. Meath on Monday 7 September 2026, offering training for community workers and volunteers working with addiction.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Kells Resource Centre",
+    "venue_address": "Kells, Co. Meath",
+    "city": "Kells",
+    "county": "Meath",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/meath-kells-addiction-studies-course-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/meath-kells-addiction-studies-course-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/meath-kells-addiction-studies-course-2026-09-07/"
+    ]
+  },
+  {
+    "title": "New Gospel Choir Monaghan",
+    "description": "A newly formed gospel choir led by Dr Grainne Duffy meets weekly at the Garage Theatre, Monaghan, starting Monday, 7 September 2026.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "The Garage Theatre",
+    "venue_address": "Monaghan Education Campus, Armagh Road, Monaghan, Co. Monaghan",
+    "city": "Monaghan",
+    "county": "Monaghan",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/new-gospel-choir-monaghan-garage-theatre-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/new-gospel-choir-monaghan-garage-theatre-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/new-gospel-choir-monaghan-garage-theatre-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Slow Trad with Eamonn Abberton",
+    "description": "A slow-paced traditional music session for near-beginner and intermediate players, led by accordion player Eamonn Abberton at the Linenhall Arts Centre, Castlebar. Recurring, next session Monday 7 September 2026.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Linenhall Arts Centre",
+    "venue_address": "Linenhall Street, Castlebar, Co. Mayo",
+    "city": "Castlebar",
+    "county": "Mayo",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/slow-trad-with-eamonn-abberton-linenhall-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/slow-trad-with-eamonn-abberton-linenhall-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/slow-trad-with-eamonn-abberton-linenhall-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Smithfield Livestock Market",
+    "description": "Historic Dublin livestock mart operating weekly with cattle, sheep and other livestock sales.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Smithfield Livestock Market",
+    "venue_address": "Smithfield, Dublin 7",
+    "city": "Smithfield",
+    "county": "Dublin",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/smithfield-livestock-market-2026-06-15/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/smithfield-livestock-market-2026-06-15/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/smithfield-livestock-market-2026-06-15/"
+    ]
+  },
+  {
+    "title": "Waterford & Lismore Diocesan Youth Golf Classic",
+    "description": "A Champagne Scramble golf fundraiser for the diocese's youth ministry tees off at Faithlegg Golf Club on Monday 7 September 2026.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Faithlegg Golf Club",
+    "venue_address": "Faithlegg, Co. Waterford",
+    "city": "Faithlegg",
+    "county": "Waterford",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/waterford-lismore-diocesan-youth-golf-classic-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/waterford-lismore-diocesan-youth-golf-classic-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/waterford-lismore-diocesan-youth-golf-classic-2026-09-07/"
+    ]
+  },
+  {
+    "title": "All Us Women - Janey Moffatt at Flowerfield Arts Centre",
+    "description": "Textile artist Janey Moffatt's exhibition All Us Women, exploring trauma and healing through embroidery, runs at Flowerfield Arts Centre, Portstewart, 7 Sept to 26 Oct.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-10-26",
+    "venue_name": "Flowerfield Arts Centre",
+    "venue_address": "185 Coleraine Road, Portstewart, Co. Derry",
+    "city": "Portstewart",
+    "county": "Derry",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/derry-all-us-women-janey-moffatt-flowerfield-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/derry-all-us-women-janey-moffatt-flowerfield-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/derry-all-us-women-janey-moffatt-flowerfield-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Having Notions - A Singles Night That Isn't One",
+    "description": "Casual, comedy-tinged singles social at BrewDog Dublin on 24 August 2026 from 7pm, pitched as an alternative to formal speed dating.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "BrewDog Dublin",
+    "venue_address": "Dublin 2, Co. Dublin",
+    "city": "City Centre",
+    "county": "Dublin",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/having-notions-singles-night-brewdog-2026-08-24/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/having-notions-singles-night-brewdog-2026-08-24/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/having-notions-singles-night-brewdog-2026-08-24/"
+    ]
+  },
+  {
+    "title": "Mayo Older Persons Council Information Day",
+    "description": "Mayo Older Persons Council AGM and Information Day at the TF Royal Hotel, Castlebar, Monday 7 September 2026, open to older people across the county.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "TF Royal Hotel",
+    "venue_address": "Castlebar, Co. Mayo",
+    "city": "Castlebar",
+    "county": "Mayo",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/mayo-civic-older-persons-council-info-day-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/mayo-civic-older-persons-council-info-day-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/mayo-civic-older-persons-council-info-day-2026-09-07/",
+      "https://irelandme.com/events/mayo-older-persons-council-information-day-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Fermanagh Feeder Classic 2026",
+    "description": "The Fermanagh Feeder Classic fishing competition runs on the waters around Enniskillen, Co. Fermanagh, from 7 to 11 September 2026.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-11",
+    "venue_name": "Waters around Enniskillen",
+    "venue_address": "Enniskillen, Co. Fermanagh",
+    "city": "Enniskillen",
+    "county": "Fermanagh",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/fermanagh-festivals-fermanagh-feeder-classic-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/fermanagh-festivals-fermanagh-feeder-classic-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/fermanagh-festivals-fermanagh-feeder-classic-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Memories of Colour - Exhibition by Caroline Wilson, Kilkee",
+    "description": "Kilrush painter Caroline Wilson's first solo show at Culturlann Sweeney, Kilkee, runs 7 September to 3 October 2026. Free admission, 10:00 AM to 5:00 PM.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-10-03",
+    "venue_name": "Culturlann Sweeney",
+    "venue_address": "O'Connell Street, Kilkee, Co. Clare",
+    "city": "Kilkee",
+    "county": "Clare",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/clare-memories-of-colour-caroline-wilson-kilkee-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/clare-memories-of-colour-caroline-wilson-kilkee-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/clare-memories-of-colour-caroline-wilson-kilkee-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Lisburn & Castlereagh City Council - Planning Committee",
+    "description": "Lisburn & Castlereagh City Council's Planning Committee meets at Lagan Valley Island, Lisburn, Monday 7 September 2026 at 10am.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Lisburn & Castlereagh City Council",
+    "venue_address": "Lagan Valley Island, Lisburn, Co. Antrim, BT27 4RL",
+    "city": "Lisburn",
+    "county": "Antrim",
+    "country": "GB",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/antrim-civic-lisburn-castlereagh-planning-committee-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/antrim-civic-lisburn-castlereagh-planning-committee-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/antrim-civic-lisburn-castlereagh-planning-committee-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Fatima Pilgrimage 2026 - Carrigtwohill Parish",
+    "description": "Carrigtwohill Parish leads a pilgrimage to Fatima, Portugal, from 7 to 14 September 2026, led by Fr Patrick Winkle.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-14",
+    "venue_name": "Carrigtwohill Parish",
+    "venue_address": "Carrigtwohill, Co. Cork",
+    "city": "Carrigtwohill",
+    "county": "Cork",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://irelandme.com/events/cork-faith-fatima-pilgrimage-carrigtwohill-2026-09-07/",
+    "cost": "",
+    "age_group": "",
+    "source": "irelandme:https://irelandme.com/events/cork-faith-fatima-pilgrimage-carrigtwohill-2026-09-07/",
+    "confidence": 0.7,
+    "all_sources": [
+      "irelandme"
+    ],
+    "all_urls": [
+      "https://irelandme.com/events/cork-faith-fatima-pilgrimage-carrigtwohill-2026-09-07/"
+    ]
+  },
+  {
+    "title": "Pre-Budget Breakfast Briefing with Tanaiste Simon Harris",
+    "description": "Mullingar Chamber hosts its annual Pre-Budget Breakfast Briefing with Tanaiste and Minister for Finance Simon Harris at Mullingar Park Hotel on Monday 7 September 2026.",
+    "start_date": "2026-09-07",
+    "end_date": "",
+    "venue_name": "Mullingar Park Hotel",
+    "venue_address": "Mullingar Park Hotel, Marlinstown, Mullingar, Co. Westmeath",
     "city": "Mullingar",
     "county": "Westmeath",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/danny-byrnes-mullingar-weekend-dj-recurring/",
+    "url": "https://irelandme.com/events/westmeath-civic-pre-budget-breakfast-briefing-mullingar-2026-09-07/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/danny-byrnes-mullingar-weekend-dj-recurring/",
+    "source": "irelandme:https://irelandme.com/events/westmeath-civic-pre-budget-breakfast-briefing-mullingar-2026-09-07/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/danny-byrnes-mullingar-weekend-dj-recurring/"
+      "https://irelandme.com/events/westmeath-civic-pre-budget-breakfast-briefing-mullingar-2026-09-07/"
     ]
   },
   {
-    "title": "Derry Senior Camogie Championship - Round 2",
-    "description": "Round 2 of the 2026 Derry Senior Camogie Championship takes place on Friday evening 29 August 2026, the second of three consecutive Friday evenings of group games.",
-    "start_date": "2026-08-29",
+    "title": "All Together Choir New Season Launch in Drumcondra",
+    "description": "The All Together Choir starts its new season at Quinns of Drumcondra on Monday 7 September 2026, a non-audition community choir open to singers of all abilities.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Various venues across Co. Derry",
-    "venue_address": "Various, Co. Derry",
-    "city": "Derry",
-    "county": "Derry",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/derry-gaa-senior-camogie-championship-group-2-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/derry-gaa-senior-camogie-championship-group-2-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/derry-gaa-senior-camogie-championship-group-2-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Live at the Square - JLS at Ebrington Derry",
-    "description": "JLS headlines Live at the Square at Ebrington Square in Derry on Saturday 29 August 2026, performing hits including Beat Again, Everybody in Love, and The Club Is Alive.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Ebrington Square",
-    "venue_address": "Ebrington Square, Derry, Co. Derry BT47 6FA",
-    "city": "Derry",
-    "county": "Derry",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/derry-live-at-the-square-jls-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/derry-live-at-the-square-jls-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/derry-live-at-the-square-jls-2026-08-29/"
-    ]
-  },
-  {
-    "title": "JLS",
-    "description": "The British-Irish boyband JLS performs at Millennium Forum Derry on Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Millennium Forum",
-    "venue_address": "Newmarket Street, Derry, Co. Derry",
-    "city": "Derry",
-    "county": "Derry",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/derry-music-jls-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/derry-music-jls-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/derry-music-jls-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Mountcharles Triathlon",
-    "description": "Triathlon event in Mountcharles, County Donegal featuring swimming, cycling and running disciplines, 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Mountcharles",
-    "venue_address": "Mountcharles, Co. Donegal",
-    "city": "Mountcharles",
-    "county": "Donegal",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/donegal-sport-mountcharles-triathlon-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/donegal-sport-mountcharles-triathlon-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/donegal-sport-mountcharles-triathlon-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Don's Craft Beer Festival - Moate",
-    "description": "Craft beer festival featuring local breweries, live music and food at Don's Bar in Moate on Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Don's Bar",
-    "venue_address": "Moate, Co. Westmeath",
-    "city": "Moate",
-    "county": "Westmeath",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/dons-craft-beer-festival-moate-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/dons-craft-beer-festival-moate-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/dons-craft-beer-festival-moate-2026-08-29/"
-    ]
-  },
-  {
-    "title": "The Ropewalk Maritime Heritage Visitor Centre",
-    "description": "Maritime heritage visitor centre in Portaferry featuring exhibitions on the Golden Age of shipbuilding, modern tidal power, and Vikings on Strangford Lough. Open weekends and holidays through September, next opening Saturday, 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "The Ropewalk Maritime Heritage Visitor Centre",
-    "venue_address": "Portaferry waterfront, Portaferry, Co. Down",
-    "city": "Portaferry",
-    "county": "Down",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/down-heritage-ropewalk-maritime-heritage-centre-exhibitions-2026-06-13/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/down-heritage-ropewalk-maritime-heritage-centre-exhibitions-2026-06-13/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/down-heritage-ropewalk-maritime-heritage-centre-exhibitions-2026-06-13/"
-    ]
-  },
-  {
-    "title": "Bach, Bows and Arrows! - An Audience with Julian & Jiaxin Lloyd Webber",
-    "description": "Cellist Julian Lloyd Webber and pianist Jiaxin Lloyd Webber perform at The Portico of Ards, Portaferry, on Saturday, 29 August 2026, 7:30pm.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "The Portico of Ards",
-    "venue_address": "Steel Dickson Avenue, Portaferry, Co. Down",
-    "city": "Portaferry",
-    "county": "Down",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/down-music-bach-bows-and-arrows-portaferry-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/down-music-bach-bows-and-arrows-portaferry-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/down-music-bach-bows-and-arrows-portaferry-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Lisa Hannigan - Open House Festival",
-    "description": "Irish singer-songwriter Lisa Hannigan performs at Bangor Castle Walled Garden as part of Open House Festival, August 29, 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Bangor Castle Walled Garden",
-    "venue_address": "Bangor Castle, Bangor, Co. Down",
-    "city": "Bangor",
-    "county": "Down",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/down-music-lisa-hannigan-bangor-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/down-music-lisa-hannigan-bangor-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/down-music-lisa-hannigan-bangor-2026-08-29/"
-    ]
-  },
-  {
-    "title": "International Currach Championships",
-    "description": "The Carlingford Lough Currach Club hosts the International Currach Championships on Warrenpoint's front shore on Saturday 29 and Sunday 30 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-30",
-    "venue_name": "Warrenpoint Beach",
-    "venue_address": "Warrenpoint Beach, Warrenpoint, Co. Down, BT34 2BY",
-    "city": "Warrenpoint",
-    "county": "Down",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/down-sport-international-currach-championships-warrenpoint-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/down-sport-international-currach-championships-warrenpoint-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/down-sport-international-currach-championships-warrenpoint-2026-08-29/"
-    ]
-  },
-  {
-    "title": "ERA Dance Classics Festival - Armagh August Bank Holiday Weekend",
-    "description": "ERA Dance Classics returns to Shambles Yard in Armagh city for a two-day outdoor festival on August 29 and 30, 2026, featuring live DJs and artists performing 90s and 00s dance music and country anthems.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-30",
-    "venue_name": "Shambles Market at the Shambles Yard",
-    "venue_address": "Cathedral Road, Armagh BT61 7QX",
-    "city": "Armagh",
-    "county": "Armagh",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/era-dance-classics-armagh-august-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/era-dance-classics-armagh-august-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/era-dance-classics-armagh-august-2026-08-29/"
-    ]
-  },
-  {
-    "title": "ERA Dance Classics Festival Armagh - August 2026",
-    "description": "ERA Dance Classics returns to Shambles Yard, Armagh City for a two-day outdoor festival on Saturday 29 and Sunday 30 August 2026, celebrating 90s and 00s dance music for the 30-plus crowd.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-30",
-    "venue_name": "Shambles Yard",
-    "venue_address": "Shambles Yard, Armagh City, Co. Armagh, BT61",
-    "city": "Armagh",
-    "county": "Armagh",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/era-dance-festival-armagh-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/era-dance-festival-armagh-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/era-dance-festival-armagh-2026-08-29/"
-    ]
-  },
-  {
-    "title": "ERA Dance Classics August Weekend - Shambles Yard, Armagh",
-    "description": "ERA Events Group returns to the Shambles Yard, Armagh on 29-30 August 2026 for a two-day open-air music festival covering 90s and 00s dance classics and country music.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-30",
-    "venue_name": "Shambles Market, Armagh",
-    "venue_address": "Cathedral Road, Armagh, Co. Armagh",
-    "city": "Armagh",
-    "county": "Armagh",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/era-dance-classics-armagh-shambles-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/era-dance-classics-armagh-shambles-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/era-dance-classics-armagh-shambles-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Weekend Club Nights at Factory, Waterford",
-    "description": "Factory nightclub on John Street runs weekend club nights with DJ sets and live bands in Waterford city, with the next Saturday night on 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Factory",
-    "venue_address": "John Street, Waterford, Co. Waterford",
-    "city": "Waterford",
-    "county": "Waterford",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/factory-nightclub-waterford-weekly/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/factory-nightclub-waterford-weekly/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/factory-nightclub-waterford-weekly/"
-    ]
-  },
-  {
-    "title": "Saturday Nights at Industry Nightclub",
-    "description": "Industry Nightclub above Crowe's Nest on High Street, Enniskillen, opens every Saturday from 10pm to 2am with DJ sets and a full dance floor, next on 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Industry Nightclub",
-    "venue_address": "12 High Street, Enniskillen, Co. Fermanagh, BT74 7EH",
-    "city": "Enniskillen",
-    "county": "Fermanagh",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/fermanagh-nightlife-industry-nightclub-saturday-2026-06-20/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/fermanagh-nightlife-industry-nightclub-saturday-2026-06-20/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/fermanagh-nightlife-industry-nightclub-saturday-2026-06-20/"
-    ]
-  },
-  {
-    "title": "Saturday DJ Nights at Pat's Bar Level 2",
-    "description": "Pat's Bar on Townhall Street, Enniskillen, runs a Level 2 nightclub every Saturday night with DJs playing chart and dance hits old and new, next on 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Pat's Bar",
-    "venue_address": "1-5 Townhall Street, Enniskillen, Co. Fermanagh",
-    "city": "Enniskillen",
-    "county": "Fermanagh",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/fermanagh-nightlife-pats-bar-saturday-dj-2026-06-20/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/fermanagh-nightlife-pats-bar-saturday-dj-2026-06-20/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/fermanagh-nightlife-pats-bar-saturday-dj-2026-06-20/"
-    ]
-  },
-  {
-    "title": "Follow Run Walk Multisport Duathlon",
-    "description": "Multisport duathlon event in Tullamore on Saturday, August 29.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Tullamore",
-    "venue_address": "Tullamore, Co. Offaly",
-    "city": "Tullamore",
-    "county": "Offaly",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/follow-run-walk-duathlon-tullamore-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/follow-run-walk-duathlon-tullamore-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/follow-run-walk-duathlon-tullamore-2026-08-29/"
-    ]
-  },
-  {
-    "title": "A Place To Bury Strangers at Roisin Dubh",
-    "description": "A Place To Bury Strangers perform at Roisin Dubh on 29 August 2026 starting at 20:30.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Roisin Dubh",
-    "venue_address": "Galway City, Co. Galway",
-    "city": "Galway City",
-    "county": "Galway",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/galway-music-roisin-dubh-place-to-bury-strangers-20260829/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/galway-music-roisin-dubh-place-to-bury-strangers-20260829/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/galway-music-roisin-dubh-place-to-bury-strangers-20260829/"
-    ]
-  },
-  {
-    "title": "Galway United Women's Home Fixtures (Women's National League)",
-    "description": "Galway United's women's team play their next home fixture against Cork City on August 29, 2026 at Pearse Stadium, part of the Women's National League season.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Pearse Stadium",
-    "venue_address": "Pearse Stadium, Galway, Co. Galway",
-    "city": "Galway City",
-    "county": "Galway",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/galway-united-womens-home-fixtures-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/galway-united-womens-home-fixtures-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/galway-united-womens-home-fixtures-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Glaslough Village Market",
-    "description": "A monthly outdoor market in Glaslough village, Co. Monaghan, on the last Saturday of the month from 10am to 4pm, with food, crafts and variety stalls. Next on Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Glaslough Village",
-    "venue_address": "Glaslough, Co. Monaghan",
-    "city": "Glaslough",
-    "county": "Monaghan",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/glaslough-village-market-recurring/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/glaslough-village-market-recurring/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/glaslough-village-market-recurring/"
-    ]
-  },
-  {
-    "title": "Global Jam - Monthly World Music Session, Drogheda",
-    "description": "A monthly world music jam session at Droichead Arts Centre, Drogheda, facilitated by local musician Peadar Connolly. Next session Saturday 29 August 2026 at 2:00 PM.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Droichead Arts Centre",
-    "venue_address": "Stockwell Street, Drogheda, Co. Louth",
-    "city": "Drogheda",
-    "county": "Louth",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/global-jam-droichead-2026-06-20/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/global-jam-droichead-2026-06-20/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/global-jam-droichead-2026-06-20/"
-    ]
-  },
-  {
-    "title": "Nightclub Saturdays at Hayes Hotel, Thurles",
-    "description": "Hayes Hotel in Thurles runs two nightclubs, The Factory and The Icon, every Saturday night and on Sunday bank holidays.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Hayes Hotel",
-    "venue_address": "Liberty Square, Thurles, Co. Tipperary",
-    "city": "Thurles",
-    "county": "Tipperary",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/hayes-hotel-thurles-nightclub-saturdays/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/hayes-hotel-thurles-nightclub-saturdays/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/hayes-hotel-thurles-nightclub-saturdays/"
-    ]
-  },
-  {
-    "title": "Her Outdoors: Try Rock Climbing, the Burren",
-    "description": "Women's beginner rock climbing taster session in the Burren, Co. Clare, Saturday 29 August 2026, 11am to 2pm, €10.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "The Burren",
-    "venue_address": "The Burren, Co. Clare",
-    "city": "Ballyvaughan",
-    "county": "Clare",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/her-outdoors-try-rock-climbing-burren-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/her-outdoors-try-rock-climbing-burren-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/her-outdoors-try-rock-climbing-burren-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Howth Market",
-    "description": "Weekend market at Howth harbour with around 25 stalls of fresh food, crafts and gifts, open Saturdays, Sundays and bank holidays, 9am to 6pm.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Howth Market",
-    "venue_address": "3 Harbour Road, Howth, Co. Dublin",
-    "city": "Howth",
+    "venue_name": "Quinns of Drumcondra",
+    "venue_address": "42 Drumcondra Road Lower, Dublin 9",
+    "city": "Drumcondra",
     "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/howth-harbour-market-2026-06-14/",
+    "url": "https://irelandme.com/events/dublin-community-all-together-choir-drumcondra-2026-09-07/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/howth-harbour-market-2026-06-14/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-all-together-choir-drumcondra-2026-09-07/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/howth-harbour-market-2026-06-14/"
+      "https://irelandme.com/events/dublin-community-all-together-choir-drumcondra-2026-09-07/"
     ]
   },
   {
-    "title": "50 Years: Ireland and the EU, a Talk by David McCullagh",
-    "description": "RTE broadcaster David McCullagh discusses fifty years of Irish EU membership at Dundalk Library on Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
+    "title": "Kimmage Manor Bridge Club",
+    "description": "Weekly parish bridge club meeting in Kimmage Manor Parish Hall, Dublin 12, every Monday evening except bank holidays, next on 31 August 2026.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Dundalk Library",
-    "venue_address": "County Hall, Millennium Centre, Dundalk, Co. Louth",
-    "city": "Dundalk",
-    "county": "Louth",
+    "venue_name": "Kimmage Manor Parish Hall",
+    "venue_address": "Whitehall Road, Kimmage, Dublin 12",
+    "city": "Kimmage",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/ireland-and-the-eu-talk-david-mccullagh-dundalk-library-2026-08-29/",
+    "url": "https://irelandme.com/events/dublin-community-kimmage-manor-bridge-club-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/ireland-and-the-eu-talk-david-mccullagh-dundalk-library-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-kimmage-manor-bridge-club-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/ireland-and-the-eu-talk-david-mccullagh-dundalk-library-2026-08-29/"
+      "https://irelandme.com/events/dublin-community-kimmage-manor-bridge-club-2026-08-31/"
     ]
   },
   {
-    "title": "Live Entertainment at Kazbar, Waterford",
-    "description": "Kazbar on John Street in Waterford city runs live entertainment six nights a week across four bars and three floors, with the next Saturday night on 29 August 2026.",
-    "start_date": "2026-08-29",
+    "title": "Marino Library Scrabble Club",
+    "description": "A weekly drop-in Scrabble club at Marino Library, Dublin 3, held every Monday at 6pm and open to all standards of player.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Kazbar",
-    "venue_address": "57 John Street, Waterford, Co. Waterford",
-    "city": "Waterford",
-    "county": "Waterford",
+    "venue_name": "Marino Library",
+    "venue_address": "14-20 Marino Mart, Fairview, Dublin 3, D03 VW10",
+    "city": "Marino",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kazbar-live-entertainment-waterford-weekly/",
+    "url": "https://irelandme.com/events/dublin-community-marino-library-scrabble-club-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kazbar-live-entertainment-waterford-weekly/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-marino-library-scrabble-club-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kazbar-live-entertainment-waterford-weekly/"
+      "https://irelandme.com/events/dublin-community-marino-library-scrabble-club-2026-08-31/"
     ]
   },
   {
-    "title": "Saturday Storytime at Listowel Library",
-    "description": "Free weekly Saturday morning storytime for young children at Listowel Library, Co. Kerry, from 11am.",
-    "start_date": "2026-08-29",
+    "title": "Knitting Group in Marino Library",
+    "description": "A weekly drop-in knitting group at Marino Library, Dublin 3, held every Monday at 6pm, open to knitters of all levels.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Listowel Library",
-    "venue_address": "Civic Centre, Listowel, Co. Kerry, V31 HT92",
-    "city": "Listowel",
-    "county": "Kerry",
+    "venue_name": "Marino Library",
+    "venue_address": "14-20 Marino Mart, Fairview, Dublin 3, D03 VW10",
+    "city": "Marino",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kerry-family-listowel-library-storytime-weekly/",
+    "url": "https://irelandme.com/events/dublin-community-marino-library-knitting-group-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kerry-family-listowel-library-storytime-weekly/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-marino-library-knitting-group-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kerry-family-listowel-library-storytime-weekly/",
-      "https://irelandme.com/events/kerry-family-killarney-library-storytime-weekly/"
+      "https://irelandme.com/events/dublin-community-marino-library-knitting-group-2026-08-31/"
     ]
   },
   {
-    "title": "Storytime at Tralee Library",
-    "description": "Free weekly storytime for children aged 0 to 6 every Saturday at 11:30am in Tralee Library, Co. Kerry.",
-    "start_date": "2026-08-29",
+    "title": "Social Line Dancing Night at Priory Market, Tallaght",
+    "description": "A beginner-friendly line dancing social run by Danspire at Priory Market in Tallaght village on Monday 7 September 2026.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Tralee Library",
-    "venue_address": "Moyderwell, Tralee, Co. Kerry, V92 X092",
-    "city": "Tralee",
-    "county": "Kerry",
+    "venue_name": "Priory Market",
+    "venue_address": "Priory Market, Main Road, Tallaght, Dublin 24, D24 YYK4",
+    "city": "Tallaght",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kerry-family-tralee-library-storytime-weekly/",
+    "url": "https://irelandme.com/events/dublin-community-social-line-dancing-priory-market-2026-09-07/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kerry-family-tralee-library-storytime-weekly/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-social-line-dancing-priory-market-2026-09-07/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kerry-family-tralee-library-storytime-weekly/"
+      "https://irelandme.com/events/dublin-community-social-line-dancing-priory-market-2026-09-07/"
     ]
   },
   {
-    "title": "Distillation",
-    "description": "Solo performance created by and featuring Luke Casserly at St. John's Theatre & Arts Centre in Listowel on 29 August 2026.",
-    "start_date": "2026-08-29",
+    "title": "Bingo at Skerries Harps GAA Club",
+    "description": "Weekly bingo night in the Skerries Harps GAA clubhouse, resuming Monday 31 August 2026 with an 800 euro jackpot.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "St. John's Theatre & Arts Centre",
-    "venue_address": "The Square, Listowel, Co. Kerry",
-    "city": "Listowel",
-    "county": "Kerry",
+    "venue_name": "Skerries Harps GAA Club",
+    "venue_address": "Skerries, Co. Dublin",
+    "city": "Skerries",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kerry-theatre-distillation-2026-08-29/",
+    "url": "https://irelandme.com/events/dublin-community-skerries-harps-gaa-bingo-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kerry-theatre-distillation-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-skerries-harps-gaa-bingo-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kerry-theatre-distillation-2026-08-29/"
+      "https://irelandme.com/events/dublin-community-skerries-harps-gaa-bingo-2026-08-31/"
     ]
   },
   {
-    "title": "Kíla",
-    "description": "Kíla, the IFTA-winning Irish world music band, play the Mermaid Arts Centre in Bray on Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
+    "title": "Active Retired Class at Taney Parish Centre",
+    "description": "A weekly Monday afternoon class for active retired people at Taney Parish Centre in Dundrum, Dublin 14.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Mermaid Arts Centre",
-    "venue_address": "Main Street, Bray, Co. Wicklow, A98 N5P1",
-    "city": "Bray",
-    "county": "Wicklow",
+    "venue_name": "Taney Parish Centre",
+    "venue_address": "Taney Road, Dundrum, Dublin 14",
+    "city": "Dundrum",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kila-mermaid-arts-centre-bray-2026-08-29/",
+    "url": "https://irelandme.com/events/dublin-community-taney-active-retired-class-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kila-mermaid-arts-centre-bray-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/dublin-community-taney-active-retired-class-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kila-mermaid-arts-centre-bray-2026-08-29/"
+      "https://irelandme.com/events/dublin-community-taney-active-retired-class-2026-08-31/"
     ]
   },
   {
-    "title": "Naas Farmers Market - Food Stalls and Artisan Producers",
-    "description": "Weekly farmers market at the Potato Market in Naas, Co. Kildare, every Saturday morning with artisan food producers, fresh bakes and local cheeses.",
-    "start_date": "2026-08-29",
+    "title": "Novena in Honour of Our Lady of the Miraculous Medal",
+    "description": "A weekly Monday evening novena at St Peter's Church in Phibsborough, Dublin 7, held after the 7pm Mass.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Potato Market",
-    "venue_address": "Potato Market, Naas, Co. Kildare",
-    "city": "Naas",
-    "county": "Kildare",
+    "venue_name": "St Peter's Church",
+    "venue_address": "Phibsborough Road, Phibsborough, Dublin 7",
+    "city": "Phibsborough",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kildare-naas-farmers-market-food-stalls-2026-06-21/",
+    "url": "https://irelandme.com/events/dublin-faith-miraculous-medal-novena-phibsborough-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kildare-naas-farmers-market-food-stalls-2026-06-21/",
+    "source": "irelandme:https://irelandme.com/events/dublin-faith-miraculous-medal-novena-phibsborough-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kildare-naas-farmers-market-food-stalls-2026-06-21/"
+      "https://irelandme.com/events/dublin-faith-miraculous-medal-novena-phibsborough-2026-08-31/"
     ]
   },
   {
-    "title": "Ireland's Woodland Show 2026",
-    "description": "A two day outdoor show celebrating Irish woodlands at Woodstock Gardens and Arboretum, Inistioge, on Saturday 29 and Sunday 30 August 2026, with chainsaw carving, craft stalls and family activities.",
-    "start_date": "2026-08-29",
-    "end_date": "2026-08-30",
-    "venue_name": "Woodstock Gardens and Arboretum",
-    "venue_address": "Woodstock Gardens and Arboretum, Inistioge, Co. Kilkenny",
-    "city": "Inistioge",
-    "county": "Kilkenny",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/kilkenny-family-irelands-woodland-show-inistioge-2026-08-29/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kilkenny-family-irelands-woodland-show-inistioge-2026-08-29/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/kilkenny-family-irelands-woodland-show-inistioge-2026-08-29/"
-    ]
-  },
-  {
-    "title": "National Reptile Zoo Family Visits and Animal Encounters",
-    "description": "Indoor reptile zoo at Hebron Business Park, Kilkenny, open daily 10am to 6pm with keeper talks and hands-on animal encounters.",
-    "start_date": "2026-08-29",
+    "title": "Cabinteely Park Bootcamp",
+    "description": "A dlr Sports Partnership four week outdoor fitness bootcamp in Cabinteely Park, running Monday evenings from 31 August 2026.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "The National Reptile Zoo",
-    "venue_address": "Hebron Business Park, Kilkenny, Co. Kilkenny",
-    "city": "Kilkenny City",
-    "county": "Kilkenny",
+    "venue_name": "Cabinteely Park",
+    "venue_address": "Old Bray Road, Cabinteely, Dublin 18",
+    "city": "Cabinteely",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kilkenny-family-national-reptile-zoo-2026-06-20/",
+    "url": "https://irelandme.com/events/dublin-sport-cabinteely-park-bootcamp-2026-08-31/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kilkenny-family-national-reptile-zoo-2026-06-20/",
+    "source": "irelandme:https://irelandme.com/events/dublin-sport-cabinteely-park-bootcamp-2026-08-31/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kilkenny-family-national-reptile-zoo-2026-06-20/"
+      "https://irelandme.com/events/dublin-sport-cabinteely-park-bootcamp-2026-08-31/"
     ]
   },
   {
-    "title": "Thomastown Country Market",
-    "description": "Weekly country market of home baking, local produce and crafts held every Saturday morning at Thomastown Community Hall, Co. Kilkenny.",
-    "start_date": "2026-08-29",
+    "title": "Monday Night Cinema at Pavilion Theatre",
+    "description": "A weekly arthouse film club runs every Monday at Pavilion Theatre, Dun Laoghaire, with the autumn and winter 2026 season starting 7 September.",
+    "start_date": "2026-09-07",
     "end_date": "",
-    "venue_name": "Thomastown Community Hall",
-    "venue_address": "Thomastown, Co. Kilkenny",
-    "city": "Thomastown",
-    "county": "Kilkenny",
+    "venue_name": "Pavilion Theatre",
+    "venue_address": "Marine Road, Dun Laoghaire, Co. Dublin",
+    "city": "Dun Laoghaire",
+    "county": "Dublin",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kilkenny-markets-thomastown-country-market-weekly/",
+    "url": "https://irelandme.com/events/dublin-film-monday-night-cinema-pavilion-weekly/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kilkenny-markets-thomastown-country-market-weekly/",
+    "source": "irelandme:https://irelandme.com/events/dublin-film-monday-night-cinema-pavilion-weekly/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kilkenny-markets-thomastown-country-market-weekly/"
+      "https://irelandme.com/events/dublin-film-monday-night-cinema-pavilion-weekly/"
     ]
   },
   {
-    "title": "Back2Basics presents Pulse with DJ Pressure",
-    "description": "Back2Basics presents Pulse featuring DJ Pressure at Set Theatre Kilkenny on Saturday 29 August 2026.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Set Theatre Kilkenny",
-    "venue_address": "Set Theatre, Kilkenny, Co. Kilkenny",
-    "city": "Kilkenny City",
-    "county": "Kilkenny",
+    "title": "What were you thinking of darling?",
+    "description": "Seven-week still life collage workshop series with Lia Laimböck at Laois Arthouse.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-10-19",
+    "venue_name": "Laois Arthouse",
+    "venue_address": "Court Square, Timahoe Road, Stradbally, County Laois, R32 DT28",
+    "city": "Stradbally",
+    "county": "Laois",
     "country": "IE",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kilkenny-music-back2basics-pulse-dj-pressure-set-theatre-2026-08-29/",
+    "url": "https://irelandme.com/events/what-were-you-thinking-of-darling-laois-arthouse-2026-09-07/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kilkenny-music-back2basics-pulse-dj-pressure-set-theatre-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/what-were-you-thinking-of-darling-laois-arthouse-2026-09-07/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kilkenny-music-back2basics-pulse-dj-pressure-set-theatre-2026-08-29/"
+      "https://irelandme.com/events/what-were-you-thinking-of-darling-laois-arthouse-2026-09-07/"
     ]
   },
   {
-    "title": "The Tallest Man on Earth",
-    "description": "Swedish singer-songwriter The Tallest Man on Earth performs at St. Canice's Cathedral on Saturday 29 August 2026, opening the new 'Come On Up To The House' concert series.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "St. Canice's Cathedral",
-    "venue_address": "St. Canice's Cathedral & Round Tower, Kilkenny, Co. Kilkenny",
-    "city": "Kilkenny City",
-    "county": "Kilkenny",
-    "country": "IE",
+    "title": "Scrabo, The Hill, the Monument and the Legacy",
+    "description": "An exhibition on the history and significance of Scrabo Hill and Tower.",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-30",
+    "venue_name": "Ards Visitor Information Centre",
+    "venue_address": "31 Regent Street, Newtownards, County Down, BT23 4AD",
+    "city": "newtownards",
+    "county": "Down",
+    "country": "GB",
     "latitude": "",
     "longitude": "",
-    "url": "https://irelandme.com/events/kilkenny-music-tallest-man-on-earth-st-canices-cathedral-2026-08-29/",
+    "url": "https://irelandme.com/events/down-scrabo-hill-monument-legacy-2026-09-07/",
     "cost": "",
     "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kilkenny-music-tallest-man-on-earth-st-canices-cathedral-2026-08-29/",
+    "source": "irelandme:https://irelandme.com/events/down-scrabo-hill-monument-legacy-2026-09-07/",
     "confidence": 0.7,
     "all_sources": [
       "irelandme"
     ],
     "all_urls": [
-      "https://irelandme.com/events/kilkenny-music-tallest-man-on-earth-st-canices-cathedral-2026-08-29/"
-    ]
-  },
-  {
-    "title": "Weekend Entertainment at Langton's",
-    "description": "Langton's on John Street, Kilkenny runs live music and DJ-led entertainment across its bars on weekend nights, part of the wider Langton's and Set Theatre complex.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Langton's",
-    "venue_address": "69 John Street, Kilkenny, Co. Kilkenny",
-    "city": "Kilkenny",
-    "county": "Kilkenny",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/kilkenny-nightlife-late-bar-langtons-2026-06-21/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/kilkenny-nightlife-late-bar-langtons-2026-06-21/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/kilkenny-nightlife-late-bar-langtons-2026-06-21/"
-    ]
-  },
-  {
-    "title": "Knockanacree Woods parkrun",
-    "description": "Free timed 5km trail run and walk every Saturday at 9:30am in Knockanacree Woods, near Cloughjordan. Open to all abilities.",
-    "start_date": "2026-08-29",
-    "end_date": "",
-    "venue_name": "Knockanacree Woods parkrun",
-    "venue_address": "Knockanacree Woods, Cloughjordan, Co. Tipperary",
-    "city": "Cloughjordan",
-    "county": "Tipperary",
-    "country": "IE",
-    "latitude": "",
-    "longitude": "",
-    "url": "https://irelandme.com/events/knockanacree-woods-parkrun-2026-06-20/",
-    "cost": "",
-    "age_group": "",
-    "source": "irelandme:https://irelandme.com/events/knockanacree-woods-parkrun-2026-06-20/",
-    "confidence": 0.7,
-    "all_sources": [
-      "irelandme"
-    ],
-    "all_urls": [
-      "https://irelandme.com/events/knockanacree-woods-parkrun-2026-06-20/"
-    ]
-  },
-  {
-    "title": "The BIG Type Festival",
-    "description": "Celebrate 30 years of the National Print Museum at The BIG Type Festival with a free Community Day packed with creative activities f - Please Like & Share",
-    "start_date": "2026-09-04",
-    "end_date": "2026-09-06",
-    "venue_name": "The BIG Type Festival",
-    "venue_address": "",
-    "city": " County Dublin Dublin Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.335255",
-    "longitude": "-6.235445",
-    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/the-big-type-festival-6392",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/the-big-type-festival-6392",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-fringe-festival-2929",
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/the-big-type-festival-6392"
-    ]
-  },
-  {
-    "title": "Waterford Harvest Festival",
-    "description": "&nbsp;\r\n\r\nWaterford Harvest Festival takes place from 4th to 6th Sep - Please Like & Share",
-    "start_date": "2026-09-04",
-    "end_date": "2026-09-06",
-    "venue_name": "Waterford Harvest Festival",
-    "venue_address": "",
-    "city": " County Waterford Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "52.259781",
-    "longitude": "-7.10562",
-    "url": "https://yourdaysout.com/events-on-in-county-waterford-ireland/waterford-harvest-festival-3708",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-waterford-ireland/waterford-harvest-festival-3708",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-waterford-ireland/waterford-harvest-festival-3708"
-    ]
-  },
-  {
-    "title": "Glenties Harvest Fair ",
-    "description": "Glenties Harvest Fair Festival returns with ten days of music, family activities, local traditions and community events. Taking plac - Please Like & Share",
-    "start_date": "2026-09-04",
-    "end_date": "2026-09-06",
-    "venue_name": "Glenties Harvest Fair",
-    "venue_address": "",
-    "city": " County Donegal Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "54.797169",
-    "longitude": "-8.283032",
-    "url": "https://yourdaysout.com/events-on-in-county-donegal-ireland/glenties-harvest-fair-2926",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-donegal-ireland/glenties-harvest-fair-2926",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-donegal-ireland/glenties-harvest-fair-2926"
-    ]
-  },
-  {
-    "title": "Heritage Week Workshop for Kids - Afternoon",
-    "description": "Celebrate Heritage Week at the Rediscovery Centre with a hands-on craft workshop designed for children aged 6 to 12. With both morni - Please Like & Share",
-    "start_date": "2026-09-05",
-    "end_date": "2026-09-05",
-    "venue_name": "Heritage Week Workshop for Kids - Afternoon",
-    "venue_address": "",
-    "city": " County Dublin Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.397774",
-    "longitude": "-6.263239",
-    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/heritage-week-workshop-for-kids-afternoon-5116",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/heritage-week-workshop-for-kids-afternoon-5116",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/heritage-week-workshop-for-kids-afternoon-5116"
-    ]
-  },
-  {
-    "title": "Ireland's Eye Foraging & Beach Picnic",
-    "description": "Enjoy a memorable afternoon exploring Ireland&#39;s Eye on this guided foraging and beach picnic experience. The tour begins with a  - Please Like & Share",
-    "start_date": "2026-09-05",
-    "end_date": "2026-09-05",
-    "venue_name": "Ireland's Eye Foraging & Beach Picnic",
-    "venue_address": "",
-    "city": " County Dublin Dublin Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.392498",
-    "longitude": "-6.068953",
-    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/irelands-eye-foraging-beach-picnic-6394",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/irelands-eye-foraging-beach-picnic-6394",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/irelands-eye-foraging-beach-picnic-6394"
-    ]
-  },
-  {
-    "title": "Community Family Fun Day",
-    "description": "Bring the family along for a fantastic day of entertainment, community spirit and fundraising at the Community Family Fun Day. Takin - Please Like & Share",
-    "start_date": "2026-09-05",
-    "end_date": "2026-09-05",
-    "venue_name": "Community Family Fun Day",
-    "venue_address": "",
-    "city": " County Dublin Dublin Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.294697",
-    "longitude": "-6.299263",
-    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/community-family-fun-day-6395",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/community-family-fun-day-6395",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/community-family-fun-day-6395"
-    ]
-  },
-  {
-    "title": "CARS AND COFFEE- JCAUTOCARE/1909 MOTORCLUB",
-    "description": "The event will be held at the dublin fire brigade centre ( o brien institute) Grace park, Dublin  - D03WR02  10am - 1pm\n\ncoffee available on the day from ruff coffee and We will be raising funds on the day for oskars kids.\n\nThis is a chilled event, strictly NO reving or messing will be tolerated.",
-    "start_date": "2026-09-05T10:00:00+01:00",
-    "end_date": "2026-09-05T13:00:00+01:00",
-    "venue_name": "O'Brien Institute",
-    "venue_address": "Dublin, Ireland",
-    "city": "Dublin",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.370638",
-    "longitude": "-6.228171",
-    "url": "https://allevents.in/dublin/cars-and-coffee-jcautocare-1909-motorclub/200030596164839",
-    "cost": "",
-    "age_group": "",
-    "source": "allevents:https://allevents.in/dublin/cars-and-coffee-jcautocare-1909-motorclub/200030596164839",
-    "confidence": 0.9,
-    "all_sources": [
-      "allevents"
-    ],
-    "all_urls": [
-      "https://allevents.in/dublin/cars-and-coffee-jcautocare-1909-motorclub/200030596164839"
-    ]
-  },
-  {
-    "title": "The Toy Library | Circular Swap & Play",
-    "description": "The Toy Library Swap&amp;Play is a free family event taking place at Dunboyne Community Centre as part of Meath County Council&#39;s - Please Like & Share",
-    "start_date": "2026-09-06",
-    "end_date": "2026-09-06",
-    "venue_name": "The Toy Library | Circular Swap & Play",
-    "venue_address": "",
-    "city": " County Meath Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.418167",
-    "longitude": "-6.469836",
-    "url": "https://yourdaysout.com/events-on-in-county-meath-ireland/the-toy-library-circular-swap-play-6396",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-meath-ireland/the-toy-library-circular-swap-play-6396",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-meath-ireland/the-toy-library-circular-swap-play-6396"
-    ]
-  },
-  {
-    "title": "Royal Meath Show",
-    "description": "The Royal Meath Show returns to Porchfields, Trim for another day celebrating farming, food, horses and rural life.\r\n\r\nA popu - Please Like & Share",
-    "start_date": "2026-09-06",
-    "end_date": "2026-09-06",
-    "venue_name": "Royal Meath Show",
-    "venue_address": "",
-    "city": " County Meath Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.554703",
-    "longitude": "-6.783135",
-    "url": "https://yourdaysout.com/events-on-in-county-meath-ireland/royal-meath-show-2816",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-meath-ireland/royal-meath-show-2816",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-meath-ireland/royal-meath-show-2816"
+      "https://irelandme.com/events/down-scrabo-hill-monument-legacy-2026-09-07/"
     ]
   },
   {
     "title": "Shoreline Arts Festival",
-    "description": "Shorelines Arts Festival returns to Portumna from 10th - 13th September with four days of music, literature, film,  - Please Like & Share",
-    "start_date": "2026-09-10",
-    "end_date": "2026-09-13",
-    "venue_name": "Shoreline Arts Festival",
-    "venue_address": "",
-    "city": " County Galway Ireland",
+    "description": "Shorelines Arts Festival returns to Portumna from 10th - 13th September with four days of music, literature, film, visual arts, workshops and family.",
+    "start_date": "2026-09-10T01:00:00+01:00",
+    "end_date": "2026-09-13T01:00:00+01:00",
+    "venue_name": "Portumna",
+    "venue_address": "Portumna, Co. Galway, Ireland",
+    "city": "County Galway",
     "county": "",
     "country": "Ireland",
     "latitude": "53.091927",
@@ -2645,6 +2422,78 @@
     ],
     "all_urls": [
       "https://yourdaysout.com/events-on-in-county-galway-ireland/shoreline-arts-festival-3739"
+    ]
+  },
+  {
+    "title": "Dublin Liffey Festival",
+    "description": "The Dublin Liffey Festival returns with a weekend of free events and activities celebrating the River Liffey and Dublin's mariti",
+    "start_date": "2026-09-12T00:00:00+01:00",
+    "end_date": "2026-09-13T00:00:00+01:00",
+    "venue_name": "Dublin",
+    "venue_address": "Dublin, Ireland",
+    "city": "County Dublin Dublin",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.348186",
+    "longitude": "-6.250637",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-liffey-festival-6398",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-liffey-festival-6398",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/dublin-liffey-festival-6398"
+    ]
+  },
+  {
+    "title": "Airfield Estate’s Harvest Festival",
+    "description": "Celebrate Farming, Flavours, and Autumn Fun at Airfield Estate’s Harvest Festival Looking for a family friendly adve",
+    "start_date": "2026-09-12T09:30:00+01:00",
+    "end_date": "2026-09-13T17:30:00+01:00",
+    "venue_name": "Airfield Estate and Farm",
+    "venue_address": "Airfield Estate, Dundrum, Dublin, Co. Dublin, Ireland",
+    "city": "County Dublin",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.288177",
+    "longitude": "-6.236995",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/airfield-estates-harvest-festival-5998",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/airfield-estates-harvest-festival-5998",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/airfield-estates-harvest-festival-5998"
+    ]
+  },
+  {
+    "title": "Richmond Barracks Harvest Fair",
+    "description": "Richmond Barracks Harvest Fair returns for a weekend celebrating the harvest season with food, gardening, creativity and family activities in the heart of.",
+    "start_date": "2026-09-12T11:00:00+01:00",
+    "end_date": "2026-09-13T17:00:00+01:00",
+    "venue_name": "Richmond Barracks",
+    "venue_address": "Richmond Barracks, Inchicore, Dublin, Ireland",
+    "city": "County Dublin Dublin",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.338257",
+    "longitude": "-6.31618",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/richmond-barracks-harvest-fair-6403",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/richmond-barracks-harvest-fair-6403",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/richmond-barracks-harvest-fair-6403"
     ]
   },
   {
@@ -2672,13 +2521,37 @@
     ]
   },
   {
+    "title": "Family Wellness &amp; Mindfulness Day Kids’ Camp",
+    "description": "A fun and inclusive afternoon of mindfulness, sensory play, creative arts and yoga for children and families.",
+    "start_date": "2026-09-12T14:00:00+01:00",
+    "end_date": "2026-09-12T16:30:00+01:00",
+    "venue_name": "Wesley House",
+    "venue_address": "Leeson Park",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3283861",
+    "longitude": "-6.2518169",
+    "url": "https://allevents.in/dublin/family-wellness-and-mindfulness-day-kids-camp/100001999227292650",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin/family-wellness-and-mindfulness-day-kids-camp/100001999227292650",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/family-wellness-and-mindfulness-day-kids-camp/100001999227292650"
+    ]
+  },
+  {
     "title": "National Ploughing Championship",
-    "description": "The&nbsp;National Ploughing Championships&nbsp;return to&nbsp;Screggan, Tullamore, Co. Offaly - Please Like & Share",
-    "start_date": "2026-09-15",
-    "end_date": "2026-09-17",
-    "venue_name": "National Ploughing Championship",
-    "venue_address": "",
-    "city": " County Offaly Ireland",
+    "description": "The National Ploughing Championships return to Screggan, Tullamore, Co. Offaly",
+    "start_date": "2026-09-15T10:00:00+01:00",
+    "end_date": "2026-09-17T19:00:00+01:00",
+    "venue_name": "Screggan",
+    "venue_address": "Screggan, Tullamore, Co. Offaly",
+    "city": "County Offaly",
     "county": "",
     "country": "Ireland",
     "latitude": "53.250969",
@@ -2720,37 +2593,13 @@
     ]
   },
   {
-    "title": "The Neighborhood Kids: Live in Ireland @ The Thomas House",
-    "description": "The Neighborhood Kids bring their Voice of the Revolution to Dublin!",
-    "start_date": "2026-09-16T20:00:00+01:00",
-    "end_date": "2026-09-16T22:00:00+01:00",
-    "venue_name": "The Thomas House",
-    "venue_address": "Thomas Street",
-    "city": "Dublin 8",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.3430729",
-    "longitude": "-6.2804465",
-    "url": "https://allevents.in/dublin-8/the-neighborhood-kids-live-in-ireland-the-thomas-house/100001997200829444",
-    "cost": "",
-    "age_group": "",
-    "source": "allevents:https://allevents.in/dublin-8/the-neighborhood-kids-live-in-ireland-the-thomas-house/100001997200829444",
-    "confidence": 0.9,
-    "all_sources": [
-      "allevents"
-    ],
-    "all_urls": [
-      "https://allevents.in/dublin-8/the-neighborhood-kids-live-in-ireland-the-thomas-house/100001997200829444"
-    ]
-  },
-  {
     "title": "Clifden Arts Festival",
-    "description": "Clifden Arts Festival returns with a varied programme of music, theatre, visual arts and family entertainment across the town. Along - Please Like & Share",
-    "start_date": "2026-09-17",
-    "end_date": "2026-09-26",
-    "venue_name": "Clifden Arts Festival",
-    "venue_address": "",
-    "city": " County Galway Ireland",
+    "description": "Clifden Arts Festival returns with a varied programme of music, theatre, visual arts and family entertainment across the town. Alongside performances and.",
+    "start_date": "2026-09-17T09:00:00+01:00",
+    "end_date": "2026-09-26T23:00:00+01:00",
+    "venue_name": "Clifden",
+    "venue_address": "Clifden, Co. Galway, Ireland",
+    "city": "County Galway",
     "county": "",
     "country": "Ireland",
     "latitude": "53.489136",
@@ -2768,61 +2617,13 @@
     ]
   },
   {
-    "title": "Culture Night",
-    "description": "Welcome to Culture Night 2026\r\n\r\nThe twentieth edition of Culture Night will place on Friday 19 September 20 - Please Like & Share",
-    "start_date": "2026-09-18",
-    "end_date": "2026-09-18",
-    "venue_name": "Culture Night",
-    "venue_address": "",
-    "city": " County Dublin Dublin Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "53.349804",
-    "longitude": "-6.26031",
-    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/culture-night-2910",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/culture-night-2910",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-dublin-ireland/culture-night-2910"
-    ]
-  },
-  {
-    "title": "Cromane SeaFest",
-    "description": "Cromane Seafest brings together the local community for a weekend celebrating the area&#39;s fishing heritage, seafood and coastal l - Please Like & Share",
-    "start_date": "2026-09-18",
-    "end_date": "2026-09-20",
-    "venue_name": "Cromane SeaFest",
-    "venue_address": "",
-    "city": " County Kerry Ireland",
-    "county": "",
-    "country": "Ireland",
-    "latitude": "52.112762",
-    "longitude": "-9.902483",
-    "url": "https://yourdaysout.com/events-on-in-county-kerry-ireland/cromane-seafest-4353",
-    "cost": "",
-    "age_group": "",
-    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kerry-ireland/cromane-seafest-4353",
-    "confidence": 1.0,
-    "all_sources": [
-      "yourdaysout"
-    ],
-    "all_urls": [
-      "https://yourdaysout.com/events-on-in-county-kerry-ireland/cromane-seafest-4353"
-    ]
-  },
-  {
     "title": "Cahir Tradfest",
-    "description": "Cahir Tradfest returns for a weekend of traditional Irish music, song and dance with concerts, workshops, sessions and community eve - Please Like & Share",
-    "start_date": "2026-09-18",
-    "end_date": "2026-09-20",
-    "venue_name": "Cahir Tradfest",
-    "venue_address": "",
-    "city": " County Tipperary Ireland",
+    "description": "Cahir Tradfest returns for a weekend of traditional Irish music, song and dance with concerts, workshops, sessions and community events taking place.",
+    "start_date": "2026-09-18T01:00:00+01:00",
+    "end_date": "2026-09-20T01:00:00+01:00",
+    "venue_name": "The Square",
+    "venue_address": "The Square, Cahir, Co. Tipperary, Ireland",
+    "city": "County Tipperary",
     "county": "",
     "country": "Ireland",
     "latitude": "52.374844",
@@ -2840,13 +2641,133 @@
     ]
   },
   {
+    "title": "Cromane SeaFest",
+    "description": "Cromane Seafest brings together the local community for a weekend celebrating the area's fishing heritage, seafood and coastal l",
+    "start_date": "2026-09-18T14:00:00+01:00",
+    "end_date": "2026-09-20T00:30:00+01:00",
+    "venue_name": "Cromane",
+    "venue_address": "Cromane, Co. Kerry, Ireland",
+    "city": "County Kerry",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.112762",
+    "longitude": "-9.902483",
+    "url": "https://yourdaysout.com/events-on-in-county-kerry-ireland/cromane-seafest-4353",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kerry-ireland/cromane-seafest-4353",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-kerry-ireland/cromane-seafest-4353"
+    ]
+  },
+  {
+    "title": "YouthClub @Crosscare",
+    "description": "We like to welcome you to The Underground Crew Youth Club\nIt will take place in Crosscare office in Swords.\nA welcoming & comfortable space for teenagers, with a pool table , foosball table, a number of computers and a playstation 5. The attendees can come to relax, socialise & play and the parents",
+    "start_date": "2026-09-18T17:00:00+01:00",
+    "end_date": "2026-09-18T18:30:00+01:00",
+    "venue_name": "17 main street swords",
+    "venue_address": "17 Main Street, Swords, County Dublin, K67 H3K4, Ireland",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.45846",
+    "longitude": "-6.21992",
+    "url": "https://allevents.in/dublin/youthclub-crosscare/200030687277419",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin/youthclub-crosscare/200030687277419",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/youthclub-crosscare/200030687277419"
+    ]
+  },
+  {
+    "title": "Culture Night",
+    "description": "Welcome to Culture Night 2026 The twentieth edition of Culture Night will place on Friday 19 September 20",
+    "start_date": "2026-09-18T19:00:00+01:00",
+    "end_date": "2026-09-18T12:55:00+01:00",
+    "venue_name": "Ireland",
+    "venue_address": "Ireland",
+    "city": "County Dublin Dublin",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.349804",
+    "longitude": "-6.26031",
+    "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/culture-night-2910",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-dublin-ireland/culture-night-2910",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-dublin-ireland/culture-night-2910"
+    ]
+  },
+  {
+    "title": "Drop &amp; Shop Camp - Free (Refundable Attendance Deposit)",
+    "description": "Multisport Camp for kids aged 7-12. Beach Volleyball, Tennis, Futsol, Tag Rugby & More! Kids should bring a small snack for their break",
+    "start_date": "2026-09-26T10:00:00+01:00",
+    "end_date": "2026-09-26T14:00:00+01:00",
+    "venue_name": "Sport Ireland: National Indoor Arena",
+    "venue_address": "Snugborough Road",
+    "city": "Dublin",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3983211",
+    "longitude": "-6.3593389",
+    "url": "https://allevents.in/dublin/drop-and-shop-camp-free-refundable-attendance-deposit/100001999268365500",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin/drop-and-shop-camp-free-refundable-attendance-deposit/100001999268365500",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin/drop-and-shop-camp-free-refundable-attendance-deposit/100001999268365500"
+    ]
+  },
+  {
+    "title": "A mama + child play session for 0-6 year olds - Allah made everything",
+    "description": "Come join us for fun playtime exploring how Allah made everything, perfect for little ones 0-6 years old!",
+    "start_date": "2026-09-26T14:00:00+01:00",
+    "end_date": "2026-09-26T17:00:00+01:00",
+    "venue_name": "Little Darlings Play Cafe",
+    "venue_address": "Lorcan Green",
+    "city": "Dublin 9",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3935592",
+    "longitude": "-6.2316949",
+    "url": "https://allevents.in/dublin-9/a-mama-child-play-session-for-0-6-year-olds-allah-made-everything/100001999934811859",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin-9/a-mama-child-play-session-for-0-6-year-olds-allah-made-everything/100001999934811859",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-9/a-mama-child-play-session-for-0-6-year-olds-allah-made-everything/100001999934811859"
+    ]
+  },
+  {
     "title": "Ken O'Sullivan: Stories from the Sea",
-    "description": "In his new show,&nbsp;Stories from the Sea, award-winning filmmaker Ken O&rsquo;Sullivan brings us on his 25 year j - Please Like & Share",
-    "start_date": "2026-09-26",
-    "end_date": "2026-09-26",
-    "venue_name": "Stories from the Sea",
-    "venue_address": "",
-    "city": " County Cork Ireland",
+    "description": "In his new show, Stories from the Sea, award-winning filmmaker Ken O’Sullivan brings us on his 25 year j",
+    "start_date": "2026-09-26T19:30:00+01:00",
+    "end_date": "2026-09-26T21:10:00+01:00",
+    "venue_name": "15 MacCurtain Street",
+    "venue_address": "15 MacCurtain Street, Victorian Quarter, Cork, T23 E094, Ireland",
+    "city": "County Cork",
     "county": "",
     "country": "Ireland",
     "latitude": "51.901115",
@@ -2864,37 +2785,13 @@
     ]
   },
   {
-    "title": "Group Drumming Workshop (Ages 10–18)",
-    "description": "An in-person samba drumming workshop led by Kieran Gallagher for kids & teens who stammer",
-    "start_date": "2026-09-26T11:00:00+01:00",
-    "end_date": "2026-09-26T16:00:00+01:00",
-    "venue_name": "Rialto",
-    "venue_address": "Community Centre",
-    "city": "Dublin 8",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.3698353",
-    "longitude": "-6.3034118",
-    "url": "https://allevents.in/dublin-8/group-drumming-workshop-ages-10-18/100001997571823096",
-    "cost": "",
-    "age_group": "",
-    "source": "allevents:https://allevents.in/dublin-8/group-drumming-workshop-ages-10-18/100001997571823096",
-    "confidence": 0.9,
-    "all_sources": [
-      "allevents"
-    ],
-    "all_urls": [
-      "https://allevents.in/dublin-8/group-drumming-workshop-ages-10-18/100001997571823096"
-    ]
-  },
-  {
     "title": "Mario & Luigi Tag & Run",
-    "description": " - Please Like & Share",
-    "start_date": "2026-09-27",
-    "end_date": "2026-09-27",
-    "venue_name": "Mario & Luigi Tag & Run",
-    "venue_address": "",
-    "city": " County Dublin Ireland",
+    "description": " IT'S-A TIME FOR THE ULTIMATE TAG & RUN CHALLENGE!  Calling all little plumbers, princesses and power-up hunters! Grab your caps and choose your side.",
+    "start_date": "2026-09-27T09:00:00+01:00",
+    "end_date": "2026-09-27T11:00:00+01:00",
+    "venue_name": "Kidspace Rathcoole | Events",
+    "venue_address": "Kidspace Rathcoole, Greenoge, Co. Dublin, Ireland",
+    "city": "County Dublin",
     "county": "",
     "country": "Ireland",
     "latitude": "53.298897",
@@ -2909,6 +2806,78 @@
     ],
     "all_urls": [
       "https://yourdaysout.com/events-on-in-county-dublin-ireland/mario-luigi-tag-run-6378"
+    ]
+  },
+  {
+    "title": " Secret Valley's Halloween Day Festival",
+    "description": "Get ready for our BIGGEST Halloween adventure yet! 🎃👻 🦙 Start your adventure a",
+    "start_date": "2026-10-10T10:00:00+01:00",
+    "end_date": "2026-10-31T17:00:00+00:00",
+    "venue_name": "Secret Valley Wildlife Park",
+    "venue_address": "Secret Valley Wildlife Park, County Wexford, Ireland",
+    "city": "County Wexford",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.426792",
+    "longitude": "-6.754764",
+    "url": "https://yourdaysout.com/events-on-in-county-wexford-ireland/secret-valleys-halloween-day-festival-6371",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-wexford-ireland/secret-valleys-halloween-day-festival-6371",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-wexford-ireland/secret-valleys-halloween-day-festival-6371"
+    ]
+  },
+  {
+    "title": "GARBA &amp; DANDIYA EVE 2026",
+    "description": "Join us for a vibrant Garba & Dandiya Eve as we come together with family and friends to celebrate the spirit and traditions of Navratri.",
+    "start_date": "2026-10-10T17:00:00+01:00",
+    "end_date": "2026-10-17T17:00:00+01:00",
+    "venue_name": "YMCA Dublin Aungier Street",
+    "venue_address": "53 Aungier Street",
+    "city": "Dublin 2",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.339329",
+    "longitude": "-6.2664558",
+    "url": "https://allevents.in/dublin-2/garba-and-dandiya-eve-2026/100001999435588669",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin-2/garba-and-dandiya-eve-2026/100001999435588669",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-2/garba-and-dandiya-eve-2026/100001999435588669"
+    ]
+  },
+  {
+    "title": "Cornmaze Massacre",
+    "description": "Step into pure terror at Cornmaze Massacre, Wexford's ultimate Halloween scare experience, set across the eerie grounds of",
+    "start_date": "2026-10-16T18:00:00+01:00",
+    "end_date": "2026-10-30T22:00:00+00:00",
+    "venue_name": "Secret Valley Wildlife Park",
+    "venue_address": "Secret Valley, Brocurrow, County Wexford, Ireland",
+    "city": "County Wexford",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.426792",
+    "longitude": "-6.754764",
+    "url": "https://yourdaysout.com/events-on-in-county-wexford-ireland/cornmaze-massacre-6372",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-wexford-ireland/cornmaze-massacre-6372",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-wexford-ireland/cornmaze-massacre-6372"
     ]
   },
   {
@@ -2936,6 +2905,78 @@
     ]
   },
   {
+    "title": "Halloween Festival 2026",
+    "description": "This year’s Halloween event at Clonfert Farm is set to be bigger and better than ever, with plenty of spooky fun for all the family! The event includes:",
+    "start_date": "2026-10-17T12:00:00+01:00",
+    "end_date": "2026-10-31T12:00:00+00:00",
+    "venue_name": "Clonfert Farm",
+    "venue_address": "986G+P3, Clonfert North, Clonfert, Balraheen, Co. Kildare, Ireland",
+    "city": "County Kildare",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "53.361866",
+    "longitude": "-6.674573",
+    "url": "https://yourdaysout.com/events-on-in-county-kildare-ireland/halloween-festival-2026-6406",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kildare-ireland/halloween-festival-2026-6406",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-kildare-ireland/halloween-festival-2026-6406"
+    ]
+  },
+  {
+    "title": "Love Actually Charity Gala 2026",
+    "description": "Join us for an unforgettable evening of music, stories, generosity and hope, supporting children and families through Love Actually Charity.",
+    "start_date": "2026-10-18T18:00:00+01:00",
+    "end_date": "2026-10-18T22:00:00+01:00",
+    "venue_name": "Clontarf Castle Hotel",
+    "venue_address": "Castle Avenue",
+    "city": "Dublin 3",
+    "county": "DN",
+    "country": "IE",
+    "latitude": "53.3655543",
+    "longitude": "-6.20473",
+    "url": "https://allevents.in/dublin-3/love-actually-charity-gala-2026/100001997720575017",
+    "cost": "",
+    "age_group": "",
+    "source": "allevents:https://allevents.in/dublin-3/love-actually-charity-gala-2026/100001997720575017",
+    "confidence": 0.9,
+    "all_sources": [
+      "allevents"
+    ],
+    "all_urls": [
+      "https://allevents.in/dublin-3/love-actually-charity-gala-2026/100001997720575017"
+    ]
+  },
+  {
+    "title": "Jurassic Haunt",
+    "description": "Get ready for a roarsome Halloween adventure with Jurassic Haunt, Jurassic Newpark’s 2026 Halloween Experience in Kilkenny!",
+    "start_date": "2026-10-24T00:00:00+01:00",
+    "end_date": "2026-11-01T00:00:00+00:00",
+    "venue_name": "Jurassic Newpark",
+    "venue_address": "26 Ardilea, Castlecomer Rd, Newpark Lower, Kilkenny, R95 XP5H, Ireland",
+    "city": "County Kilkenny",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.664631",
+    "longitude": "-7.248838",
+    "url": "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/jurassic-haunt-6382",
+    "cost": "",
+    "age_group": "",
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kilkenny-ireland/jurassic-haunt-6382",
+    "confidence": 1.0,
+    "all_sources": [
+      "yourdaysout"
+    ],
+    "all_urls": [
+      "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/jurassic-haunt-6382"
+    ]
+  },
+  {
     "title": "Paddy McDonnell: Gout's Out",
     "description": "Belfast comedian Paddy McDonnell brings his brand new show to The Laughter Lounge",
     "start_date": "2026-10-25T18:00:00+00:00",
@@ -2960,27 +3001,27 @@
     ]
   },
   {
-    "title": "The Milk Carton Kids",
-    "description": "Nearby AttractionsThe Milk Carton Kids has 20 upcoming events.AccessibilityTo purchase accessible tickets please click purchase link below.\nFor further information please visit help.ticketmaster.ie\nYou can now update your accessible information in \"My AccountNote: Under 14s must be accompanied by an",
-    "start_date": "2027-01-19T19:00:00+00:00",
-    "end_date": "2027-01-19T21:00:00+00:00",
-    "venue_name": "3Olympia Theatre",
-    "venue_address": "",
-    "city": "Dublin",
-    "county": "DN",
-    "country": "IE",
-    "latitude": "53.34431800",
-    "longitude": "-6.26611400",
-    "url": "https://allevents.in/dublin/the-milk-carton-kids/210006455647068",
+    "title": "The Witching Hour",
+    "description": "When darkness falls, the dinosaurs come alive… The Witching Hour is Jurassic Newpark’s brand-new&",
+    "start_date": "2026-10-30T00:00:00+00:00",
+    "end_date": "2026-10-31T00:00:00+00:00",
+    "venue_name": "Jurassic Newpark",
+    "venue_address": "26 Ardilea, Castlecomer Rd, Newpark Lower, Kilkenny, R95 XP5H, Ireland",
+    "city": "County Kilkenny",
+    "county": "",
+    "country": "Ireland",
+    "latitude": "52.664631",
+    "longitude": "-7.248838",
+    "url": "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/the-witching-hour-6383",
     "cost": "",
     "age_group": "",
-    "source": "allevents:https://allevents.in/dublin/the-milk-carton-kids/210006455647068",
-    "confidence": 0.9,
+    "source": "yourdaysout:https://yourdaysout.com/events-on-in-county-kilkenny-ireland/the-witching-hour-6383",
+    "confidence": 1.0,
     "all_sources": [
-      "allevents"
+      "yourdaysout"
     ],
     "all_urls": [
-      "https://allevents.in/dublin/the-milk-carton-kids/210006455647068"
+      "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/the-witching-hour-6383"
     ]
   }
 ]

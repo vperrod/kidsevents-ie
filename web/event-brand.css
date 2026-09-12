@@ -1,0 +1,162 @@
+:root {
+  --paper: #f5f7f2;
+  --ink: #17312d;
+  --pine: #1b5c63;
+  --leaf: #f1c84b;
+  --coral: #e48a78;
+  --mist: #dde8d7;
+  --line: #9fb2aa;
+  --quiet: #46615b;
+  --serif: "Bricolage Grotesque", Arial, sans-serif;
+  --sans: "Atkinson Hyperlegible", Arial, sans-serif;
+}
+
+html {
+  background: #e5ebe4;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: #e5ebe4;
+  font: 16px/1.55 var(--sans);
+}
+
+.app {
+  max-width: 1120px;
+  background: var(--paper);
+}
+
+header {
+  min-height: 88px;
+  background: rgba(245, 247, 242, 0.92);
+  border-color: rgba(70, 97, 91, 0.2);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--ink);
+  font: 700 28px/1 var(--serif);
+  letter-spacing: -0.055em;
+  text-decoration: none;
+}
+
+.brand img {
+  width: 38px;
+  height: 38px;
+}
+
+header > a:last-child {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+main {
+  padding-top: clamp(42px, 7vw, 76px);
+}
+
+.eyebrow {
+  color: var(--pine);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.picker {
+  margin: 24px 0 40px;
+  padding: 20px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--mist);
+}
+
+.picker select {
+  border-color: var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+}
+
+h1 {
+  font: 700 clamp(46px, 7vw, 76px) / 0.94 var(--serif);
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.facts {
+  overflow: hidden;
+  border: 1px solid rgba(70, 97, 91, 0.28);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.fact {
+  min-height: 76px;
+  border-color: rgba(70, 97, 91, 0.28);
+}
+
+.fact b {
+  color: var(--quiet);
+}
+
+.description {
+  color: var(--ink);
+}
+
+.link {
+  min-height: 48px;
+  border-radius: 12px;
+}
+
+.link.primary {
+  background: var(--pine);
+}
+
+.source-note {
+  padding: 20px;
+  border: 0;
+  border-left: 4px solid var(--coral);
+  border-radius: 0 14px 14px 0;
+  background: var(--mist);
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--leaf);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+@media (max-width: 560px) {
+  body {
+    background: var(--paper);
+  }
+
+  header {
+    min-height: 72px;
+  }
+
+  .brand {
+    font-size: 25px;
+  }
+
+  .brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .picker {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

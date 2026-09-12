@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Beyond the Trees Avondale",
+    "description": "A Wicklow forest day with walking trails, a walled garden and the treetop experience. The site has free elements and bookable activities, so choose the version of the day that suits your budget and energy.",
+    "region": "Leinster",
+    "county": "Wicklow",
+    "location": "Avondale Forest Park, Rathdrum, Co. Wicklow",
+    "latitude": 52.91391,
+    "longitude": -6.22358,
+    "category": "Nature",
+    "price_range": "Free elements + ticketed options",
+    "age_group": "Different options for different ages",
+    "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/",
+    "source_name": "Visit Wicklow",
+    "booking_url": "https://www.beyondthetreesavondale.com/"
+  },
+  {
+    "title": "Lough Key Forest & Activity Park",
+    "description": "Build a low-cost forest day around walking, cycling or a picnic, then add an activity only if it suits the plan. Some activities require advance booking.",
+    "region": "Connacht",
+    "county": "Roscommon",
+    "location": "Lough Key Forest Park, Boyle, Co. Roscommon",
+    "latitude": 53.9944,
+    "longitude": -8.3129,
+    "category": "Outdoor activity",
+    "price_range": "Free grounds + paid add-ons",
+    "age_group": "All ages; check each activity",
+    "source_url": "https://loughkey.ie/activities/family-activities/",
+    "source_name": "Lough Key Forest & Activity Park",
+    "booking_url": "https://loughkey.ie/"
+  },
+  {
+    "title": "Explorium",
+    "description": "An indoor Dublin option built around interactive science, sport and discovery activities. Choose the activity and session that fit your child’s age before booking.",
+    "region": "Leinster",
+    "county": "Dublin",
+    "location": "The Point Square, Dublin 1",
+    "latitude": 53.3498,
+    "longitude": -6.2288,
+    "category": "Science & indoor play",
+    "price_range": "Ticketed activities",
+    "age_group": "Activity guidance varies",
+    "source_url": "https://explorium.ie/",
+    "source_name": "Explorium",
+    "booking_url": "https://explorium.ie/"
+  }
+]

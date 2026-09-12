@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1B5C63">
+  <title>Small Days — event details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/small-days-mark.svg" type="image/svg+xml">
+  <style>
+    :root{--paper:#fbfaf4;--ink:#17352d;--pine:#17483c;--leaf:#c5ec70;--coral:#f17c64;--mist:#eaf0e7;--line:#c8d2c8;--quiet:#5e6d65;--serif:Newsreader,Georgia,serif;--sans:"Noto Sans",Arial,sans-serif}*{box-sizing:border-box}body{margin:0;background:#dbe5da;color:var(--ink);font:15px/1.5 var(--sans)}.app{max-width:1040px;min-height:100vh;margin:auto;background:var(--paper)}header{min-height:78px;padding:0 clamp(20px,5vw,54px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{font:700 30px var(--serif);letter-spacing:-.06em;color:var(--pine)}.brand span{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;margin-right:5px;background:var(--coral);color:#fff;font:600 14px var(--serif)}a{color:var(--pine);font-weight:700}main{padding:clamp(34px,7vw,74px) clamp(20px,7vw,76px) 80px;max-width:900px}.eyebrow{margin:0 0 7px;color:var(--quiet);font-size:12px}.picker{border-top:2px solid var(--pine);border-bottom:1px solid var(--line);padding:17px 0;margin:20px 0 34px}.picker label{display:block;font-weight:700;margin-bottom:7px}.picker select{width:100%;min-height:48px;border:1px solid var(--pine);background:#fff;padding:10px;font:inherit;color:var(--ink)}h1{font:600 clamp(43px,7vw,74px)/.92 var(--serif);letter-spacing:-.065em;margin:0;max-width:760px}.location{margin:14px 0 27px;color:var(--quiet);font-size:17px}.facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.fact{padding:13px 15px;border-right:1px solid var(--line)}.fact:last-child{border:0}.fact b{display:block;font-size:11px;color:var(--quiet);margin-bottom:3px}.fact span{font-weight:700}.description{max-width:680px;font-size:17px;margin:29px 0}.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.link{min-height:46px;display:inline-flex;align-items:center;padding:10px 14px;border:1px solid var(--pine);text-decoration:none}.link.primary{background:var(--pine);color:#fff}.source-note{margin-top:34px;padding:16px;background:var(--mist);border-left:3px solid var(--leaf);color:var(--quiet)}.source-note b{color:var(--ink)}.state{padding:30px 0;color:var(--quiet)}@media(max-width:560px){body{background:var(--paper)}header{min-height:68px}main{padding-top:38px}.facts{grid-template-columns:1fr 1fr}.fact:nth-child(2){border-right:0}.fact:nth-child(-n+2){border-bottom:1px solid var(--line)}.location,.description{font-size:16px}}
+  </style>
+  <link rel="stylesheet" href="event-brand.css?v=2">
+</head>
+<body>
+  <div class="app"><header><a class="brand" href="/kidsevents/"><img src="assets/small-days-mark.svg" alt="">Small Days</a><a href="/kidsevents/">Back to ideas</a></header><main>
+    <p class="eyebrow">Original event information</p>
+    <div class="picker"><label for="eventPicker">Choose an event to inspect</label><select id="eventPicker" disabled><option>Loading events…</option></select></div>
+    <section id="eventDetail" aria-live="polite"><p class="state">Loading the latest event information…</p></section>
+  </main></div>
+  <script>
+    const picker = document.getElementById('eventPicker');
+    const detail = document.getElementById('eventDetail');
+    let events = [];
+    const text = value => String(value || '').replace(/&amp;/g, '&').replace(/&#039;/g, "'").replace(/&#8217;/g, '’');
+    const sourceUrl = event => [event.url, ...(event.all_urls || [])].find(url => { try { return ['http:', 'https:'].includes(new URL(url).protocol); } catch { return false; } }) || '';
+    function mapLink(event) {
+      const lat = String(event.latitude || '').trim(), lng = String(event.longitude || '').trim();
+      const query = lat && lng ? `${lat},${lng}` : [event.venue_name, event.venue_address, event.city, event.county, event.country || 'Ireland'].filter(Boolean).join(', ') || text(event.title);
+      return `https://www.google.com/maps/search/?${new URLSearchParams({api:'1',query})}`;
+    }
+    function element(tag, className, value) { const node=document.createElement(tag); if(className)node.className=className; if(value!==undefined)node.textContent=value; return node; }
+    function render(event) {
+      detail.replaceChildren();
+      const title = element('h1','',text(event.title) || 'Untitled event');
+      const locationParts = [event.venue_name, event.venue_address, event.city, event.county].filter(Boolean).map(text);
+      const location = element('p','location',locationParts.join(' · ') || 'Exact venue was not provided by the source');
+      const facts = element('div','facts');
+      [['Date',event.start_date || 'Check original listing'],['Cost',event.cost || 'Not provided'],['Ages',event.age_group || 'Not provided']].forEach(([label,value])=>{const fact=element('div','fact');fact.append(element('b','',label),element('span','',text(value)));facts.append(fact)});
+      const description = element('p','description',text(event.description) || 'The original listing did not provide a description.');
+      const links = element('div','links');
+      const original = sourceUrl(event);
+      if(original){const link=element('a','link primary','View original listing');link.href=original;link.target='_blank';link.rel='noopener noreferrer';links.append(link)}
+      const map=element('a','link',event.latitude && event.longitude ? 'Open in Google Maps' : 'Search Google Maps');map.href=mapLink(event);map.target='_blank';map.rel='noopener noreferrer';links.append(map);
+      const sourceName = text((event.source || event.all_sources?.[0] || 'Original source').split(':')[0]);
+      const note=element('p','source-note');note.append(element('b','',`Captured from ${sourceName}. `),document.createTextNode('Descriptions and practical details are shown from the original listing. Always confirm timing and availability with the organiser.'));
+      detail.append(title,location,facts,description,links,note);
+    }
+    async function load() {
+      try {
+        const response = await fetch('api/events');
+        if(!response.ok) throw new Error('Event feed unavailable');
+        events = await response.json();
+        if(!events.length) throw new Error('No events available');
+        picker.replaceChildren();
+        events.forEach((event,index)=>{const option=document.createElement('option');option.value=index;option.textContent=text(event.title) || `Event ${index+1}`;picker.append(option)});
+        picker.disabled=false; render(events[0]);
+      } catch(error) { detail.replaceChildren(element('p','state','We could not load the event feed just now. Please try again shortly.')); picker.replaceChildren(element('option','', 'Event feed unavailable')); }
+    }
+    picker.addEventListener('change', () => render(events[Number(picker.value)]));
+    load();
+  </script>
+</body>
+</html>
