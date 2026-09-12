@@ -888,6 +888,30 @@
     ]
   },
   {
+    "title": "",
+    "description": "One of our go-to spots for sushi, with outdoor seating offering stunning lake views. Kids love the lawn area where they can run freely, but please note it's not fenced and leads to the parking lot and lake.",
+    "start_date": "2025-07-20",
+    "end_date": "2025-07-20",
+    "venue_name": "",
+    "venue_address": "107 Terhune Dr, Wayne, NJ 07470",
+    "city": "",
+    "county": "",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://www.instagram.com/thingstodokids.nj/reel/DMWkXZeAYZ5/",
+    "cost": "paid",
+    "age_group": "kids",
+    "source": "instagram:https://www.instagram.com/thingstodokids.nj/reel/DMWkXZeAYZ5/",
+    "confidence": 0.6,
+    "all_sources": [
+      "https://www.instagram.com/thingstodokids.nj/reel/DMWkXZeAYZ5/"
+    ],
+    "all_urls": [
+      "https://www.instagram.com/thingstodokids.nj/reel/DMWkXZeAYZ5/"
+    ]
+  },
+  {
     "title": "GoKidsGo | General Admisson",
     "description": "Go Kids Go At Go Kids Go, we are an indoor play and party centre created for children of different ages, with space",
     "start_date": "2026-04-16T09:30:00+01:00",
@@ -957,6 +981,30 @@
     ],
     "all_urls": [
       "https://yourdaysout.com/events-on-in-county-wicklow-ireland/soundtrack-to-your-sunday-big-band-classics-return-6350"
+    ]
+  },
+  {
+    "title": "",
+    "description": "VILLA NEXT FRIDAY NIGHT! #musiciansofinstagram #countrymusic #instagramreels #originalmusic #singersongwriter",
+    "start_date": "2026-07-31",
+    "end_date": "2026-07-31",
+    "venue_name": "Villa",
+    "venue_address": "",
+    "city": "",
+    "county": "",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://www.instagram.com/colin_graham_official/reel/DbLwBteowkh/",
+    "cost": "",
+    "age_group": "",
+    "source": "instagram:https://www.instagram.com/colin_graham_official/reel/DbLwBteowkh/",
+    "confidence": 0.6,
+    "all_sources": [
+      "https://www.instagram.com/colin_graham_official/reel/DbLwBteowkh/"
+    ],
+    "all_urls": [
+      "https://www.instagram.com/colin_graham_official/reel/DbLwBteowkh/"
     ]
   },
   {
@@ -2401,6 +2449,30 @@
     ]
   },
   {
+    "title": "",
+    "description": "Outdoor cinema screening of Song of the Sea at Herbert Park. Film can be enjoyed in Irish or English, with Sorcha from Neuroconvergence explaining the experience. Part of making outdoor cinema more inclusive, flexible, and welcoming. Ticket proceeds support neurodiversity charity partners.",
+    "start_date": "2026-09-12",
+    "end_date": "2026-09-12",
+    "venue_name": "Herbert Park",
+    "venue_address": "",
+    "city": "Dublin",
+    "county": "",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://www.instagram.com/happeningsireland/reel/DdI4REWCiNa/",
+    "cost": "paid",
+    "age_group": "all_ages",
+    "source": "instagram:https://www.instagram.com/happeningsireland/reel/DdI4REWCiNa/",
+    "confidence": 0.6,
+    "all_sources": [
+      "https://www.instagram.com/happeningsireland/reel/DdI4REWCiNa/"
+    ],
+    "all_urls": [
+      "https://www.instagram.com/happeningsireland/reel/DdI4REWCiNa/"
+    ]
+  },
+  {
     "title": "Dublin Liffey Festival",
     "description": "The Dublin Liffey Festival returns with a weekend of free events and activities celebrating the River Liffey and Dublin's mariti",
     "start_date": "2026-09-12T00:00:00+01:00",
@@ -2952,6 +3024,31 @@
     ],
     "all_urls": [
       "https://allevents.in/dublin-3/love-actually-charity-gala-2026/100001997720575017"
+    ]
+  },
+  {
+    "title": "",
+    "description": "Founding member of the Buena Vista Social Club and the iconic voice of Chan Chan, Eliades Ochoa comes to Ireland for one unforgettable night on his World Tour: Como Nunca!",
+    "start_date": "2026-10-19",
+    "end_date": "2026-10-19",
+    "venue_name": "National Concert Hall",
+    "venue_address": "",
+    "city": "Dublin",
+    "county": "",
+    "country": "IE",
+    "latitude": "",
+    "longitude": "",
+    "url": "https://www.instagram.com/eliadesochoaofficial/reel/DctWifiRmu7/",
+    "cost": "",
+    "age_group": "",
+    "source": "instagram:https://www.instagram.com/eliadesochoaofficial/reel/DctWifiRmu7/",
+    "confidence": 0.6,
+    "all_sources": [
+      "https://www.instagram.com/eliadesochoaofficial/reel/DctWifiRmu7/"
+    ],
+    "all_urls": [
+      "https://www.instagram.com/eliadesochoaofficial/reel/DctWifiRmu7/",
+      "https://www.nch.ie/all-events-listing/eliades-ochoa-oct26/"
     ]
   },
   {

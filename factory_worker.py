@@ -740,15 +740,23 @@ def publish_place(place):
     return True
 
 
-def promote_candidate(candidate):
+def promote_candidate(candidate, hint=""):
     """Turn one staged social candidate into a publishable event or evergreen
-    place. Returns ("event", record), ("place", record), or (None, None).
+    place. Returns ("event", record, None), ("place", record, None), or
+    (None, None, reason).
 
-    (None, None) means neither classification found enough to publish -- the
-    candidate stays staged until someone supplies the missing information by
-    hand.
+    `hint` is optional extra context a curator typed in on the admin Social
+    page ("it's the playground on Main St, every Saturday") -- folded into
+    the caption before either classification runs, same do-not-invent LLM
+    gate either way, just with more to go on.
+
+    (None, None, reason) means neither classification found enough to
+    publish -- the candidate stays staged, and `reason` is what to show a
+    human so they know what's missing rather than just "still pending".
     """
     caption = candidate.get("caption") or ""
+    if hint:
+        caption = f"{caption}\n\nAdditional context from a curator: {hint}".strip()
     source_url = candidate.get("source_url", "")
     platform = candidate.get("platform", "social")
     enriched, _model = enrich_event(
@@ -766,13 +774,22 @@ def promote_candidate(candidate):
         enriched["all_sources"] = [source_url]
         enriched["all_urls"] = [source_url] + ([website] if website else [])
         enriched["confidence"] = "medium"
-        return "event", normalize_event(enriched)
+        return "event", normalize_event(enriched), None
 
     place = extract_place(caption, source_url, platform, candidate.get("author", ""))
     if place:
-        return "place", place
+        return "place", place, None
 
-    return None, None
+    if not (candidate.get("caption") or "").strip() and not hint:
+        reason = "No caption text was captured for this post (a rate-limited fetch) — nothing to classify from. Add a note below with what it's about."
+    else:
+        reason = (
+            "Checked as both a dated event and an evergreen place: no usable "
+            "date was found, and the caption/account don't clearly name a "
+            "specific real venue. Add a note below (a date, or the actual "
+            "venue name) and resubmit."
+        )
+    return None, None, reason
 
 
 def extract_events_from_pages(pages, city, today, horizon):

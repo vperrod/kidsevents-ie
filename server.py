@@ -188,6 +188,50 @@ def admin_status():
     
     return jsonify(result)
 
+def _load_json_file(path):
+    if not os.path.exists(path):
+        return []
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+
+@app.route("/admin/api/metrics")
+def admin_metrics():
+    """Overall + today + this-hour progress across events, places, holidays
+    and the social review queue -- for the landing page's metrics square."""
+    now = datetime.now(timezone.utc)
+    today_cutoff = now.date().isoformat() + "T00:00:00"
+    hour_cutoff = now.replace(minute=0, second=0, microsecond=0).isoformat(timespec="seconds")
+
+    staged = staging.load_staged()
+
+    def reviewed_since(status, cutoff):
+        return sum(
+            1 for c in staged
+            if c.get("status") == status and (c.get("reviewed_at") or "") >= cutoff
+        )
+
+    return jsonify({
+        "totals": {
+            "events": len(_load_json_file(EVENTS_FILE)),
+            "places": len(_load_json_file(PLACES_FILE)),
+            "holidays": len(_load_json_file(HOLIDAYS_FILE)),
+            "needs_review": sum(1 for c in staged if c.get("status") == "needs_review"),
+        },
+        "today": {
+            "approved": reviewed_since("approved", today_cutoff),
+            "rejected": reviewed_since("rejected", today_cutoff),
+        },
+        "hour": {
+            "approved": reviewed_since("approved", hour_cutoff),
+        },
+        "generated_at": now.isoformat(timespec="seconds"),
+    })
+
+
 @app.route("/admin/api/stats")
 def admin_stats():
     """Event statistics: counts, sources, recent events."""
@@ -414,40 +458,38 @@ def admin_social_staged():
 
 
 def _set_candidate_status(source_url, status, note=None):
-    """Mark one staged candidate. Candidates are never deleted — audit trail."""
-    candidates = staging.load_staged()
-    for candidate in candidates:
-        if candidate.get("source_url") == source_url:
-            candidate["status"] = status
-            candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-            if note:
-                candidate["review_note"] = note
-            staging.save_staged(candidates)
-            return candidate
-    return None
+    """Mark one staged candidate (locked, fresh-read). Never deleted — audit trail."""
+    def _mutate(candidate):
+        candidate["status"] = status
+        candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        if note:
+            candidate["review_note"] = note
+        return dict(candidate)
+    return staging.mark_candidate(source_url, _mutate)
 
 
 @app.route("/admin/api/social/approve", methods=["POST"])
 def admin_social_approve():
     """Classify one staged candidate as a dated event or an evergreen place
-    and publish it accordingly."""
-    source_url = (request.get_json(silent=True) or {}).get("source_url", "")
-    candidate = next(
-        (c for c in staging.load_staged() if c.get("source_url") == source_url), None
-    )
+    and publish it accordingly. An optional `hint` (a curator's note typed on
+    the admin page — a date, a venue name) is folded into the classification;
+    plain re-clicking Approve with no hint just retries the same gate."""
+    body = request.get_json(silent=True) or {}
+    source_url = body.get("source_url", "")
+    hint = (body.get("hint") or "").strip()
+
+    candidates = staging.load_staged()
+    candidate = next((c for c in candidates if c.get("source_url") == source_url), None)
     if not candidate:
         return jsonify({"error": "Candidate not found"}), 404
 
-    kind, record = factory_worker.promote_candidate(candidate)
-    if not record:
-        return jsonify({
-            "error": "still needs manual info",
-            "message": "No usable date or identifiable place could be read from this post — it stays staged.",
-        }), 422
+    published = staging.try_approve_by_url(source_url, hint=hint)
+    if not published:
+        updated = next((c for c in staging.load_staged() if c.get("source_url") == source_url), None)
+        reason = (updated or {}).get("reason", "No usable date or identifiable place could be read from this post.")
+        return jsonify({"error": "still needs manual info", "message": reason}), 422
 
-    added = (factory_worker.publish_event if kind == "event" else factory_worker.publish_place)(record)
-    _set_candidate_status(source_url, "approved", note=f"Auto-classified as a{'n' if kind == 'event' else ''} {kind}.")
-    return jsonify({"status": "approved", "kind": kind, "published": added, "event": record})
+    return jsonify({"status": "approved", "published": True})
 
 
 @app.route("/admin/api/social/reject", methods=["POST"])

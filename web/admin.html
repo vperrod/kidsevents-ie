@@ -424,6 +424,19 @@
         background: #fff;
         color: var(--ink);
       }
+      .hint-input {
+        min-height: 34px;
+        width: 100%;
+        min-width: 200px;
+        padding: 0 10px;
+        margin-bottom: 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--ink);
+        font-size: 13px;
+        display: block;
+      }
       .filters {
         display: flex;
         gap: 7px;
@@ -768,6 +781,26 @@
               ><span>saved guides</span>
             </article>
           </div>
+          <div class="head">
+            <div>
+              <h3>Review progress</h3>
+              <p class="muted">Overall, today, and this hour.</p>
+            </div>
+          </div>
+          <div class="metrics">
+            <article class="metric">
+              <span>Waiting for review</span><b class="warn" id="p-needs-review">—</b
+              ><span>overall, across Instagram and TikTok</span>
+            </article>
+            <article class="metric">
+              <span>Approved today</span><b class="good" id="p-today-approved">—</b
+              ><span id="p-today-rejected-note">— rejected today</span>
+            </article>
+            <article class="metric">
+              <span>Approved this hour</span><b id="p-hour-approved">—</b
+              ><span id="p-metrics-updated">—</span>
+            </article>
+          </div>
           <div class="two">
             <section class="panel">
               <div class="head">
@@ -912,6 +945,7 @@
                   <th>Platform</th>
                   <th>Found via</th>
                   <th>Captured</th>
+                  <th>Why not yet</th>
                   <th>Decision</th>
                 </tr>
               </thead>
@@ -944,9 +978,9 @@
           String(v || "").replace(
             /[&<>"']/g,
             (c) =>
-              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
+              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c],
           );
-        let S = { events: [], sources: [], holidays: [], filter: "all" };
+        let S = { events: [], sources: [], holidays: [], places: [], metrics: null, filter: "all" };
         const get = async (u, o) => {
             let r = await fetch(u, o);
             if (!r.ok) throw Error(r.status);
@@ -1030,7 +1064,7 @@
             `from ${Object.keys(S.stats?.sources_by_type || {}).length} represented sources`;
           $("#m-ready").textContent = full;
           $("#m-context").textContent = total - full;
-          $("#m-holidays").textContent = S.holidays.length;
+          $("#m-holidays").textContent = S.holidays.length + S.places.length;
           $("#desk-title").textContent = total
             ? `${total} things to do are live. Make the next run more useful, not just bigger.`
             : "Start with a first collection of family plans.";
@@ -1085,6 +1119,22 @@
               )
               .join("") ||
             '<div class="empty">No locations available yet.</div>';
+        }
+        function renderProgress() {
+          let m = S.metrics;
+          if (!m) return;
+          $("#p-needs-review").textContent = m.totals?.needs_review ?? "—";
+          $("#p-today-approved").textContent = m.today?.approved ?? "—";
+          $("#p-today-rejected-note").textContent =
+            `${m.today?.rejected ?? 0} rejected today`;
+          $("#p-hour-approved").textContent = m.hour?.approved ?? "—";
+          $("#p-metrics-updated").textContent = m.generated_at
+            ? "as of " +
+              new Date(m.generated_at).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : "";
         }
         function events() {
           let q = $("#search").value.toLowerCase(),
@@ -1205,10 +1255,10 @@
             a
               .map((x) => {
                 let u = esc(x.source_url);
-                return `<tr><td><div class="item-title">${esc(x.author || "Unknown account")}</div><div class="item-sub">${esc((x.caption || "No caption captured").slice(0, 180))}</div><a class="item-sub" href="${u}" target="_blank" rel="noopener">Original post ↗</a></td><td><span class="tag">${esc(x.platform || "social")}</span></td><td>${x.found_via ? esc(x.found_via) : '<span class="tag missing">Unattributed</span>'}</td><td>${esc(x.captured_at || "—")}</td><td><button class="button primary" data-approve="${u}">Approve</button> <button class="button secondary" data-reject="${u}">Reject</button></td></tr>`;
+                return `<tr><td><div class="item-title">${esc(x.author || "Unknown account")}</div><div class="item-sub">${esc((x.caption || "No caption captured").slice(0, 180))}</div><a class="item-sub" href="${u}" target="_blank" rel="noopener">Original post ↗</a></td><td><span class="tag">${esc(x.platform || "social")}</span></td><td>${x.found_via ? esc(x.found_via) : '<span class="tag missing">Unattributed</span>'}</td><td>${esc(x.captured_at || "—")}</td><td class="item-sub">${esc(x.reason || "Not checked yet")}${x.hint ? `<br><em>Note tried: ${esc(x.hint)}</em>` : ""}</td><td><input type="text" class="hint-input" data-hint="${u}" placeholder="Add a date or venue, then resubmit" value="${esc(x.hint || "")}"/><div class="actions"><button class="button primary" data-approve="${u}">Approve</button> <button class="button secondary" data-reject="${u}">Reject</button></div></td></tr>`;
               })
               .join("") ||
-            '<tr><td colspan="5" class="empty">No social candidates are waiting for review.</td></tr>';
+            '<tr><td colspan="6" class="empty">No social candidates are waiting for review.</td></tr>';
         }
         async function decide(url, action) {
           let b = [
@@ -1217,11 +1267,17 @@
             ),
           ];
           b.forEach((x) => (x.disabled = true));
+          let hintInput = document.querySelector(
+            `[data-hint="${CSS.escape(url)}"]`,
+          );
           try {
             let r = await fetch(API + "/admin/api/social/" + action, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ source_url: url }),
+                body: JSON.stringify({
+                  source_url: url,
+                  hint: action === "approve" ? hintInput?.value || "" : undefined,
+                }),
               }),
               d = await r.json();
             if (!r.ok) throw Error(d.message || d.error || "Request failed");
@@ -1276,13 +1332,15 @@
         }
         async function load() {
           try {
-            let [stats, status, pipeline, sourceData, holidays] =
+            let [stats, status, pipeline, sourceData, holidays, places, metrics] =
               await Promise.all([
                 get(API + "/admin/api/stats"),
                 get(API + "/admin/api/status"),
                 get(API + "/admin/api/pipeline"),
                 get(API + "/admin/api/sources"),
                 get(API + "/api/holidays"),
+                get(API + "/api/places"),
+                get(API + "/admin/api/metrics"),
               ]);
             S = {
               ...S,
@@ -1294,8 +1352,11 @@
               holidays: Array.isArray(holidays)
                 ? holidays
                 : holidays.holidays || [],
+              places: Array.isArray(places) ? places : [],
+              metrics,
             };
             dashboard();
+            renderProgress();
             events();
             sources();
             renderPipeline();
