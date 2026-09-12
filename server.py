@@ -432,21 +432,7 @@ def admin_social_approve():
             "message": "No usable date could be read from this post — it stays staged.",
         }), 422
 
-    events = []
-    if os.path.exists(EVENTS_FILE):
-        try:
-            with open(EVENTS_FILE, "r") as f:
-                events = json.load(f)
-        except Exception:
-            events = []
-    key = factory_worker.event_key(event)
-    added = not any(factory_worker.event_key(e) == key for e in events)
-    if added:
-        events.append(event)
-        events.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
-        with open(EVENTS_FILE, "w") as f:
-            json.dump(events, f, indent=2, ensure_ascii=False)
-
+    added = factory_worker.publish_event(event)
     _set_candidate_status(source_url, "approved")
     return jsonify({"status": "approved", "published": added, "event": event})
 

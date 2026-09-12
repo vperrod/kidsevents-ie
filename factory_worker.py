@@ -544,6 +544,28 @@ def event_key(event):
     ]).lower()
 
 
+def publish_event(event):
+    """Append a normalized event to events_output.json, deduped by event_key.
+
+    Returns True if it was new (actually written), False if a matching event
+    already existed. Shared by the admin approve route and auto-promotion so
+    both publish through the exact same path.
+    """
+    events = []
+    if OUTPUT_FILE.exists():
+        try:
+            events = json.loads(OUTPUT_FILE.read_text())
+        except (OSError, json.JSONDecodeError):
+            events = []
+    key = event_key(event)
+    if any(event_key(e) == key for e in events):
+        return False
+    events.append(event)
+    events.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
+    OUTPUT_FILE.write_text(json.dumps(events, indent=2, ensure_ascii=False))
+    return True
+
+
 # Republic of Ireland county codes as used by allevents.in's schema.org
 # addressRegion field — raw codes like "DN" were leaking straight to parents.
 _COUNTY_CODES = {

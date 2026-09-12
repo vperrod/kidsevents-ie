@@ -8,17 +8,27 @@ daemon. That collector pipes its findings into this script over SSH:
     ssh azureuser@claude-dev-vperrod.westeurope.cloudapp.azure.com \\
         "cd /home/azureuser/kidsevents-ie && venv/bin/python3 staging.py append"
 
-Nothing here publishes: candidates land in staged/social_candidates.json with
-status needs_review and are promoted one by one from the admin Social view.
+AUTO_APPROVE (same pattern as WanderTold's factory, on by default -- Victor
+2026-09-12: "I don't have time to review all manually"): every newly staged
+candidate is immediately run through the same enrichment gate the admin
+Approve button uses (factory_worker.promote_candidate -- real LLM read of
+the caption, published only if it yields a real date; never invented). A
+candidate that doesn't clear that gate just stays needs_review, same as
+before -- auto-approve is a tighter gate applied automatically, not a lower
+one. Set AUTO_APPROVE=off in .env to go back to fully manual review.
 """
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import factory_worker
+
 BASE = Path(__file__).resolve().parent
 STAGED_FILE = BASE / "staged" / "social_candidates.json"
+AUTO_APPROVE = os.environ.get("AUTO_APPROVE", "on").strip().lower() != "off"
 
 REVIEW_NOTE = (
     "Verify destination, dates, age guidance and price on the organiser "
@@ -38,8 +48,25 @@ def save_staged(candidates):
     STAGED_FILE.write_text(json.dumps(candidates, indent=2, ensure_ascii=False) + "\n")
 
 
+def try_auto_approve(candidate):
+    """Run one needs_review candidate through the same gate the admin Approve
+    button uses. Mutates candidate in place (status/reviewed_at/event) on
+    success; leaves it untouched (still needs_review) on failure -- no date
+    found is not an error, it just means a human still has to look at it."""
+    event = factory_worker.promote_candidate(candidate)
+    if not event:
+        return False
+    factory_worker.publish_event(event)
+    candidate["status"] = "approved"
+    candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    candidate["review_note"] = "Auto-approved: a real date was read from the caption."
+    return True
+
+
 def write_staged(candidates):
-    """Append new candidates, deduplicated by source_url. Returns the count added."""
+    """Append new candidates, deduplicated by source_url. Returns the count added
+    (auto-approved candidates count as added -- they still land in the ledger,
+    just already published)."""
     existing = load_staged()
     seen = {item.get("source_url") for item in existing}
     timestamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -61,14 +88,34 @@ def write_staged(candidates):
                 "review_note": REVIEW_NOTE,
             }
         )
+    if AUTO_APPROVE:
+        for candidate in additions:
+            try_auto_approve(candidate)
     save_staged(existing + additions)
     return len(additions)
 
 
+def sweep_pending():
+    """Auto-approve every already-staged needs_review candidate (clears a
+    backlog collected before AUTO_APPROVE existed, or after it was off).
+    Returns (checked, approved)."""
+    candidates = load_staged()
+    pending = [c for c in candidates if c.get("status") == "needs_review"]
+    approved = sum(1 for c in pending if try_auto_approve(c))
+    save_staged(candidates)
+    return len(pending), approved
+
+
 def main():
-    if len(sys.argv) < 2 or sys.argv[1] != "append":
+    if len(sys.argv) < 2 or sys.argv[1] not in ("append", "sweep"):
         print("usage: staging.py append  (candidate JSON array on stdin)", file=sys.stderr)
+        print("       staging.py sweep   (auto-approve the existing needs_review backlog)",
+              file=sys.stderr)
         return 2
+    if sys.argv[1] == "sweep":
+        checked, approved = sweep_pending()
+        print(f"Swept {checked} pending candidates, auto-approved {approved}.")
+        return 0
     try:
         candidates = json.loads(sys.stdin.read())
     except json.JSONDecodeError as error:
