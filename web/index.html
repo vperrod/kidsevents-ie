@@ -1387,6 +1387,7 @@
         <nav class="desktopnav" aria-label="Primary">
           <button data-page="today" class="active" aria-current="page">Today</button
           ><button data-page="find">Find</button
+          ><button data-page="places">Places</button
           ><button data-page="holidays">Holidays</button
           ><button data-page="guides">Guides</button
           ><button data-page="saved">
@@ -1613,6 +1614,23 @@
           </div>
           <div class="holidaycards" id="holidayCards"></div>
         </section>
+        <section id="places" class="screen">
+          <p class="eyebrow">Closer to home, any day</p>
+          <h1>Things to do nearby.</h1>
+          <p class="holidayintro">
+            Year-round local activities and venues — soft play, farms,
+            museums, classes — not one-off dated events and not a bigger day
+            trip. Open any time, so no date to plan around.
+          </p>
+          <div class="holidayfilters">
+            <p id="placeResultText" role="status" aria-live="polite">Loading places…</p>
+            <div class="filtergroup" id="placeCategoryFilters"></div>
+            <button class="linkbutton" id="clearPlaceFilters">
+              Show all places
+            </button>
+          </div>
+          <div class="holidaycards" id="placeCards"></div>
+        </section>
         <section id="guides" class="screen">
           <p class="eyebrow">Plan ahead, lightly</p>
           <h1>Notes for the family calendar.</h1>
@@ -1671,6 +1689,7 @@
       <nav class="bottomnav" aria-label="Primary mobile">
         <button class="active" data-page="today" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-6v-5h-4v5H4z"/></svg><span>Today</span></button
         ><button data-page="find"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg><span>Find</span></button
+        ><button data-page="places"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21V9l8-6 8 6v12h-5v-7H9v7z"/></svg><span>Places</span></button
         ><button data-page="holidays"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></svg><span>Holidays</span></button
         ><button data-page="guides"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 17h11M9 8h6M9 12h6"/></svg><span>Guides</span></button
         ><button data-page="saved"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3-5 3z"/></svg><span>Saved</span></button>
@@ -1727,6 +1746,8 @@
         detailTrigger = null,
         holidays = [],
         holidayRegion = "",
+        places = [],
+        placeCategory = "",
         calendarMode = "";
       const clean = (v) =>
         String(v || "")
@@ -2002,6 +2023,52 @@
             "Holiday ideas are temporarily unavailable.";
         }
       }
+      function renderPlaceCategoryFilters() {
+        const categories = [...new Set(places.map((p) => p.category).filter(Boolean))].sort();
+        $("#placeCategoryFilters").innerHTML = categories
+          .map(
+            (cat) =>
+              `<label><input type="checkbox" data-place-category="${esc(cat)}" ${placeCategory === cat ? "checked" : ""}/> ${esc(cat)}</label>`,
+          )
+          .join("");
+        $$("[data-place-category]").forEach((input) =>
+          input.addEventListener("change", () => {
+            placeCategory = input.checked ? input.dataset.placeCategory : "";
+            $$("[data-place-category]").forEach((other) => {
+              if (other !== input) other.checked = false;
+            });
+            renderPlaces();
+          }),
+        );
+      }
+      function renderPlaces() {
+        const selected = placeCategory
+          ? places.filter((p) => p.category === placeCategory)
+          : places;
+        $("#placeResultText").textContent = selected.length
+          ? `${selected.length} place${selected.length === 1 ? "" : "s"} nearby${placeCategory ? ` · ${placeCategory}` : ""}.`
+          : "No places match that yet — check back after the next round.";
+        $("#placeCards").innerHTML = selected.length
+          ? selected
+              .map(
+                (item) =>
+                  `<article class="holidaycard"><p class="eyebrow">${esc(item.county || item.region)} · ${esc(item.category)}</p><h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks"><a href="${esc(item.source_url)}" target="_blank" rel="noopener noreferrer">Original source</a><a href="${esc(holidayMapUrl(item))}" target="_blank" rel="noopener noreferrer">Google Maps</a><a href="${esc(item.booking_url)}" target="_blank" rel="noopener noreferrer">Check options</a></div></article>`,
+              )
+              .join("")
+          : '<p class="empty">Try a different category or show all places.</p>';
+      }
+      async function loadPlaces() {
+        try {
+          const response = await fetch("api/places");
+          if (!response.ok) throw new Error();
+          places = await response.json();
+          renderPlaceCategoryFilters();
+          renderPlaces();
+        } catch {
+          $("#placeResultText").textContent =
+            "Places are temporarily unavailable.";
+        }
+      }
       function openEvent(e) {
         current = e;
         $("#detailSource").textContent =
@@ -2096,7 +2163,7 @@
             if (x.dataset.page === id) x.setAttribute("aria-current", "page");
             else x.removeAttribute("aria-current");
           });
-          const names = { today: "Today", find: "Find", holidays: "Holidays", guides: "Guides", saved: "Saved" };
+          const names = { today: "Today", find: "Find", places: "Places", holidays: "Holidays", guides: "Guides", saved: "Saved" };
           document.title = `${names[id] || "Small Days"} — Small Days`;
           window.scrollTo({ top: 0 });
           const heading = $(`#${id} h1`);
@@ -2221,6 +2288,11 @@
         $$("[data-holiday-filter]").forEach((input) => (input.checked = false));
         renderHolidays();
       };
+      $("#clearPlaceFilters").onclick = () => {
+        placeCategory = "";
+        $$("[data-place-category]").forEach((input) => (input.checked = false));
+        renderPlaces();
+      };
       $("#openLead").onclick = () => {
         detailTrigger = $("#openLead");
         events[0] && openEvent(events[0]);
@@ -2264,6 +2336,7 @@
       }
       load();
       loadHolidays();
+      loadPlaces();
     </script>
     <script type="module" src="member-sync.js"></script>
   </body>

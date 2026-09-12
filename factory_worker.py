@@ -39,6 +39,10 @@ STATE_FILE = BASE / "factory_state.json"
 ROUTING_LOG = BASE / "routing.jsonl"
 OUTPUT_FILE = BASE / "events_output.json"
 HOLIDAYS_FILE = BASE / "holidays_output.json"
+# Places (year-round local activities/venues -- soft play, farms, museums)
+# are their own section, distinct from Holidays (bigger curated day-trip
+# destinations like Avondale Forest Park). Same shape, separate file/tab.
+PLACES_FILE = BASE / "places_output.json"
 
 # Hermes LLM. `nous` (hermes's default provider) has no credentials on this
 # VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
@@ -695,19 +699,21 @@ def extract_place(caption, source_url, platform, author=""):
 
 
 def publish_place(place):
-    """Append a place to holidays_output.json, deduped by title+location.
-    Returns True if it was new (actually written)."""
+    """Append a place to places_output.json (year-round local activities/
+    venues -- its own section, separate from the curated Holidays
+    destinations), deduped by title+location. Returns True if newly written.
+    """
     places = []
-    if HOLIDAYS_FILE.exists():
+    if PLACES_FILE.exists():
         try:
-            places = json.loads(HOLIDAYS_FILE.read_text())
+            places = json.loads(PLACES_FILE.read_text())
         except (OSError, json.JSONDecodeError):
             places = []
     key = (place.get("title", "").lower(), place.get("location", "").lower())
     if any((p.get("title", "").lower(), p.get("location", "").lower()) == key for p in places):
         return False
     places.append(place)
-    HOLIDAYS_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False))
+    PLACES_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False))
     return True
 
 

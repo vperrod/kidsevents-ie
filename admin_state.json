@@ -13,8 +13,22 @@
       "events_count": 126,
       "duration": "117s",
       "sources_count": 15
+    },
+    {
+      "time": "2026-09-12 10:27:09",
+      "success": true,
+      "events_count": 126,
+      "duration": "41s",
+      "sources_count": 15
+    },
+    {
+      "time": "2026-09-12 10:36:21",
+      "success": true,
+      "events_count": 126,
+      "duration": "45s",
+      "sources_count": 15
     }
   ],
-  "last_run": "2026-09-09T16:33:09.655590",
-  "last_result": "OK \u2014 126 events in 117s"
+  "last_run": "2026-09-12T10:36:21.765510",
+  "last_result": "OK \u2014 126 events in 45s"
 }

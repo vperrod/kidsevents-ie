@@ -23,6 +23,7 @@ app = Flask(__name__,
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 EVENTS_FILE = os.path.join(BASE_DIR, "events_output.json")
 HOLIDAYS_FILE = os.path.join(BASE_DIR, "holidays_output.json")
+PLACES_FILE = os.path.join(BASE_DIR, "places_output.json")
 SOURCES_FILE = os.path.join(BASE_DIR, "sources.json")
 FACTORY_SCRIPT = os.path.join(BASE_DIR, "factory_worker.py")
 PIPELINE_LOG = os.path.join(BASE_DIR, "pipeline.log")
@@ -61,6 +62,17 @@ def api_holidays():
     if not os.path.exists(HOLIDAYS_FILE):
         return jsonify([])
     with open(HOLIDAYS_FILE, "r") as f:
+        return jsonify(json.load(f))
+
+
+@app.route("/api/places")
+def api_places():
+    """Year-round local activities/venues (soft play, farms, museums) --
+    evergreen like Holidays, but its own section: smaller, closer-to-home
+    things to do, not curated bigger day-trip destinations."""
+    if not os.path.exists(PLACES_FILE):
+        return jsonify([])
+    with open(PLACES_FILE, "r") as f:
         return jsonify(json.load(f))
 
 @app.route("/api/health")
