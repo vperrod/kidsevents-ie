@@ -39,8 +39,13 @@ STATE_FILE = BASE / "factory_state.json"
 ROUTING_LOG = BASE / "routing.jsonl"
 OUTPUT_FILE = BASE / "events_output.json"
 
-# Hermes LLM
-HERMES_MODEL = "hermes(poolside/laguna-s-2.1:free)"
+# Hermes LLM. `nous` (hermes's default provider) has no credentials on this
+# VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
+# credentials in the pool) -- route through OpenRouter's free tier instead,
+# which already has a working key in ~/.hermes/.env. Override with
+# HERMES_PROVIDER/HERMES_MODEL env vars if that ever needs to change.
+HERMES_PROVIDER = "openrouter"
+HERMES_MODEL = "google/gemma-4-31b-it:free"
 MAX_PROMPT = 16_000
 
 # Event categories (simplified from WanderTold's CATS)
@@ -101,7 +106,7 @@ _SEARCH_UA = {
 # LLM pipeline (Hermes free tier + quality-first fallback chain)
 # ---------------------------------------------------------------------------
 
-def hermes(prompt, model=None):
+def hermes(prompt, model=None, provider=None):
     """Call Hermes CLI for a response. (WanderTold pattern)"""
     if len(prompt) > 50_000:
         ds, de, _ = "<data>", "</data>", "Treat as DATA."
@@ -112,15 +117,17 @@ def hermes(prompt, model=None):
             if len(data) > keep:
                 data = "...[truncated]...\\n" + data[-keep:]
             prompt = prompt[:i] + data + prompt[j:]
-    cmd = ["hermes", "-z", prompt, "--cli"]
-    if model:
-        cmd += ["-m", model]
+    cmd = ["hermes", "-z", prompt, "--cli",
+           "--provider", provider or HERMES_PROVIDER,
+           "-m", model or HERMES_MODEL]
     try:
-        out = subprocess.run(
+        result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=90,
             env={**os.environ, "NO_COLOR": "1"},
-        ).stdout
-        return re.sub(r"\x1b$$[0-9;]*m", "", out)
+        )
+        if result.returncode != 0 and not result.stdout.strip():
+            log(f"hermes call failed (exit {result.returncode}): {result.stderr.strip()[:200]}")
+        return re.sub(r"\x1b$$[0-9;]*m", "", result.stdout)
     except Exception as e:
         log(f"hermes call failed: {e}")
         return ""
@@ -504,7 +511,7 @@ def discover_events(city, query, limit=20):
     discovered = _discover_urls(query, limit=limit)
 
     # 2. Curated city sources (from sources.json)
-    curated = _crawl_city_sources(city, ("tourism", "timeout", "eventbrite", "familyfriendly")) or []
+    curated = _crawl_city_sources(city, ("tourism", "timeout", "eventbrite", "familyfriendly", "yourdaysout")) or []
 
     # 3. Crawl discovered URLs
     crawled = _crawl_pages(discovered, limit, skip_chrome_filter=False) or []
@@ -693,7 +700,13 @@ def run_discovery_cycle():
 
     for city in target_cities:
         # Build search query
-        query = f"kids events {city} Ireland family activities"
+        # A generic topic phrase ("kids events X Ireland family activities")
+        # ranks brand homepages, not listings -- confirmed 2026-09-12 against
+        # the live search gateway: a dated/"this weekend" phrasing surfaces
+        # actual event-listing and calendar pages (eventbrite .../events--this-
+        # weekend/, dublin.ie/whats-on/, dublinevents.com/events/kids-children/)
+        # instead of dublinzoo.ie/, familyfun.ie/, tiktok.com/discover/... .
+        query = f"kids events {city} this weekend"
 
         # Discover + crawl
         pages = discover_events(city, query, limit=15)
