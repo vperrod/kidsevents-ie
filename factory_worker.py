@@ -359,7 +359,8 @@ def _crawl_pages(discovered, limit, skip_chrome_filter=False):
             task = loop.create_task(extract())
             done, _ = loop.run_until_complete(asyncio.wait({task}, timeout=CRAWL_WALL_SECS))
             if done:
-                return task.result()
+                task.result()  # re-raises if extract() failed; out is already populated
+                return out
             task.cancel()
             loop.run_until_complete(asyncio.wait({task}, timeout=15))
             log(f"crawl4ai abandoned after {CRAWL_WALL_SECS}s")
