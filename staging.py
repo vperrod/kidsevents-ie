@@ -98,11 +98,19 @@ def write_staged(candidates):
 def sweep_pending():
     """Auto-approve every already-staged needs_review candidate (clears a
     backlog collected before AUTO_APPROVE existed, or after it was off).
-    Returns (checked, approved)."""
+    Saves after every candidate -- each one costs a real LLM call, a backlog
+    can be hundreds deep, and losing all progress to one interruption on a
+    save-only-at-the-end version is exactly what happened the first time
+    this ran. Returns (checked, approved)."""
     candidates = load_staged()
     pending = [c for c in candidates if c.get("status") == "needs_review"]
-    approved = sum(1 for c in pending if try_auto_approve(c))
-    save_staged(candidates)
+    approved = 0
+    for i, candidate in enumerate(pending, 1):
+        if try_auto_approve(candidate):
+            approved += 1
+        save_staged(candidates)
+        print(f"  [{i}/{len(pending)}] {'approved' if candidate['status'] == 'approved' else 'still needs review'} — {candidate.get('source_url', '')[:70]}",
+              file=sys.stderr, flush=True)
     return len(pending), approved
 
 
