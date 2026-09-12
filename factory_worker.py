@@ -17,6 +17,8 @@ Run: python3 factory_worker.py discover --query "kids events dublin"
 """
 import asyncio
 import concurrent.futures
+import contextlib
+import fcntl
 import json
 import os
 import re
@@ -43,6 +45,25 @@ HOLIDAYS_FILE = BASE / "holidays_output.json"
 # are their own section, distinct from Holidays (bigger curated day-trip
 # destinations like Avondale Forest Park). Same shape, separate file/tab.
 PLACES_FILE = BASE / "places_output.json"
+# events_output.json/places_output.json/holidays_output.json are each
+# read-modify-written from more than one process now (the hourly factory
+# timer, the admin approve route, the auto-approve sweep) -- confirmed live
+# 2026-09-12: an hourly run's "load existing, extend, write" read a stale
+# copy while a sweep was mid-flight, silently dropping events the sweep had
+# just added. One lock file serializes all three; the operations are small
+# JSON read/writes, so contention cost is negligible next to the risk.
+_LOCK_FILE = BASE / ".output.lock"
+
+
+@contextlib.contextmanager
+def output_lock():
+    _LOCK_FILE.touch(exist_ok=True)
+    with open(_LOCK_FILE, "w") as fh:
+        fcntl.flock(fh, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(fh, fcntl.LOCK_UN)
 
 # Hermes LLM. `nous` (hermes's default provider) has no credentials on this
 # VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
@@ -556,18 +577,19 @@ def publish_event(event):
     already existed. Shared by the admin approve route and auto-promotion so
     both publish through the exact same path.
     """
-    events = []
-    if OUTPUT_FILE.exists():
-        try:
-            events = json.loads(OUTPUT_FILE.read_text())
-        except (OSError, json.JSONDecodeError):
-            events = []
-    key = event_key(event)
-    if any(event_key(e) == key for e in events):
-        return False
-    events.append(event)
-    events.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
-    OUTPUT_FILE.write_text(json.dumps(events, indent=2, ensure_ascii=False))
+    with output_lock():
+        events = []
+        if OUTPUT_FILE.exists():
+            try:
+                events = json.loads(OUTPUT_FILE.read_text())
+            except (OSError, json.JSONDecodeError):
+                events = []
+        key = event_key(event)
+        if any(event_key(e) == key for e in events):
+            return False
+        events.append(event)
+        events.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
+        OUTPUT_FILE.write_text(json.dumps(events, indent=2, ensure_ascii=False))
     return True
 
 
@@ -703,17 +725,18 @@ def publish_place(place):
     venues -- its own section, separate from the curated Holidays
     destinations), deduped by title+location. Returns True if newly written.
     """
-    places = []
-    if PLACES_FILE.exists():
-        try:
-            places = json.loads(PLACES_FILE.read_text())
-        except (OSError, json.JSONDecodeError):
-            places = []
-    key = (place.get("title", "").lower(), place.get("location", "").lower())
-    if any((p.get("title", "").lower(), p.get("location", "").lower()) == key for p in places):
-        return False
-    places.append(place)
-    PLACES_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False))
+    with output_lock():
+        places = []
+        if PLACES_FILE.exists():
+            try:
+                places = json.loads(PLACES_FILE.read_text())
+            except (OSError, json.JSONDecodeError):
+                places = []
+        key = (place.get("title", "").lower(), place.get("location", "").lower())
+        if any((p.get("title", "").lower(), p.get("location", "").lower()) == key for p in places):
+            return False
+        places.append(place)
+        PLACES_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False))
     return True
 
 
@@ -834,23 +857,27 @@ def run_discovery_cycle():
                 seen.add(key)
                 all_events.append(ev)
 
-    # Merge with existing staged events
-    existing = []
-    if OUTPUT_FILE.exists():
-        try:
-            existing = json.loads(OUTPUT_FILE.read_text())
-        except (json.JSONDecodeError, ValueError):
-            pass
+    # Merge with existing staged events. Locked: this is exactly the read-
+    # modify-write another process (an approve/auto-approve publish_event
+    # call) could interleave with -- confirmed live 2026-09-12, a stale read
+    # here silently dropped events a concurrent sweep had just added.
+    with output_lock():
+        existing = []
+        if OUTPUT_FILE.exists():
+            try:
+                existing = json.loads(OUTPUT_FILE.read_text())
+            except (json.JSONDecodeError, ValueError):
+                pass
 
-    # Deduplicate against existing
-    existing_keys = {event_key(ev) for ev in existing}
-    new_events = [ev for ev in all_events if event_key(ev) not in existing_keys]
+        # Deduplicate against existing
+        existing_keys = {event_key(ev) for ev in existing}
+        new_events = [ev for ev in all_events if event_key(ev) not in existing_keys]
 
-    # Merge and write
-    existing.extend(new_events)
-    existing.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
+        # Merge and write
+        existing.extend(new_events)
+        existing.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
 
-    OUTPUT_FILE.write_text(json.dumps(existing, indent=2, ensure_ascii=False))
+        OUTPUT_FILE.write_text(json.dumps(existing, indent=2, ensure_ascii=False))
     log(f"Total events: {len(existing)} ({len(new_events)} new)")
 
     state["last_run"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
