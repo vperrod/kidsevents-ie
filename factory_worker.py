@@ -38,6 +38,7 @@ SOURCES_FILE = BASE / "sources.json"
 STATE_FILE = BASE / "factory_state.json"
 ROUTING_LOG = BASE / "routing.jsonl"
 OUTPUT_FILE = BASE / "events_output.json"
+HOLIDAYS_FILE = BASE / "holidays_output.json"
 
 # Hermes LLM. `nous` (hermes's default provider) has no credentials on this
 # VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
@@ -636,11 +637,87 @@ def normalize_event(raw):
     }
 
 
-def promote_candidate(candidate):
-    """Turn one staged social candidate into a publishable event, or None.
+def extract_place(caption, source_url, platform, author=""):
+    """Ask whether a caption describes a real, evergreen place or activity --
+    a playground, farm, museum, adventure park, class -- rather than a dated
+    event. Returns a holidays_output.json-shaped dict, or None. Same
+    do-not-invent discipline as enrich_event: an empty/vague caption (common
+    on a rate-limited fetch) correctly yields nothing rather than a guess.
+    The account handle is real, verifiable data (often literally the venue's
+    name, e.g. "leisuredomeashbourne") -- pass it along, don't rely on
+    caption text alone.
+    """
+    account_line = f"Account/author: {author}\n" if author else ""
+    prompt = (
+        "You are a places-and-activities curator for a kids/family day-out "
+        "guide in Ireland. The text below is a social media caption. Decide "
+        "whether it describes a REAL, NAMED, evergreen place or activity a "
+        "family could visit any time (a playground, farm, museum, adventure "
+        "park, class, attraction) -- NOT a one-off dated event. The account "
+        "name is real data you can use to identify the venue (e.g. an "
+        'account "leisuredomeashbourne" is the venue "Leisuredome, '
+        'Ashbourne") -- don\'t invent details beyond what the handle and '
+        "caption actually support.\n\n"
+        f"{account_line}"
+        f"Caption:\n<data>{caption[:2000]}</data>\n\n"
+        'If it is NOT a real identifiable evergreen place, reply exactly: {"is_place": false}\n\n'
+        "If it IS, reply ONLY a JSON object:\n"
+        '{"is_place": true,\n'
+        '"title": string,\n'
+        '"description": "concise, <= 300 words",\n'
+        '"region": "Leinster|Munster|Connacht|Ulster" or "",\n'
+        '"county": string or "",\n'
+        '"location": string (place name, town),\n'
+        '"category": string (e.g. "Nature", "Indoor play", "Farm", "Museum"),\n'
+        '"price_range": string or "check",\n'
+        '"age_group": string or "",\n'
+        '"booking_url": URL or ""}\n\n'
+        "Do not invent values you cannot support from the text."
+    )
+    obj = extract_obj(hermes(prompt))
+    if not obj or not isinstance(obj, dict) or not obj.get("is_place") or not obj.get("title"):
+        return None
+    return {
+        "title": str(obj.get("title", ""))[:200],
+        "description": obj.get("description", "") or "",
+        "region": obj.get("region", "") or "",
+        "county": obj.get("county", "") or "",
+        "location": obj.get("location", "") or "",
+        "latitude": None,
+        "longitude": None,
+        "category": obj.get("category", "") or "",
+        "price_range": obj.get("price_range") or "check",
+        "age_group": obj.get("age_group", "") or "",
+        "source_url": source_url,
+        "source_name": platform,
+        "booking_url": obj.get("booking_url", "") or "",
+    }
 
-    None means the caption carried no usable date — the candidate stays staged
-    until someone supplies the missing information by hand.
+
+def publish_place(place):
+    """Append a place to holidays_output.json, deduped by title+location.
+    Returns True if it was new (actually written)."""
+    places = []
+    if HOLIDAYS_FILE.exists():
+        try:
+            places = json.loads(HOLIDAYS_FILE.read_text())
+        except (OSError, json.JSONDecodeError):
+            places = []
+    key = (place.get("title", "").lower(), place.get("location", "").lower())
+    if any((p.get("title", "").lower(), p.get("location", "").lower()) == key for p in places):
+        return False
+    places.append(place)
+    HOLIDAYS_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False))
+    return True
+
+
+def promote_candidate(candidate):
+    """Turn one staged social candidate into a publishable event or evergreen
+    place. Returns ("event", record), ("place", record), or (None, None).
+
+    (None, None) means neither classification found enough to publish -- the
+    candidate stays staged until someone supplies the missing information by
+    hand.
     """
     caption = candidate.get("caption") or ""
     source_url = candidate.get("source_url", "")
@@ -650,18 +727,23 @@ def promote_candidate(candidate):
         caption,
         {"llm": 1},
     )
-    if not enriched or not enriched.get("date"):
-        return None
-    website = enriched.get("website", "")
-    enriched["title"] = enriched.get("title") or caption[:120]
-    # The contract wants the page the event was captured from, not an organiser
-    # page the model inferred — the organiser link rides along in all_urls.
-    enriched["url"] = source_url
-    enriched["source"] = f"{platform}:{source_url[:100]}"
-    enriched["all_sources"] = [source_url]
-    enriched["all_urls"] = [source_url] + ([website] if website else [])
-    enriched["confidence"] = "medium"
-    return normalize_event(enriched)
+    if enriched and enriched.get("date"):
+        website = enriched.get("website", "")
+        enriched["title"] = enriched.get("title") or caption[:120]
+        # The contract wants the page the event was captured from, not an
+        # organiser page the model inferred — that rides along in all_urls.
+        enriched["url"] = source_url
+        enriched["source"] = f"{platform}:{source_url[:100]}"
+        enriched["all_sources"] = [source_url]
+        enriched["all_urls"] = [source_url] + ([website] if website else [])
+        enriched["confidence"] = "medium"
+        return "event", normalize_event(enriched)
+
+    place = extract_place(caption, source_url, platform, candidate.get("author", ""))
+    if place:
+        return "place", place
+
+    return None, None
 
 
 def extract_events_from_pages(pages, city, today, horizon):

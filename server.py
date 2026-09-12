@@ -417,7 +417,8 @@ def _set_candidate_status(source_url, status, note=None):
 
 @app.route("/admin/api/social/approve", methods=["POST"])
 def admin_social_approve():
-    """Enrich one staged candidate and publish it if it yields a usable date."""
+    """Classify one staged candidate as a dated event or an evergreen place
+    and publish it accordingly."""
     source_url = (request.get_json(silent=True) or {}).get("source_url", "")
     candidate = next(
         (c for c in staging.load_staged() if c.get("source_url") == source_url), None
@@ -425,16 +426,16 @@ def admin_social_approve():
     if not candidate:
         return jsonify({"error": "Candidate not found"}), 404
 
-    event = factory_worker.promote_candidate(candidate)
-    if not event:
+    kind, record = factory_worker.promote_candidate(candidate)
+    if not record:
         return jsonify({
             "error": "still needs manual info",
-            "message": "No usable date could be read from this post — it stays staged.",
+            "message": "No usable date or identifiable place could be read from this post — it stays staged.",
         }), 422
 
-    added = factory_worker.publish_event(event)
-    _set_candidate_status(source_url, "approved")
-    return jsonify({"status": "approved", "published": added, "event": event})
+    added = (factory_worker.publish_event if kind == "event" else factory_worker.publish_place)(record)
+    _set_candidate_status(source_url, "approved", note=f"Auto-classified as a{'n' if kind == 'event' else ''} {kind}.")
+    return jsonify({"status": "approved", "kind": kind, "published": added, "event": record})
 
 
 @app.route("/admin/api/social/reject", methods=["POST"])

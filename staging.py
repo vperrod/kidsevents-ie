@@ -49,17 +49,20 @@ def save_staged(candidates):
 
 
 def try_auto_approve(candidate):
-    """Run one needs_review candidate through the same gate the admin Approve
-    button uses. Mutates candidate in place (status/reviewed_at/event) on
-    success; leaves it untouched (still needs_review) on failure -- no date
-    found is not an error, it just means a human still has to look at it."""
-    event = factory_worker.promote_candidate(candidate)
-    if not event:
+    """Run one needs_review candidate through the same classification+publish
+    gate the admin Approve button uses -- a dated event, or an evergreen
+    place/activity (playground, farm, museum) that's there all year, same
+    schema and tab as the existing curated Holidays section. Mutates
+    candidate in place (status/reviewed_at) on success; leaves it untouched
+    (still needs_review) on failure -- neither classification landing is not
+    an error, it just means a human still has to look at it."""
+    kind, record = factory_worker.promote_candidate(candidate)
+    if not record:
         return False
-    factory_worker.publish_event(event)
+    (factory_worker.publish_event if kind == "event" else factory_worker.publish_place)(record)
     candidate["status"] = "approved"
     candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    candidate["review_note"] = "Auto-approved: a real date was read from the caption."
+    candidate["review_note"] = f"Auto-approved: classified as a{'n' if kind == 'event' else ''} {kind}."
     return True
 
 
