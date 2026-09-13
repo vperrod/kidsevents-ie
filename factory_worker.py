@@ -122,22 +122,9 @@ def load_json_store(path, default):
         log(f"{path.name}: has content but does not parse ({error}) — refusing to overwrite it")
         raise
 
-MAX_PROMPT = 16_000
-
-# Event categories (simplified from WanderTold's CATS)
-EVENT_CATS = {
-    "festival": "Festival",
-    "theatre": "Theatre/Performance",
-    "music": "Music/Concert",
-    "sport": "Sports",
-    "workshop": "Workshop/Class",
-    "market": "Market/Fair",
-    "museum": "Museum/Gallery",
-    "park": "Outdoor/Nature",
-    "special": "Special Interest",
-    "food": "Food/Drink Event",
-    "seasonal": "Seasonal/Holiday",
-}
+# The event categories and the prompt budget that used to live here belonged to
+# `enrich_event`; the vocabulary is `catalog/facets.json` now and each of the
+# four steps sets its own budget.
 
 AGE_GROUPS = ["toddler", "preschool", "kids", "teens", "all_ages"]
 PRICE_TIERS = ["free", "paid", "donation", "membership"]
