@@ -21,6 +21,9 @@ events_output.json
 # Social review queue (runtime state)
 staged/
 
+# One-shot re-research ledger (runtime state)
+recatalog_progress.json
+
 # Playwright browsers (downloaded separately)
 ~/.cache/ms-playwright/
 

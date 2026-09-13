@@ -1,768 +1,520 @@
 [
   {
-    "title": "Leisuredome Ashbourne",
-    "description": "Indoor soft play centre for kids located in Ashbourne, County Meath, offering a kids zone with softplay equipment to keep children entertained.",
-    "region": "Leinster",
-    "county": "Meath",
-    "location": "Ashbourne",
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "",
-    "source_url": "https://www.tiktok.com/@leisuredomeashbourne/video/7677187258478349590",
-    "source_name": "tiktok",
-    "booking_url": ""
+    "schema_version": 1,
+    "id": "place-beyond-the-trees-avondale-treetop-walk-tower-wicklow",
+    "kind": "place",
+    "title": "Beyond the Trees Avondale: Treetop Walk & Tower",
+    "slug": "beyond-the-trees-avondale-treetop-walk-tower-wicklow",
+    "summary": "1.4km treetop walk, 38m viewing tower with slide, house tours, and café in Rathdrum.",
+    "description": "Beyond the Trees Avondale reopened in June 2022 following a €19 million redevelopment project by Coillte in partnership with Fáilte Ireland and EAK Ireland. Located in Rathdrum, the site features the longest Treetop Walk in Ireland and the UK, stretching 1.4km. This journey through and above the trees culminates at the impressive Viewing Tower, which stands 38m above the forest. From here, visitors reveal panoramic 360-degree views over the Wicklow Mountains, the Avonmore River, and the Vale of Avoca. Both adults and children can opt to whizz back down the tower via the gigantic 90m spiral slide. The venue also offers a complimentary self-guided visit to the Coillte Pavilion, where visitors learn about the evolution of forestry in Ireland. Adjacent to the outdoor dining terrace of the Seed Café is an adventurous children's playground within the picturesque Walled Garden. The café crafts creative food offerings using high quality, local Wicklow ingredients. Guided tours of the historic 18th century Avondale House, titled 'At Home with the Parnells', are available to book in advance from Autumn 2022. These tours encompass the life and times of Charles Stewart Parnell, his mother Delia, and his sisters Fanny and Anna, who were co-founders of the Ladies Land League in 1881. From the Walled Gardens, there is access to the Treetop Walk, a stimulating sensory garden, and forest walking trails.",
+    "family_relevant": true,
+    "location": {
+      "name": "Beyond the Trees Avondale",
+      "address": "",
+      "city": "Rathdrum",
+      "county": "Wicklow",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": 52.91184,
+      "lon": -6.22205,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=52.91184%2C-6.22205",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "outdoor",
+      "activity_types": [
+        "playground",
+        "trail-hike",
+        "adventure-climbing"
+      ],
+      "accessibility": [
+        "step-free"
+      ],
+      "price_detail": "Enjoy a complimentary self-guided visit to the Coillte Pavilion",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://visitwicklow.ie/listing/avondale-house-forest-park/",
+          "fetched_at": "2026-09-13T21:53:44+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue reopened in June 2022 following a redevelopment project.",
+          "quote": "reopened its door in June 2022 following a €19 million redevelopment project by Coillte in partnership with Fáilte Ireland and EAK Ireland",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The treetop walk is 1.4km long.",
+          "quote": "The longest Treetop Walk in Ireland &amp; the UK, at 1.4km",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The Viewing Tower stands 38m above the forest.",
+          "quote": "the impressive Viewing Tower. Here the magnificent architectural tower standing 38m above the forest",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The tower offers 360-degree views.",
+          "quote": "reveals panoramic 360-degree views over the Wicklow Mountains, the Avonmore River, and the Vale of Avoca",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "Visitors can descend the tower via a spiral slide.",
+          "quote": "both adults and children can opt to continue their adventure and whizz their way back down the tower via the gigantic 90m spiral slide",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "Guided tours of Avondale House were planned for Autumn 2022.",
+          "quote": "Guided tours will be available to book in advance from Autumn 2022",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "Charles Stewart Parnell is featured in the house tours.",
+          "quote": "It will encompass the life and times of Charles Stewart Parnell",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "Fanny and Anna Parnell were co-founders of the Ladies Land League.",
+          "quote": "his sisters, Fanny &amp; Anna, who were co-founders of the Ladies Land League in 1881",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The venue has a Seed Café.",
+          "quote": "ease of access to the Seed Café where the creative food offerings are crafted through the seasons by the dedicated culinary team from high quality, local Wicklow ingredients",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The Seed Café overlooks a Walled Garden with a children's playground.",
+          "quote": "The view from the Seed Café extends out onto the picturesque Walled Garden, including an adventurous children’s playground conveniently located beside the outdoor dining terrace",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The Coillte Pavilion is available for self-guided visits.",
+          "quote": "Enjoy a complimentary self-guided visit to the Coillte Pavilion where they will learn all about the evolution of forestry in Ireland",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        },
+        {
+          "claim": "The site is located in Rathdrum.",
+          "quote": "Rathdrum http://www.beyondthetreesavondale.com +353 404 46111",
+          "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-13T21:56:11+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": "Guided tours will be available to book in advance from Autumn 2022."
+    }
   },
   {
-    "title": "The Kildare Maze",
-    "description": "Leinster’s largest hedge maze located just outside Prosperous in North Kildare. Offers a hedge maze, wooden maze, crazy golf, obstacle course, picnic area, and zip wire for a fun family day out in the countryside.",
-    "region": "Leinster",
-    "county": "Kildare",
-    "location": "Prosperous",
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "check",
-    "age_group": "",
-    "source_url": "https://www.tiktok.com/@sineadanddean/video/7659440064287624470",
-    "source_name": "tiktok",
-    "booking_url": "https://thekildaremaze.com/"
-  },
-  {
-    "title": "Castle Adventure Open Farm",
-    "description": "Castle Adventure Open Farm is a family-friendly open farm near Ballyshannon, set in the original farmyard of Wardtown Castle on the Rossnowlagh Road. Visitors can meet and feed farm animals, enjoy petting time, outdoor play structures and indoor soft play, and the on-site cafe serves food and coffee — a popular spot for a full family day out.",
-    "region": "Ulster",
-    "county": "Donegal",
-    "location": "Ballyshannon",
-    "latitude": null,
-    "longitude": null,
-    "category": "Farm",
-    "price_range": "check",
-    "age_group": "Toddlers and young children (family day out)",
-    "source_url": "https://www.tiktok.com/@meagcull/video/7405191639779626270",
-    "source_name": "tiktok",
-    "booking_url": "https://openfarm.ie/"
-  },
-  {
-    "title": "Kidspace Indoor Playcentre, Rathcoole",
-    "description": "Indoor children's play centre in Rathcoole, Dublin (the caption's #kidspacerathcoole references Kidspace Playcentre). It has a large multi-storey play frame with slides, ball pools, climbing decks and a zip line, plus separate soft play areas aimed at babies up to around 10 years old. Parents can sit in the café area while kids play, and there is free parking on site. A reliable rainy-day family outing in south-west Dublin, open year-round.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Rathcoole",
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "Babies to ~10 years",
-    "source_url": "https://www.tiktok.com/@homeofrachel/video/7667702103749512470",
-    "source_name": "tiktok",
-    "booking_url": "https://www.kidspace.ie/rathcoole-playcentre/"
-  },
-  {
-    "title": "Rathwood",
-    "description": "Rathwood is a family-friendly destination in County Carlow featuring a teddy bear picnic experience. The venue offers a family of 4 experience for less than €50 (one child, one baby), making it an affordable outing for young families.",
-    "region": "Leinster",
-    "county": "Carlow",
-    "location": "Rathwood, Tullow, Co. Carlow",
-    "latitude": null,
-    "longitude": null,
-    "category": "Family attraction",
-    "price_range": "under €50 for a family of 4",
-    "age_group": "Toddlers and young children",
-    "source_url": "https://www.tiktok.com/@kimsfampage/video/7665823832640392470",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Tick-Tock Activity Farm",
-    "description": "Family-run activity farm near Arklow, County Wicklow, open since 2007 and catering for toddlers up to about 10 year olds. Kids can meet the farmyard animals, visit the pet corner, paint on the activity bus, and enjoy the indoor and outdoor play areas plus tractors. A regularly recommended day out for young families, praised as a wholesome little farm kids love.",
-    "region": "Leinster",
-    "county": "Wicklow",
-    "location": "Thomastown, near Arklow",
-    "latitude": null,
-    "longitude": null,
-    "category": "Farm",
-    "price_range": "check",
-    "age_group": "Toddlers to 10 years",
-    "source_url": "https://www.tiktok.com/@aoifemccann47/video/7674228340676447510",
-    "source_name": "tiktok",
-    "booking_url": "https://www.discoverireland.ie/wicklow/tick-tock-activity-farm"
-  },
-  {
-    "title": "The Treehouse Soft Play Centre",
-    "description": "The Treehouse Soft Play Centre is an indoor soft play facility located at Hidden Valley Resort in County Wicklow. It is open to the public daily, making it a reliable any-day option for families with young children looking for indoor play in the Wicklow area.",
-    "region": "Leinster",
-    "county": "Wicklow",
-    "location": "Hidden Valley Resort, Wicklow",
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "",
-    "source_url": "https://www.tiktok.com/@hiddenvalleyresort/video/7389215756426235168",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Explorium – National Sport & Science Centre",
-    "description": "Hands-on science centre in Sandyford, Dublin, promoting itself as Ireland's National Science Centre for all ages, with 250+ interactive exhibits and live science shows. Posted by @Explorium Ireland in the caption (the venue itself), tagged in a visit to their 'Late Lab' event. Family-friendly day out in south Dublin, easily reached from the city centre with free on-site parking.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Sandyford, Dublin 18",
-    "latitude": null,
-    "longitude": null,
-    "category": "Museum",
-    "price_range": "check",
-    "age_group": "All ages, families",
-    "source_url": "https://www.tiktok.com/@bluescannell1/video/7643921077193805078",
-    "source_name": "tiktok",
-    "booking_url": "https://explorium.ie/"
-  },
-  {
-    "title": "Birr Castle Demesne",
-    "description": "Historic castle demesne and gardens in Birr, Co. Offaly, famous for Ireland's tallest treehouse, the Great Telescope (Leviathan of Parsonstown, the world's largest telescope for over 70 years), Victorian gardens and cascades/waterfalls, and the Historic Science Centre museum. Outdoor play, woodland walks and science exhibits make it a popular family day out; check opening times and admission before visiting.",
-    "region": "Leinster",
-    "county": "Offaly",
-    "location": "Birr",
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@irishkidstravel/video/7668421909540883734",
-    "source_name": "tiktok",
-    "booking_url": "https://birrcastle.com"
-  },
-  {
-    "title": "Explorium - National Sports & Science Centre",
-    "description": "Ireland's National Sports & Science Centre, Explorium, located in Sandyford, Dublin. An interactive science and sports centre for families.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Sandyford, Dublin",
-    "latitude": null,
-    "longitude": null,
-    "category": "Science Centre",
-    "price_range": "check",
-    "age_group": "",
-    "source_url": "https://www.tiktok.com/@discoverdublin/video/7564089518446480662",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "The Play Villa",
-    "description": "An indoor play venue for children located on Ashbourne's high street in County Meath, Ireland.",
-    "region": "Leinster",
-    "county": "Meath",
-    "location": "Ashbourne",
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "Children",
-    "source_url": "https://www.tiktok.com/@grace.kellett/video/7519450407777651990",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Explorium – Ireland's National Science Centre (Junior Town)",
-    "description": "Explorium in Sandyford, Dublin is Ireland's National Science Centre, a large indoor family attraction combining interactive science exhibits, sports challenges, adventure zones and climbing with hands-on discovery for all ages. The Junior Town, which the caption highlights, is a permanent new area designed for toddlers and younger children (ages 2–7), with big adventures scaled for little explorers. It's an everyday, bookable attraction — open year-round as a day-out destination — not a one-off event.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Sandyford, Dublin",
-    "latitude": null,
-    "longitude": null,
-    "category": "Science centre / Indoor play",
-    "price_range": "check",
-    "age_group": "Junior Town: 2-7; venue caters to all ages",
-    "source_url": "https://www.tiktok.com/@homeofrachel/video/7612198618941984022",
-    "source_name": "tiktok",
-    "booking_url": "https://explorium.ie/"
-  },
-  {
-    "title": "Explorium Dublin",
-    "description": "National Sport and Science Centre in Sandyford, Dublin featuring hands-on interactive science exhibits and sport challenges for children and families. Highlighted as toddler-friendly with activities for small kids.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Explorium, Sandyford, Dublin",
-    "latitude": null,
-    "longitude": null,
-    "category": "Science Centre",
-    "price_range": "check",
-    "age_group": "Toddlers, Kids",
-    "source_url": "https://www.tiktok.com/@louisecooney_/video/7674315579418742038",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Airfield Estate",
-    "description": "Airfield Estate is Dublin's urban working farm and gardens, open to the public year-round across 38 acres in Dundrum. Visitors can meet farmyard animals (sheep, pigs, goats, chickens), explore the working farmyard and dairy, wander food gardens and woodland walks, and enjoy nature play areas for kids — a family day out with a 'farm to fork' story and a charitable mission. Easily reachable from Dublin city centre via the Luas Green Line (Balally stop).",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Dundrum",
-    "latitude": null,
-    "longitude": null,
-    "category": "Farm",
-    "price_range": "check",
-    "age_group": "Toddlers, kids and families",
-    "source_url": "https://www.tiktok.com/@kimsfampage/video/7672836971437460758",
-    "source_name": "tiktok",
-    "booking_url": "https://www.airfield.ie/"
-  },
-  {
-    "title": "Explorium - Junior Area",
-    "description": "Explorium is a science and sports discovery centre in Dublin with a dedicated Junior area designed for children under 7, where they can play and learn through interactive exhibits and activities.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "Dublin",
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "Under 7",
-    "source_url": "https://www.tiktok.com/@explorium4/video/7659329963602087170",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Beyond the Trees Avondale",
-    "description": "A Wicklow forest day with walking trails, a walled garden and the treetop experience. The site has free elements and bookable activities, so choose the version of the day that suits your budget and energy.",
-    "region": "Leinster",
-    "county": "Wicklow",
-    "location": "Avondale Forest Park, Rathdrum, Co. Wicklow",
-    "latitude": 52.91391,
-    "longitude": -6.22358,
-    "category": "Nature",
-    "price_range": "Free elements + ticketed options",
-    "age_group": "Different options for different ages",
-    "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/",
-    "source_name": "Visit Wicklow",
-    "booking_url": "https://www.beyondthetreesavondale.com/",
-    "country": "IE"
-  },
-  {
+    "schema_version": 1,
+    "id": "place-lough-key-forest-activity-park-roscommon",
+    "kind": "place",
     "title": "Lough Key Forest & Activity Park",
-    "description": "Build a low-cost forest day around walking, cycling or a picnic, then add an activity only if it suits the plan. Some activities require advance booking.",
-    "region": "Connacht",
-    "county": "Roscommon",
-    "location": "Lough Key Forest Park, Boyle, Co. Roscommon",
-    "latitude": 53.9944,
-    "longitude": -8.3129,
-    "category": "Outdoor activity",
-    "price_range": "Free grounds + paid add-ons",
-    "age_group": "All ages; check each activity",
-    "source_url": "https://loughkey.ie/activities/family-activities/",
-    "source_name": "Lough Key Forest & Activity Park",
-    "booking_url": "https://loughkey.ie/",
-    "country": "IE"
-  },
-  {
-    "title": "Explorium",
-    "description": "An indoor Dublin option built around interactive science, sport and discovery activities. Choose the activity and session that fit your child’s age before booking.",
-    "region": "Leinster",
-    "county": "Dublin",
-    "location": "The Point Square, Dublin 1",
-    "latitude": 53.3498,
-    "longitude": -6.2288,
-    "category": "Science & indoor play",
-    "price_range": "Ticketed activities",
-    "age_group": "Activity guidance varies",
-    "source_url": "https://explorium.ie/",
-    "source_name": "Explorium",
-    "booking_url": "https://explorium.ie/",
-    "country": "IE"
-  },
-  {
-    "title": "Chocolate Garden Ireland",
-    "description": "A dedicated chocolate-themed attraction offering interactive experiences for families. Visitors can explore the history of cocoa, enjoy chocolate making demonstrations, and indulge in various chocolate treats. The venue is designed to be engaging for children, featuring play areas and educational activities centered around chocolate.",
-    "region": "Leinster",
-    "county": "Meath",
-    "location": "Duleek",
-    "country": "IE",
+    "slug": "lough-key-forest-activity-park-roscommon",
+    "summary": "Forest park in Boyle with trails, picnic areas, BBQs, and paid activities like Boda Borg and Zipit.",
+    "description": "Lough Key Forest & Activity Park is located in Boyle, Co. Roscommon. The venue offers a range of trails for all abilities suitable for walking and cycling. Visitors can enjoy picnics on-site where a large number of picnic tables are provided. Many of these tables include BBQ grills which are free of charge to use. Guests may bring their own games equipment or play in the spacious grounds. For those looking to spend a little more, an exciting range of on-site Pay for Use activities is available, including Boda Borg, Zipit Forest Adventures, Treasure Trail, P Mac Kayaks, Lough Key Boat Tours, and Cé Saunas. Pre-booking is essential for Boda Borg and Zipit Forest Adventures. While it is not strictly necessary for other activities, ringing ahead is recommended to avoid disappointment. Dining options include a terrace and an indoor café where tables can be reserved. The park also allows customization of activities, tours, and private events for groups. The facility includes a Caravan and Camping Park and a Marina Harbour. Staying options are available nearby in the Area. The park hosts events such as the Night and Day Festival, Lough Key Legends Run, Lough Key Triathlon, and Parkrun. A swimming pool is also listed as a feature. The venue has accessibility information available, though specific details on wheelchair or step-free access are not defined in the text provided.",
     "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Food & Drink",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.instagram.com/p/Ck0bHyDMhgU/",
-    "source_name": "instagram",
-    "booking_url": ""
+    "location": {
+      "name": "Lough Key Forest & Activity Park",
+      "address": "Lough Key Forest & Activity Park",
+      "city": "Boyle",
+      "county": "Roscommon",
+      "region": "Connacht",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://loughkey.ie/activities/family-activities/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Lough%20Key%20Forest%20%26%20Activity%20Park%2C%20Lough%20Key%20Forest%20%26%20Activity%20Park%2C%20Roscommon%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "free",
+      "setting": "outdoor",
+      "activity_types": [
+        "park",
+        "trail-hike",
+        "water-sports",
+        "adventure-climbing",
+        "swimming"
+      ],
+      "accessibility": [],
+      "price_detail": "free of charge",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://loughkey.ie/activities/family-activities/",
+          "fetched_at": "2026-09-13T22:35:58+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is named Lough Key Forest & Activity Park.",
+          "quote": "Lough Key Forest & Activity Park",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "The phone number is 071-9673122.",
+          "quote": "Phone No: 071-9673122",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "The full address is Lough Key Forest & Activity Park, Boyle, Co. Roscommon.",
+          "quote": "Address Lough Key Forest & Activity Park, Boyle, Co. Roscommon",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "Pre-booking is essential for Boda Borg.",
+          "quote": "Pre-booking is essential for Boda Borg",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "Pre-booking is essential for Zipit Forest Adventures.",
+          "quote": "and Zipit Forest Adventures.",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "Many picnic tables include BBQ grills.",
+          "quote": "Many of these include BBQ grills",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "The BBQ grills are free of charge to use.",
+          "quote": "which are free of charge to use.",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "The park offers trails for all abilities.",
+          "quote": "Enjoy our range of trails for all abilities.",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "Tables can be reserved for food on the terrace or indoor café.",
+          "quote": "Tables can be reserved",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        },
+        {
+          "claim": "The venue allows customization of activities, tours, and private events.",
+          "quote": "We can customize activities, tours and private events for you and your group",
+          "source_url": "https://loughkey.ie/activities/family-activities/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-13T22:37:49+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
   },
   {
-    "title": "Chocolate Garden Ireland",
-    "description": "A dedicated chocolate-themed garden and attraction located in the Republic of Ireland, offering a sweet experience for families. The venue features lush gardens filled with chocolate sculptures and often includes interactive activities or tasting sessions suitable for children and adults alike. It serves as a unique educational and entertaining destination where visitors can learn about the history of chocolate while enjoying a whimsical, family-friendly atmosphere.",
-    "region": "Munster",
-    "county": "County Limerick",
-    "location": "Kilteely",
-    "country": "IE",
+    "schema_version": 1,
+    "id": "place-kidspace-rathcoole-superhero-brunch-event-dublin",
+    "kind": "place",
+    "title": "Kidspace Rathcoole Superhero Brunch Event",
+    "slug": "kidspace-rathcoole-superhero-brunch-event-dublin",
+    "summary": "Superhero brunch with Spiderman and Batman on Sun 2 Feb, suitable for children up to 8 years.",
+    "description": "Kidspace Playcentre, located in Rathcoole, hosts the Superhero Brunch event on Sunday, 2nd February 2025, from 10:00 to 12:00. Spiderman and Batman will visit to meet children in the event area. The venue offers free wifi and has various televisions with Sky Sports. The Nest Café serves delicious coffees, meals, and snacks. Kidspace regularly hosts themed and seasonal events. On the day, children can enjoy a Super Pancake brunch, a super soundtrack for dancing, and learn superhero moves. Little ones are encouraged to come in fancy dress. The venue is open from 9am. The event is suitable for children up to 8 years. Due to space restrictions, only one adult may be able to accompany each child in the event area, though the whole family is welcome to join for photographs. On the day, you have the option to add on kiddie treatments for €5 per head, including face painting and temporary tattoos. Kids can also play in the playframe while adults relax.",
     "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.instagram.com/p/Ckqr7lLN-Zq/",
-    "source_name": "instagram",
-    "booking_url": ""
+    "location": {
+      "name": "Kidspace Rathcoole | Events",
+      "address": "Greenogue Business Park, County Dublin, Ireland",
+      "city": "",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Kidspace%20Rathcoole%20%7C%20Events%2C%20Greenogue%20Business%20Park%2C%20County%20Dublin%2C%20Ireland%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9"
+      ],
+      "price_band": "under-10",
+      "setting": "indoor",
+      "activity_types": [
+        "playground",
+        "seasonal",
+        "food-market"
+      ],
+      "accessibility": [],
+      "price_detail": "€5 per head",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157",
+          "fetched_at": "2026-09-13T21:10:57+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "Kidspace Playcentre is located in Rathcoole.",
+          "quote": "Kidspace Playcentre, located in Rathcoole has",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "The venue offers free wifi.",
+          "quote": "offer free wifi",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "The venue provides various televisions with Sky Sports.",
+          "quote": "various televisions with Sky Sports",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "Kidspace regularly hosts themed events.",
+          "quote": "Kidspace regularily host themed and seasonal events",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "The Superhero Brunch event runs from 10:00 to 12:00.",
+          "quote": "10:00-12:00",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "Spiderman and Batman will visit Kidspace Rathcoole on Sun 2 Feb.",
+          "quote": "and Rathcoole on Sun 2 Feb to meet all the little superheros",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "The event is suitable for children up to 8 years.",
+          "quote": "This event is suitable for children up to 8 years.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "Due to space restrictions, only one adult may accompany each child in the event area.",
+          "quote": "Due to space restrictions only one adult may be able to accompany each child in the event area",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        },
+        {
+          "claim": "The venue is open from 9am.",
+          "quote": "We&#39;re open from 9am",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-13T21:12:42+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "We&#39;re open from 9am",
+      "duration_hint": "",
+      "seasonal_note": "Kidspace regularily host themed and seasonal events"
+    }
   },
   {
-    "title": "Amber Springs Hotel",
-    "description": "Amber Springs Hotel is a family-friendly hotel located in Wexford. The venue offers accommodations and amenities suitable for families, often featuring facilities for children to enjoy during their stay. As a hotel in the region, it serves as a base for exploring local attractions.",
-    "region": "Leinster",
-    "county": "Wexford",
-    "location": "Wexford",
-    "country": "IE",
+    "schema_version": 1,
+    "id": "place-gokidsgo-birthday-parties-dublin",
+    "kind": "place",
+    "title": "GoKidsGo | Birthday Parties",
+    "slug": "gokidsgo-birthday-parties-dublin",
+    "summary": "Birthday parties including laser games and themed rooms like Princess and Minions.",
+    "description": "GoKidsGo specialises in children's birthday parties, offering both laser parties and themed party room experiences. The venue provides themed rooms including Princess, Super Heroes, Minions and Glitter Studio, each designed to create a fun and colourful setting for celebrations. Themed parties include extended playtime and exclusive use of one of the party rooms.\n\nParty packages include playtime, food for children and a private room. Families simply bring the cake and optional party bags, with additional party bags available to purchase on site. Laser parties run seven days a week and are ideal for energetic groups looking for something a little different from traditional soft play. Each party includes organised laser games followed by time in a party room for food and celebrations. Laser parties are priced per child with a minimum group number, though smaller groups can still book and receive the full experience with the minimum charge applying.\n\nA booking deposit is required for parties. Adult numbers are limited per party to ensure comfort and space for children. Laser parties are suitable for confident players. The venue is located at Porters Rd, Coolmine Industrial Estate, Dublin 15, D15 H6TX, Ireland.",
     "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Hotel",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@cogstoysandgames/video/7366313973689388321",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Blarney Castle",
-    "description": "Blarney Castle is a historic medieval castle located near Cork City, famous for the Blarney Stone. Visitors can kiss the stone to receive the 'gift of the gab'. The grounds also feature extensive gardens, a maze, and the historic Blarney House, offering a family-friendly day out with history, nature, and interactive experiences for children and adults alike.",
-    "region": "Munster",
-    "county": "Cork",
-    "location": "Blarney",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Historic Attraction",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@tiktoknikkimum/video/7494611628743200022",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Marco Polo Limerick",
-    "description": "Marco Polo Limerick is a well-known, evergreen family entertainment venue located in Limerick City. It offers a variety of indoor activities suitable for families, including a soft play area, arcade games, bowling lanes, and a café. The venue is designed to be a fun day-out spot for children and adults alike, providing a climate-controlled environment for activities regardless of the weather.",
-    "region": "Munster",
-    "county": "Limerick",
-    "location": "Limerick",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@fuddermuckinfood/video/7453861189064461600",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Limerick Family Farm",
-    "description": "A family-friendly farm destination located in County Limerick. As indicated by the handle 'limerickfamilyfarm', the venue specializes in providing an authentic farm experience suitable for families with children. Visitors can typically expect activities such as animal encounters, petting zoos, and outdoor exploration in a rural setting, offering a classic Irish countryside outing.",
-    "region": "Munster",
-    "county": "Limerick",
-    "location": "Limerick",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Farm",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.instagram.com/limerickfamilyfarm/reel/DAB6NxeM5Bx/",
-    "source_name": "instagram",
-    "booking_url": ""
-  },
-  {
-    "title": "Limerick Lake Lodge & Marina",
-    "description": "A lakeside lodge and marina offering a scenic setting for family outings. The venue typically features boating activities, walking trails around the lake, and facilities suitable for picnics and relaxation. It serves as a base for outdoor recreation in a natural environment, ideal for families looking to enjoy nature and water-based fun.",
-    "region": "Munster",
-    "county": "Limerick",
-    "location": "Limerick",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.instagram.com/limerick_lake_lodge__marina_/p/Co-_sr7NF5t/",
-    "source_name": "instagram",
-    "booking_url": ""
-  },
-  {
-    "title": "Tramore Amusement Park",
-    "description": "Tramore Amusement Park is a seaside amusement park located in the popular coastal town of Tramore, County Waterford. It features a variety of rides and attractions suitable for families and children, including fairground-style rides and amusements. A well-known summer destination on the southeast coast of Ireland.",
-    "region": "Munster",
-    "county": "Waterford",
-    "location": "Tramore",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Amusement Park",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@tramore.amusement/video/7673910422709357846",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Tramore, Co. Waterford",
-    "description": "Tramore is a popular seaside town in County Waterford, known for its long sandy beach, playgrounds, and family-friendly promenades. The mention of 'Sunset Orange Cafe' suggests a family-friendly dining spot near the coast, ideal for a day out with children enjoying the sea air and beach activities. As a town and beach destination, it is a year-round location for family recreation rather than a one-off event.",
-    "region": "Munster",
-    "county": "Waterford",
-    "location": "Tramore",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@cassiestokes1111/video/7601169066329492758",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Jurassic Exhibition at Newpark Hotel Kilkenny",
-    "description": "A family-friendly exhibition featuring life-sized dinosaurs and interactive elements hosted at the Newpark Hotel. This event offers an engaging day out for children to explore a prehistoric world with larger-than-life exhibits, combining entertainment with educational fun.",
-    "region": "Leinster",
-    "county": "Kilkenny",
-    "location": "Kilkenny",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@all.about.amyy/video/7663225921536740630",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Quin Friary, County Clare",
-    "description": "A historic 15th-century Franciscan friary ruin located in the small town of Quin, County Clare. Known for its well-preserved cloisters and tower, it is a popular free attraction for families interested in history and local heritage. The site offers ample space for children to explore the grounds and learn about Ireland's monastic past in an open-air setting.",
-    "region": "Munster",
-    "county": "Clare",
-    "location": "Quin",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Historic Site",
-    "price_range": "Free",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@irishkidstravel/video/7665104690509548822",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Newpark Hotel Kilkenny",
-    "description": "The Newpark Hotel in Kilkenny is a popular family-friendly destination offering extensive indoor facilities suitable for year-round visits. It features a large leisure club with swimming pools, a gym, and a dedicated soft play area, making it an ideal spot for family days out. The hotel also provides family dining options and spacious event rooms. The caption highlights a 'brilliant day out' and mentions #summerfun and #kidsdayout, confirming its status as a recurring activity venue for families.",
-    "region": "Leinster",
-    "county": "Kilkenny",
-    "location": "Kilkenny",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Hotel & Leisure",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@keliemaher/video/7407554450228825377",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Focaccino",
-    "description": "A cafe and restaurant serving Italian-inspired food, including focaccia, located in Galway. The venue offers a casual dining atmosphere suitable for families enjoying lunch or light bites. While the social post highlights the food quality, the establishment itself is a standard eatery welcoming to all ages.",
-    "region": "Connacht",
-    "county": "Galway",
-    "location": "Galway",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Restaurant/Cafe",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@galwayfoodtours/video/7624125060646735126",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Dragons Den Play Centre",
-    "description": "Dragons Den Play Centre is a soft play facility designed for families with young children. As indicated by the hashtags #softplay and #kidsparties, the venue offers indoor play areas suitable for kids and is a popular location for hosting children's birthday parties. It serves as a dedicated space for play and social activities for families in the Waterford and Kilkenny regions.",
-    "region": "Munster",
-    "county": "Waterford",
-    "location": "Waterford",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "Kids",
-    "source_url": "https://www.tiktok.com/@dragonzdenplaycentre/video/7631890109838806294",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Kids at Play Waterford",
-    "description": "A dedicated family venue located in Waterford, offering a safe and fun environment for children to play and families to enjoy time together. The name suggests a focus on interactive play activities suitable for kids.",
-    "region": "Munster",
-    "county": "Waterford",
-    "location": "Waterford City",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Indoor play",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.instagram.com/kidsatplaywaterford/reel/DZxQ2CoC95E/",
-    "source_name": "instagram",
-    "booking_url": ""
-  },
-  {
-    "title": "Ristorante Kilkenny",
-    "description": "A restaurant located in Kilkenny, Ireland, offering dining experiences. While the caption highlights a general reservation opportunity, Ristorante is a real dining establishment in the area suitable for families looking for a meal out.",
-    "region": "Leinster",
-    "county": "Kilkenny",
-    "location": "Kilkenny",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Restaurant",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@visitkilkenny/video/7418516474639306017",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Dock 84",
-    "description": "Dock 84 is a popular dining venue located in Sligo, known for serving a variety of dishes including the featured steak sandwich. As a restaurant offering brunch and main meals, it serves as a family-friendly destination where parents can enjoy a meal while accompanied by their children. The venue provides a setting for a casual feast, making it a viable spot for a family day out focused on dining.",
-    "region": "Connacht",
-    "county": "Sligo",
-    "location": "Sligo Town",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Restaurant",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@conorryan75/video/7509145358371540246",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Waterford Lakes",
-    "description": "A popular family destination in Waterford offering lakeside walks, outdoor play areas, and various recreational activities suitable for children. The venue features scenic walking trails along the water, open green spaces for picnics, and seasonal fun activities, making it a great spot for families to spend a day outdoors.",
-    "region": "Munster",
-    "county": "Waterford",
-    "location": "Waterford",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "free",
-    "age_group": "all ages",
-    "source_url": "https://www.instagram.com/kidsrkidswaterfordlakes/reel/DdMoRUWk4qS/",
-    "source_name": "instagram",
-    "booking_url": ""
-  },
-  {
-    "title": "Sligo Southern Hotel",
-    "description": "The Sligo Southern Hotel is a family-friendly accommodation located in Sligo Town. While the hotel itself serves as a base for families, the caption highlights access to the surrounding area's offerings, including music, food, culture, chess activities, and coastal adventures, making it a suitable hub for a summer family stay in the region.",
-    "region": "Connacht",
-    "county": "Sligo",
-    "location": "Sligo Town",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Hotel",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@sligosouthernhotel/video/7659440943044594966",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Poulanassy Waterfall",
-    "description": "Poulanassy Waterfall is a scenic natural attraction located in County Kilkenny, Ireland. Known as a 'hidden gem,' it offers families a chance to explore a beautiful waterfall and surrounding woodland area. The site is suitable for a day out with kids, offering opportunities for nature walks, picnics, and enjoying the outdoors. It is a permanent natural feature that can be visited year-round, making it an ideal spot for a family adventure away from crowds.",
-    "region": "Leinster",
-    "county": "Kilkenny",
-    "location": "Poulanassy, Kilkenny",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "Free",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@werethewilds/video/7508703485441985848",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Yeats Family Legacy Sites in Sligo",
-    "description": "Experience the deep connection between the Yeats family and the landscape of County Sligo. This evergreen destination allows families to explore the real places that inspired W.B. Yeats's poetry, including locations like the Sligo Literary Festival site, Coole Park (if accessible), and other heritage trails marked in the region. It offers a blend of nature, history, and literature, making it an educational and engaging outing for children and adults alike to walk in the footsteps of literary giants.",
-    "region": "Connacht",
-    "county": "Sligo",
-    "location": "County Sligo",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Museum",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@visitsligo/video/7500899316899253536",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Bia Bao",
-    "description": "Bia Bao is a modern Asian restaurant located just minutes from the Sligo Southern Hotel. It offers authentic Chinese flavors with a contemporary twist, providing a dining option for families visiting the Sligo area. While primarily a restaurant, it serves as a family-friendly destination for meals in the vicinity of the hotel.",
-    "region": "Ulster",
-    "county": "Sligo",
-    "location": "Sligo Town",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Dining",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@sligosouthernhotel/video/7546274607347666198",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Coach Lane, Sligo",
-    "description": "A family-run venue located just down the road from the Sligo Southern Hotel. Described as a 'family-run gem', it is an evergreen destination suitable for families visiting Sligo.",
-    "region": "Connacht",
-    "county": "Sligo",
-    "location": "Sligo Town",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Restaurant",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@sligosouthernhotel/video/7516140041987722519",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Funtasia Family Adventure Park",
-    "description": "A family-friendly adventure park located near Dublin, featuring thrilling activities and attractions suitable for children and families. The venue is highlighted as a summer destination offering various fun options for visitors.",
-    "region": "Leinster",
-    "county": "Meath",
-    "location": "Kells",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Adventure Park",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@gemmatreacy_/video/7648730955988978966",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Hidden Valley Resort",
-    "description": "Hidden Valley Resort is a holiday park located in County Wicklow, Republic of Ireland. It offers a variety of family-friendly accommodation options, including lodges and chalets, as well as an on-site adventure golf course, mini-golf, and seasonal activities. The resort is situated near the scenic Bray Head and provides a base for exploring the natural beauty of Wicklow.",
-    "region": "Leinster",
-    "county": "Wicklow",
-    "location": "Bray, County Wicklow",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Holiday Park",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@goodroominterior/video/7498638880724258070",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Lyrath Estate, Kilkenny",
-    "description": "Lyrath Estate is a historic 17th-century house and gardens located in Kilkenny, Ireland. It offers extensive grounds including a large adventure playground, a forest adventure trail, and seasonal family events. The estate features a cafe and restaurant with family-friendly dining options, as well as event spaces for celebrations. The grounds are well-suited for family walks and outdoor activities year-round.",
-    "region": "Leinster",
-    "county": "Kilkenny",
-    "location": "Kilkenny",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Nature",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@oorlaggennery/video/7435285409250462979",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Kilkenny City",
-    "description": "A historic city in the heart of Ireland, celebrated for its medieval heritage, castle, and vibrant streets. While the caption highlights a 'foodie getaway,' Kilkenny City is a year-round destination featuring family-friendly attractions such as Kilkenny Castle and Gardens, the Kilkenny Arts Centre, and numerous parks and playgrounds suitable for children.",
-    "region": "Leinster",
-    "county": "Kilkenny",
-    "location": "Kilkenny",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Museum, History, Park",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@marcusolaoire/video/7644989788264647958",
-    "source_name": "tiktok",
-    "booking_url": ""
-  },
-  {
-    "title": "Galway Atlantaquaria",
-    "description": "Galway Atlantaquaria is Ireland's only dedicated aquarium, featuring a unique underwater viewing area that allows visitors to get close to marine life. The attraction houses a variety of local and exotic species, including sea turtles, rays, and colorful fish, offering an engaging educational experience for families. With its focus on marine conservation and interactive displays, it is an ideal destination for children and adults alike to learn about ocean ecosystems.",
-    "region": "Connacht",
-    "county": "Galway",
-    "location": "Ballyvaughan, County Clare (Note: While the handle mentions Galway, the venue is actually located in Ballyvaughan, County Clare, but often marketed for the wider West region including Galway. However, strictly adhering to the prompt's instruction to not invent details, the handle 'galwayatlantaquaria' strongly implies a location associated with Galway or is a common misattribution for the actual venue in Clare. Wait, checking facts: Galway Atlantaquaria is in Ballyvaughan, Co Clare. The handle is the official account. I will use the actual location found in general knowledge triggered by the handle, as the prompt allows using the account name to identify the venue.",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Aquarium",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@galwayatlantaquaria/video/7677187725950242070",
-    "source_name": "tiktok",
-    "booking_url": "https://www.atlantaquaria.ie"
-  },
-  {
-    "title": "Kilmeedy Social Farm",
-    "description": "A social farm located near Limerick City offering an interactive and educational day out for families. This venue allows visitors to engage with a variety of farm animals in a social and welcoming environment, providing a gentle introduction to rural life. It is suitable for families looking for a relaxed, animal-focused activity that is open year-round.",
-    "region": "Munster",
-    "county": "Limerick",
-    "location": "Kilmeedy, Limerick",
-    "country": "IE",
-    "family_relevant": true,
-    "latitude": null,
-    "longitude": null,
-    "category": "Farm",
-    "price_range": "check",
-    "age_group": "All ages",
-    "source_url": "https://www.tiktok.com/@saraahp1451/video/7646178665063124246",
-    "source_name": "tiktok",
-    "booking_url": ""
+    "location": {
+      "name": "GoKidsGo | Birthday Parties",
+      "address": "Porters Rd, Coolmine Industrial Estate",
+      "city": "Dublin 15",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=GoKidsGo%20%7C%20Birthday%20Parties%2C%20Porters%20Rd%2C%20Coolmine%20Industrial%20Estate%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12"
+      ],
+      "price_band": "unknown",
+      "setting": "indoor",
+      "activity_types": [
+        "soft-play",
+        "adventure-climbing"
+      ],
+      "accessibility": [],
+      "price_detail": "Laser parties are priced per child with a minimum group number",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166",
+          "fetched_at": "2026-09-13T21:14:33+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue specialises in children's birthday parties, offering laser parties and themed party room experiences.",
+          "quote": "We specialise in children&rsquo;s birthday parties, offering both laser parties and themed party room experiences.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Themed parties include extended playtime and exclusive use of one of the party rooms.",
+          "quote": "themed parties include extended playtime and exclusive use of one of our party rooms.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "The themed rooms include Princess, Super Heroes, Minions and Glitter Studio.",
+          "quote": "Our themed rooms include Princess, Super Heroes, Minions and Glitter Studio",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Party packages include playtime, food for children and a private room.",
+          "quote": "Party packages include playtime, food for children and a private room.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Families simply bring the cake and optional party bags.",
+          "quote": "Families simply bring the cake and optional party bags",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Additional party bags are available to purchase on site.",
+          "quote": "with additional party bags available to purchase on site.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "A booking deposit is required for parties.",
+          "quote": "A booking deposit is required",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Laser parties run seven days a week.",
+          "quote": "Parties run seven days a week",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Each laser party includes organised laser games followed by time in a party room for food and celebrations.",
+          "quote": "Each party includes organised laser games followed by time in a party room for food and celebrations.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "Laser parties are priced per child with a minimum group number.",
+          "quote": "Laser parties are priced per child with a minimum group number.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        },
+        {
+          "claim": "The venue is located at Porters Rd, Coolmine Industrial Estate, Dublin 15, D15 H6TX, Ireland.",
+          "quote": "GoKidsGo! Porters Rd, Coolmine Industrial Estate, Dublin 15, D15 H6TX, Ireland",
+          "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/gokidsgo-birthday-parties-6166"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-13T21:17:33+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
   }
 ]

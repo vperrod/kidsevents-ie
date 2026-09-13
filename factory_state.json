@@ -4,33 +4,41 @@
   "sources_hit": {},
   "total_events": 61,
   "llm": {
-    "calls_today": 868,
+    "calls_today": 1888,
     "by_lane": {
       "local": {
-        "calls": 696,
+        "calls": 1129,
         "errors": 1,
-        "p50_ms": 15906
+        "p50_ms": 15892
       },
       "auto": {
-        "calls": 87,
-        "errors": 63,
-        "p50_ms": 93880
+        "calls": 406,
+        "errors": 303,
+        "p50_ms": 15055
       },
       "hermes": {
-        "calls": 63,
-        "errors": 60,
-        "p50_ms": 90105
+        "calls": 302,
+        "errors": 94,
+        "p50_ms": 80378
       },
       "kg/stepfun/step-3.7-flash:free": {
-        "calls": 22,
-        "errors": 21,
-        "p50_ms": 11079
+        "calls": 50,
+        "errors": 45,
+        "p50_ms": 9127
+      },
+      "oc/mimo-v2.5-free": {
+        "calls": 1,
+        "errors": 1,
+        "p50_ms": 4571
       }
     },
-    "last_probe": "2026-09-13T20:04:43+00:00"
+    "last_probe": "2026-09-13T22:49:19+00:00"
   },
   "facet_drops": {
-    "setting": 4,
-    "price_band": 1
+    "setting": 10,
+    "price_band": 4,
+    "activity_types": 58,
+    "age_bands": 78,
+    "accessibility": 100
   }
 }
