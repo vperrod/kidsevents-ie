@@ -1371,6 +1371,15 @@
       }
     </style>
     <link rel="stylesheet" href="small-days.css?v=2" />
+    <style>
+      .toast[hidden] {
+        display: none;
+      }
+      .nolink {
+        color: var(--quiet);
+        font-weight: 700;
+      }
+    </style>
   </head>
   <body>
     <div class="app">
@@ -1386,10 +1395,9 @@
         </button>
         <nav class="desktopnav" aria-label="Primary">
           <button data-page="today" class="active" aria-current="page">Today</button
-          ><button data-page="find">Find</button
-          ><button data-page="places">Places</button
+          ><button data-page="find">Events</button
+          ><button data-page="places">Things to do</button
           ><button data-page="holidays">Holidays</button
-          ><button data-page="guides">Guides</button
           ><button data-page="saved">
             Saved <span id="savedCount"></span>
           </button>
@@ -1441,15 +1449,14 @@
           </div>
           <div class="route">
             <div>
-              <h2>Need a rain plan?</h2>
+              <h2>Guides</h2>
               <p>
-                Guides are separate from event search, so practical reading does
-                not get in the way of finding something on.
+                Rain plans, buggy-friendly cafés and other practical reading —
+                kept out of event search so it does not get in the way of
+                finding something on.
               </p>
             </div>
-            <button class="solid" data-page="guides">
-              Open rainy-day guide
-            </button>
+            <button class="solid" data-page="guides">Open the guides</button>
           </div>
         </section>
         <section id="find" class="screen">
@@ -1688,10 +1695,9 @@
       </main>
       <nav class="bottomnav" aria-label="Primary mobile">
         <button class="active" data-page="today" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20h-6v-5h-4v5H4z"/></svg><span>Today</span></button
-        ><button data-page="find"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg><span>Find</span></button
-        ><button data-page="places"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21V9l8-6 8 6v12h-5v-7H9v7z"/></svg><span>Places</span></button
+        ><button data-page="find"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m15 15 5 5"/></svg><span>Events</span></button
+        ><button data-page="places"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 21V9l8-6 8 6v12h-5v-7H9v7z"/></svg><span>Things to do</span></button
         ><button data-page="holidays"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Z"/><circle cx="12" cy="10" r="2"/></svg><span>Holidays</span></button
-        ><button data-page="guides"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 17h11M9 8h6M9 12h6"/></svg><span>Guides</span></button
         ><button data-page="saved"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3-5 3z"/></svg><span>Saved</span></button>
       </nav>
     </div>
@@ -1734,9 +1740,7 @@
         </p>
       </div>
     </section>
-    <div class="toast" id="toast" aria-live="polite">
-      Saved to your small plan
-    </div>
+    <div class="toast" id="toast" aria-live="polite" hidden></div>
     <script>
       const $ = (s) => document.querySelector(s),
         $$ = (s) => [...document.querySelectorAll(s)];
@@ -1768,16 +1772,25 @@
             })[c],
         );
       const key = (e) => e.url || `${e.title}|${e.start_date}|${e.city}`;
+      // Anything that becomes an href has to survive this: only http(s) links
+      // are rendered as links, everything else falls back to plain text.
+      function safeUrl(value) {
+        try {
+          return ["http:", "https:"].includes(new URL(value).protocol)
+            ? String(value)
+            : "";
+        } catch {
+          return "";
+        }
+      }
+      function dataLink(value, label) {
+        const href = safeUrl(value);
+        return href
+          ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`
+          : `<span class="nolink">${esc(label)}</span>`;
+      }
       function sourceUrl(e) {
-        return (
-          [e.url, ...(e.all_urls || [])].find((u) => {
-            try {
-              return ["http:", "https:"].includes(new URL(u).protocol);
-            } catch {
-              return false;
-            }
-          }) || ""
-        );
+        return [e.url, ...(e.all_urls || [])].map(safeUrl).find(Boolean) || "";
       }
       function mapUrl(e) {
         let q =
@@ -1805,6 +1818,21 @@
               month: "short",
               year: "numeric",
             });
+      }
+      // The date slot is two short lines, so a missing date gets its own label
+      // rather than a sliced-up fallback sentence.
+      function dateSlot(e) {
+        const raw = e.start_date || e.date;
+        if (!raw) return ["Date TBC", ""];
+        const d = new Date(raw);
+        if (Number.isNaN(d.valueOf())) return [clean(raw), ""];
+        const label = d.toLocaleDateString("en-IE", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+        return [label.split(" ")[0], label.slice(label.indexOf(" ") + 1)];
       }
       function eventText(e) {
         return [
@@ -1869,6 +1897,29 @@
         if (numbers.length || /kids|children/.test(age)) return "school-age";
         return "";
       }
+      // The backend score is a completeness score, so it may never read higher
+      // than the fields actually present: a listing still showing "to check"
+      // placeholders cannot claim 100%.
+      function completenessLabel(e) {
+        if (typeof e.confidence !== "number" || !Number.isFinite(e.confidence))
+          return "Not provided";
+        const fields = [
+          e.title,
+          e.start_date || e.date,
+          e.venue_name || e.city || e.county,
+          e.cost,
+          e.age_group,
+          e.description,
+          sourceUrl(e),
+        ];
+        const present = Math.round(
+          (fields.filter(Boolean).length / fields.length) * 100,
+        );
+        const reported = Math.round(
+          e.confidence <= 1 ? e.confidence * 100 : e.confidence,
+        );
+        return `${Math.max(0, Math.min(reported, present))}% complete`;
+      }
       function shortMeta(e) {
         return (
           [e.venue_name, e.city, e.county]
@@ -1886,7 +1937,8 @@
               `<span class="badge ${label === "Free" ? "free" : ""}">${esc(label)}</span>`,
           )
           .join("");
-        return `<article class="event"><div class="eventdate">${esc(formatDate(e.start_date || e.date).split(" ")[0])}<small>${esc(formatDate(e.start_date || e.date).slice(4) || "LISTING")}</small></div><div class="eventmain"><button class="openEvent" data-event="${events.indexOf(e)}">${esc(e.title || "Untitled event")}</button><span>${esc(shortMeta(e))}</span><div class="badges">${badges}</div></div><button class="save" data-save="${events.indexOf(e)}" aria-label="Save ${esc(e.title)}" aria-pressed="${isSaved}">${isSaved ? "✓" : "＋"}</button></article>`;
+        const [dayLabel, dayRest] = dateSlot(e);
+        return `<article class="event"><div class="eventdate">${esc(dayLabel)}${dayRest ? `<small>${esc(dayRest)}</small>` : ""}</div><div class="eventmain"><button class="openEvent" data-event="${events.indexOf(e)}">${esc(e.title || "Untitled event")}</button><span>${esc(shortMeta(e))}</span><div class="badges">${badges}</div></div><button class="save" data-save="${events.indexOf(e)}" aria-label="Save ${esc(e.title)}" aria-pressed="${isSaved}">${isSaved ? "✓" : "＋"}</button></article>`;
       }
       function render() {
         let selected = filtered();
@@ -1967,6 +2019,10 @@
             : item.location;
         return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query })}`;
       }
+      function placeCard(item, eyebrowParts) {
+        const eyebrow = eyebrowParts.filter(Boolean).map(clean).join(" · ");
+        return `<article class="holidaycard">${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks">${dataLink(item.source_url, "Original source")}${dataLink(holidayMapUrl(item), "Google Maps")}${dataLink(item.booking_url, "Check options")}</div></article>`;
+      }
       function filteredHolidays() {
         const filters = $$("[data-holiday-filter]:checked").map(
           (input) => input.dataset.holidayFilter,
@@ -1999,10 +2055,7 @@
           : "No places match that combination yet.";
         $("#holidayCards").innerHTML = selected.length
           ? selected
-              .map(
-                (item) =>
-                  `<article class="holidaycard"><p class="eyebrow">${esc(item.region)} · ${esc(item.category)}</p><h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks"><a href="${esc(item.source_url)}" target="_blank" rel="noopener noreferrer">Original source</a><a href="${esc(holidayMapUrl(item))}" target="_blank" rel="noopener noreferrer">Google Maps</a><a href="${esc(item.booking_url)}" target="_blank" rel="noopener noreferrer">Check options</a></div></article>`,
-              )
+              .map((item) => placeCard(item, [item.region, item.category]))
               .join("")
           : '<p class="empty">Try another region or show all places.</p>';
         $$(".mapspot").forEach((spot) =>
@@ -2050,9 +2103,8 @@
           : "No places match that yet — check back after the next round.";
         $("#placeCards").innerHTML = selected.length
           ? selected
-              .map(
-                (item) =>
-                  `<article class="holidaycard"><p class="eyebrow">${esc(item.county || item.region)} · ${esc(item.category)}</p><h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks"><a href="${esc(item.source_url)}" target="_blank" rel="noopener noreferrer">Original source</a><a href="${esc(holidayMapUrl(item))}" target="_blank" rel="noopener noreferrer">Google Maps</a><a href="${esc(item.booking_url)}" target="_blank" rel="noopener noreferrer">Check options</a></div></article>`,
+              .map((item) =>
+                placeCard(item, [item.county || item.region, item.category]),
               )
               .join("")
           : '<p class="empty">Try a different category or show all places.</p>';
@@ -2083,9 +2135,7 @@
         $("#detailDate").textContent = formatDate(e.start_date || e.date);
         $("#detailCost").textContent = priceLabel(e);
         $("#detailAge").textContent = ageLabel(e);
-        $("#detailConfidence").textContent = e.confidence
-          ? `${Math.round(Number(e.confidence) * 100)}% captured`
-          : "Not provided";
+        $("#detailConfidence").textContent = completenessLabel(e);
         $("#detailDescription").textContent =
           clean(e.description) ||
           "The original listing did not provide a description.";
@@ -2093,8 +2143,10 @@
           source = $("#sourceLink");
         source.href = original || "#";
         source.style.display = original ? "inline-flex" : "none";
-        let map = $("#mapLink");
-        map.href = mapUrl(e);
+        let map = $("#mapLink"),
+          mapHref = safeUrl(mapUrl(e));
+        map.href = mapHref || "#";
+        map.style.display = mapHref ? "inline-flex" : "none";
         map.textContent =
           e.latitude && e.longitude
             ? "Open in Google Maps"
@@ -2114,11 +2166,22 @@
         $(".app").inert = false;
         detailTrigger?.focus();
       }
+      let noticeHide = null,
+        noticeClear = null;
       function notice(message) {
         let t = $("#toast");
+        clearTimeout(noticeHide);
+        clearTimeout(noticeClear);
         t.textContent = message;
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 1800);
+        t.hidden = false;
+        requestAnimationFrame(() => t.classList.add("show"));
+        noticeHide = setTimeout(() => {
+          t.classList.remove("show");
+          noticeClear = setTimeout(() => {
+            t.hidden = true;
+            t.textContent = "";
+          }, 250);
+        }, 1800);
       }
       function toggle(e) {
         let id = key(e);
@@ -2163,7 +2226,7 @@
             if (x.dataset.page === id) x.setAttribute("aria-current", "page");
             else x.removeAttribute("aria-current");
           });
-          const names = { today: "Today", find: "Find", places: "Places", holidays: "Holidays", guides: "Guides", saved: "Saved" };
+          const names = { today: "Today", find: "Events", places: "Things to do", holidays: "Holidays", guides: "Guides", saved: "Saved" };
           document.title = `${names[id] || "Small Days"} — Small Days`;
           window.scrollTo({ top: 0 });
           const heading = $(`#${id} h1`);

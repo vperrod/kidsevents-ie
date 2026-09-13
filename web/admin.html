@@ -695,6 +695,173 @@
       }
     </style>
     <link rel="stylesheet" href="admin-brand.css?v=2" />
+    <style>
+      .pager {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 12px 0;
+      }
+      .pager .link[disabled] {
+        opacity: 0.4;
+        cursor: default;
+        text-decoration: none;
+      }
+      .field {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--quiet);
+        font-size: 13px;
+      }
+      .field select {
+        min-height: 40px;
+        padding: 0 8px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: var(--ink);
+        font: inherit;
+      }
+      .cardlist {
+        display: grid;
+        gap: 12px;
+      }
+      .candidate {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--white);
+      }
+      .candidate-main {
+        min-width: 0;
+      }
+      .candidate-decision {
+        align-self: start;
+        position: sticky;
+        top: 16px;
+        padding-left: 16px;
+        border-left: 1px solid var(--mist);
+      }
+      .candidate-decision .actions {
+        margin-top: 0;
+        gap: 8px;
+      }
+      .candidate-decision .button {
+        flex: 1;
+      }
+      /* .secondary is written for the dark hero; on a white card it needs ink. */
+      .candidate-decision .secondary {
+        color: var(--ink);
+      }
+      .chip.active .count {
+        color: inherit;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 8px 0 10px;
+      }
+      .caption {
+        margin: 0 0 10px;
+        overflow-wrap: anywhere;
+      }
+      .reason {
+        margin: 0 0 10px;
+        color: var(--quiet);
+        font-size: 13px;
+        white-space: normal;
+        overflow-wrap: break-word;
+      }
+      .reason em {
+        display: block;
+        margin-top: 5px;
+      }
+      .candidate .item-sub {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        max-width: none;
+      }
+      @media (max-width: 900px) {
+        .candidate {
+          grid-template-columns: 1fr;
+        }
+        .candidate-decision {
+          position: static;
+          padding: 14px 0 0;
+          border-left: 0;
+          border-top: 1px solid var(--mist);
+        }
+      }
+      @media (max-width: 760px) {
+        #view-content table {
+          min-width: 0;
+        }
+        #view-content thead {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0 0 0 0);
+          white-space: nowrap;
+        }
+        #view-content table,
+        #view-content tbody,
+        #view-content tr,
+        #view-content td {
+          display: block;
+          width: 100%;
+        }
+        #view-content tr {
+          padding: 8px 0;
+          border-bottom: 1px solid var(--line);
+        }
+        #view-content tr:last-child {
+          border-bottom: 0;
+        }
+        #view-content td {
+          padding: 6px 15px;
+          border: 0;
+        }
+        #view-content td::before {
+          content: attr(data-label);
+          display: block;
+          margin-bottom: 4px;
+          color: var(--quiet);
+          font: 500 10px "DM Mono", monospace;
+          letter-spacing: 0.03em;
+        }
+        #view-content .item-title,
+        #view-content .item-sub {
+          max-width: none;
+          white-space: normal;
+          overflow: visible;
+          text-overflow: clip;
+        }
+        #view-content td {
+          overflow-wrap: anywhere;
+        }
+      }
+      /* Six rail labels, not the five the brand sheet's phone grid assumes. */
+      @media (max-width: 520px) {
+        .rail .nav {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 4px;
+        }
+        .rail .nav button {
+          padding: 10px 9px;
+          font-size: 13px;
+          text-align: left;
+          white-space: normal;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="shell">
@@ -704,10 +871,10 @@
           Small Days
         </div>
         <nav class="nav" aria-label="Editor desk">
-          <button class="active" data-view="desk">Today</button
-          ><button data-view="content">Content</button
-          ><button data-view="sources">Sources</button
-          ><button data-view="pipeline">Pipeline</button
+          <button class="active" data-view="desk">Overview</button
+          ><button data-view="content">Editorial review</button
+          ><button data-view="sources">Coverage</button
+          ><button data-view="pipeline">Collection</button
           ><button data-view="social">Social</button
           ><button data-view="logs">Run log</button>
         </nav>
@@ -730,13 +897,6 @@
             <i class="dot"></i><span id="refresh-label">Loading live data</span>
           </div>
         </header>
-        <div class="tabs">
-          <button class="tab active" data-view="desk">Overview</button
-          ><button class="tab" data-view="content">Editorial review</button
-          ><button class="tab" data-view="sources">Coverage</button
-          ><button class="tab" data-view="pipeline">Collection</button
-          ><button class="tab" data-view="social">Social</button>
-        </div>
         <section class="view active" id="view-desk">
           <div class="hero">
             <div>
@@ -842,9 +1002,12 @@
                 All <span id="all-count"></span></button
               ><button class="chip" data-filter="needs">
                 Need details <span id="need-count"></span></button
-              ><button class="chip" data-filter="ready">Ready</button>
+              ><button class="chip" data-filter="ready">
+                Ready <span id="ready-count"></span>
+              </button>
             </div>
           </div>
+          <div class="pager" id="ev-pager-top"></div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -859,6 +1022,7 @@
               <tbody id="events"></tbody>
             </table>
           </div>
+          <div class="pager" id="ev-pager-bottom"></div>
         </section>
         <section class="view" id="view-sources">
           <h2 class="section-title">Coverage map</h2>
@@ -937,21 +1101,30 @@
               <div class="coverage" id="soc-found-via"></div>
             </section>
           </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Post</th>
-                  <th>Platform</th>
-                  <th>Found via</th>
-                  <th>Captured</th>
-                  <th>Why not yet</th>
-                  <th>Decision</th>
-                </tr>
-              </thead>
-              <tbody id="social"></tbody>
-            </table>
+          <div class="filterbar">
+            <input
+              class="search"
+              id="soc-search"
+              aria-label="Search caption, account or link"
+              placeholder="Search caption, account or link…"
+              type="search"
+            />
+            <div class="filters" id="soc-status"></div>
           </div>
+          <div class="filterbar">
+            <div class="filters">
+              <label class="field"
+                >Platform <select id="soc-platform"></select></label
+              ><label class="field"
+                >Found via <select id="soc-foundvia"></select></label
+              ><label class="field"
+                ><input type="checkbox" id="soc-caption" /> Has caption</label
+              >
+            </div>
+            <div class="pager" id="soc-pager-top"></div>
+          </div>
+          <div class="cardlist" id="social"></div>
+          <div class="pager" id="soc-pager-bottom"></div>
         </section>
         <section class="view" id="view-logs">
           <div class="head">
@@ -961,6 +1134,7 @@
                 The latest collection output, useful when a source needs
                 attention.
               </p>
+              <p class="muted" id="log-run-note"></p>
             </div>
             <button class="button secondary" id="refresh-log">Refresh</button>
           </div>
@@ -974,13 +1148,44 @@
         const match = location.pathname.match(/^(.*)\/admin/),
           API = match ? match[1] : "";
         $ = (s) => document.querySelector(s);
+        // Upstream text arrives already HTML-escaped, so decode once before
+        // escaping for output — otherwise titles render a literal &#039;.
+        const clean = (v) =>
+          String(v == null ? "" : v)
+            .replace(/&amp;/g, "&")
+            .replace(/&#0?39;/g, "'")
+            .replace(/&#8217;/g, "’")
+            .replace(/&#8211;/g, "–")
+            .replace(/&quot;/g, '"')
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">");
         const esc = (v) =>
-          String(v || "").replace(
+          clean(v).replace(
             /[&<>"']/g,
             (c) =>
               ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c],
           );
-        let S = { events: [], sources: [], holidays: [], places: [], metrics: null, filter: "all" };
+        const PAGE_SIZES = [25, 50, 100];
+        let S = {
+          events: [],
+          sources: [],
+          holidays: [],
+          places: [],
+          metrics: null,
+          filter: "all",
+          contentPage: 1,
+          contentSize: 25,
+          social: {
+            items: [],
+            page: 1,
+            size: 25,
+            status: "all",
+            platform: "all",
+            foundVia: "all",
+            hasCaption: false,
+            q: "",
+          },
+        };
         const get = async (u, o) => {
             let r = await fetch(u, o);
             if (!r.ok) throw Error(r.status);
@@ -1005,8 +1210,66 @@
             e.textContent = t;
             e.classList.add("show");
             setTimeout(() => e.classList.remove("show"), 3500);
+          },
+          // Fixed month names: the platform locale renders September as
+          // "Sept", and the desk reads one time zone only.
+          MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" "),
+          pad = (n) => String(n).padStart(2, "0"),
+          stampUTC = (v) => {
+            let d = new Date(v);
+            if (!v || Number.isNaN(d.valueOf())) return "—";
+            return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
           };
-        function view(n) {
+        function pages(total, size) {
+          return Math.max(1, Math.ceil(total / size));
+        }
+        function pagerHtml(page, total, size) {
+          const last = pages(total, size);
+          return `<button class="link" data-page-step="-1"${page <= 1 ? " disabled" : ""}>‹ Prev</button><span class="muted">Page ${page} of ${last} · ${total} item${total === 1 ? "" : "s"}</span><button class="link" data-page-step="1"${page >= last ? " disabled" : ""}>Next ›</button><label class="field">Show <select data-page-size>${PAGE_SIZES.map((n) => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`).join("")}</select></label>`;
+        }
+        const VIEWS = {
+          desk: [
+            "Today’s desk",
+            "A clear view of what parents can see, what needs a decision, and what the next collection run will change.",
+          ],
+          content: [
+            "Editorial review",
+            "The details that turn a listing into a confident family plan.",
+          ],
+          sources: [
+            "Coverage map",
+            "See what is feeding Small Days and where the feed is thin.",
+          ],
+          pipeline: [
+            "Collection run",
+            "Run and monitor the web collection pipeline.",
+          ],
+          social: [
+            "Social review",
+            "Candidates collected from saved collections and tag searches.",
+          ],
+          logs: ["Run log", "The latest system output, in one place."],
+        };
+        function parseHash() {
+          const raw = location.hash.replace(/^#/, ""),
+            cut = raw.indexOf("/"),
+            name = cut < 0 ? raw : raw.slice(0, cut);
+          let param = "";
+          try {
+            param = cut < 0 ? "" : decodeURIComponent(raw.slice(cut + 1));
+          } catch (e) {
+            param = "";
+          }
+          return { name: VIEWS[name] ? name : "desk", param };
+        }
+        function view(n, param) {
+          if (!VIEWS[n]) n = "desk";
+          if (parseHash().name !== n)
+            history.replaceState(
+              null,
+              "",
+              "#" + n + (param ? "/" + encodeURIComponent(param) : ""),
+            );
           document
             .querySelectorAll(".view")
             .forEach((e) => e.classList.toggle("active", e.id === "view-" + n));
@@ -1015,32 +1278,15 @@
             e.classList.toggle("active", active);
             e.setAttribute("aria-pressed", String(active));
           });
-          let x = {
-            desk: [
-              "Today’s desk",
-              "A clear view of what parents can see, what needs a decision, and what the next collection run will change.",
-            ],
-            content: [
-              "Editorial review",
-              "The details that turn a listing into a confident family plan.",
-            ],
-            sources: [
-              "Coverage map",
-              "See what is feeding Small Days and where the feed is thin.",
-            ],
-            pipeline: [
-              "Collection run",
-              "Run and monitor the web collection pipeline.",
-            ],
-            social: [
-              "Social review",
-              "Candidates collected from saved collections and tag searches.",
-            ],
-            logs: ["Run log", "The latest system output, in one place."],
-          }[n];
+          let x = VIEWS[n];
           $("#page-title").textContent = x[0];
           $("#page-subtitle").textContent = x[1];
-          if (n === "logs") logs();
+          if (n === "logs") {
+            $("#log-run-note").textContent = param
+              ? `Opened from the failed collection run at ${param}.`
+              : "";
+            logs();
+          }
           if (n === "social") socialQueue();
           scrollTo({ top: 0 });
         }
@@ -1160,9 +1406,18 @@
           $("#need-count").textContent = S.events.filter(
             (x) => !ready(x),
           ).length;
+          $("#ready-count").textContent = S.events.filter(ready).length;
+          S.contentPage = Math.min(
+            Math.max(1, S.contentPage),
+            pages(e.length, S.contentSize),
+          );
+          const start = (S.contentPage - 1) * S.contentSize;
+          const pager = pagerHtml(S.contentPage, e.length, S.contentSize);
+          $("#ev-pager-top").innerHTML = pager;
+          $("#ev-pager-bottom").innerHTML = pager;
           $("#events").innerHTML =
             e
-              .slice(0, 150)
+              .slice(start, start + S.contentSize)
               .map((x) => {
                 let d = [
                   x.age_group && `Ages ${x.age_group}`,
@@ -1171,7 +1426,7 @@
                     ? x.venue_name || x.city || x.county
                     : "Place to add",
                 ].filter(Boolean);
-                return `<tr><td><div class="item-title">${esc(x.title || "Untitled")}</div><div class="item-sub">${esc(x.description || "No description")}</div></td><td>${x.start_date ? esc(x.start_date) : '<span class="tag missing">Date needed</span>'}</td><td>${d.map((v) => `<span class="tag ${v === "Cost to check" || v === "Place to add" ? "missing" : ""}">${esc(v)}</span>`).join(" ")}</td><td><div class="item-sub">${esc(src(x))}</div><a class="item-sub" href="${esc(x.url)}" target="_blank">Original link ↗</a></td><td><span class="status ${ready(x) ? "ok" : "issue"}">${ready(x) ? "Ready" : "Needs details"}</span></td></tr>`;
+                return `<tr><td data-label="Listing"><div class="item-title">${esc(x.title || "Untitled")}</div><div class="item-sub">${esc(x.description || "No description")}</div></td><td data-label="When">${x.start_date ? esc(x.start_date) : '<span class="tag missing">Date needed</span>'}</td><td data-label="Family details">${d.map((v) => `<span class="tag ${v === "Cost to check" || v === "Place to add" ? "missing" : ""}">${esc(v)}</span>`).join(" ")}</td><td data-label="Source"><div class="item-sub">${esc(src(x))}</div><a class="item-sub" href="${esc(x.url)}" target="_blank">Original link ↗</a></td><td data-label="Quality"><span class="status ${ready(x) ? "ok" : "issue"}">${ready(x) ? "Ready" : "Needs details"}</span></td></tr>`;
               })
               .join("") ||
             '<tr><td colspan="5" class="empty">No listings match this view.</td></tr>';
@@ -1213,10 +1468,16 @@
             ? a
                 .slice()
                 .reverse()
-                .map(
-                  (x) =>
-                    `<div class="stage"><span class="stage-num">${x.success ? "OK" : "NO"}</span><div><b>${esc(x.time)}</b><br><span>${x.events_count || 0} items · ${x.sources_count || 0} sources · ${esc(x.duration || "—")}</span></div><span class="status ${x.success ? "ok" : "issue"}">${x.success ? "Complete" : "Failed"}</span></div>`,
-                )
+                .map((x) => {
+                  const error = x.error || x.error_message || x.message || "",
+                    runId = x.run_id || x.id || x.time || "";
+                  const why = x.success
+                    ? ""
+                    : error
+                      ? `<br><span class="status issue">${esc(error)}</span>`
+                      : `<br><a class="link" href="#logs/${encodeURIComponent(runId)}">Open the run log ↗</a>`;
+                  return `<div class="stage"><span class="stage-num">${x.success ? "OK" : "NO"}</span><div><b>${esc(x.time)}</b><br><span>${x.events_count || 0} items · ${x.sources_count || 0} sources · ${esc(x.duration || "—")}</span>${why}</div><span class="status ${x.success ? "ok" : "issue"}">${x.success ? "Complete" : "Failed"}</span></div>`;
+                })
                 .join("")
             : '<div class="empty">No collection history yet.</div>';
         }
@@ -1229,16 +1490,22 @@
             $("#log").textContent = "Could not load the run log.";
           }
         }
+        const SOCIAL_STATUSES = [
+          ["all", "All"],
+          ["needs_review", "Needs review"],
+          ["approved", "Approved"],
+          ["rejected", "Rejected"],
+        ];
         async function socialQueue() {
           let d;
           try {
             d = await get(API + "/admin/api/social/staged");
           } catch (e) {
             $("#social").innerHTML =
-              '<tr><td colspan="5" class="empty">Could not load social candidates.</td></tr>';
+              '<div class="empty">Could not load social candidates.</div>';
             return;
           }
-          let a = d.candidates || [];
+          S.social.items = d.candidates || [];
           $("#soc-total").textContent = d.total || 0;
           let g = d.found_via || {},
             m = Math.max(1, ...Object.values(g));
@@ -1251,14 +1518,83 @@
               )
               .join("") ||
             '<div class="empty">Nothing waiting for review.</div>';
+          socialOptions();
+          socialRender();
+        }
+        function socialOptions() {
+          const fill = (sel, values, chosen, allLabel) => {
+            $(sel).innerHTML = [
+              `<option value="all">${allLabel}</option>`,
+              ...values.map(
+                (v) =>
+                  `<option value="${esc(v)}"${v === chosen ? " selected" : ""}>${esc(v)}</option>`,
+              ),
+            ].join("");
+          };
+          const uniq = (field) =>
+            [
+              ...new Set(S.social.items.map((x) => x[field]).filter(Boolean)),
+            ].sort();
+          fill(
+            "#soc-platform",
+            uniq("platform"),
+            S.social.platform,
+            "All platforms",
+          );
+          fill(
+            "#soc-foundvia",
+            uniq("found_via"),
+            S.social.foundVia,
+            "All sources",
+          );
+          const counts = {};
+          S.social.items.forEach((x) => {
+            const k = x.status || "needs_review";
+            counts[k] = (counts[k] || 0) + 1;
+          });
+          $("#soc-status").innerHTML = SOCIAL_STATUSES.map(
+            ([value, label]) =>
+              `<button class="chip${S.social.status === value ? " active" : ""}" data-soc-status="${value}" aria-pressed="${S.social.status === value}">${label} <span class="count">${value === "all" ? S.social.items.length : counts[value] || 0}</span></button>`,
+          ).join("");
+        }
+        function socialFiltered() {
+          const f = S.social,
+            q = f.q.trim().toLowerCase();
+          return f.items.filter((x) => {
+            const status = x.status || "needs_review";
+            if (f.status !== "all" && status !== f.status) return false;
+            if (f.platform !== "all" && x.platform !== f.platform) return false;
+            if (f.foundVia !== "all" && x.found_via !== f.foundVia)
+              return false;
+            if (f.hasCaption && !String(x.caption || "").trim()) return false;
+            if (
+              q &&
+              ![x.caption, x.author, x.source_url]
+                .join(" ")
+                .toLowerCase()
+                .includes(q)
+            )
+              return false;
+            return true;
+          });
+        }
+        function socialRender() {
+          const list = socialFiltered(),
+            f = S.social;
+          f.page = Math.min(Math.max(1, f.page), pages(list.length, f.size));
+          const pager = pagerHtml(f.page, list.length, f.size),
+            start = (f.page - 1) * f.size;
+          $("#soc-pager-top").innerHTML = pager;
+          $("#soc-pager-bottom").innerHTML = pager;
           $("#social").innerHTML =
-            a
+            list
+              .slice(start, start + f.size)
               .map((x) => {
                 let u = esc(x.source_url);
-                return `<tr><td><div class="item-title">${esc(x.author || "Unknown account")}</div><div class="item-sub">${esc((x.caption || "No caption captured").slice(0, 180))}</div><a class="item-sub" href="${u}" target="_blank" rel="noopener">Original post ↗</a></td><td><span class="tag">${esc(x.platform || "social")}</span></td><td>${x.found_via ? esc(x.found_via) : '<span class="tag missing">Unattributed</span>'}</td><td>${esc(x.captured_at || "—")}</td><td class="item-sub">${esc(x.reason || "Not checked yet")}${x.hint ? `<br><em>Note tried: ${esc(x.hint)}</em>` : ""}</td><td><input type="text" class="hint-input" data-hint="${u}" placeholder="Add a date or venue, then resubmit" value="${esc(x.hint || "")}"/><div class="actions"><button class="button primary" data-approve="${u}">Approve</button> <button class="button secondary" data-reject="${u}">Reject</button></div></td></tr>`;
+                return `<article class="candidate"><div class="candidate-main"><div class="item-title">${esc(x.author || "Unknown account")}</div><div class="chips"><span class="tag">${esc(x.platform || "social")}</span>${x.found_via ? `<span class="tag">via ${esc(x.found_via)}</span>` : '<span class="tag missing">Unattributed</span>'}<span class="tag">${esc(stampUTC(x.captured_at))}</span><span class="tag">${esc((x.status || "needs_review").replace(/_/g, " "))}</span></div><p class="caption">${esc(x.caption || "No caption captured")}</p><p class="reason">${esc(x.reason || "Not checked yet")}${x.hint ? `<em>Note tried: ${esc(x.hint)}</em>` : ""}</p><a class="item-sub" href="${u}" target="_blank" rel="noopener">Original post ↗</a></div><div class="candidate-decision"><input type="text" class="hint-input" data-hint="${u}" placeholder="Add a date or venue, then resubmit" value="${esc(x.hint || "")}"/><div class="actions"><button class="button primary" data-approve="${u}">Approve</button><button class="button secondary" data-reject="${u}">Reject</button></div></div></article>`;
               })
               .join("") ||
-            '<tr><td colspan="6" class="empty">No social candidates are waiting for review.</td></tr>';
+            '<div class="empty">No social candidates match this view.</div>';
         }
         async function decide(url, action) {
           let b = [
@@ -1374,22 +1710,86 @@
         document
           .querySelectorAll("[data-view]")
           .forEach((x) =>
-            x.addEventListener("click", () => view(x.dataset.view)),
+            x.addEventListener(
+              "click",
+              () => (location.hash = "#" + x.dataset.view),
+            ),
           );
-        $("#search").addEventListener("input", events);
-        document.querySelectorAll(".chip").forEach((x) =>
+        const applyHash = () => {
+          const h = parseHash();
+          view(h.name, h.param);
+        };
+        addEventListener("hashchange", applyHash);
+        $("#search").addEventListener("input", () => {
+          S.contentPage = 1;
+          events();
+        });
+        document.querySelectorAll("#view-content .chip").forEach((x) =>
           x.addEventListener("click", () => {
             S.filter = x.dataset.filter;
             document
-              .querySelectorAll(".chip")
+              .querySelectorAll("#view-content .chip")
               .forEach((y) => {
                 const active = x === y;
                 y.classList.toggle("active", active);
                 y.setAttribute("aria-pressed", String(active));
               });
+            S.contentPage = 1;
             events();
           }),
         );
+        document.addEventListener("click", (ev) => {
+          const step = ev.target.closest("[data-page-step]");
+          if (step && !step.disabled) {
+            const social = step.closest("#view-social");
+            if (social) {
+              S.social.page += Number(step.dataset.pageStep);
+              socialRender();
+            } else {
+              S.contentPage += Number(step.dataset.pageStep);
+              events();
+            }
+            return;
+          }
+          const chip = ev.target.closest("[data-soc-status]");
+          if (chip) {
+            S.social.status = chip.dataset.socStatus;
+            S.social.page = 1;
+            socialOptions();
+            socialRender();
+          }
+        });
+        document.addEventListener("change", (ev) => {
+          const size = ev.target.closest("[data-page-size]");
+          if (!size) return;
+          if (size.closest("#view-social")) {
+            S.social.size = Number(size.value);
+            S.social.page = 1;
+            socialRender();
+          } else {
+            S.contentSize = Number(size.value);
+            S.contentPage = 1;
+            events();
+          }
+        });
+        $("#soc-search").addEventListener("input", (ev) => {
+          S.social.q = ev.target.value;
+          S.social.page = 1;
+          socialRender();
+        });
+        ["#soc-platform", "#soc-foundvia"].forEach((sel) =>
+          $(sel).addEventListener("change", (ev) => {
+            S.social[sel === "#soc-platform" ? "platform" : "foundVia"] =
+              ev.target.value;
+            S.social.page = 1;
+            socialRender();
+          }),
+        );
+        $("#soc-caption").addEventListener("change", (ev) => {
+          S.social.hasCaption = ev.target.checked;
+          S.social.page = 1;
+          socialRender();
+        });
         document
           .querySelectorAll(".run")
           .forEach((x) => x.addEventListener("click", run));
@@ -1402,8 +1802,8 @@
             ? decide(t.dataset.approve, "approve")
             : decide(t.dataset.reject, "reject");
         });
-        view("desk");
-        document.querySelectorAll(".chip").forEach((chip) =>
+        applyHash();
+        document.querySelectorAll("#view-content .chip").forEach((chip) =>
           chip.setAttribute(
             "aria-pressed",
             String(chip.classList.contains("active")),
