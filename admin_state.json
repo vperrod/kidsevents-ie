@@ -27,8 +27,15 @@
       "events_count": 126,
       "duration": "45s",
       "sources_count": 15
+    },
+    {
+      "time": "2026-09-12 16:38:06",
+      "success": false,
+      "events_count": 0,
+      "duration": "600s",
+      "sources_count": 22
     }
   ],
-  "last_run": "2026-09-12T10:36:21.765510",
-  "last_result": "OK \u2014 126 events in 45s"
+  "last_run": "2026-09-12T16:38:06.890245",
+  "last_result": "TIMEOUT after 600s"
 }

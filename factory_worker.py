@@ -79,6 +79,47 @@ def output_lock():
             _lock_state.fh.close()
             _lock_state.fh = None
 
+
+def write_json_atomic(path, obj):
+    """Write a JSON store so a crash mid-write can never leave a torn file:
+    full content to <path>.tmp in the same directory, fsync, then os.replace
+    (atomic within one filesystem). Every store in this project goes through
+    here -- truncate-in-place was one interrupted write away from losing the
+    whole dataset.
+    """
+    path = Path(path)
+    tmp = path.with_name(path.name + ".tmp")
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(obj, fh, indent=2, ensure_ascii=False)
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, path)
+
+
+def load_json_store(path, default):
+    """Load a JSON store, or raise.
+
+    A missing or blank file is legitimately `default`. A file with content in
+    it that will not parse is an error and must stop the caller: the old
+    behaviour (swallow the error, return []) turned one torn read into a write
+    that erased the real data.
+    """
+    path = Path(path)
+    if not path.exists():
+        return default
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as error:
+        log(f"{path.name}: cannot be read ({error}) — refusing to continue")
+        raise
+    if not text.strip():
+        return default
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as error:
+        log(f"{path.name}: has content but does not parse ({error}) — refusing to overwrite it")
+        raise
+
 # Hermes LLM. `nous` (hermes's default provider) has no credentials on this
 # VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
 # credentials in the pool) -- route through OpenRouter's free tier instead,
@@ -220,6 +261,9 @@ def enrich_event(raw_event, sources_markdown, budget):
         prompt += f"\\nSource page content:\\n<data>{sources_markdown[:MAX_PROMPT]}</data>\\n"
 
     prompt += f"""Reply ONLY a JSON object with these keys (omit a key when the source gives no evidence):
+"title": short synthesised event name, <= 80 characters — never the raw caption or a truncation of it,
+"country": "IE" if the event happens in the Republic of Ireland, "GB" for Northern Ireland or Britain, otherwise "other",
+"family_relevant": true only if children can attend and it is aimed at or welcoming to families — false for adult comedy, gigs, club nights, age-gated (16+/18+) events, trade or adult-only shopping events,
 "date": "YYYY-MM-DD" (or ""),
 "time": "HH:MM" (24h, or ""),
 "duration_hours": float (or 0),
@@ -274,27 +318,7 @@ def _src_gateway(query, limit, kind=None):
         return []
 
 
-def _src_schedulex(query, limit, kind=None):
-    """Pattern-scrape a generic site search for event URLs."""
-    urls, seen = [], set()
-    q = urllib.parse.quote(query)
-    try:
-        url = f"https://www.google.com/search?q={q}&num={limit * 5}"
-        req = urllib.request.Request(url, headers=SEARCH_UA)
-        with urllib.request.urlopen(req, timeout=20) as r:
-            html = r.read().decode("utf-8", errors="ignore")
-        # Extract URLs from Google results
-        for m in re.finditer(r'https?://[^\\s"<>&]+', html):
-            u = m.group(0).rstrip(")")
-            if u not in seen and not any(b in u.lower() for b in ("google.com", "bing.com", "search")):
-                seen.add(u)
-                urls.append({"url": u, "title": u.split("/")[-1].replace("-", " ").title(), "source": "google"})
-    except Exception:
-        pass
-    return urls[:limit]
-
-
-_DISCOVERY_SOURCES = [_src_gateway, _src_schedulex]
+_DISCOVERY_SOURCES = [_src_gateway]
 
 _JUNK_URL_RE = re.compile(r"[Ss]pecial:|[?&]search=|/search\\?|facebook.com/(login|recover)")
 
@@ -523,10 +547,7 @@ def _norm_jsonld_event(o, today, horizon):
 
 def _load_city_sources():
     """Load curated sources.json (like WanderTold)."""
-    try:
-        return json.loads(SOURCES_FILE.read_text())
-    except (OSError, json.JSONDecodeError):
-        return {}
+    return load_json_store(SOURCES_FILE, {})
 
 
 CITY_SOURCES = _load_city_sources()
@@ -555,7 +576,8 @@ def discover_events(city, query, limit=20):
     discovered = _discover_urls(query, limit=limit)
 
     # 2. Curated city sources (from sources.json)
-    curated = _crawl_city_sources(city, ("tourism", "timeout", "eventbrite", "familyfriendly", "yourdaysout")) or []
+    curated = _crawl_city_sources(
+        city, ("tourism", "timeout", "familyfriendly", "yourdaysout", "listings")) or []
 
     # 3. Crawl discovered URLs
     crawled = _crawl_pages(discovered, limit, skip_chrome_filter=False) or []
@@ -576,7 +598,31 @@ def discover_events(city, query, limit=20):
 # Public event contract (see EVENT_DATA_CONTRACT.md / deduplicator.to_dict)
 # ---------------------------------------------------------------------------
 
-_CONFIDENCE_SCORES = {"high": 0.8, "medium": 0.6, "low": 0.4}
+MAX_TITLE_CHARS = 120
+EVENT_HORIZON_DAYS = 60
+
+
+def date_window_reason(event, today, horizon):
+    """Why this event's date puts it outside the publishable window, or None.
+
+    This is the `today <= date <= horizon` check the JSON-LD path already
+    applied; the LLM path had none, which is how a pop-up that ended the day
+    before went on air.
+    """
+    start_str = (event.get("start_date") or "")[:10]
+    if not start_str:
+        return "no usable date was found"
+    end_str = (event.get("end_date") or start_str)[:10]
+    try:
+        start = date.fromisoformat(start_str)
+        end = date.fromisoformat(end_str)
+    except ValueError:
+        return f"date {start_str!r} is not a usable YYYY-MM-DD date"
+    if end < today:
+        return f"the event is already over (ended {end.isoformat()})"
+    if start > horizon:
+        return f"starts {start.isoformat()}, beyond the {(horizon - today).days}-day horizon"
+    return None
 
 
 def event_key(event):
@@ -588,27 +634,105 @@ def event_key(event):
     ]).lower()
 
 
-def publish_event(event):
+def _title_is_caption(title, caption):
+    """True when the "title" is just the source caption, or the front of it.
+
+    The 2026-09-12 auto-approve published an adult vintage pop-up with the raw
+    truncated caption as its title -- `caption[:120]` is a literal prefix of
+    the caption, which is exactly what this catches.
+    """
+    t = " ".join((title or "").split()).lower()
+    c = " ".join((caption or "").split()).lower()
+    if not t or not c:
+        return False
+    return t == c or (len(t) >= 20 and c.startswith(t))
+
+
+def _title_reject_reason(record, caption=""):
+    title = (record.get("title") or "").strip()
+    if not title:
+        return "no title"
+    if len(title) > MAX_TITLE_CHARS:
+        return f"title is {len(title)} characters (max {MAX_TITLE_CHARS})"
+    if _title_is_caption(title, caption):
+        return "title is the raw caption, not a synthesised title"
+    return None
+
+
+def event_reject_reason(event, caption=""):
+    """Why this normalized event must not be published, or None if it may be.
+
+    `caption` is the social post text the record came from, when there is one;
+    the title/caption check is a no-op without it.
+    """
+    country = (event.get("country") or "").strip()
+    if country != "IE":
+        return f"country is {country or 'unknown'}, not IE"
+    if event.get("family_relevant") is False:
+        return "not family-relevant"
+    reason = _title_reject_reason(event, caption)
+    if reason:
+        return reason
+    if not (event.get("start_date") or "").strip():
+        return "no start_date"
+    return None
+
+
+def place_reject_reason(place, caption=""):
+    """Why this place must not be published, or None if it may be."""
+    country = (place.get("country") or "").strip()
+    if country != "IE":
+        return f"country is {country or 'unknown'}, not IE"
+    if place.get("family_relevant") is False:
+        return "not family-relevant"
+    return _title_reject_reason(place, caption)
+
+
+def publish_event(event, caption=""):
     """Append a normalized event to events_output.json, deduped by event_key.
 
-    Returns True if it was new (actually written), False if a matching event
-    already existed. Shared by the admin approve route and auto-promotion so
-    both publish through the exact same path.
+    Returns True if it was new (actually written), False if it was rejected by
+    the quality gate or a matching event already existed. Shared by the admin
+    approve route, auto-promotion and the discovery cycle so everything
+    publishes through the exact same gate.
     """
+    reason = event_reject_reason(event, caption)
+    if reason:
+        log(f"rejected event {event.get('title', '')[:60]!r}: {reason}")
+        return False
     with output_lock():
-        events = []
-        if OUTPUT_FILE.exists():
-            try:
-                events = json.loads(OUTPUT_FILE.read_text())
-            except (OSError, json.JSONDecodeError):
-                events = []
+        events = load_json_store(OUTPUT_FILE, [])
         key = event_key(event)
         if any(event_key(e) == key for e in events):
             return False
         events.append(event)
         events.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
-        OUTPUT_FILE.write_text(json.dumps(events, indent=2, ensure_ascii=False))
+        write_json_atomic(OUTPUT_FILE, events)
     return True
+
+
+def prune_past_events():
+    """Drop published events that are over: end_date, or start_date when there
+    is no end_date, earlier than today UTC. A record with neither date can
+    never be shown on a calendar and is dropped with them (the gate refuses to
+    publish undated events at all now). Returns the number removed.
+    """
+    today = datetime.now(timezone.utc).date().isoformat()
+    with output_lock():
+        events = load_json_store(OUTPUT_FILE, [])
+        kept, past, undated = [], 0, 0
+        for event in events:
+            when = (event.get("end_date") or event.get("start_date") or "").strip()
+            if not when:
+                undated += 1
+            elif when < today:
+                past += 1
+            else:
+                kept.append(event)
+        if past or undated:
+            write_json_atomic(OUTPUT_FILE, kept)
+    log(f"prune_past_events: dropped {past} past + {undated} undated, {len(kept)} remain")
+    return past + undated
 
 
 # Republic of Ireland county codes as used by allevents.in's schema.org
@@ -643,12 +767,57 @@ def normalize_location(city, county):
     return city, county
 
 
+_COUNTRY_ALIASES = {
+    "ie": "IE", "ireland": "IE", "republic of ireland": "IE", "eire": "IE", "éire": "IE",
+    "gb": "GB", "uk": "GB", "united kingdom": "GB", "great britain": "GB",
+    "northern ireland": "GB", "england": "GB", "scotland": "GB", "wales": "GB",
+}
+
+
+def normalize_country(value):
+    """Fold whatever a source called the country onto IE / GB / other.
+
+    Published records carried three spellings of the same country ("IE",
+    "Ireland") plus raw "GB", so a country gate could not be written against
+    them until they all mean one thing.
+    """
+    raw = str(value or "").strip()
+    if not raw:
+        return "IE"
+    return _COUNTRY_ALIASES.get(raw.lower(), "other")
+
+
+def completeness(record):
+    """Fraction 0-1 of the fields a parent actually needs that are filled in.
+
+    This replaces the model's own confidence self-report, which was a constant
+    ("high" for every web-extracted event) and told nobody anything.
+    """
+    checks = (
+        bool(record.get("start_date")),
+        bool(record.get("venue_name")),
+        bool(record.get("city")),
+        bool(record.get("county")),
+        bool(record.get("latitude")) and bool(record.get("longitude")),
+        bool(record.get("cost")),
+        bool(record.get("age_group")),
+        bool(record.get("category")),
+        len(record.get("description") or "") >= 120,
+        bool(record.get("website")),
+    )
+    return round(sum(checks) / len(checks), 2)
+
+
 def normalize_event(raw):
     """Map a factory event onto the published contract shape.
 
     Handles both raw shapes that reach events_output.json: the LLM-enriched one
     (date / venue_coords / cost_detail) and the JSON-LD one (start / end /
     venue / price). Missing values stay empty — never guessed.
+
+    Every field the enrichment prompt asks for is kept here. Dropping them was
+    the actual reason the published feed showed 0% category and near-0% cost
+    and age: the model answered, and this function threw the answers away.
     """
     city, county = normalize_location(raw.get("city", ""), raw.get("county", ""))
     coords = raw.get("venue_coords") or []
@@ -656,29 +825,44 @@ def normalize_event(raw):
     lon = coords[1] if len(coords) > 1 else None
     start_date = raw.get("start_date") or raw.get("date") or raw.get("start") or ""
     url = raw.get("url") or raw.get("website") or ""
-    confidence = raw.get("confidence", "")
-    if isinstance(confidence, str):
-        confidence = _CONFIDENCE_SCORES.get(confidence.lower(), 0.5)
-    return {
+    try:
+        duration_hours = float(raw.get("duration_hours") or 0)
+    except (TypeError, ValueError):
+        duration_hours = 0.0
+    event = {
         "title": raw.get("title", ""),
         "description": raw.get("description", ""),
         "start_date": start_date,
         "end_date": raw.get("end_date") or raw.get("end") or start_date,
+        "time": raw.get("time", ""),
+        "duration_hours": duration_hours,
         "venue_name": raw.get("venue_name") or raw.get("venue") or "",
         "venue_address": raw.get("venue_address", ""),
         "city": city,
         "county": county,
-        "country": raw.get("country", "IE"),
+        "country": normalize_country(raw.get("country")),
+        "family_relevant": raw.get("family_relevant", True),
         "latitude": "" if lat is None else str(lat),
         "longitude": "" if lon is None else str(lon),
         "url": url,
+        "website": raw.get("website", ""),
+        "image_url": raw.get("image_url", ""),
+        "image_alt": raw.get("image_alt", ""),
         "cost": raw.get("cost") or raw.get("cost_detail") or raw.get("price") or "",
+        "cost_detail": raw.get("cost_detail") or raw.get("price") or "",
         "age_group": raw.get("age_group", ""),
+        "category": raw.get("category", ""),
+        "suitable_for": raw.get("suitable_for", ""),
+        "booking_required": raw.get("booking_required", ""),
+        "booking_url": raw.get("booking_url", ""),
+        "phone": raw.get("phone", ""),
+        "contact_email": raw.get("contact_email", ""),
         "source": raw.get("source", ""),
-        "confidence": round(float(confidence), 2),
         "all_sources": raw.get("all_sources", []),
         "all_urls": raw.get("all_urls") or ([url] if url else []),
     }
+    event["confidence"] = completeness(event)
+    return event
 
 
 def extract_place(caption, source_url, platform, author=""):
@@ -707,7 +891,9 @@ def extract_place(caption, source_url, platform, author=""):
         'If it is NOT a real identifiable evergreen place, reply exactly: {"is_place": false}\n\n'
         "If it IS, reply ONLY a JSON object:\n"
         '{"is_place": true,\n'
-        '"title": string,\n'
+        '"title": short synthesised place name, <= 80 characters — never the raw caption or a truncation of it,\n'
+        '"country": "IE" if it is in the Republic of Ireland, "GB" for Northern Ireland or Britain, otherwise "other",\n'
+        '"family_relevant": true only if children are welcome and it is somewhere a family would actually bring kids — false for adult-only venues, bars, nightlife or age-gated attractions,\n'
         '"description": "concise, <= 300 words",\n'
         '"region": "Leinster|Munster|Connacht|Ulster" or "",\n'
         '"county": string or "",\n'
@@ -727,6 +913,8 @@ def extract_place(caption, source_url, platform, author=""):
         "region": obj.get("region", "") or "",
         "county": obj.get("county", "") or "",
         "location": obj.get("location", "") or "",
+        "country": normalize_country(obj.get("country")),
+        "family_relevant": obj.get("family_relevant", True),
         "latitude": None,
         "longitude": None,
         "category": obj.get("category", "") or "",
@@ -738,23 +926,23 @@ def extract_place(caption, source_url, platform, author=""):
     }
 
 
-def publish_place(place):
+def publish_place(place, caption=""):
     """Append a place to places_output.json (year-round local activities/
     venues -- its own section, separate from the curated Holidays
-    destinations), deduped by title+location. Returns True if newly written.
+    destinations), deduped by title+location. Returns True if newly written,
+    False if the quality gate rejected it or it was already there.
     """
+    reason = place_reject_reason(place, caption)
+    if reason:
+        log(f"rejected place {place.get('title', '')[:60]!r}: {reason}")
+        return False
     with output_lock():
-        places = []
-        if PLACES_FILE.exists():
-            try:
-                places = json.loads(PLACES_FILE.read_text())
-            except (OSError, json.JSONDecodeError):
-                places = []
+        places = load_json_store(PLACES_FILE, [])
         key = (place.get("title", "").lower(), place.get("location", "").lower())
         if any((p.get("title", "").lower(), p.get("location", "").lower()) == key for p in places):
             return False
         places.append(place)
-        PLACES_FILE.write_text(json.dumps(places, indent=2, ensure_ascii=False))
+        write_json_atomic(PLACES_FILE, places)
     return True
 
 
@@ -777,6 +965,8 @@ def promote_candidate(candidate, hint=""):
         caption = f"{caption}\n\nAdditional context from a curator: {hint}".strip()
     source_url = candidate.get("source_url", "")
     platform = candidate.get("platform", "social")
+    today = date.today()
+    horizon = today + timedelta(days=EVENT_HORIZON_DAYS)
     enriched, _model = enrich_event(
         {"title": caption[:120], "url": source_url, "source": platform},
         caption,
@@ -791,11 +981,20 @@ def promote_candidate(candidate, hint=""):
         enriched["source"] = f"{platform}:{source_url[:100]}"
         enriched["all_sources"] = [source_url]
         enriched["all_urls"] = [source_url] + ([website] if website else [])
-        enriched["confidence"] = "medium"
-        return "event", normalize_event(enriched), None
+        record = normalize_event(enriched)
+        window = date_window_reason(record, today, horizon)
+        if window:
+            return None, None, window
+        gate = event_reject_reason(record, caption)
+        if gate:
+            return None, None, gate
+        return "event", record, None
 
     place = extract_place(caption, source_url, platform, candidate.get("author", ""))
     if place:
+        gate = place_reject_reason(place, caption)
+        if gate:
+            return None, None, gate
         return "place", place, None
 
     if not (candidate.get("caption") or "").strip() and not hint:
@@ -830,7 +1029,7 @@ def extract_events_from_pages(pages, city, today, horizon):
         enriched, _model = enrich_event(raw_event, page["markdown"], {"llm": 1})
         if enriched and enriched.get("date"):
             website = enriched.get("website", "")
-            events.append(normalize_event({
+            event = normalize_event({
                 **enriched,
                 "title": enriched.get("title") or raw_event["title"],
                 "city": enriched.get("city") or city,
@@ -838,27 +1037,31 @@ def extract_events_from_pages(pages, city, today, horizon):
                 "source": raw_event["source"],
                 "all_sources": [page["url"]],
                 "all_urls": [page["url"]] + ([website] if website else []),
-                "confidence": "high",
-            }))
+            })
+            # Same window the JSON-LD branch above already enforces.
+            window = date_window_reason(event, today, horizon)
+            if window:
+                log(f"rejected event {event.get('title', '')[:60]!r}: {window}")
+                continue
+            events.append(event)
 
     return events
 
 
 def load_state():
-    if STATE_FILE.exists():
-        return json.loads(STATE_FILE.read_text())
-    return {"fails": {}, "last_run": None, "sources_hit": {}}
+    return load_json_store(STATE_FILE, {"fails": {}, "last_run": None, "sources_hit": {}})
 
 
 def save_state(state):
-    STATE_FILE.write_text(json.dumps(state, indent=2))
+    write_json_atomic(STATE_FILE, state)
 
 
 def run_discovery_cycle():
     """Main factory cycle — discover, extract, enrich, write staged events."""
     state = load_state()
+    prune_past_events()
     today = date.today()
-    horizon = today + timedelta(days=60)  # 60-day lookahead
+    horizon = today + timedelta(days=EVENT_HORIZON_DAYS)
 
     # Target cities (from env or default to Irish cities)
     target_cities = ENV.get("TARGET_CITIES", "dublin,cork,galway,waterford,limerick").split(",")
@@ -892,34 +1095,21 @@ def run_discovery_cycle():
                 seen.add(key)
                 all_events.append(ev)
 
-    # Merge with existing staged events. Locked: this is exactly the read-
-    # modify-write another process (an approve/auto-approve publish_event
-    # call) could interleave with -- confirmed live 2026-09-12, a stale read
-    # here silently dropped events a concurrent sweep had just added.
+    # Publish through publish_event so discovery passes the same quality gate
+    # as the admin approve route. Holding the lock across the loop keeps the
+    # read-modify-write atomic against a concurrent approve/sweep -- confirmed
+    # live 2026-09-12, a stale read here silently dropped events a concurrent
+    # sweep had just added.
     with output_lock():
-        existing = []
-        if OUTPUT_FILE.exists():
-            try:
-                existing = json.loads(OUTPUT_FILE.read_text())
-            except (json.JSONDecodeError, ValueError):
-                pass
-
-        # Deduplicate against existing
-        existing_keys = {event_key(ev) for ev in existing}
-        new_events = [ev for ev in all_events if event_key(ev) not in existing_keys]
-
-        # Merge and write
-        existing.extend(new_events)
-        existing.sort(key=lambda e: (e.get("start_date", ""), -len(e.get("all_sources", []))))
-
-        OUTPUT_FILE.write_text(json.dumps(existing, indent=2, ensure_ascii=False))
-    log(f"Total events: {len(existing)} ({len(new_events)} new)")
+        published = sum(1 for ev in all_events if publish_event(ev))
+        total = len(load_json_store(OUTPUT_FILE, []))
+    log(f"Total events: {total} ({published} new)")
 
     state["last_run"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    state["total_events"] = len(existing)
+    state["total_events"] = total
     save_state(state)
 
-    return len(new_events)
+    return published
 
 
 def _web_block(pages):

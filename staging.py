@@ -43,15 +43,12 @@ REVIEW_NOTE = (
 
 
 def load_staged():
-    try:
-        return json.loads(STAGED_FILE.read_text()) if STAGED_FILE.exists() else []
-    except json.JSONDecodeError:
-        return []
+    return factory_worker.load_json_store(STAGED_FILE, [])
 
 
 def save_staged(candidates):
     STAGED_FILE.parent.mkdir(exist_ok=True)
-    STAGED_FILE.write_text(json.dumps(candidates, indent=2, ensure_ascii=False) + "\n")
+    factory_worker.write_json_atomic(STAGED_FILE, candidates)
 
 
 def mark_candidate(source_url, mutate_fn):
@@ -145,6 +142,11 @@ def sweep_pending():
     stale in-memory copy -- and logs progress since a backlog can be hundreds
     deep and each item costs a real LLM call. Returns (checked, approved)."""
     pending_urls = [c["source_url"] for c in load_staged() if c.get("status") == "needs_review"]
+    # SWEEP_LIMIT caps one run -- a 600-deep backlog is hours of real LLM calls,
+    # and a short sweep is how you check the gate before spending them.
+    limit = int(os.environ.get("SWEEP_LIMIT", "0") or 0)
+    if limit > 0:
+        pending_urls = pending_urls[:limit]
     approved = 0
     for i, url in enumerate(pending_urls, 1):
         ok = try_approve_by_url(url)

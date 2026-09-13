@@ -2,33 +2,41 @@
   "dublin": {
     "tourism": "https://www.visitdublin.com/events/",
     "timeout": "https://www.timeout.com/dublin/things-to-do",
-    "facebook_groups": "https://www.facebook.com/groups/dublinfamilyfun/",
-    "eventbrite": "https://www.eventbrite.ie/d/ireland--dublin/free-kids-events/",
-    "songkick": "https://www.songkick.com/metro/dublin",
     "familyfriendly": "https://www.familyfun.ie/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-dublin-ireland/"
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-dublin-ireland/",
+    "listings": [
+      "https://www.familyfun.ie/family-event-calendar/",
+      "https://www.familyfun.ie/kids-events-on-now/",
+      "https://dublin.ie/whats-on/",
+      "https://www.dublincity.ie/events/library-events-children"
+    ]
   },
   "cork": {
-    "tourism": "https://www.visitcork.com/events/",
-    "facebook_groups": "https://www.facebook.com/groups/corkfamilyevents/",
-    "eventbrite": "https://www.eventbrite.ie/d/ireland--cork/free-kids-events/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-cork-ireland/"
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-cork-ireland/",
+    "listings": [
+      "https://www.purecork.ie/whats-on",
+      "https://www.corkcity.ie/en/things-to-do/festivals-events/"
+    ]
   },
   "galway": {
     "tourism": "https://www.visitgalway.ie/events/",
-    "facebook_groups": "https://www.facebook.com/groups/galwayfamily/",
-    "eventbrite": "https://www.eventbrite.ie/d/ireland--galway/free-kids-events/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-galway-ireland/"
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-galway-ireland/",
+    "listings": [
+      "https://thisisgalway.ie/events/"
+    ]
   },
   "waterford": {
     "tourism": "https://www.waterford.org/events/",
-    "facebook_groups": "https://www.facebook.com/groups/waterfordfamilyevents/",
-    "eventbrite": "https://www.eventbrite.ie/d/ireland--waterford/free-kids-events/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-waterford-ireland/"
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-waterford-ireland/",
+    "listings": [
+      "https://visitwaterford.com/our-events"
+    ]
   },
   "limerick": {
     "tourism": "https://www.limerick.ie/discover/eat-see-do/family-fun",
-    "eventbrite": "https://www.eventbrite.ie/d/ireland--limerick/free-kids-events/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-limerick-ireland/"
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-limerick-ireland/",
+    "listings": [
+      "https://www.limerick.ie/discover/whats-on"
+    ]
   }
 }

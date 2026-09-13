@@ -1,281 +1,139 @@
-# Kids Events Ireland
+# Small Days (kidsevents-ie)
 
-Aggregator for kids/family events across Ireland. Scrapes multiple sources, deduplicates, and outputs a unified event feed.
+Aggregator for kids/family events, places and holiday ideas across Ireland.
+Discovers listing pages, extracts structured records, gates them for quality,
+and serves the result as JSON to the public site and the admin portal.
 
-## Data Sources
+Live at: https://claude-dev-vperrod.westeurope.cloudapp.azure.com/kidsevents/
 
-| Source | Tier | Auth Required | Scraped via | Notes |
-|--------|------|---------------|-------------|-------|
-| YourDaysOut.ie | 1 | No | `requests` + JSON-LD | 100+ events, high quality |
-| AllEvents.in | 1 | No | `requests` + JSON-LD | 15+ events, patchy coverage |
-| FamilyFun.ie | 1 | No | `requests` + WP REST API | 100+ events, WordPress JSON-LD |
-| IrelandMe.com | 1 | No | `requests` + HTML parsing | 2000+ events (filtered to ~50-100 family-relevant) |
-| The Ark | 1 | No | `requests` + HTML parsing | Dublin children's cultural centre |
-| Limerick.ie | 1 | No | `requests` + HTML parsing | City council events |
-| Facebook Groups (Dublin) | 2 | No | Playwright | 2 Dublin family groups |
-| Facebook Groups (Extended) | 2 | No | Playwright | Limerick + extended groups |
-| DublinFamilyFun.ie | 2 | No | Playwright + JSON-LD | Next.js SPA with schema.org/Event |
-| TotsSpots.com | 2 | No | Playwright + HTML | Ireland's largest kids classes directory |
-| Meetup.com | 2 | No | Playwright + HTML | Public events across 5 cities |
-| Eventbrite.ie | — | Yes (OAuth) | Blocked | Cloudflare bot protection blocks scraping; API requires OAuth2 |
-| Instagram | 3 | Yes (sessionid) | `instagrapi` library | **Requires residential IP** — see setup below |
-| Reddit | — | No | Playwright + PRAW | Community-shared events (not implemented yet) |
+## Pipeline
 
-## Quick Start
+Three modules, nothing else:
 
-```bash
-# Clone
-git clone https://github.com/vperrod/kidsevents-ie.git
-cd kidsevents-ie
+| Module | Role |
+|---|---|
+| `factory_worker.py` | The factory. One cycle per run: prune events that are over → discover URLs (local search gateway + the curated deep listing pages in `sources.json`) → crawl with crawl4AI → extract (schema.org `Event` JSON-LD first, Hermes LLM for free-text pages) → normalise → publish through the quality gate. Run hourly by `kidsevents-factory.timer`. |
+| `staging.py` | The staging desk for social candidates collected by the mini PC crew. Appends them to `staged/social_candidates.json` and, with `AUTO_APPROVE=on` (the default), runs each through the same gate immediately. Anything that does not clear it stays `needs_review` with a stored `reason`. |
+| `server.py` | Flask on `127.0.0.1:8128` (user unit `kidsevents-ie.service`): the public `/api/events`, `/api/places`, `/api/holidays` feeds, the member save API, and the `/admin` portal with its `/admin/api/*` routes. |
 
-# Python environment
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Install Playwright browser (for Tier 2 scrapers)
-playwright install chromium
-
-# Run Tier 1 only (fast, no Playwright needed)
-python3 main.py --tiers 1
-
-# Run Tier 1 + 2 (includes Facebook, DublinFamilyFun, TotsSpots, Meetup)
-python3 main.py --tiers "1,2" --limit 20
-
-# Run with Instagram (requires sessionid — see below)
-export INSTAGRAM_SESSIONID="your_sessionid_cookie_here"
-python3 main.py --tiers "1,2,3" --limit 20
+```
+kidsevents-factory.timer (hourly) → factory_worker.run_discovery_cycle()
+mini PC social crew (ssh)         → staging.py append → factory_worker.promote_candidate()
+                                       ↓ quality gate ↓
+        events_output.json · places_output.json · holidays_output.json
+                                       ↓
+                              server.py → web/ + /admin
 ```
 
-## Tier Structure
+### Quality gate
 
-- **Tier 1 (fast)**: No browser needed. Uses `requests` + HTML/JSON-LD parsing. Runs in 5-10 seconds.
-  - YourDaysOut.ie — JSON-LD schema.org/Event
-  - AllEvents.in — JSON-LD schema.org/Event  
-  - FamilyFun.ie — WordPress REST API + JSON-LD
-  - IrelandMe.com — HTML table/list parsing
-  - The Ark — HTML h3 heading parsing
-  - Limerick.ie — LocalGov Drupal article parsing
+Nothing is written to a catalogue without passing `event_reject_reason()` /
+`place_reject_reason()`, and every rejection is logged with its reason:
 
-- **Tier 2 (Playwright)**: Requires chromium browser. Runs in 30-120 seconds.
-  - Facebook Groups — visible text extraction from group `/events/` pages
-  - Extended Facebook — Limerick regional groups
-  - DublinFamilyFun.ie — Next.js SPA, extracts JSON-LD blocks
-  - TotsSpots.com — listing cards parsed from town/county pages
-  - Meetup.com — public event search results across 5 cities
+- `country` must be `IE` (Northern Ireland and Britain fold to `GB`, everything else to `other`)
+- `family_relevant` must not be false
+- the title must exist, be at most 120 characters, and must not be the source caption or the front of it
+- an event must have a `start_date`, and it must fall inside `today … today + 60 days`
 
-- **Tier 3 (Instagram)**: Requires Instagram sessionid cookie + residential IP.
-  - Uses `instagrapi` library (private API)
-  - Blocked from cloud/datacenter IPs
+`confidence` is not a model self-report: it is the fraction of ten fields a
+parent actually needs (`start_date`, `venue_name`, `city`, `county`,
+lat/lon, `cost`, `age_group`, `category`, a description of at least 120
+characters, `website`) that are filled in.
 
-## Instagram Setup — IMPORTANT
+### Storage
 
-Instagram blocks all public/no-auth scraping. You must provide your Instagram session cookie.
+Every JSON store is written with `write_json_atomic()` (temp file in the same
+directory, fsync, `os.replace`) and read with `load_json_store()`, which
+returns the default only for a missing or blank file — a file with content in
+it that will not parse raises rather than reporting an empty catalogue.
+`output_lock()` (re-entrant per thread) serialises every read-modify-write
+across the factory timer, the admin approve route and the sweep.
 
-**⚠️ Instagram's API blocks requests from datacenter/cloud IPs. The sessionid must be used from a residential IP address. If you run this from a server (VPS, cloud VM, etc.), you will get `403 Forbidden` or `login_required` errors.**
-
-### Option A: Run locally on your home machine (recommended)
-
-This is the simplest approach — run the scraper from your residential IP where the sessionid works:
-
-1. Clone this repo on your personal computer
-2. Get your Instagram sessionid:
-   - Log into instagram.com in your browser
-   - Open DevTools → Application → Cookies → https://www.instagram.com
-   - Copy the value of the `sessionid` cookie
-3. Set the environment variable and run:
+## Running it
 
 ```bash
-export INSTAGRAM_SESSIONID="your_sessionid_cookie_here"
-python3 main.py --tiers "1,2,3" --limit 20
-```
-
-4. Transfer the output file to your server:
-
-```bash
-scp events_output.json user@your-server:/path/to/deployment/events_output.json
-```
-
-### Option B: Use a residential proxy on the server
-
-If you need to run the scraper on a server (e.g., a cron job), you must route through a residential proxy:
-
-```bash
-# Set an HTTP residential proxy
-export INSTAGRAM_PROXY="http://username:password@proxy-host:port"
-
-# Or set a SOCKS5 proxy
-export INSTAGRAM_PROXY="socks5://username:password@proxy-host:port"
-```
-
-Residential proxy providers that work with Instagram:
-- BrightData (~$30/month for small usage)
-- ScraperAPI (~$29/month)
-- Oxylabs (~$30+/month)
-
-## Deployment
-
-### On a server (VM, VPS, etc.)
-
-```bash
-# Clone and set up
-git clone https://github.com/vperrod/kidsevents-ie.git
-cd kidsevents-ie
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
 
-# Run Tier 1+2 (works from any IP)
-python3 main.py --tiers "1,2" --limit 20
+venv/bin/python3 factory_worker.py            # one discovery cycle, all cities
+TARGET_CITIES=galway venv/bin/python3 factory_worker.py   # one city
 
-# Serve the web frontend
-python3 server.py  # Flask on port 8128
+venv/bin/python3 staging.py sweep             # classify the needs_review backlog
+SWEEP_LIMIT=5 venv/bin/python3 staging.py sweep           # …just the first 5
+
+venv/bin/python3 server.py                    # Flask on 127.0.0.1:8128
+venv/bin/python3 -m pytest -q                 # tests (no network, no LLM)
 ```
 
-The scraper will skip Tier 3 (Instagram) automatically if `INSTAGRAM_SESSIONID` is not set.
+Useful environment (from `.env` or the systemd unit): `TARGET_CITIES`,
+`MAX_LLM_PER_CYCLE`, `CRAWL_WALL_SECS`, `DISCOVER_WAIT_SECS`, `SEARCHGW_BASE`,
+`AUTO_APPROVE`, `SWEEP_LIMIT`, `HERMES_PROVIDER`, `HERMES_MODEL`.
 
-### Cron job (server)
+## Output format
 
-```bash
-# Runs every 4 hours — Tier 1+2 only (Instagram requires residential IP)
-0 */4 * * * cd /home/azureuser/kidsevents-ie && source venv/bin/activate && python3 main.py --tiers "1,2" --limit 20
-```
-
-### Local workflow for Instagram
-
-On your home machine:
-
-```bash
-# Run with Instagram enabled (residential IP)
-export INSTAGRAM_SESSIONID="..."
-python3 main.py --tiers "1,2,3" --limit 20
-
-# Sync results to server
-rsync -avz events_output.json server:/home/azureuser/kidsevents-ie/events_output.json
-```
-
-## Running the Scraper
-
-```bash
-# Quick run (Tier 1 only, no auth needed)
-./run_pipeline.sh
-
-# Or run manually
-python3 main.py --tiers "1,2" --limit 15
-```
-
-## Testing Individual Sources
-
-```bash
-# Test a specific scraper
-python3 scrapers.py yourdaysout    # Tier 1a
-python3 scrapers.py allevents     # Tier 1b
-python3 scrapers.py familyfun     # Tier 1c
-python3 scrapers.py irelandme     # Tier 1d
-python3 scrapers.py ark           # Tier 1e
-python3 scrapers.py limerick      # Tier 1f
-python3 scrapers.py all           # All Tier 1 sources
-
-# Test Playwright scrapers
-python3 dublinfamilyfun_scraper.py
-python3 totsspots_scraper.py
-python3 meetup_scraper.py
-```
-
-## Output Format
-
-Events are saved to `events_output.json` with this schema:
+`events_output.json` is a list of records shaped like this:
 
 ```json
 {
-  "title": "Halloween Kids Disco",
+  "title": "Toddler Storytime at Pearse Street Library",
   "description": "...",
-  "start_date": "2025-10-30",
-  "end_date": "",
-  "venue_name": "Community Center",
-  "venue_address": "Main Street, Baldoyle",
+  "start_date": "2026-09-20",
+  "end_date": "2026-09-20",
+  "time": "10:30",
+  "duration_hours": 1.0,
+  "venue_name": "Pearse Street Library",
+  "venue_address": "138-144 Pearse St, Dublin 2",
   "city": "Dublin",
-  "county": "County Dublin",
-  "country": "Ireland",
-  "latitude": "53.384537",
-  "longitude": "-6.401467",
+  "county": "Dublin",
+  "country": "IE",
+  "family_relevant": true,
+  "latitude": "53.3441",
+  "longitude": "-6.2527",
   "url": "https://...",
-  "cost": "€5 per child",
-  "age_group": "Ages 2-10",
-  "source": "instagram:kidseventsireland:...",
-  "confidence": 0.5,
-  "all_sources": ["instagram"],
-  "all_urls": ["https://..."]
+  "website": "https://...",
+  "image_url": "https://...",
+  "image_alt": "...",
+  "cost": "free",
+  "cost_detail": "Free, no booking needed",
+  "age_group": "toddler",
+  "category": "workshop",
+  "suitable_for": "pushchair_accessible",
+  "booking_required": "none",
+  "booking_url": "",
+  "phone": "+353 1 222 8488",
+  "contact_email": "libraries@dublincity.ie",
+  "source": "web:https://...",
+  "all_sources": ["https://..."],
+  "all_urls": ["https://..."],
+  "confidence": 0.9
 }
 ```
 
-## Deduplication
+See `EVENT_DATA_CONTRACT.md` for what the public site must show for every
+event, and `DESIGN.md` for the front-end.
 
-Events from different sources are matched by:
-1. Same URL (exact duplicate)
-2. Title similarity > 0.8 + dates within 3 days
-3. Same title + same location (city/county)
-4. Same date + geo proximity (<5km) + title similarity > 0.5
+## Sources
 
-Confidence scoring: YourDaysOut=1.0, AllEvents=0.9, FamilyFun=0.8, IrelandMe=0.7, The Ark=0.8, Limerick.ie=0.7, Facebook=0.5, DublinFamilyFun=0.7, TotsSpots=0.7, Meetup=0.6, Instagram=0.3
+`sources.json` holds the curated deep listing URLs per city, by category
+(`tourism`, `timeout`, `familyfriendly`, `yourdaysout`, `listings`). Only
+categories listed in `discover_events()` are crawled. Entries that go dead or
+start blocking get removed rather than retried — Eventbrite (405), Songkick,
+Facebook groups (login wall) and `visitcork.com` (broken certificate) are all
+out for that reason.
 
-## Architecture
-
-```
-cron (every 4 hours) → main.py →
-  Tier 1 (5-10s):
-    YourDaysOut     → requests + JSON-LD → ~25 events
-    AllEvents.in    → requests + JSON-LD → ~15 events
-    FamilyFun.ie    → WP REST API + JSON-LD → ~100 events
-    IrelandMe.com   → requests + HTML → ~50-100 events
-    The Ark         → requests + HTML → ~14 events
-    Limerick.ie     → requests + HTML → ~5-10 events
-
-  Tier 2 (30-120s, requires chromium):
-    Facebook Groups → Playwright → ~40 events
-    DublinFamilyFun → Playwright + JSON-LD → ~20 events
-    TotsSpots       → Playwright + HTML → ~50-100 listings
-    Meetup.com      → Playwright + HTML → ~20 events
-
-  Dedup: Fuzzy match by title/date/geo
-  → events_output.json → Flask API + web frontend
-
-Live at: https://claude-dev-vperrod.westeurope.cloudapp.azure.com/kidsevents/
-```
-
-## File Structure
+## File structure
 
 ```
 kidsevents-ie/
-├── main.py                        # Orchestrator — runs tiers, deduplicates, outputs JSON
-├── scrapers.py                    # Tier 1 scrapers (fast, no browser)
-├── facebook_scraper.py            # Tier 2a: Facebook groups (Playwright)
-├── facebook_extended_scraper.py   # Tier 2b: Extended Facebook groups
-├── dublinfamilyfun_scraper.py     # Tier 2c: DublinFamilyFun.ie (Playwright + JSON-LD)
-├── totsspots_scraper.py           # Tier 2d: TotsSpots.com (Playwright)
-├── meetup_scraper.py              # Tier 2e: Meetup.com (Playwright)
-├── staging.py                     # Social candidate staging desk (fed from the mini PC)
-├── deduplicator.py                # Fuzzy event matching + dedup
-├── server.py                      # Flask API serving events + web frontend
-├── web/
-│   └── index.html                 # Frontend with calendar + event browser
-├── run_pipeline.sh                # Quick run script (Tier 1 only)
-├── requirements.txt
-└── events_output.json             # Generated output (gitignored)
-```
-
-## Requirements
-
-```
-instagrapi>=0.12.2
-playwright>=1.40.0
-requests>=2.31.0
-flask>=3.0.0
-```
-
-Plus Playwright browsers:
-
-```bash
-playwright install chromium
+├── factory_worker.py        # discovery, extraction, normalisation, quality gate
+├── staging.py               # social candidate staging desk + auto-approve sweep
+├── server.py                # Flask API + admin portal
+├── firebase_auth.py         # member identity verification
+├── member_store.py          # member saves (sqlite)
+├── sources.json             # curated listing URLs per city
+├── web/                     # index.html (public) + admin.html
+├── staged/                  # social_candidates.json
+├── systemd/                 # unit examples
+└── events_output.json · places_output.json · holidays_output.json
 ```

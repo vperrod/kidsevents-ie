@@ -29,6 +29,7 @@ FACTORY_SCRIPT = os.path.join(BASE_DIR, "factory_worker.py")
 PIPELINE_LOG = os.path.join(BASE_DIR, "pipeline.log")
 
 ADMIN_STATE_FILE = os.path.join(BASE_DIR, "admin_state.json")
+FACTORY_STATE_FILE = os.path.join(BASE_DIR, "factory_state.json")
 MEMBERS_DB = os.path.join(BASE_DIR, "members.sqlite3")
 # Track factory run state
 _factory_state = {
@@ -36,6 +37,16 @@ _factory_state = {
     "last_run": None,
     "last_result": None,
 }
+# The server is threaded now, so "is a run already going?" is a check-and-set
+# two requests can otherwise both win -- that starts two factory processes on
+# one output file.
+_factory_start_lock = threading.Lock()
+
+
+def _read_store(path, default):
+    """Read a JSON store. Torn content raises rather than reporting an empty
+    catalogue, which is a lie the admin page would act on."""
+    return factory_worker.load_json_store(path, default)
 
 # ─────────────────────────────────────────────
 # PUBLIC ROUTES
@@ -48,10 +59,7 @@ def index():
 
 @app.route("/api/events")
 def api_events():
-    if not os.path.exists(EVENTS_FILE):
-        return jsonify([])
-    with open(EVENTS_FILE, "r") as f:
-        events = json.load(f)
+    events = _read_store(EVENTS_FILE, [])
     events.sort(key=lambda e: e.get("start_date", ""))
     return jsonify(events)
 
@@ -59,10 +67,7 @@ def api_events():
 @app.route("/api/holidays")
 def api_holidays():
     """Curated, evergreen family day-out ideas kept separate from dated events."""
-    if not os.path.exists(HOLIDAYS_FILE):
-        return jsonify([])
-    with open(HOLIDAYS_FILE, "r") as f:
-        return jsonify(json.load(f))
+    return jsonify(_read_store(HOLIDAYS_FILE, []))
 
 
 @app.route("/api/places")
@@ -70,18 +75,11 @@ def api_places():
     """Year-round local activities/venues (soft play, farms, museums) --
     evergreen like Holidays, but its own section: smaller, closer-to-home
     things to do, not curated bigger day-trip destinations."""
-    if not os.path.exists(PLACES_FILE):
-        return jsonify([])
-    with open(PLACES_FILE, "r") as f:
-        return jsonify(json.load(f))
+    return jsonify(_read_store(PLACES_FILE, []))
 
 @app.route("/api/health")
 def health():
-    count = 0
-    if os.path.exists(EVENTS_FILE):
-        with open(EVENTS_FILE, "r") as f:
-            count = len(json.load(f))
-    return jsonify({"status": "ok", "events_count": count})
+    return jsonify({"status": "ok", "events_count": len(_read_store(EVENTS_FILE, []))})
 
 
 def _member_from_request():
@@ -175,27 +173,15 @@ def admin_status():
         result["factory_timer"] = "unknown"
     
     # Check last factory state file
-    state_file = os.path.join(BASE_DIR, "factory_state.json")
-    if os.path.exists(state_file):
-        try:
-            with open(state_file, "r") as f:
-                state = json.load(f)
-            if state.get("last_run"):
-                result["last_run"] = state["last_run"]
-                result["last_run_result"] = state.get("last_result", "")
-        except Exception:
-            pass
-    
+    state = _read_store(FACTORY_STATE_FILE, {})
+    if state.get("last_run"):
+        result["last_run"] = state["last_run"]
+        result["last_run_result"] = state.get("last_result", "")
+
     return jsonify(result)
 
 def _load_json_file(path):
-    if not os.path.exists(path):
-        return []
-    try:
-        with open(path) as f:
-            return json.load(f)
-    except Exception:
-        return []
+    return _read_store(path, [])
 
 
 @app.route("/admin/api/metrics")
@@ -235,16 +221,9 @@ def admin_metrics():
 @app.route("/admin/api/stats")
 def admin_stats():
     """Event statistics: counts, sources, recent events."""
-    events = []
-    if os.path.exists(EVENTS_FILE):
-        try:
-            with open(EVENTS_FILE, "r") as f:
-                events = json.load(f)
-        except Exception:
-            pass
-    
+    events = _read_store(EVENTS_FILE, [])
     events.sort(key=lambda e: e.get("start_date", ""))
-    
+
     # Count by source
     sources_count = {}
     for e in events:
@@ -282,57 +261,40 @@ def admin_stats():
 def admin_sources():
     """List data sources from sources.json (dict keyed by city)."""
     sources = []
-    if os.path.exists(SOURCES_FILE):
-        try:
-            with open(SOURCES_FILE, "r") as f:
-                data = json.load(f)
-            if isinstance(data, list):
-                sources = data
-            elif isinstance(data, dict):
-                # Dict keyed by city -> {source_name: url} OR {source_name: [urls]}
-                for city, entries in data.items():
-                    if isinstance(entries, dict):
-                        for src_name, url in entries.items():
-                            if isinstance(url, list):
-                                for u in url:
-                                    sources.append({"city": city, "name": src_name, "type": src_name, "url": u})
-                            else:
-                                sources.append({"city": city, "name": src_name, "type": src_name, "url": url})
-                    elif isinstance(entries, list):
-                        for u in entries:
-                            if isinstance(u, dict):
-                                u["city"] = city
-                                sources.append(u)
-                            elif isinstance(u, str):
-                                sources.append({"city": city, "url": u})
-                    elif isinstance(entries, str):
-                        sources.append({"city": city, "url": entries})
-        except Exception:
-            pass
+    data = _read_store(SOURCES_FILE, {})
+    if isinstance(data, list):
+        sources = data
+    elif isinstance(data, dict):
+        # Dict keyed by city -> {source_name: url} OR {source_name: [urls]}
+        for city, entries in data.items():
+            if isinstance(entries, dict):
+                for src_name, url in entries.items():
+                    if isinstance(url, list):
+                        for u in url:
+                            sources.append({"city": city, "name": src_name, "type": src_name, "url": u})
+                    else:
+                        sources.append({"city": city, "name": src_name, "type": src_name, "url": url})
+            elif isinstance(entries, list):
+                for u in entries:
+                    if isinstance(u, dict):
+                        u["city"] = city
+                        sources.append(u)
+                    elif isinstance(u, str):
+                        sources.append({"city": city, "url": u})
+            elif isinstance(entries, str):
+                sources.append({"city": city, "url": entries})
     return jsonify({"sources": sources})
 
 @app.route("/admin/api/pipeline")
 def admin_pipeline():
     """Pipeline status and run history."""
-    state = {}
-    if os.path.exists(ADMIN_STATE_FILE):
-        try:
-            with open(ADMIN_STATE_FILE, "r") as f:
-                state = json.load(f)
-        except Exception:
-            pass
+    state = _read_store(ADMIN_STATE_FILE, {})
     # Fall back to factory_state.json for last_run if admin state is empty
     if not state.get("run_history"):
-        factory_state_file = os.path.join(BASE_DIR, "factory_state.json")
-        if os.path.exists(factory_state_file):
-            try:
-                with open(factory_state_file, "r") as f:
-                    fs = json.load(f)
-                if fs.get("last_run") and not state.get("last_run"):
-                    state["last_run"] = fs["last_run"]
-            except Exception:
-                pass
-    
+        fs = _read_store(FACTORY_STATE_FILE, {})
+        if fs.get("last_run") and not state.get("last_run"):
+            state["last_run"] = fs["last_run"]
+
     return jsonify({
         "url_discovery": state.get("url_discovery_status", "idle"),
         "crawling": state.get("crawling_status", "idle"),
@@ -346,11 +308,12 @@ def admin_pipeline():
 @app.route("/admin/api/pipeline/run", methods=["POST"])
 def admin_run_factory():
     """Trigger a factory run in background."""
-    if _factory_state["running"]:
-        return jsonify({"status": "already_running", "message": "Factory is already running"})
-    
-    def run_factory():
+    with _factory_start_lock:
+        if _factory_state["running"]:
+            return jsonify({"status": "already_running", "message": "Factory is already running"})
         _factory_state["running"] = True
+
+    def run_factory():
         _factory_state["last_run"] = datetime.now().isoformat()
         start_time = time.time()
         
@@ -365,15 +328,7 @@ def admin_run_factory():
             
             duration = time.time() - start_time
             
-            # Count events after run
-            events_count = 0
-            if os.path.exists(EVENTS_FILE):
-                try:
-                    with open(EVENTS_FILE, "r") as f:
-                        events_count = len(json.load(f))
-                except Exception:
-                    pass
-            
+            events_count = len(_read_store(EVENTS_FILE, []))
             success = result.returncode == 0
             _factory_state["last_result"] = f"{'OK' if success else 'FAIL'} — {events_count} events in {duration:.0f}s"
             
@@ -397,14 +352,7 @@ def admin_run_factory():
 @app.route("/admin/api/pipeline/run", methods=["GET"])
 def admin_factory_status():
     """Check current factory run status."""
-    state = {}
-    if os.path.exists(ADMIN_STATE_FILE):
-        try:
-            with open(ADMIN_STATE_FILE, "r") as f:
-                state = json.load(f)
-        except Exception:
-            pass
-    
+    state = _read_store(ADMIN_STATE_FILE, {})
     last = state.get("run_history", [{}])[-1] if state.get("run_history") else {}
     
     return jsonify({
@@ -432,13 +380,7 @@ def admin_logs():
 @app.route("/admin/api/events")
 def admin_events():
     """All events for admin table."""
-    events = []
-    if os.path.exists(EVENTS_FILE):
-        try:
-            with open(EVENTS_FILE, "r") as f:
-                events = json.load(f)
-        except Exception:
-            pass
+    events = _read_store(EVENTS_FILE, [])
     events.sort(key=lambda e: e.get("start_date", ""))
     return jsonify({"events": events})
 
@@ -505,26 +447,13 @@ def admin_social_reject():
 
 def _update_factory_state(success, events_count, duration):
     """Update admin_state.json with run results."""
-    state = {}
-    if os.path.exists(ADMIN_STATE_FILE):
-        try:
-            with open(ADMIN_STATE_FILE, "r") as f:
-                state = json.load(f)
-        except Exception:
-            pass
-    
+    state = _read_store(ADMIN_STATE_FILE, {})
     history = state.get("run_history", [])
-    src_count = 0
-    if os.path.exists(SOURCES_FILE):
-        try:
-            with open(SOURCES_FILE, "r") as f:
-                src_data = json.load(f)
-            if isinstance(src_data, dict):
-                src_count = sum(len(v) if isinstance(v, dict) else 1 for v in src_data.values())
-            elif isinstance(src_data, list):
-                src_count = len(src_data)
-        except Exception:
-            pass
+    src_data = _read_store(SOURCES_FILE, {})
+    if isinstance(src_data, dict):
+        src_count = sum(len(v) if isinstance(v, dict) else 1 for v in src_data.values())
+    else:
+        src_count = len(src_data)
     history.append({
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "success": success,
@@ -541,8 +470,7 @@ def _update_factory_state(success, events_count, duration):
     state["last_run"] = datetime.now().isoformat()
     state["last_result"] = _factory_state["last_result"]
     
-    with open(ADMIN_STATE_FILE, "w") as f:
-        json.dump(state, f, indent=2)
+    factory_worker.write_json_atomic(ADMIN_STATE_FILE, state)
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8128, debug=False)
+    app.run(host="127.0.0.1", port=8128, debug=False, threaded=True)
