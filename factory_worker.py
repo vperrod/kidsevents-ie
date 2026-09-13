@@ -31,6 +31,8 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+import contract
+import gate
 import llm
 
 # ---------------------------------------------------------------------------
@@ -218,57 +220,239 @@ def _post_json(url, payload, headers=None, timeout=180):
     return json.loads(r.stdout)
 
 
-def enrich_event(raw_event, sources_markdown, budget):
-    """Use Hermes to enrich a scraped event with structured data.
+# ---------------------------------------------------------------------------
+# Research fetch — the source text every later step is grounded in
+# ---------------------------------------------------------------------------
 
-    Extracts: title, date, time, location, venue, description, cost,
-    age_group, category, tags, website, image_url.
+# A plain desktop Chrome UA is what makes an Instagram permalink return the
+# server-rendered HTML (which carries `"caption":{"text":...}`) instead of the
+# JS shell. Verified from this VM 2026-09-13; the mini PC's IP gets the shell,
+# so this VM-side fetch is the only caption source for the keyword-search lane.
+RESEARCH_UA = {
+    "User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                   "Chrome/131.0.0.0 Safari/537.36"),
+    "Accept-Language": "en-IE,en;q=0.9",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+}
+FETCH_GAP_SECS = 2
+RESEARCH_MAX_CHARS = 6000
+_fetch_clock = {}
+_fetch_lock = threading.Lock()
+
+_IG_CAPTION_RE = re.compile(r'"caption"\s*:\s*\{\s*"text"\s*:\s*"((?:[^"\\]|\\.)*)"')
+_IG_AUTHOR_RE = re.compile(r'"username"\s*:\s*"([^"]+)"')
+_SCRIPT_RE = re.compile(r"<(script|style)\b.*?</\1>", re.S | re.I)
+
+
+def _throttle(platform):
+    """One request per FETCH_GAP_SECS per platform, across every sweep worker."""
+    with _fetch_lock:
+        wait = FETCH_GAP_SECS - (time.time() - _fetch_clock.get(platform, 0))
+        if wait > 0:
+            time.sleep(wait)
+        _fetch_clock[platform] = time.time()
+
+
+def _http_text(url, timeout=25):
+    request = urllib.request.Request(url, headers=RESEARCH_UA)
+    with urllib.request.urlopen(request, timeout=timeout) as response:
+        return response.read().decode("utf-8", "ignore")
+
+
+def _instagram_caption(url):
+    html = _http_text(url)
+    match = _IG_CAPTION_RE.search(html)
+    caption = json.loads('"' + match.group(1) + '"') if match else ""
+    author = _IG_AUTHOR_RE.search(html)
+    return "\n".join(x for x in (f"Account: {author.group(1)}" if author else "", caption) if x)
+
+
+def _tiktok_caption(url):
+    """TikTok's oEmbed endpoint is keyless and returns the caption as `title`."""
+    data = json.loads(_http_text(
+        "https://www.tiktok.com/oembed?" + urllib.parse.urlencode({"url": url})))
+    author = data.get("author_name") or ""
+    return "\n".join(x for x in (f"Account: {author}" if author else "", data.get("title", "")) if x)
+
+
+def _page_text(url):
+    html = _SCRIPT_RE.sub(" ", _http_text(url))
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html)).strip()
+
+
+def research_fetch(candidate):
+    """Fetch the candidate's own source from THIS VM; return
+    `(text, source, missing_field)`.
+
+    `text` is what every later step is grounded in (the stored caption plus
+    whatever the live fetch adds); `source` is the `provenance.sources[0]`
+    entry. A 401/403/429 is a rate limit, not a bad candidate: it yields
+    `missing_field="caption"` (needs-input), never a rejection.
     """
+    url = candidate.get("source_url", "")
+    caption = (candidate.get("caption") or "").strip()
+    if not url:
+        return caption, None, "" if caption else "caption"
+    host = urllib.parse.urlparse(url).netloc.lower()
+    platform = (candidate.get("platform") or host or "web").lower()
+    fetched = ""
+    try:
+        _throttle(platform)
+        if "instagram.com" in host:
+            fetched = _instagram_caption(url)
+        elif "tiktok.com" in host:
+            fetched = _tiktok_caption(url)
+        else:
+            fetched = _page_text(url)
+    except urllib.error.HTTPError as error:
+        if error.code in (401, 403, 429):
+            log(f"research_fetch {host}: HTTP {error.code} (rate limited) — caption needed by hand")
+            return caption, None, "" if caption else "caption"
+        log(f"research_fetch {url[:70]}: HTTP {error.code}")
+    except Exception as error:
+        log(f"research_fetch {url[:70]}: {error}")
+
+    text = _merge_text(caption, fetched)
+    source = {"url": url, "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+    if not text.strip():
+        return "", source, "caption"
+    return text[:RESEARCH_MAX_CHARS], source, ""
+
+
+def _merge_text(caption, fetched):
+    """The stored caption is usually a truncation of the live one; keep the
+    superset instead of feeding the model the same words twice."""
+    if not fetched:
+        return caption
+    if not caption or caption[:60] in fetched:
+        return fetched
+    return caption + "\n\n" + fetched
+
+
+# ---------------------------------------------------------------------------
+# The four steps — classify, facts, extract, write (at most four model calls
+# per candidate, each a small prompt with an explicit JSON contract)
+# ---------------------------------------------------------------------------
+
+_NO_INVENTING = ("Use ONLY what the source text below actually says. Do not invent values. "
+                 "Leave a field empty rather than guessing it.\n\n")
+
+
+def classify(text, candidate=None):
+    """Step 1 — what is this, is it for families, and where?"""
+    author = (candidate or {}).get("author", "")
     prompt = (
-        f"You are an event data extractor for a kids events aggregator in Ireland. "
-        f"Extract every piece of structured information you can find about the event below. "
-        f"Today's date is {date.today().isoformat()}.\\n\\n"
-        f"Event raw data:\\n{json.dumps(raw_event, indent=2, ensure_ascii=False)[:3000]}\\n\\n"
+        "You sort sources for a family-days-out guide in Ireland.\n\n"
+        + _NO_INVENTING
+        + (f"Account/author: {author}\n" if author else "")
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + 'Reply ONLY a JSON object:\n'
+        + '{"kind": "event" for something happening on specific dates, "place" for a venue or '
+          'activity a family can visit any time, "holiday" for a destination to travel to, '
+          'or "none" if it is none of those,\n'
+        + '"family_relevant": true only if children can come and it is aimed at or welcoming to '
+          'families - false for adult comedy, gigs, club nights, age-gated (16+/18+) events, '
+          'trade or adult-only shopping events,\n'
+        + '"country": ISO code of where it is - "IE" for the Republic of Ireland, "GB" for '
+          'Northern Ireland or Britain, otherwise the real code,\n'
+        + '"why": at most 120 characters saying why}'
     )
+    return extract_obj(hermes(prompt, kind="classify"))
 
-    if sources_markdown:
-        prompt += f"\\nSource page content:\\n<data>{sources_markdown[:MAX_PROMPT]}</data>\\n"
 
-    prompt += f"""Reply ONLY a JSON object with these keys (omit a key when the source gives no evidence):
-"title": short synthesised event name, <= 80 characters — never the raw caption or a truncation of it,
-"country": "IE" if the event happens in the Republic of Ireland, "GB" for Northern Ireland or Britain, otherwise "other",
-"family_relevant": true only if children can attend and it is aimed at or welcoming to families — false for adult comedy, gigs, club nights, age-gated (16+/18+) events, trade or adult-only shopping events,
-"date": "YYYY-MM-DD" (or ""),
-"time": "HH:MM" (24h, or ""),
-"duration_hours": float (or 0),
-"venue_name": string,
-"venue_address": string,
-"city": "Dublin|Cork|Galway|Waterford|Limerick" or nearest,
-"venue_coords": [lat, lon] (or [null, null]),
-"description": "concise, <= 300 words",
-"category": one of {list(EVENT_CATS.keys())} — pick the best fit,
-"age_group": "toddler|preschool|kids|teens|all_ages" or "",
-"cost": "free|paid|donation|membership" or "",
-"cost_detail": string (e.g. "€5 per child, under 2s free"),
-"suitable_for": "pushchair_accessible|stairs_only|hearing_impaired|visual_impaired|general" (pick most relevant or "general"),
-"website": URL or "",
-"phone": string or "",
-"image_url": URL or "",
-"image_alt": description of the image, or "",
-"booking_required": "required|recommended|none",
-"booking_url": URL or "",
-"contact_email": email or "",
+def gather_facts(text):
+    """Step 2 — the grounding. Every fact must quote the source verbatim, and a
+    quote that is not actually in the text is dropped here, in code: that is
+    what stops the later steps inventing details. Returns (facts, name)."""
+    prompt = (
+        "You pull quotable facts out of a source for a family-days-out guide.\n\n"
+        + _NO_INVENTING
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + 'Reply ONLY a JSON object:\n'
+        + '{"facts": [{"claim": what the source establishes, "quote": the exact words from the '
+          'source that establish it, copied character for character}] (at most 12),\n'
+        + '"name": the venue, organiser or destination name as the source writes it, or ""}'
+    )
+    obj = extract_obj(hermes(prompt, kind="facts")) or {}
+    haystack = _fold_spaces(text)
+    facts = []
+    for fact in (obj.get("facts") or [])[:12]:
+        if not isinstance(fact, dict):
+            continue
+        quote = str(fact.get("quote") or "").strip()
+        if quote and _fold_spaces(quote) in haystack:
+            facts.append({"claim": str(fact.get("claim") or "")[:300], "quote": quote[:300]})
+    return facts, str(obj.get("name") or "")[:200]
 
-For any field where you cannot find a confident answer, return empty string/null.
-If the event date is in the past, still extract it but note "date_status": "past".
-Do not invent values.
-"""
 
-    raw = hermes(prompt, kind="enrich_event")
-    obj = extract_obj(raw)
-    if obj and isinstance(obj, dict):
-        return obj, "hermes"
-    return None, "none"
+def _fold_spaces(text):
+    return re.sub(r"\s+", " ", str(text or "")).strip().casefold()
+
+
+_EXTRACT_FIELDS = {
+    "event": (
+        '{"start_date": "YYYY-MM-DD", "end_date": "YYYY-MM-DD" or "", "times": ["HH:MM"], '
+        '"recurrence": e.g. "every Saturday" or "", "organizer": "", '
+        '"booking_required": "required|recommended|none", "booking_url": "", '
+        '"price_detail": exactly what the source says it costs, or "", '
+        '"date_evidence": the quote from the verified facts above that states the date, '
+        'copied exactly, "cancelled": true only if the source says it is cancelled}'
+    ),
+    "place": (
+        '{"opening_hours": "", "duration_hint": how long a visit takes, or "", '
+        '"seasonal_note": "", "price_detail": exactly what the source says it costs, or "", '
+        '"booking_url": ""}'
+    ),
+    "holiday": (
+        '{"destination_type": "city|resort|region|park|island", "holiday_types": [], '
+        '"best_seasons": [], "best_months": [], "school_breaks": [], '
+        '"flight_time_from_dublin": "none|under-2h|2-4h|4-8h|8h-plus", '
+        '"direct_flight": true/false/null, "budget_band": "budget|mid|premium|luxury", '
+        '"with_baby_toddler": true/false/null, "includes": [], "price_detail": ""}'
+    ),
+}
+
+
+def extract_details(kind, text, facts, location_hint=""):
+    """Step 3 — the kind-specific fields. Every value must be traceable to one
+    of the verified quotes; the gate re-checks `date_evidence` against them."""
+    prompt = (
+        f"You are filling in the {kind} fields of a family-days-out listing.\n"
+        f"Today is {date.today().isoformat()}.\n\n"
+        + _NO_INVENTING
+        + "Verified quotes from the source (the only evidence you may use):\n"
+        + json.dumps(facts, ensure_ascii=False)[:4000] + "\n\n"
+        + (f"Location context: {location_hint}\n" if location_hint else "")
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + "Reply ONLY a JSON object:\n"
+        + _EXTRACT_FIELDS[kind]
+        + '\nplus "name", "address", "city", "county" (the Irish county, spelled out), '
+          '"country" (ISO code), "lat" and "lon" (numbers, only if the source states them).'
+    )
+    return extract_obj(hermes(prompt, kind="extract")) or {}
+
+
+def write_copy(kind, text, facts, name=""):
+    """Step 4 — the words a parent reads, plus the taxonomy, chosen from the
+    vocabulary `gate.facet_gloss()` renders and validated by `gate.gate_meta`."""
+    band = "120 to 300 words" if kind in ("place", "holiday") else "60 to 200 words"
+    prompt = (
+        "You write listings for Small Days, a family-days-out guide in Ireland. "
+        "Plain, warm and factual; no marketing language.\n\n"
+        + _NO_INVENTING
+        + (f"Name: {name}\n" if name else "")
+        + "Verified quotes from the source (the only evidence you may use):\n"
+        + json.dumps(facts, ensure_ascii=False)[:4000] + "\n\n"
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + 'Reply ONLY a JSON object:\n'
+        + '{"title": a synthesised name, at most 80 characters, never the caption or the first '
+          'words of it,\n'
+        + '"summary": one line, at most 160 characters,\n'
+        + f'"description": {band}, using only the facts above,\n'
+        + '"taxonomy": an object using EXACTLY these fields and these allowed values:\n'
+        + gate.facet_gloss(kind) + "}"
+    )
+    return extract_obj(hermes(prompt, kind="write")) or {}
 
 
 # ---------------------------------------------------------------------------
@@ -670,6 +854,8 @@ def publish_event(event, caption=""):
     approve route, auto-promotion and the discovery cycle so everything
     publishes through the exact same gate.
     """
+    if event.get("schema_version") == 1:
+        return publish_record(event)
     reason = event_reject_reason(event, caption)
     if reason:
         log(f"rejected event {event.get('title', '')[:60]!r}: {reason}")
@@ -696,7 +882,8 @@ def prune_past_events():
         events = load_json_store(OUTPUT_FILE, [])
         kept, past, undated = [], 0, 0
         for event in events:
-            when = (event.get("end_date") or event.get("start_date") or "").strip()
+            dates = contract.legacy_view(event)
+            when = (dates.get("end_date") or dates.get("start_date") or "").strip()
             if not when:
                 undated += 1
             elif when < today:
@@ -839,73 +1026,14 @@ def normalize_event(raw):
     return event
 
 
-def extract_place(caption, source_url, platform, author=""):
-    """Ask whether a caption describes a real, evergreen place or activity --
-    a playground, farm, museum, adventure park, class -- rather than a dated
-    event. Returns a holidays_output.json-shaped dict, or None. Same
-    do-not-invent discipline as enrich_event: an empty/vague caption (common
-    on a rate-limited fetch) correctly yields nothing rather than a guess.
-    The account handle is real, verifiable data (often literally the venue's
-    name, e.g. "leisuredomeashbourne") -- pass it along, don't rely on
-    caption text alone.
-    """
-    account_line = f"Account/author: {author}\n" if author else ""
-    prompt = (
-        "You are a places-and-activities curator for a kids/family day-out "
-        "guide in Ireland. The text below is a social media caption. Decide "
-        "whether it describes a REAL, NAMED, evergreen place or activity a "
-        "family could visit any time (a playground, farm, museum, adventure "
-        "park, class, attraction) -- NOT a one-off dated event. The account "
-        "name is real data you can use to identify the venue (e.g. an "
-        'account "leisuredomeashbourne" is the venue "Leisuredome, '
-        'Ashbourne") -- don\'t invent details beyond what the handle and '
-        "caption actually support.\n\n"
-        f"{account_line}"
-        f"Caption:\n<data>{caption[:2000]}</data>\n\n"
-        'If it is NOT a real identifiable evergreen place, reply exactly: {"is_place": false}\n\n'
-        "If it IS, reply ONLY a JSON object:\n"
-        '{"is_place": true,\n'
-        '"title": short synthesised place name, <= 80 characters — never the raw caption or a truncation of it,\n'
-        '"country": "IE" if it is in the Republic of Ireland, "GB" for Northern Ireland or Britain, otherwise "other",\n'
-        '"family_relevant": true only if children are welcome and it is somewhere a family would actually bring kids — false for adult-only venues, bars, nightlife or age-gated attractions,\n'
-        '"description": "concise, <= 300 words",\n'
-        '"region": "Leinster|Munster|Connacht|Ulster" or "",\n'
-        '"county": string or "",\n'
-        '"location": string (place name, town),\n'
-        '"category": string (e.g. "Nature", "Indoor play", "Farm", "Museum"),\n'
-        '"price_range": string or "check",\n'
-        '"age_group": string or "",\n'
-        '"booking_url": URL or ""}\n\n'
-        "Do not invent values you cannot support from the text."
-    )
-    obj = extract_obj(hermes(prompt, kind="extract_place"))
-    if not obj or not isinstance(obj, dict) or not obj.get("is_place") or not obj.get("title"):
-        return None
-    return {
-        "title": str(obj.get("title", ""))[:200],
-        "description": obj.get("description", "") or "",
-        "region": obj.get("region", "") or "",
-        "county": obj.get("county", "") or "",
-        "location": obj.get("location", "") or "",
-        "country": normalize_country(obj.get("country")),
-        "family_relevant": obj.get("family_relevant", True),
-        "latitude": None,
-        "longitude": None,
-        "category": obj.get("category", "") or "",
-        "price_range": obj.get("price_range") or "check",
-        "age_group": obj.get("age_group", "") or "",
-        "source_url": source_url,
-        "source_name": platform,
-        "booking_url": obj.get("booking_url", "") or "",
-    }
-
-
 def publish_place(place, caption=""):
     """Append a place to places_output.json (year-round local activities/
     venues -- its own section, separate from the curated Holidays
     destinations), deduped by title+location. Returns True if newly written,
     False if the quality gate rejected it or it was already there.
     """
+    if place.get("schema_version") == 1:
+        return publish_record(place)
     reason = place_reject_reason(place, caption)
     if reason:
         log(f"rejected place {place.get('title', '')[:60]!r}: {reason}")
@@ -920,106 +1048,244 @@ def publish_place(place, caption=""):
     return True
 
 
-def promote_candidate(candidate, hint=""):
-    """Turn one staged social candidate into a publishable event or evergreen
-    place. Returns ("event", record, None), ("place", record, None), or
-    (None, None, reason).
+# ---------------------------------------------------------------------------
+# Contract records: one store per kind, one writer
+# ---------------------------------------------------------------------------
 
-    `hint` is optional extra context a curator typed in on the admin Social
-    page ("it's the playground on Main St, every Saturday") -- folded into
-    the caption before either classification runs, same do-not-invent LLM
-    gate either way, just with more to go on.
+STORE_FOR_KIND = {"event": OUTPUT_FILE, "place": PLACES_FILE, "holiday": HOLIDAYS_FILE}
 
-    (None, None, reason) means neither classification found enough to
-    publish -- the candidate stays staged, and `reason` is what to show a
-    human so they know what's missing rather than just "still pending".
-    """
-    caption = candidate.get("caption") or ""
-    if hint:
-        caption = f"{caption}\n\nAdditional context from a curator: {hint}".strip()
-    source_url = candidate.get("source_url", "")
-    platform = candidate.get("platform", "social")
-    today = date.today()
-    horizon = today + timedelta(days=EVENT_HORIZON_DAYS)
-    enriched, _model = enrich_event(
-        {"title": caption[:120], "url": source_url, "source": platform},
-        caption,
-        {"llm": 1},
-    )
-    if enriched and enriched.get("date"):
-        website = enriched.get("website", "")
-        enriched["title"] = enriched.get("title") or caption[:120]
-        # The contract wants the page the event was captured from, not an
-        # organiser page the model inferred — that rides along in all_urls.
-        enriched["url"] = source_url
-        enriched["source"] = f"{platform}:{source_url[:100]}"
-        enriched["all_sources"] = [source_url]
-        enriched["all_urls"] = [source_url] + ([website] if website else [])
-        record = normalize_event(enriched)
-        window = date_window_reason(record, today, horizon)
-        if window:
-            return None, None, window
-        gate = event_reject_reason(record, caption)
-        if gate:
-            return None, None, gate
-        return "event", record, None
 
-    place = extract_place(caption, source_url, platform, candidate.get("author", ""))
-    if place:
-        gate = place_reject_reason(place, caption)
-        if gate:
-            return None, None, gate
-        return "place", place, None
+def on_air_titles(kind):
+    """Titles already published in this kind's catalogue, for the duplicate
+    fold. Reads both shapes, so it works mid-migration."""
+    return [contract.legacy_view(record).get("title", "")
+            for record in load_json_store(STORE_FOR_KIND[kind], [])]
 
-    if not (candidate.get("caption") or "").strip() and not hint:
-        reason = "No caption text was captured for this post (a rate-limited fetch) — nothing to classify from. Add a note below with what it's about."
+
+def publish_record(record):
+    """Append an on-air contract record to its catalogue, deduped by id. The
+    single writer for contract records -- the admin approve route, the sweep
+    and the discovery cycle all come through here, so they all pass the same
+    gate and share one atomic, locked read-modify-write."""
+    if record.get("status") != "on-air":
+        log(f"refusing to publish {record.get('id', '')!r}: status is {record.get('status')!r}")
+        return False
+    store = STORE_FOR_KIND[record["kind"]]
+    with output_lock():
+        records = load_json_store(store, [])
+        if any(other.get("id") == record["id"] for other in records):
+            return False
+        records.append(record)
+        records.sort(key=lambda one: contract.legacy_view(one).get("start_date") or "")
+        write_json_atomic(store, records)
+    return True
+
+
+def _coord(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _safe_url(value):
+    url = str(value or "").strip()
+    return url if url.startswith(("http://", "https://")) else ""
+
+
+def _country_code(value):
+    """A real ISO code when the model gave one (holidays are abroad), folded
+    onto IE/GB/other otherwise."""
+    raw = str(value or "").strip()
+    if re.fullmatch(r"[A-Za-z]{2}", raw):
+        return raw.upper()
+    return normalize_country(raw)
+
+
+def _build_record(kind, candidate, source, facts, name, details, written, verdict):
+    """Assemble one contract record out of the four steps' answers. Nothing is
+    invented here: every value either came from a step or is derived by
+    `contract.derive`, and the taxonomy is whatever survives `gate_meta`."""
+    record = contract.EMPTY_RECORD(kind)
+    record["title"] = str(written.get("title") or "").strip()[:contract.MAX_TITLE]
+    record["summary"] = str(written.get("summary") or "").strip()[:contract.MAX_SUMMARY]
+    record["description"] = str(written.get("description") or "").strip()
+    record["family_relevant"] = verdict.get("family_relevant") is not False
+
+    city, county = normalize_location(details.get("city", ""), details.get("county", ""))
+    location = record["location"]
+    location["name"] = str(details.get("name") or name or "")[:200]
+    location["address"] = str(details.get("address") or "")[:300]
+    location["city"] = city
+    location["county"] = county
+    location["country"] = _country_code(details.get("country") or verdict.get("country"))
+    location["lat"] = _coord(details.get("lat"))
+    location["lon"] = _coord(details.get("lon"))
+
+    url = candidate.get("source_url", "")
+    links = record["links"]
+    links["source_url"] = url
+    links["official_url"] = _safe_url(details.get("official_url") or details.get("website"))
+    links["booking_url"] = _safe_url(details.get("booking_url"))
+    if "instagram.com" in url:
+        links["instagram_url"] = url
+    elif "tiktok.com" in url:
+        links["tiktok_url"] = url
+
+    taxonomy, dropped = gate.gate_meta({**(written.get("taxonomy") or {}),
+                                        "price_detail": details.get("price_detail")
+                                        or (written.get("taxonomy") or {}).get("price_detail", "")})
+    record["taxonomy"] = taxonomy
+
+    if kind == "event":
+        record["event"].update({
+            "start_date": str(details.get("start_date") or "")[:10],
+            "end_date": str(details.get("end_date") or details.get("start_date") or "")[:10],
+            "times": [str(t) for t in (details.get("times") or [])][:6],
+            "recurrence": str(details.get("recurrence") or "")[:120],
+            "organizer": str(details.get("organizer") or "")[:200],
+            "booking_required": str(details.get("booking_required") or "")[:20],
+            "date_evidence": str(details.get("date_evidence") or "")[:300],
+            "cancelled": details.get("cancelled") is True,
+        })
+    elif kind == "place":
+        record["place"].update({
+            "opening_hours": str(details.get("opening_hours") or "")[:300],
+            "duration_hint": str(details.get("duration_hint") or "")[:120],
+            "seasonal_note": str(details.get("seasonal_note") or "")[:300],
+        })
     else:
-        reason = (
-            "Checked as both a dated event and an evergreen place: no usable "
-            "date was found, and the caption/account don't clearly name a "
-            "specific real venue. Add a note below (a date, or the actual "
-            "venue name) and resubmit."
-        )
-    return None, None, reason
+        holiday, holiday_dropped = gate.gate_holiday({**details, **(written.get("taxonomy") or {})})
+        record["holiday"].update(holiday)
+        dropped += holiday_dropped
+
+    record["provenance"].update({
+        "sources": [source] if source else [],
+        "facts": [{**fact, "source_url": url} for fact in facts],
+        "last_checked": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "produced_by": ["classify", "facts", "extract", "write"],
+    })
+    gate.record_drops(dropped)
+    return contract.derive(record)
+
+
+def promote(candidate, hint="", prefetched=None, prefill=None):
+    """Turn one candidate into a publishable contract record.
+
+    Returns `(record|None, reason, missing_field)`. A truthy `missing_field`
+    means one nameable thing is missing and a curator's note could fix it
+    (needs-input); an empty one with no record means rejected.
+
+    `hint` is a curator's note from the admin Social page ("it's the
+    playground on Main St, every Saturday") -- folded into the source text
+    before any step runs, same do-not-invent discipline either way.
+    `prefetched` skips the research fetch (the discovery cycle already has the
+    page text); `prefill` supplies `event.*` from schema.org JSON-LD, which
+    skips the extract step. At most four model calls, one per step.
+    """
+    if prefetched is None:
+        text, source, missing = research_fetch(candidate)
+    else:
+        text, source, missing = prefetched, {
+            "url": candidate.get("source_url", ""),
+            "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        }, ""
+    if hint:
+        text = f"{text}\n\nAdditional context from a curator: {hint}".strip()
+        missing = ""
+    if not text.strip():
+        return None, ("No caption or page text could be read from this post (a rate-limited "
+                      "fetch) -- nothing to classify from. Add a note below with what it's "
+                      "about."), missing or "caption"
+
+    verdict = classify(text, candidate)
+    if not verdict:
+        return None, "no model lane answered the classify step", ""
+    kind = str(verdict.get("kind") or "").strip().lower()
+    why = str(verdict.get("why") or "").strip()[:120]
+    if kind not in contract.KINDS:
+        return None, f"not an event, place or holiday: {why or kind or 'no verdict'}", ""
+    if verdict.get("family_relevant") is False:
+        return None, f"not family-relevant: {why}", ""
+
+    facts, name = gather_facts(text)
+    if prefill and kind == "event":
+        details = dict(prefill)
+    else:
+        details = extract_details(kind, text, facts, candidate.get("found_via", ""))
+    written = write_copy(kind, text, facts, name)
+
+    record = _build_record(kind, candidate, source, facts, name, details, written, verdict)
+    problems = contract.validate(record)
+    if problems:
+        return None, "record does not match the contract: " + "; ".join(problems[:3]), ""
+
+    ok, reason, missing_field = gate.qa(record, text, on_air_titles(kind))
+    if not ok:
+        record["status"] = "needs-input" if missing_field else "rejected"
+        record["reason"] = reason
+        return None, reason, missing_field
+    if kind == "event":
+        window = date_window_reason(contract.legacy_view(record), date.today(),
+                                    date.today() + timedelta(days=EVENT_HORIZON_DAYS))
+        if window:
+            return None, window, ""
+    record["status"] = "on-air"
+    return record, "", ""
+
+
+def promote_candidate(candidate, hint=""):
+    """`(kind, record, reason)` -- the three-tuple form of `promote()` kept for
+    callers that only need the verdict, not the missing field."""
+    record, reason, _missing_field = promote(candidate, hint=hint)
+    return (record["kind"] if record else None), record, reason
+
+
+def _jsonld_prefill(event, city):
+    """schema.org gives the dates as machine-readable markup, so the extract
+    step has nothing to add. The evidence quote is the markup itself, which is
+    appended to the grounded text so the gate can verify it like any other."""
+    return {
+        "start_date": event.get("start", ""),
+        "end_date": event.get("end", "") or event.get("start", ""),
+        "name": event.get("venue", ""),
+        "city": city,
+        "price_detail": event.get("price", ""),
+        "official_url": event.get("url", ""),
+        "date_evidence": _jsonld_evidence(event),
+    }
+
+
+def _jsonld_evidence(event):
+    return f"schema.org startDate {event.get('start', '')}"
 
 
 def extract_events_from_pages(pages, city, today, horizon):
-    """Extract structured events from crawled pages using LLM enrichment + JSON-LD."""
-    events = []
-
-    # First: try schema.org JSON-LD extraction (no LLM needed)
-    jsonld_events = _extract_jsonld_events([{"url": p["url"]} for p in pages], today, horizon)
-    events.extend(normalize_event(e) for e in jsonld_events)
-
-    # Second: LLM enrichment for free-text pages
+    """Contract records from crawled pages, through the same four steps the
+    social lane uses. A page carrying a schema.org Event pre-fills `event.*`
+    and skips the extract step."""
+    seeds = {}
+    for event in _extract_jsonld_events([{"url": p["url"]} for p in pages], today, horizon):
+        seeds.setdefault(event.get("url") or "", event)
+    records = []
     for page in pages:
         if not page.get("markdown"):
             continue
-        raw_event = {
-            "title": page.get("title", ""),
-            "url": page["url"],
-            "source": f"web:{page.get('url', '')[:100]}",
-        }
-        enriched, _model = enrich_event(raw_event, page["markdown"], {"llm": 1})
-        if enriched and enriched.get("date"):
-            website = enriched.get("website", "")
-            event = normalize_event({
-                **enriched,
-                "title": enriched.get("title") or raw_event["title"],
-                "city": enriched.get("city") or city,
-                "url": page["url"],
-                "source": raw_event["source"],
-                "all_sources": [page["url"]],
-                "all_urls": [page["url"]] + ([website] if website else []),
-            })
-            # Same window the JSON-LD branch above already enforces.
-            window = date_window_reason(event, today, horizon)
-            if window:
-                log(f"rejected event {event.get('title', '')[:60]!r}: {window}")
-                continue
-            events.append(event)
-
-    return events
+        seed = seeds.get(page["url"])
+        text = page["markdown"]
+        prefill = None
+        if seed:
+            prefill = _jsonld_prefill(seed, city)
+            text = f"{text}\n{_jsonld_evidence(seed)}"
+        record, reason, _missing_field = promote(
+            {"source_url": page["url"], "platform": "web", "found_via": city},
+            prefetched=text, prefill=prefill,
+        )
+        if record:
+            records.append(record)
+        else:
+            log(f"rejected {page['url'][:60]}: {reason}")
+    return records
 
 
 def load_state():
@@ -1071,21 +1337,22 @@ def run_discovery_cycle():
         events = extract_events_from_pages(pages, city, today, horizon)
         log(f"  {city}: extracted {len(events)} events")
 
-        # Deduplicate by title + date
+        # Deduplicate by contract id (kind + slug + county)
         seen = set()
         for ev in events:
-            key = event_key(ev)
+            key = ev.get("id") or event_key(ev)
             if key not in seen:
                 seen.add(key)
                 all_events.append(ev)
 
-    # Publish through publish_event so discovery passes the same quality gate
-    # as the admin approve route. Holding the lock across the loop keeps the
-    # read-modify-write atomic against a concurrent approve/sweep -- confirmed
-    # live 2026-09-12, a stale read here silently dropped events a concurrent
-    # sweep had just added.
+    # Publish through publish_record so discovery passes the same quality gate
+    # as the admin approve route, and a page that turned out to be a place or a
+    # holiday lands in its own catalogue. Holding the lock across the loop keeps
+    # the read-modify-write atomic against a concurrent approve/sweep --
+    # confirmed live 2026-09-12, a stale read here silently dropped events a
+    # concurrent sweep had just added.
     with output_lock():
-        published = sum(1 for ev in all_events if publish_event(ev))
+        published = sum(1 for ev in all_events if publish_record(ev))
         total = len(load_json_store(OUTPUT_FILE, []))
     log(f"Total events: {total} ({published} new)")
 

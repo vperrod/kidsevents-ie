@@ -12,6 +12,7 @@ import time
 import threading
 from datetime import datetime, timezone
 
+import contract
 import factory_worker
 import staging
 
@@ -57,9 +58,22 @@ def index():
     return send_file(os.path.join(BASE_DIR, "web", "index.html"))
 
 
+def _on_air(path):
+    """The records in a store that are actually published. A record with no
+    `status` predates the contract and is on air by virtue of being in the
+    file at all."""
+    return [r for r in _read_store(path, []) if r.get("status", "on-air") == "on-air"]
+
+
+def _legacy(path):
+    """On-air records flattened onto the keys web/index.html reads, so the
+    public API keeps its response shape while the stores hold the contract."""
+    return [contract.legacy_view(r) for r in _on_air(path)]
+
+
 @app.route("/api/events")
 def api_events():
-    events = _read_store(EVENTS_FILE, [])
+    events = _legacy(EVENTS_FILE)
     events.sort(key=lambda e: e.get("start_date", ""))
     return jsonify(events)
 
@@ -67,7 +81,7 @@ def api_events():
 @app.route("/api/holidays")
 def api_holidays():
     """Curated, evergreen family day-out ideas kept separate from dated events."""
-    return jsonify(_read_store(HOLIDAYS_FILE, []))
+    return jsonify(_legacy(HOLIDAYS_FILE))
 
 
 @app.route("/api/places")
@@ -75,11 +89,31 @@ def api_places():
     """Year-round local activities/venues (soft play, farms, museums) --
     evergreen like Holidays, but its own section: smaller, closer-to-home
     things to do, not curated bigger day-trip destinations."""
-    return jsonify(_read_store(PLACES_FILE, []))
+    return jsonify(_legacy(PLACES_FILE))
+
+
+@app.route("/api/v1/events")
+def api_v1_events():
+    """The full contract record — everything the flat legacy view drops
+    (facts and their quotes, the facet taxonomy, media, provenance)."""
+    events = _on_air(EVENTS_FILE)
+    events.sort(key=lambda e: (e.get("event") or {}).get("start_date", ""))
+    return jsonify(events)
+
+
+@app.route("/api/v1/places")
+def api_v1_places():
+    return jsonify(_on_air(PLACES_FILE))
+
+
+@app.route("/api/v1/holidays")
+def api_v1_holidays():
+    return jsonify(_on_air(HOLIDAYS_FILE))
+
 
 @app.route("/api/health")
 def health():
-    return jsonify({"status": "ok", "events_count": len(_read_store(EVENTS_FILE, []))})
+    return jsonify({"status": "ok", "events_count": len(_on_air(EVENTS_FILE))})
 
 
 def _member_from_request():
@@ -222,12 +256,12 @@ def admin_metrics():
 def admin_stats():
     """Event statistics: counts, sources, recent events."""
     events = _read_store(EVENTS_FILE, [])
-    events.sort(key=lambda e: e.get("start_date", ""))
+    events.sort(key=lambda e: contract.legacy_view(e).get("start_date") or "")
 
     # Count by source
     sources_count = {}
     for e in events:
-        src = e.get("source", e.get("source_type", "unknown"))
+        src = contract.legacy_view(e).get("source") or e.get("source_type", "unknown")
         # Normalize: use source name before colon
         src_name = src.split(":")[0] if src and ":" in src else (src or "unknown")
         sources_count[src_name] = sources_count.get(src_name, 0) + 1
@@ -379,15 +413,21 @@ def admin_logs():
 
 @app.route("/admin/api/events")
 def admin_events():
-    """All events for admin table."""
+    """All events for admin table — full contract records, not the legacy view."""
     events = _read_store(EVENTS_FILE, [])
-    events.sort(key=lambda e: e.get("start_date", ""))
+    events.sort(key=lambda e: contract.legacy_view(e).get("start_date") or "")
     return jsonify({"events": events})
 
 @app.route("/admin/api/social/staged")
 def admin_social_staged():
-    """Social candidates awaiting a review decision, plus per-source counts."""
-    pending = [c for c in staging.load_staged() if c.get("status") == "needs_review"]
+    """Social candidates awaiting a review decision, plus per-source counts.
+
+    `needs_input` is in here too: the gate could not publish it, but it named
+    the one field (`missing_field`) a curator's note would fix, so it is still
+    a decision waiting for a human rather than a closed one.
+    """
+    pending = [c for c in staging.load_staged()
+               if c.get("status") in ("needs_review", "needs_input")]
     found_via = {}
     for candidate in pending:
         key = candidate.get("found_via") or "Unattributed"

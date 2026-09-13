@@ -1,0 +1,125 @@
+{
+  "age_bands": {
+    "values": ["0-2", "3-5", "6-9", "10-12", "13+"],
+    "legacy": {
+      "toddler": ["0-2", "3-5"],
+      "preschool": ["3-5"],
+      "kids": ["6-9", "10-12"],
+      "teens": ["13+"],
+      "all_ages": ["0-2", "3-5", "6-9", "10-12", "13+"]
+    }
+  },
+  "price_band": {
+    "values": ["free", "under-10", "10-25", "25-plus", "unknown"],
+    "legacy": {
+      "free": "free",
+      "donation": "free",
+      "paid": "unknown",
+      "membership": "unknown"
+    }
+  },
+  "setting": {
+    "values": ["indoor", "outdoor", "both"]
+  },
+  "activity_types": {
+    "values": [
+      "playground", "park", "museum", "farm", "soft-play", "zoo-wildlife",
+      "trail-hike", "swimming", "water-sports", "adventure-climbing",
+      "workshop-class", "festival", "theatre-show", "cinema", "library",
+      "craft", "sports", "seasonal", "food-market", "nature-reserve"
+    ],
+    "legacy": {
+      "festival": "festival",
+      "theatre": "theatre-show",
+      "music": "festival",
+      "sport": "sports",
+      "workshop": "workshop-class",
+      "market": "food-market",
+      "museum": "museum",
+      "park": "park",
+      "special": "seasonal",
+      "food": "food-market",
+      "seasonal": "seasonal",
+      "indoor play": "soft-play",
+      "nature": "nature-reserve"
+    }
+  },
+  "accessibility": {
+    "values": [
+      "wheelchair", "step-free", "buggy", "changing-places-toilet",
+      "sensory-friendly", "elder-friendly"
+    ],
+    "legacy": {
+      "pushchair_accessible": "buggy"
+    }
+  },
+  "counties": {
+    "Antrim": {"region": "Ulster", "ni": true, "code": ""},
+    "Armagh": {"region": "Ulster", "ni": true, "code": ""},
+    "Carlow": {"region": "Leinster", "ni": false, "code": "CW"},
+    "Cavan": {"region": "Ulster", "ni": false, "code": "CN"},
+    "Clare": {"region": "Munster", "ni": false, "code": "CE"},
+    "Cork": {"region": "Munster", "ni": false, "code": "CO"},
+    "Derry": {"region": "Ulster", "ni": true, "code": ""},
+    "Donegal": {"region": "Ulster", "ni": false, "code": "DL"},
+    "Down": {"region": "Ulster", "ni": true, "code": ""},
+    "Dublin": {"region": "Leinster", "ni": false, "code": "DN"},
+    "Fermanagh": {"region": "Ulster", "ni": true, "code": ""},
+    "Galway": {"region": "Connacht", "ni": false, "code": "GY"},
+    "Kerry": {"region": "Munster", "ni": false, "code": "KY"},
+    "Kildare": {"region": "Leinster", "ni": false, "code": "KE"},
+    "Kilkenny": {"region": "Leinster", "ni": false, "code": "KK"},
+    "Laois": {"region": "Leinster", "ni": false, "code": "LS"},
+    "Leitrim": {"region": "Connacht", "ni": false, "code": "LM"},
+    "Limerick": {"region": "Munster", "ni": false, "code": "LK"},
+    "Longford": {"region": "Leinster", "ni": false, "code": "LD"},
+    "Louth": {"region": "Leinster", "ni": false, "code": "LH"},
+    "Mayo": {"region": "Connacht", "ni": false, "code": "MO"},
+    "Meath": {"region": "Leinster", "ni": false, "code": "MH"},
+    "Monaghan": {"region": "Ulster", "ni": false, "code": "MN"},
+    "Offaly": {"region": "Leinster", "ni": false, "code": "OY"},
+    "Roscommon": {"region": "Connacht", "ni": false, "code": "RN"},
+    "Sligo": {"region": "Connacht", "ni": false, "code": "SO"},
+    "Tipperary": {"region": "Munster", "ni": false, "code": "TA"},
+    "Tyrone": {"region": "Ulster", "ni": true, "code": ""},
+    "Waterford": {"region": "Munster", "ni": false, "code": "WD"},
+    "Westmeath": {"region": "Leinster", "ni": false, "code": "WH"},
+    "Wexford": {"region": "Leinster", "ni": false, "code": "WX"},
+    "Wicklow": {"region": "Leinster", "ni": false, "code": "WW"}
+  },
+  "county_aliases": {
+    "londonderry": "Derry",
+    "co. derry": "Derry",
+    "co derry": "Derry",
+    "tipperary north": "Tipperary",
+    "tipperary south": "Tipperary"
+  },
+  "holiday": {
+    "destination_type": {
+      "values": ["city", "resort", "region", "park", "island"]
+    },
+    "holiday_types": {
+      "values": [
+        "beach", "winter-sun", "ski", "city-break", "theme-park", "farm-stay",
+        "camping-glamping", "all-inclusive", "villa-self-catering", "cruise",
+        "road-trip", "safari-wildlife", "lakes-mountains"
+      ]
+    },
+    "best_seasons": {
+      "values": ["spring", "summer", "autumn", "winter"]
+    },
+    "school_breaks": {
+      "oct-midterm": "2026-10-26/2026-10-30",
+      "christmas": "2026-12-23/2027-01-05",
+      "feb-midterm": "2027-02-15/2027-02-19",
+      "easter": "2027-03-20/2027-04-04",
+      "summer": "2027-06-26/2027-08-31"
+    },
+    "flight_time_from_dublin": {
+      "values": ["none", "under-2h", "2-4h", "4-8h", "8h-plus"]
+    },
+    "budget_band": {
+      "values": ["budget", "mid", "premium", "luxury"]
+    }
+  }
+}

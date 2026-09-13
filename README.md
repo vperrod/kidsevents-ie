@@ -8,19 +8,21 @@ Live at: https://claude-dev-vperrod.westeurope.cloudapp.azure.com/kidsevents/
 
 ## Pipeline
 
-Three modules, nothing else:
+The modules, and nothing else:
 
 | Module | Role |
 |---|---|
 | `factory_worker.py` | The factory. One cycle per run: prune events that are over → discover URLs (local search gateway + the curated deep listing pages in `sources.json`) → crawl with crawl4AI → extract (schema.org `Event` JSON-LD first, an LLM for free-text pages) → normalise → publish through the quality gate. Run hourly by `kidsevents-factory.timer`, one cycle at a time (`daemon.lock`). |
 | `llm.py` | Model routing. Every LLM call in the project goes through `complete(prompt, kind)`, which picks the cheapest lane that can answer right now. |
-| `staging.py` | The staging desk for social candidates collected by the mini PC crew. Appends them to `staged/social_candidates.json` and, with `AUTO_APPROVE=on` (the default), runs each through the same gate immediately. Anything that does not clear it stays `needs_review` with a stored `reason`. |
-| `server.py` | Flask on `127.0.0.1:8128` (user unit `kidsevents-ie.service`): the public `/api/events`, `/api/places`, `/api/holidays` feeds, the member save API, and the `/admin` portal with its `/admin/api/*` routes. |
+| `contract.py` + `gate.py` + `catalog/facets.json` | The record contract, the facet vocabulary and the QA gate — see below. Every record written to a catalogue has passed both. |
+| `staging.py` | The staging desk for social candidates collected by the mini PC crew. Appends them to `staged/social_candidates.json` and, with `AUTO_APPROVE=on` (the default), runs each through the same gate immediately. Anything that does not clear it becomes `needs_input` with the one `missing_field` a curator's note would fix, or `rejected`. |
+| `server.py` | Flask on `127.0.0.1:8128` (user unit `kidsevents-ie.service`): the public `/api/events`, `/api/places`, `/api/holidays` feeds (the legacy view), the full-contract `/api/v1/*` feeds, the member save API, and the `/admin` portal with its `/admin/api/*` routes. |
 
 ```
 kidsevents-factory.timer (hourly) → factory_worker.run_discovery_cycle()
-mini PC social crew (ssh)         → staging.py append → factory_worker.promote_candidate()
-                                       ↓ quality gate ↓
+mini PC social crew (ssh)         → staging.py append → factory_worker.promote()
+              research fetch → classify → facts → extract → write → gate.qa()
+                                       ↓
         events_output.json · places_output.json · holidays_output.json
                                        ↓
                               server.py → web/ + /admin
@@ -57,20 +59,88 @@ curl -s 127.0.0.1:18089/health
 Nothing is installed or changed on the mini PC — it is a plain local forward
 onto the llama-server it already runs.
 
+### The record contract
+
+Events, Things to do (places) and Holidays are one shape, defined in
+`contract.py` and stored in the three catalogue files. `contract.EMPTY_RECORD(kind)`
+is the whole shape; `contract.validate(record)` returns the structural
+violations; `contract.derive(record)` fills in everything that must never be
+authored by a model — `location.region` from the county, `location.ireland`
+from the country, `links.maps_url` (a plain `google.com/maps/search/?api=1&query=…`
+link, never a billed Places API), the slug and id, and `provenance.confidence`,
+which is a measured completeness score rather than a model's self-report.
+
+```
+schema_version, id, kind, title (≤80), slug, summary (≤160), description, family_relevant
+location:   name, address, city, county (one of the 32), region, country, lat, lon, ireland
+links:      source_url, official_url, maps_url, instagram_url, tiktok_url, booking_url
+media:      hero { url, file, credit, licence, source, gate, alt } | null, embeds[]
+taxonomy:   age_bands[], price_band, price_detail, setting, activity_types[], rainy_ok, accessibility[]
+provenance: sources[] {url, fetched_at}, facts[] {claim, quote, source_url}, confidence, last_checked, produced_by[]
+status:     on-air | needs-input | rejected, reason, hint
+event:      start_date, end_date, times[], recurrence, organizer, booking_required, date_evidence, cancelled
+place:      opening_hours, duration_hint, seasonal_note
+holiday:    destination_type, holiday_types[], best_seasons[], best_months[], school_breaks[],
+            flight_time_from_dublin, direct_flight, budget_band, with_baby_toddler, includes[]
+```
+
+`contract.legacy_view(record)` flattens a record onto the flat keys
+`web/index.html` reads, which is what the public `/api/*` routes serve; the
+full record is at `/api/v1/{events,places,holidays}` and on `/admin/api/*`.
+A record with no `schema_version` predates the contract and passes through the
+legacy view untouched, so the site keeps working during the migration.
+
+### Facet vocabulary
+
+`catalog/facets.json` is the whole vocabulary: age bands, price bands, setting,
+the 20 activity types, accessibility, the 32 counties (region + Northern
+Ireland flag + the old allevents county codes), and the holiday facets
+including the 2026/27 school-break dates. `gate.gate_meta(taxonomy)` folds a
+model's answer onto it through the legacy alias maps and **drops** anything it
+still cannot recognise — it never substitutes a default, because an invented
+category that looks curated is worse than a missing one. Every drop is counted
+into `factory_state.json.facet_drops`, and `gate.facet_gloss(kind)` renders the
+same vocabulary into the write prompt so the model picks from it.
+
 ### Quality gate
 
-Nothing is written to a catalogue without passing `event_reject_reason()` /
-`place_reject_reason()`, and every rejection is logged with its reason:
+`gate.qa(record, sources_text, on_air_titles)` returns `(ok, reason, missing_field)`
+and is the only thing that puts a record on air. The split matters as much as
+the verdict: a truthy `missing_field` names one thing a curator's note could
+supply (`needs-input`, the item stays in the desk), an empty one means nothing
+anybody types would help (`rejected`).
 
-- `country` must be `IE` (Northern Ireland and Britain fold to `GB`, everything else to `other`)
-- `family_relevant` must not be false
-- the title must exist, be at most 120 characters, and must not be the source caption or the front of it
-- an event must have a `start_date`, and it must fall inside `today … today + 60 days`
+Rejected: not family-relevant · the event is already over · title is the raw
+caption · no source at all · not in Ireland (event/place) · Irish record whose
+coordinates are not in Ireland · description that is a link list rather than
+prose · duplicate of an item already on air.
 
-`confidence` is not a model self-report: it is the fraction of ten fields a
-parent actually needs (`start_date`, `venue_name`, `city`, `county`,
-lat/lon, `cost`, `age_group`, `category`, a description of at least 120
-characters, `website`) that are filled in.
+Needs-input, with the field named: `title` · `summary` · `description` (60
+words for an event, 120 for a place or holiday) · `county` · `facts` (nothing
+in the source was quoted, so nothing is grounded) · `start_date` ·
+`date_evidence` (missing, or not actually present in the source text) ·
+`price_band` · `age_bands` · `activity_types` · `address` · `sources` (a
+holiday needs two independent domains) · `holiday_types` · `best_seasons` ·
+`caption` (the fetch was rate-limited).
+
+### The four steps
+
+`factory_worker.promote(candidate)` is the whole ingestion path: one research
+fetch and then at most four model calls per item, each with an explicit JSON
+contract and "do not invent values":
+
+1. `research_fetch()` — fetch the candidate's own source from this VM with a
+   desktop Chrome UA (TikTok captions come keylessly from
+   `tiktok.com/oembed`), one request per 2 s per platform. A 401/403/429 is a
+   rate limit, not a bad candidate: it becomes needs-input `caption`.
+2. `classify()` — kind, family relevance, country.
+3. `gather_facts()` — claims with verbatim quotes. **A quote that is not
+   actually a substring of the source text is dropped in code**; this is the
+   grounding every later step is limited to.
+4. `extract_details()` — the kind-specific fields. A page carrying schema.org
+   `Event` JSON-LD pre-fills `event.*` and skips this step.
+5. `write_copy()` — title, summary, description and the taxonomy, from the
+   verified facts only.
 
 ### Storage
 
@@ -108,7 +178,10 @@ Useful environment (from `.env`, the systemd unit, or the command line):
 
 ## Output format
 
-`events_output.json` is a list of records shaped like this:
+`events_output.json`, `places_output.json` and `holidays_output.json` hold
+contract records (the shape above). The public feeds serve
+`contract.legacy_view()` of the on-air ones, which is the flat shape the
+current front end reads:
 
 ```json
 {
@@ -116,34 +189,40 @@ Useful environment (from `.env`, the systemd unit, or the command line):
   "description": "...",
   "start_date": "2026-09-20",
   "end_date": "2026-09-20",
-  "time": "10:30",
-  "duration_hours": 1.0,
   "venue_name": "Pearse Street Library",
   "venue_address": "138-144 Pearse St, Dublin 2",
   "city": "Dublin",
   "county": "Dublin",
   "country": "IE",
-  "family_relevant": true,
   "latitude": "53.3441",
   "longitude": "-6.2527",
   "url": "https://...",
-  "website": "https://...",
-  "image_url": "https://...",
-  "image_alt": "...",
-  "cost": "free",
-  "cost_detail": "Free, no booking needed",
-  "age_group": "toddler",
-  "category": "workshop",
-  "suitable_for": "pushchair_accessible",
-  "booking_required": "none",
-  "booking_url": "",
-  "phone": "+353 1 222 8488",
-  "contact_email": "libraries@dublincity.ie",
-  "source": "web:https://...",
-  "all_sources": ["https://..."],
-  "all_urls": ["https://..."],
-  "confidence": 0.9
+  "source": "dublincity.ie",
+  "cost": "Free, no booking needed",
+  "age_group": "0-2, 3-5",
+  "category": "library",
+  "confidence": 0.85,
+  "region": "Leinster",
+  "location": "Pearse Street Library",
+  "price_range": "Free, no booking needed",
+  "source_url": "https://...",
+  "source_name": "dublincity.ie",
+  "booking_url": ""
 }
+```
+
+### Migration
+
+`migrate_contract.py` maps the pre-contract records onto the contract through
+the legacy facet maps, then splits them: on-air stays in the public file,
+needs-input moves to `staged/needs_input.json` with its `missing_field`, and
+rejected is dropped. It is dry-run by default (prints the table, writes
+nothing) and idempotent — a record already at `schema_version: 1` is left
+exactly as it is:
+
+```bash
+venv/bin/python3 migrate_contract.py            # the table only
+venv/bin/python3 migrate_contract.py --apply    # backup to ~/backups/kidsevents-ie, then write
 ```
 
 See `EVENT_DATA_CONTRACT.md` for what the public site must show for every
@@ -162,7 +241,11 @@ out for that reason.
 
 ```
 kidsevents-ie/
-├── factory_worker.py        # discovery, extraction, normalisation, quality gate
+├── factory_worker.py        # discovery, research fetch, the four steps, publishing
+├── contract.py              # the one record contract + the legacy view
+├── gate.py                  # facet vocabulary fold + the on-air decision
+├── migrate_contract.py      # one-shot, idempotent migration onto the contract
+├── catalog/facets.json      # the facet vocabulary (counties, ages, prices, activities)
 ├── llm.py                   # model routing: local → free gateway lanes → hermes
 ├── staging.py               # social candidate staging desk + auto-approve sweep
 ├── server.py                # Flask API + admin portal
@@ -170,7 +253,7 @@ kidsevents-ie/
 ├── member_store.py          # member saves (sqlite)
 ├── sources.json             # curated listing URLs per city
 ├── web/                     # index.html (public) + admin.html
-├── staged/                  # social_candidates.json
+├── staged/                  # social_candidates.json, needs_input.json
 ├── systemd/                 # unit examples
 └── events_output.json · places_output.json · holidays_output.json
 ```

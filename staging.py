@@ -11,12 +11,13 @@ daemon. That collector pipes its findings into this script over SSH:
 AUTO_APPROVE (same pattern as WanderTold's factory, on by default -- Victor
 2026-09-12: "I don't have time to review all manually"): every newly staged
 candidate is immediately run through the same enrichment gate the admin
-Approve button uses (factory_worker.promote_candidate -- real LLM read of
-the caption, published only if it yields a real date or a real identifiable
-place; never invented). A candidate that doesn't clear that gate just stays
-needs_review with a stored `reason` explaining why -- auto-approve is a
-tighter gate applied automatically, not a lower one. Set AUTO_APPROVE=off in
-.env to go back to fully manual review.
+Approve button uses (factory_worker.promote -- a real research fetch and four
+grounded model steps, published only if the QA gate passes; never invented).
+A candidate that doesn't clear that gate becomes `needs_input` with the one
+`missing_field` a curator's note could supply, or `rejected` when nothing
+anybody types would help -- auto-approve is a tighter gate applied
+automatically, not a lower one. Set AUTO_APPROVE=off in .env to go back to
+fully manual review.
 
 All read-modify-write access to this file goes through factory_worker's
 shared lock -- confirmed live 2026-09-12 that the sweep and a concurrent
@@ -76,22 +77,33 @@ def mark_candidate(source_url, mutate_fn):
         return result
 
 
-def apply_verdict(candidate, kind, record, reason, hint=""):
+def apply_verdict(candidate, record, reason, missing_field, hint=""):
     """Apply a classification verdict to the candidate in place and, on
-    success, publish the record. On success sets status/reviewed_at/
-    review_note; on failure sets `reason` (why not) and, if given, `hint`
-    (what a curator already tried) so the admin page can show it.
-    Returns True if it published. Call under mark_candidate's lock."""
+    success, publish the record. Call under mark_candidate's lock.
+
+    A verdict that did not publish splits two ways, which is the whole point
+    of the gate: `missing_field` names one thing a curator's note could
+    supply, so the candidate becomes `needs_input` and stays in the desk;
+    without one, nothing anybody types will make it publishable and it is
+    `rejected`. Returns True if it published.
+    """
     if hint:
         candidate["hint"] = hint
-    if not record:
-        candidate["reason"] = reason
-        return False
-    (factory_worker.publish_event if kind == "event" else factory_worker.publish_place)(record)
-    candidate["status"] = "approved"
     candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    if not record:
+        candidate["status"] = "needs_input" if missing_field else "rejected"
+        candidate["reason"] = reason
+        if missing_field:
+            candidate["missing_field"] = missing_field
+        else:
+            candidate.pop("missing_field", None)
+        return False
+    kind = record["kind"]
+    factory_worker.publish_record(record)
+    candidate["status"] = "approved"
     candidate["review_note"] = f"Approved: classified as a{'n' if kind == 'event' else ''} {kind}."
     candidate.pop("reason", None)
+    candidate.pop("missing_field", None)
     return True
 
 
@@ -104,9 +116,9 @@ def try_approve_by_url(source_url, hint=""):
     snapshot = next((c for c in load_staged() if c.get("source_url") == source_url), None)
     if snapshot is None:
         return False
-    kind, record, reason = factory_worker.promote_candidate(snapshot, hint=hint)
+    record, reason, missing_field = factory_worker.promote(snapshot, hint=hint)
     return mark_candidate(
-        source_url, lambda c: apply_verdict(c, kind, record, reason, hint=hint)
+        source_url, lambda c: apply_verdict(c, record, reason, missing_field, hint=hint)
     ) or False
 
 

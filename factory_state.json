@@ -1,6 +1,36 @@
 {
   "fails": {},
-  "last_run": "2026-09-13T15:59:27+00:00",
+  "last_run": "2026-09-13T20:40:22+00:00",
   "sources_hit": {},
-  "total_events": 40
+  "total_events": 61,
+  "llm": {
+    "calls_today": 868,
+    "by_lane": {
+      "local": {
+        "calls": 696,
+        "errors": 1,
+        "p50_ms": 15906
+      },
+      "auto": {
+        "calls": 87,
+        "errors": 63,
+        "p50_ms": 93880
+      },
+      "hermes": {
+        "calls": 63,
+        "errors": 60,
+        "p50_ms": 90105
+      },
+      "kg/stepfun/step-3.7-flash:free": {
+        "calls": 22,
+        "errors": 21,
+        "p50_ms": 11079
+      }
+    },
+    "last_probe": "2026-09-13T20:04:43+00:00"
+  },
+  "facet_drops": {
+    "setting": 4,
+    "price_band": 1
+  }
 }
