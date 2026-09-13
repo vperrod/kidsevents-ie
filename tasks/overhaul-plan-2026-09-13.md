@@ -1,183 +1,157 @@
-# Small Days — portal + ingestion overhaul plan (2026-09-13)
+# Small Days — portal + ingestion overhaul plan, v2 (2026-09-13, after Victor's answers)
 
-Status: DRAFT for Victor's review. Nothing below is built yet except §0.
-Evidence: four read-only audits this morning (WanderTold mechanics on the mini PC, Small Days code + data on the VM, online research on directories/taxonomy/sources/analytics, real-browser usability pass of the portal).
+Status: v2 for Victor's approval. Built from two audit rounds (WanderTold mechanics on the mini PC; Small Days code, data, runtime; real-browser usability; online research on directories, taxonomy, embeds, holidays, analytics, DNS/mail; infra review of the VM, mini PC, Hostinger mail server, Firebase; content-quality sampling; code review). Nothing is built yet except §0.
 
-## 0. What was actually broken this morning (fixed, live, pushed 26ae87f)
+## 0. Fixed today (live, pushed 26ae87f)
 
-| Symptom Victor saw | Root cause (verified) | Fix |
+| Symptom | Root cause (verified) | Fix |
 |---|---|---|
-| "hundreds waiting for me" (296 needs_review, 294 with no verdict) | The auto-approve sweep self-deadlocked after item 2 on 09-12 14:19 UTC: `output_lock()` was not re-entrant (flock treats each open() as a new owner), so "classify → publish" blocked on itself. Sat in `locks_lock_inode_wait` for 20 h; 22 hourly mini-PC pushes queued behind it. | Lock is re-entrant per thread; LLM classification now runs on a snapshot **outside** the lock. Sweep relaunched 11:07 UTC. |
-| Factory run 09-12 15:03: 0 events for all 5 cities | systemd user unit PATH has no `~/.local/bin` → every `hermes` call: "No such file". | `hermes` resolved to an absolute path in code. |
-| Classifier "timed out after 90 s" | OpenRouter free tier: ~1 req/min per model per key; sequential hammering of one model. All 4 roster models answer in 22–42 s when not throttled. | Plan §3.4: rotate lanes, local model first. |
+| "hundreds waiting for me" (296 needs_review, 294 never judged) | Auto-approve sweep self-deadlocked after item 2 on 09-12 14:19 UTC: `output_lock()` was not re-entrant (flock treats each open() as a new owner) so "classify → publish" blocked on itself. `locks_lock_inode_wait` for 20 h; 22 hourly mini-PC pushes queued behind it; the 09-12 15:03 factory run also hung on the same lock for 20 h. | Re-entrant per thread; classification runs on a snapshot outside the lock. Sweep relaunched 11:07 UTC, 19/296 done by 12:40, no timeouts. |
+| Factory run published 0 events | systemd user unit PATH has no `~/.local/bin` → every `hermes` call "No such file". | Absolute path in code; proven on the 11:05 run. |
+| Classifier "timed out after 90 s" | OpenRouter free tier ≈ 1 req/min per model per key; one model hammered. All 4 roster models answer in 22–42 s unthrottled. | §4.4 rotate lanes, local model first. |
 
-Net: the backlog was never a review problem, it was a stuck process. With the gate working, most of the 296 will resolve to approved / rejected-with-reason without Victor.
+Not fixed, found today: the mini PC social crew's **TikTok lane is dead since this morning** ("Pre-navigation to tiktok.com failed: Navigation rejected" on every query) while the Instagram lanes still return candidates (46 new at 09:43, resent after the deadlock cleared). WanderTold's crew on the same browser is fine. To triage in phase 0b (browser extension URL allow-list or TikTok bot wall; read-only first per the one-owner rule).
 
-## 1. Where the product stands (numbers)
+The sweep's first auto-approval is the QA gate in one record: an adult vintage clothing pop-up, dated yesterday (already past), published as an "all ages" family event with the raw truncated caption as its title. Three checks missing: family relevance, past-date rejection, title synthesis.
 
-| Catalogue | Records | price | age | category | official site | maps link | instagram | photo | description >80 chars |
+## 1. Where the product stands
+
+**Counts and completeness**
+
+| Catalogue | Records | price | age | category | official site | maps | instagram | photo | good description |
 |---|---|---|---|---|---|---|---|---|---|
-| Events | 122 | 0% | 0% | 0% | 100% (source url) | 0% (no field) | 0% (no field) | 0% (no field) | 75% |
-| Things to do (places) | 2 | 100% | 50% | 50% | 0% | 0% | 0% | 0% | 50% |
-| Holidays | 3 | 100% | 100% | 100% | 0% | 0% | 0% | 0% | 100% |
+| Events | 122 | 0% | 0% | 0% | 100% (source url) | no field | no field | no field | 75% |
+| Things to do | 2 | 100% | 50% | 50% | 0% | no field | no field | no field | 50% |
+| Holidays | 3 | 100% | 100% | 100% | 0% | no field | no field | no field | 100% |
 
-- The three output schemas do not even have fields for maps, Instagram, photos, accessibility. R5 is a schema gap, not a fill gap.
-- The public site is a single-page app with no per-item URL, no JSON-LD, no sitemap, no canonical, served at `…cloudapp.azure.com/kidsevents/`. SEO metrics cannot exist until it has a domain and crawlable item pages.
-- No visitor analytics anywhere (no script, no server counter).
-- Sources: 20 URLs across 5 Irish cities, events only. No Things-to-do sources, no Holidays sources. Social search: 15 tags, TikTok 202 / Instagram 102 candidates, 34% with empty caption (rate-limited fetch).
-- Admin: one flat nav of 6 views (Overview, Editorial review, Coverage, Collection, Social, Logs). No separation by catalogue, no metrics beyond counts, no bulk actions, no deep links.
+**Content quality (deterministic sample of 31 events, 44 staged)**
+- Events: 42% real family events, 35% adult (stand-up, gigs, "16+" theatre from irelandme.com), 10% evergreen attractions mislabelled as events (familyfun.ie, descriptions are nav-tag lists), 13% empty (ark.ie). 54% of all published events (67/124) have a start date already in the past, one from 2022.
+- Places/Holidays are inverted: the three Holidays are Irish day-trip places; the one London item sits in Places and shows as "nearby".
+- Staged social: 23% have a nameable Irish venue in the caption; 55% have no caption or no venue; 23% are explicitly outside Ireland. Noise tags: `holidays kids`, `thingstodokids`, and brand spam inside `events ireland`. Good tags: `galwayfamily`, `corkfamily`, `corkwithkids`, `kidsofcork`, `familyeventsireland`, `kidseventsireland`.
+- Sources: 22 URLs, 5 cities; all 5 Eventbrite URLs 405, corkbeo anti-bot, visitcork dead, Facebook groups are login walls; 21 of 26 counties have no source. Search discovery crawls section homepages (visitdublin.com/events nav), yielding 2–3 events per run.
 
-## 2. Target model — three catalogues, one contract each
+**Code review (top items)**: every JSON store is written by truncate-in-place with no temp+rename, and every loader silently substitutes an empty list on a torn read and then writes it back (one interrupted write = whole dataset gone); the LLM path publishes past dates (JSON-LD path filters them); `normalize_event` drops the fields the prompt asks for (`image_url`, `suitable_for`, `booking_required`, `phone`, `contact_email`, `duration_hours`) which is why cost/age are 0%; no country gate on `publish_place`; Flask runs single-threaded so one Approve click blocks the public site for up to 90 s; `href` fields are escaped but not scheme-checked; `main.py` + 8 scraper modules are dead code that would clobber the output file if ever run.
 
-Shared core (every record, every catalogue):
+**Portal usability (real Chromium, desktop + phone)**: Approve/Reject buttons clipped off-screen for all 296 rows; a "Saved to your small plan" toast is present in the DOM on every page; no pagination (10k–40k px pages); two parallel navs with different labels; no deep links; failed runs show no error; raw `&#039;` in titles. Zero JS errors; production identical to loopback.
+
+**SEO/analytics**: none possible today. Single-page app, no per-item URL, no JSON-LD, no sitemap, no analytics script, served under the Azure hostname. `smalldays.ie` currently has no DNS zone (NXDOMAIN).
+
+## 2. Your answers, recorded, and what they change
+
+| # | You said | What it means for the plan |
+|---|---|---|
+| 1 | Domain `smalldays.ie` on your Blacknight account | Site moves to `https://smalldays.ie`; `/kidsevents/` becomes a 301. Blacknight has no DNS API, so the records are clicks in cp.blacknight.com (list in §6). |
+| 2 | Analytics on the mini PC | Umami (Node + Postgres, ~300 MB) on the mini PC, served as `stats.smalldays.ie` through the VM's Caddy over Tailscale. Mini PC has 1.6 TB disk free; RAM is tight (local model holds most of it) so Umami is sized small. |
+| 3 | Domain exists | Search Console: the Firebase project `small-days-ireland` already has a service account on this VM. You need three clicks (§6). |
+| 4 | "What is this?" + yes, under @smalldays.ie on your own SMTP | **Fáilte Ireland** is the national tourism authority. Its free Open Data API lists every attraction and activity operators submit to discoverireland.ie, licensed CC BY 4.0. It is the single biggest seed for Things to do. Registration needs an email, so `data@smalldays.ie` gets created first on the Trystful mail server (docker-mailserver on the Hostinger box supports a second domain natively). |
+| 5 | Prefer an iframe embed; host if not; wants my take | **Embed.** Instagram's `/p/<code>/embed/` iframe and TikTok's embed both work with no token (tested from this VM today; Meta reopened tokenless embeds on 2026-06-15). Under EU case law (BestWater, VG Bild-Kunst) embedding a public post is lawful; downloading and rehosting needs the poster's licence. WanderTold does download venues' Instagram og:images with no licence field, which is your call there, but Small Days is a public directory with a domain and a brand, so: hero image from licensed sources (Wikimedia Commons, Openverse, the venue's own website with credit), the organiser's post embedded as "as seen on Instagram/TikTok", and rehosting only after the organiser says yes via the claim email (§4.6). |
+| 6 | Age and price bands yes | Locked: 0-2 / 3-5 / 6-9 / 10-12 / 13+; free / under €10 / €10-25 / €25+. |
+| 7 | Worldwide, as many as you can, plus a season taxonomy | No cap. "Two sources" was a quality bar, not a limit: a destination goes on air once two independent sources agree it exists and is family-friendly. Season taxonomy in §3. |
+| 8 | "What is this?" | A **saved collection** is Instagram's bookmark folder (you tap Save on a post and file it, e.g. "Kids"). WanderTold reads yours ("Wandertold" collection) as an idea feed. Small Days' crew has a placeholder for a "Kids" collection but no URL, so that lane is a no-op. You don't need it: tag search runs without it. Default: drop the lane. If you do start saving posts into a collection, tell me its name and I switch it on. |
+
+## 3. Target model: three catalogues, one contract each
+
+Shared core on every record:
 
 ```
-id, kind: event|place|holiday, title, slug, summary (≤160 chars), description (120–300 words, grounded)
-location: { name, address, city, county (32-county enum), region, country (ISO), lat, lon, ireland: bool }
-links: { source_url (where we found it), official_url, maps_url (google.com/maps/search/?api=1&query=…), instagram_url, booking_url }
-photos[]: { url|file, credit, licence, source, gate: hero|pass|reject, alt }
-taxonomy: { age_bands[] ⊂ {0-2,3-5,6-9,10-12,13+}, price_band ∈ {free,under-10,10-25,25-plus,unknown}, price_detail,
-            setting ∈ {indoor,outdoor,both}, activity_types[] (20-value enum), weather: {rainy_ok: bool},
-            accessibility[] ⊂ {wheelchair, step-free, buggy, changing-places-toilet, sensory-friendly, elder-friendly} }
-provenance: { sources[] (url, fetched_at), facts[] (claim + quote), confidence, last_checked, produced_by (model ids) }
-status: on-air | needs-input | rejected, reason, hint
+id, kind: event | place | holiday, title (synthesised, ≤80 chars, never a raw caption), slug, summary (≤160), description (120–300 words, grounded)
+location:   name, address, city, county (32-county enum), region, country (ISO), lat, lon, ireland: bool
+links:      source_url, official_url, maps_url (google.com/maps/search/?api=1&query=…), instagram_url, tiktok_url, booking_url
+media:      hero { url|file, credit, licence, source, gate: hero|pass|reject, alt }, embeds[] { platform, url }
+taxonomy:   age_bands[], price_band, price_detail, setting ∈ {indoor, outdoor, both}, activity_types[] (20-value enum), rainy_ok,
+            accessibility[] ⊂ {wheelchair, step-free, buggy, changing-places-toilet, sensory-friendly, elder-friendly}
+provenance: sources[] (url, fetched_at), facts[] (claim + quote), confidence (= completeness score), last_checked, produced_by
+status:     on-air | needs-input | rejected, reason, hint
 ```
 
 Per kind:
-- **Event**: `start_date, end_date, times[], recurrence, organizer, booking_required, sold_out|cancelled` + `date_evidence` (quoted source text — WanderTold rule, no date without a quote). Location + price are required to go on air.
-- **Place** (Things to do): `opening_hours, duration_hint, seasonal_note`. Location required; price may be `unknown` but shown as such.
-- **Holiday**: `destination_type (city|resort|region|park), country, best_months[], travel: {from_dublin_hours, direct_flights: bool}, family_features[]`, `includes[]` (attractions). Worldwide, `ireland=false` for most.
+- **Event**: `start_date, end_date, times[], recurrence, organizer, booking_required, sold_out|cancelled, date_evidence` (quoted source text; no date without a quote). Required for air: location, price band, at least one age band, start date ≥ today.
+- **Place** (Things to do): `opening_hours, duration_hint, seasonal_note`. Required: location in Ireland, activity type. Price may be `unknown` and is shown as such.
+- **Holiday**: `destination_type ∈ {city, resort, region, park, island}, country, holiday_types[] ⊂ {beach, winter-sun, ski, city-break, theme-park, farm-stay, camping-glamping, all-inclusive, villa-self-catering, cruise, road-trip, safari-wildlife, lakes-mountains}, best_seasons[] ⊂ {spring, summer, autumn, winter}, best_months[], school_breaks[] ⊂ {oct-midterm, christmas, feb-midterm, easter, summer} (matched to the Department of Education 2026/27 dates: 26–30 Oct 2026; 23 Dec 2026–5 Jan 2027; 15–19 Feb 2027; 20 Mar–4 Apr 2027; summer), flight_time_from_dublin ∈ {none, <2h, 2-4h, 4-8h, 8h+}, direct_flight: bool, budget_band ∈ {budget, mid, premium, luxury}, with_baby_toddler: bool, includes[]`. Required: two independent sources, country, at least one holiday type and one season. Climate normals from Open-Meteo (free, no key) fill best months.
 
-Facet vocabulary lives in one file (`catalog/facets.json`, same shape as WanderTold's) and every LLM output is hard-validated against it (`gate_meta` pattern: unknown values dropped and counted, never silently coerced). Age bands, price bands and the 20 activity types are in Appendix A. Accessibility is emitted to search engines as `amenityFeature → LocationFeatureSpecification` (schema.org has no accessibility property on Place).
+Facet vocabulary in one file (`catalog/facets.json`, WanderTold shape); every model output hard-validated against it, unknown values dropped and counted. Accessibility emitted as `amenityFeature → LocationFeatureSpecification` for search engines.
 
-Migration: the 122 existing events are re-run through the new enrichment (they have source URLs, so the crawl can re-fetch); anything that cannot reach the on-air bar goes to needs-input with a reason, not deleted.
+Migration: the 3 Holidays move to Things to do; the London item is rejected; all 122 events re-run through the new gate from their source URLs (expect roughly half to be dropped as past, adult, or not an event; the familyfun.ie attractions become Things to do).
 
-## 3. Ingestion — the WanderTold method, applied
+## 4. Ingestion: the WanderTold method, applied
 
-### 3.1 Stage map (mirrors worker.py on the mini PC)
+### 4.1 Stage map
+Discovery lanes → candidate ledger (one queue, dedup by URL + folded name + geo, near-duplicates via the mini PC embedding server) → research (source page, official site, Wikidata, OSM → `facts[]` with quotes) → classify + enrich (kind → kind-specific extraction → facets; every field cites a fact or stays empty) → links → media → QA gate → auto-approve / merge every 15 min (only the merge holds the lock; atomic temp+rename writes; a torn read aborts, never writes back empty) → publish (catalogues, item pages, sitemap, JSON-LD, URL verify).
 
-| Stage | Small Days implementation | Lock |
+### 4.2 QA gate, explicit
+Reject with a named reason when: kind is `none`; not family-relevant (age-gated, adult comedy, gigs, art exhibitions without a family programme); event date in the past or missing `date_evidence`; `ireland=true` but coordinates outside Ireland, or `ireland=false` for an event/place; title equals or truncates the caption; description under 120 words, filler, or a nav-tag list; duplicate fold of an on-air item; place without an activity type; holiday with fewer than two sources. Needs-input (not reject) only when a single nameable field is missing and a hint could fix it. Items with no caption and no page content are auto-rejected `no-content`.
+
+### 4.3 Discovery lanes (all free)
+- **Events**: curated Irish sources extended to all 32 counties with deep listing URLs (not section homepages); JSON-LD Event harvesting; Ticketmaster Discovery within the free daily quota; Instagram/TikTok keyword and hashtag search; per-county "this weekend" search. Drop Eventbrite (405, API closed), corkbeo (anti-bot), Facebook groups (login wall), Songkick/Metro (404).
+- **Things to do**: Fáilte Ireland Open Data (registration with `data@smalldays.ie`); data.gov.ie playground and park datasets; OpenStreetMap Overpass seed for the island (playgrounds, museums, attractions, zoos, farms, water parks, libraries); Wikidata (website P856, Instagram P2003); venue accounts found through events; social search.
+- **Holidays**: Wikivoyage (CC BY-SA, has family sections and Wikidata IDs) + Wikidata tourist destinations as the backbone; Wikimedia Commons photos; OpenFlights routes cross-checked with the Dublin Airport destinations table for `direct_flight`; Open-Meteo climate normals; Instagram/TikTok family-travel tags; an LLM-generated seed list that is then researched and grounded item by item. OpenTripMap only after its free-tier cap is confirmed by registering.
+
+### 4.4 Model routing (free-first, WanderTold's chain)
+Mini PC local model first (yields when its two slots are busy) → six rotating free lanes on OmniRoute → hermes/OpenRouter → give up with a reason. Four short calls per item (classify, extract, facets, description); vision gate on the local model; embeddings on the mini PC. Never a paid key. Six lanes clear ≈300 items/hour.
+
+### 4.5 Social crew (mini PC)
+Fix the TikTok lane first (0b). Replace `holidays kids` and `thingstodokids` with `things to do kids ireland`, `school holidays ireland kids`; add `limerickfamily`, `waterfordkids`, `kilkennyfamily`, `sligofamily`; for any generic tag require an Ireland signal (`ireland|dublin|cork|galway|limerick|waterford|kilkenny|sligo|éire`) in caption or author bio before staging; backfill empty captions via oEmbed before classification; hashtag pages; expansion of venue accounts found through events; holiday tags for the Holidays lane. Saved-collection lane dropped unless you say otherwise.
+
+### 4.6 Organiser loop (new)
+Every on-air item gets a "Is this your venue? Claim or update" link. Claim form: name, category, address, hours, ages, price, photo upload with a licence tick-box, contacts, socials. Outreach from `hello@smalldays.ie` when a listing goes on air: "you're listed, check it, send us photos we may use". Legitimate-interest B2B email with one-click unsubscribe; sole-trader venues held back until the Irish DPC position is checked. Photos received this way may be rehosted; nothing else is.
+
+## 5. Admin portal: information architecture
+Eight areas in one left rail, each a real URL under `/admin/`, badge counts, every list paginated and filterable, state in the URL, phone layout, undo on destructive actions, one time zone: **Overview** (metrics square), **Catalogue** (Events / Things to do / Holidays tabs, facet columns, completeness chips, edit drawer with provenance, bulk unpublish / re-enrich / re-photo), **Needs input** (the only queue; grouped by reason; hint + Resubmit / Reject / Reject-all-like-this; keys j k a r), **Sources & discovery** (per lane: last run, found / on-air / rejected; add source or tag; test now), **Production** (runs with per-stage counts and the error text, mini PC crews, model lanes, failed items with retry), **Photos**, **Metrics**, **Settings** (auto-approve, thresholds, facet editor, tag list). Flask moves behind a multi-worker server so an Approve never blocks the public site.
+
+## 6. Domain, mail, analytics, search (new, from your answers)
+
+**DNS at Blacknight** (cp.blacknight.com → Domains → smalldays.ie → DNS; no API, 1–2 h propagation). Records:
+
+| Record | Name | Value |
 |---|---|---|
-| Discovery lanes | per catalogue (§3.2); each lane writes `discovery/<lane>.jsonl` candidates with `found_via` | none |
-| Candidate ledger | `staged/candidates.json` — one queue for all kinds, dedup by URL + name-fold + geo (bge-m3 embeddings on the mini PC for near-duplicate titles) | output lock |
-| Research | fetch source page(s) + official site + Wikidata/OSM enrichment → `facts[]` with quotes | none |
-| Classify + enrich | LLM: kind (event/place/holiday/none) → kind-specific extraction → facet assignment; each step a separate short prompt; every field must cite a fact or be empty | none |
-| Links | official site from JSON-LD/`sameAs`/Wikidata P856; Instagram from official-site HTML scan → Wikidata P2003 → `site:instagram.com` search (needs confirmation); maps URL built, never Places API | none |
-| Photos | Commons → Openverse → official-site og:image (placeholder only) → organiser Instagram **link** (never rehosted); vision gate on the mini PC local model (HERO/PASS/REJECT, WanderTold `photo-gate.py` rules) + alt text | none |
-| QA gate | required fields per kind; `name_grounded` (title appears in the sources); date evidence for events; no filler descriptions; duplicate-fold check; coords inside Ireland when `ireland=true` | none |
-| Auto-approve / merge | pass → on-air immediately; fail → needs-input with a **specific** reason and the one field that would unblock it; timer every 15 min like `wt-merge-staged` | output lock (merge only) |
-| Publish | write catalogue files → regenerate item pages + sitemap + JSON-LD → verify URLs | output lock |
+| A | @ | 51.124.44.241 (the VM) |
+| CNAME | www | smalldays.ie |
+| CNAME | stats | smalldays.ie |
+| MX 10 | @ | mail.trystful.com |
+| TXT | @ | `v=spf1 mx include:trystful.com -all` (final form confirmed at mailbox creation) |
+| TXT | mail._domainkey | DKIM public key (generated by the mail server when the first @smalldays.ie mailbox is added; I send you the exact string) |
+| TXT | _dmarc | `v=DMARC1; p=none; rua=mailto:admin@smalldays.ie` (tightened to reject after 2 weeks of clean reports) |
+| TXT | @ | Search Console verification string (from your Google account, §6 Search) |
+| CAA | @ | `0 issue "letsencrypt.org"` (optional) |
 
-### 3.2 Discovery lanes per catalogue (all free, no paid keys)
+**VM edge**: a new Caddy site block `smalldays.ie, www.smalldays.ie` with automatic HTTPS, `/admin*` behind the same portal-gate, `www` → apex, and `/kidsevents/*` on the Azure hostname 301 → `smalldays.ie`. Three hard-coded `/kidsevents/` hrefs in the app, `os/links.yaml`, and the Firebase "authorized domains" list updated the same day.
 
-Events: curated Irish sources (familyfun.ie, yourdaysout, city tourism sites — 20 today, extend to all 32 counties); JSON-LD `Event` harvesting on every crawled page; Ticketmaster Discovery within its free 5,000/day quota; Instagram/TikTok keyword+hashtag search (existing mini-PC crew); "this weekend" web search per county. Eventbrite (API closed since 2020) and Meetup (paid key) are out.
+**Mail**: on the Trystful mail server (docker-mailserver 15.1 on the Hostinger box, already multi-domain): `hello@smalldays.ie` (public, outreach, claim replies), `data@smalldays.ie` (registrations: Fáilte Ireland, Bing, IndexNow), `admin@smalldays.ie` (DMARC reports). DKIM key auto-generated per domain. Passwords into the sops secrets store, never a plaintext file.
 
-Things to do: Fáilte Ireland Open Data API (attractions/activities, CC BY 4.0 — needs a portal registration, §7); data.gov.ie playgrounds/parks datasets (DLR, Wicklow, Westmeath, DCC); OpenStreetMap Overpass (`leisure=playground`, `tourism=museum|attraction|zoo`, farms, `leisure=water_park`, libraries) as the seed list for the whole island; Wikidata for known museums/attractions (website + Instagram); social search; venue accounts discovered from events.
+**Analytics**: Umami 3.x on the mini PC (own compose with its own small Postgres; ports in the free 81xx band, bound to the Tailscale IP; ufw tailnet-only), `stats.smalldays.ie` proxied by the VM's Caddy, tracker script and collect endpoint renamed to survive ad-blockers, custom events for outbound clicks (site, maps, Instagram, booking), search terms, filter use, saves. Its API token in the secrets store feeds the Metrics tab.
 
-Holidays: no Irish-source analogue exists. Lanes: editorial seed list (Victor's + LLM-generated list of family destinations, each then researched and grounded), Wikidata `TouristDestination`s with `touristType=families`, Instagram/TikTok tags (`familytravel`, `holidayswithkids`, `kidsholidays`, …), and the existing `holidays kids` search results (56 candidates already staged). Every holiday needs ≥2 independent sources before on-air.
+**Search**: the existing service account `small-days-auth-verifier@small-days-ireland.iam.gserviceaccount.com` can be the Search Console reader. It cannot enable APIs itself (checked today: 403), so you do three clicks once the domain resolves: (1) enable the Search Console API at the link I send, (2) add a Domain property `smalldays.ie` in Search Console and paste its TXT record at Blacknight, (3) add the service-account email as a Restricted user. Bing Webmaster verification by CNAME, IndexNow key file on the site (Bing/Yandex only; Google needs sitemap + Search Console). On page: server-rendered item pages with JSON-LD (Event, TouristAttraction/LocalBusiness, TouristDestination), sitemap regenerated on publish, canonical, OpenGraph image.
 
-### 3.3 Review desk policy (what reaches Victor)
+## 7. Metrics tab
+Visitors (Umami: pageviews, visitors, top pages, referrers, outbound targets, 24 h / 7 d / 30 d); SEO (Search Console clicks, impressions, CTR, position per page and query; indexed pages; rich-result errors; sitemap freshness); Content (on air per catalogue, added per day and hour, completeness per field, needs-input ageing, per-source yield, model timeouts and lane cooldowns, photo coverage), stored daily so trends exist.
 
-- Only items that fail the gate on a **single, nameable** field reach the queue, and each shows: the reason, the field, a proposed value (if the model had a low-confidence guess) and a one-line hint box → resubmit. Bulk "apply hint to all similar" for repeated reasons (e.g. "London — outside Ireland: reject all").
-- Items with no caption and no page content are auto-rejected with reason `no-content`, not queued.
-- Target: ≤20 open questions at any time; anything older than 14 days auto-archives.
+## 8. Public site (what the plan forces)
+Item pages with URLs; facet filters (age, price, setting, activity, county map, accessibility, rainy day, near me); cards with hero, price band, age bands, county, links row, last checked; Holidays browsable by school break and by season; the toast hidden until something is actually saved; bottom nav back to five items (Today, Events, Things to do, Holidays, Saved).
 
-### 3.4 Model routing (free-first, identical to WanderTold's chain)
+## 9. What I still need from you (actions only, no more questions)
+1. **Blacknight**: create the DNS zone for smalldays.ie and add the records in §6 as I send them (A/CNAME first; MX/SPF/DKIM/DMARC once the mailboxes exist; the Search Console TXT last). Alternative: log into cp.blacknight.com in the shared browser on the Surface and I drive it.
+2. **Google**: the three Search Console clicks in §6, after the A record resolves.
+3. Anything else defaults as written: embed policy, saved-collection lane dropped, Umami on the mini PC, mailboxes as listed.
 
-- Order: mini PC `llama-server` (Qwen3.5-35B, yield when `requests_processing ≥ 3`) → OmniRoute lanes rotated per call (nemotron-3-super, minimax-m2.7, mimo-v2.5, hy3, step-3.7-flash, longcat) → hermes/openrouter (gemma, dots) → give up with reason. Never a paid key; ChatGPT Plus lane not used for bulk.
-- Per-item budget: classify (1 short call, dots/local), extract (1), facets (1, constrained), description (1, nemotron-super), links/photos are non-LLM except the vision gate (local Qwen vision).
-- Vision + embeddings on the mini PC (`:8089`, `:8090`); text via OmniRoute from the VM (tunnel already up).
-- Throughput math: 6 rotating lanes × ~1 req/min each ≈ 300 items/hour worst case; the current 296 backlog clears in ~1 h once §3.4 lands (today's sweep uses one model and will take longer).
+## 10. Phases and "done"
 
-### 3.5 Social crew (mini PC) changes
-
-Keep the two-hop design. Add: hashtag pages (`instagram.com/explore/tags/<tag>`), per-account expansion of venues found via events, TikTok search for the holiday tags, caption backfill via oEmbed when the DOM fetch was rate-limited (34% empty captions today), and `found_via` + `platform` stamped on every candidate (already). Still needs Victor's "Kids" saved-collection URL to activate the collection lane.
-
-## 4. Admin portal — information architecture
-
-Top-level areas (left rail, each a real URL `/admin/<area>`, deep-linkable, badge counts):
-
-1. **Overview** — the metrics square: on-air per catalogue, added today / this hour / last 7 days (sparkline), needs-input count, last factory run + next, source health, model lane health. One screen, no scrolling.
-2. **Catalogue** — tabs Events / Things to do / Holidays. Table with facets as columns, completeness chips (missing photo, missing price…), search, filter by county/status, inline edit drawer with the full record and its provenance/facts. Bulk: unpublish, re-enrich, re-photo.
-3. **Needs input** — the only review queue. Grouped by reason; per item: what we know, the exact blocker, proposed value, hint box, Resubmit / Reject / Reject-all-like-this. Keyboard j/k/a/r.
-4. **Sources & discovery** — per lane: enabled, last run, candidates found / on-air yield / rejected, add a source or a tag inline, "test this source now".
-5. **Production** — runs (duration, per-stage counts, failures), crews on the mini PC (social, photo gate), model lanes (calls, timeouts, cooldowns), Failed items with retry.
-6. **Photos** — coverage per catalogue, no-hero list, gate rejects with the model's reason, upload/replace.
-7. **Metrics** — §5.
-8. **Settings** — auto-approve on/off, thresholds, facet vocabulary editor, tag list.
-
-Rules: every list paginated + filterable; state in the URL; visible focus; mobile layout (Victor reviews from his phone); no destructive action without an undo toast; every timestamp in one zone with the zone shown.
-
-## 5. Metrics tab
-
-- **Visitors**: self-hosted **Umami** on the VM (Node + Postgres in Docker, ~300 MB; VM has ~10 GB free RAM, 40 GB disk). Tracking script on the public site with custom events: outbound clicks to official site / maps / Instagram / booking per item, search terms, filter usage, saves. Umami's REST API feeds the admin tab (pageviews, visitors, top pages, top referrers, top outbound targets, 24 h / 7 d / 30 d). Fallback if Victor prefers no container: GoatCounter single binary + SQLite (counts only).
-- **SEO**: Google Search Console API (clicks, impressions, CTR, position per page/query, 16 months). Requires a **real domain** + Search Console verification + a service account key (Victor, §7). Bing Webmaster API + IndexNow for Bing/Yandex. On-page: per-item server-rendered pages with JSON-LD (`Event`, `TouristAttraction`/`LocalBusiness`, `TouristDestination`), `sitemap.xml` regenerated on publish, canonical, OpenGraph image. Admin shows: indexed pages, pages with rich-result errors, sitemap freshness.
-- **Content KPIs**: on-air per catalogue, added per day/hour, completeness % per field, needs-input ageing, per-source yield, model timeouts, photo coverage. Already partly in `/admin/api/metrics`; extended, and stored daily so trends exist.
-
-## 6. Public site (only what the plan above forces)
-
-Item pages with URLs; facet filters (age, price, setting, activity, county map, accessibility, "rainy day", "near me" via browser geolocation); item card shows photo, price band, age bands, county, links row (site · maps · Instagram · book), "last checked" and source; Things to do gets its own section (done 09-12, not yet with facets); mobile bottom nav back to 5 items (Today, Events, Things to do, Holidays, Saved — Guides folds into Today).
-
-## 7. Decisions for Victor (each one line, answer in any order)
-
-1. **Domain**: which domain for Small Days? (SEO metrics are meaningless on the Azure hostname; `small-days-ireland` is the Firebase project name.)
-2. **Analytics host**: Umami on the VM (default) or on the mini PC (fleet convention, needs your yes)?
-3. **Search Console**: once the domain exists, you verify it and create a service-account JSON; I wire it.
-4. **Fáilte Ireland Open Data**: register the developer portal account (free) — under your email.
-5. **Instagram photos**: policy = link to the organiser's Instagram and never rehost their images (Meta's terms). Photos come from Commons / Openverse / official site og:image. OK?
-6. **Age bands** 0-2 / 3-5 / 6-9 / 10-12 / 13+ and price bands free / <€10 / €10-25 / €25+ — OK, or your cut-offs?
-7. **Holidays scope**: worldwide, ≥2 sources per destination, ~20/month target. OK?
-8. **"Kids" saved collection URL** (Instagram + TikTok) — still outstanding since 09-12.
-
-## 8. Phases, order, acceptance
-
-| # | Phase | Delivers | Done when (measured) |
+| # | Phase | Delivers | Done when |
 |---|---|---|---|
-| 0 | Unblock (DONE today) | lock fix, hermes path, sweep running | backlog verdicts land; factory run adds events |
-| 1 | Contract + taxonomy + gate | schemas §2, `facets.json`, `gate_meta`, normalizer, migration of 122 events | 100% of on-air records validate; ≥90% events have price + age + category |
-| 2 | Model routing + queue | WanderTold chain (local → 6 lanes → hermes), rotating lanes, per-item budget, needs-input reasons | 296 backlog resolved; needs-input ≤20; p95 classify < 60 s |
-| 3 | Discovery lanes | §3.2 lanes for all three catalogues, 32 counties | ≥300 Things to do on air, ≥50 holidays, events in every county |
-| 4 | Links + photos | official/maps/Instagram resolution, photo pipeline + vision gate + alt | ≥90% maps, ≥70% official site, ≥40% Instagram, ≥80% with a gated photo |
-| 5 | Admin portal | IA §4, 8 areas, deep links, bulk actions, mobile | Victor can clear the needs-input queue on his phone in <10 min |
-| 6 | Metrics + SEO | Umami, GSC, item pages, JSON-LD, sitemap, KPIs stored daily | Metrics tab shows visitors/SEO/content trends; rich-result test passes on 3 sample pages |
-| 7 | Public facets | §6 | filters work on real data; Lighthouse ≥90 mobile |
+| 0 | Unblock (done) | lock fix, binary path, sweep | verdicts land; hourly run adds events |
+| 0b | Stop the bleeding (this week, no approval needed) | atomic writes + abort on torn read; past-date filter + prune; family-relevance and Ireland gates on the current pipeline; `normalize_event` keeps the asked-for fields; TikTok lane triage; toast/`&#039;`/date-slot/Ready-count bugs; `threaded` server with a run-now lock; dead scrapers deleted | 0 past events on air; no adult items in a re-sample of 30; TikTok lane returns results |
+| 1 | Contract + taxonomy + gate | §3 schemas, `facets.json`, hard validation, normaliser, migration | 100% of on-air records validate; ≥90% events with price, age, category |
+| 2 | Model routing + queue | §4.4 chain, rotating lanes, needs-input reasons | backlog resolved; needs-input ≤20; p95 classify < 60 s |
+| 3 | Discovery lanes | §4.3 for all three catalogues, 32 counties | ≥300 things to do, ≥50 holidays, events in every county |
+| 4 | Links + media | official / maps / Instagram / TikTok resolution, licensed hero + embeds, vision gate, alt | ≥90% maps, ≥70% official, ≥40% social link, ≥80% hero |
+| 5 | Admin portal | §5 eight areas | you clear the needs-input queue on your phone in under 10 min |
+| D | Domain, mail, analytics, search (parallel, starts on your DNS) | §6 | site on smalldays.ie with TLS, mail delivering with DKIM pass, Umami counting, Search Console verified |
+| 6 | Metrics + SEO | §7, item pages, JSON-LD, sitemap, IndexNow | tab shows visitor, SEO, content trends; rich-result test passes on 3 pages |
+| 7 | Public facets + organiser loop | §8, §4.6 | filters on real data; first claim received; Lighthouse ≥90 mobile |
 
-Order is 1 → 2 → 3 → 4 in the pipeline, with 5 built in parallel from phase 2 (executor by file ownership), 6 after the domain decision, 7 last. Each phase: spec → `opus-executor` → real-browser verification → commit + push + registry/links update in the same turn. No phase gates between them once approved.
+Order: 0b now → 1 → 2 → 3 → 4 in the pipeline; 5 in parallel from 2; D as soon as DNS resolves; 6 after D; 7 last. Each phase: spec → executor → real-browser verification → commit, push, registry and links updated in the same turn. No approval gates between phases once v2 is approved.
 
-## Appendix A — facet vocabulary (draft)
+## Appendix A — facet vocabulary
+age_bands `0-2, 3-5, 6-9, 10-12, 13+` · price_band `free, under-10, 10-25, 25-plus, unknown` · setting `indoor, outdoor, both` · activity_types `playground, park, museum, farm, soft-play, zoo-wildlife, trail-hike, swimming, water-sports, adventure-climbing, workshop-class, festival, theatre-show, cinema, library, craft, sports, seasonal, food-market, nature-reserve` · accessibility `wheelchair, step-free, buggy, changing-places-toilet, sensory-friendly, elder-friendly` · county: 32 · region: `Leinster, Munster, Connacht, Ulster` · holiday_types, best_seasons, school_breaks, flight_time, budget_band as in §3.
 
-- age_bands: `0-2, 3-5, 6-9, 10-12, 13+` (matches `typicalAgeRange` free-text convention and Time Out's tiers; Hoop uses a slider — bands read better in a directory)
-- price_band: `free, under-10, 10-25, 25-plus, unknown` (store real `price_detail`; band derived)
-- setting: `indoor, outdoor, both`
-- activity_types (20): `playground, park, museum, farm, soft-play, zoo-wildlife, trail-hike, swimming, water-sports, adventure-climbing, workshop-class, festival, theatre-show, cinema, library, craft, sports, seasonal, food-market, nature-reserve`
-- accessibility: `wheelchair, step-free, buggy, changing-places-toilet, sensory-friendly, elder-friendly`
-- county: the 32 counties; region: `Leinster, Munster, Connacht, Ulster`; `ireland: bool`
-
-## Appendix B — what is lifted from WanderTold vs rewritten
-
-Lift: LLM fallback chain + `_local_is_free` yielding; `facets.json` + `facet_gloss`/`gate_meta` validation; `photo-gate.py` rules + `photo-alt.py`; `cycle.lock`/`daemon.lock` + merge → push → deploy → verify shape; social two-hop crew; `content_fails` / `name_grounded` QA pattern; admin tabs Production / Photos / Models / Failed / Scout.
-Rewrite: record schemas (dates, price, age, recurrence, holidays), geography (county-based, not city-radius), category vocabulary, scout prompts, and drop narration/audio entirely.
-
-## 9. Portal usability audit (real Chromium, desktop + phone, console/network captured)
-
-No JS errors, no failed requests; production pixel-identical to loopback. Problems are structural.
-
-| # | Sev | Issue | Covered by |
-|---|---|---|---|
-| 1 | P0 | Social review: Approve/Reject + hint box clipped off-screen for all 296 rows, no scroll cue | §4 Needs-input, card layout, sticky actions |
-| 2 | P0 | Public: "Saved to your small plan" banner permanently shown, overlaps content on Home/Places/Holidays/Guides; Saved page is empty | immediate bug fix |
-| 3 | P0 | No pagination anywhere (10k–40k px pages) | §4 rule |
-| 4 | P1 | Editorial/Social table columns off-screen on phone, no cue | §4 phone layout |
-| 5 | P1 | 0/122 items with parent-facing essentials ("Cost to check", "Ages to check" everywhere) | phases 1–2 |
-| 6 | P1 | Two parallel admin navs with different labels; 27% of phone viewport lost | §4 single rail |
-| 7 | P1 | Dateless listing fallback text collides with title on Find | immediate bug fix |
-| 8 | P1 | Reject reasons truncated mid-word | §4 |
-| 9 | P1 | No deep links (admin tabs, public event modal); reload loses the item | §4 + §6 item pages |
-| 10 | P1 | Failed collection run: no error, no log link | §4 Production |
-| 11 | P2 | "Warner Bros. Studio Tour London" as "nearby"; stray "." for empty category | §2 ireland flag + QA gate |
-| 12 | P2 | Raw `&#039;` in Editorial titles (double escape) | immediate bug fix |
-| 13 | P2 | Zero photos on the public site | phase 4 |
-| 14 | P2 | "Confidence: 100% captured" next to unresolved fields | §2 |
-| 15 | P3 | "Ready" chip without count; raw ISO timestamps | §4 |
-
-Nielsen (admin, 0–4): control 3, consistency 3, recognition 3, flexibility 3, error recovery 3, error prevention 2, minimalism 2, status 1, real-world match 1, help 1. Adult stand-up shows appear in the family feed (QA gate §3.1). Items 2, 7, 12 are fixed before phase 1.
+## Appendix B — lifted from WanderTold vs rewritten
+Lift: LLM fallback chain + local-first yielding; `facets.json` + gloss + hard validation; photo gate rules + alt-text pass; cycle/daemon locks + merge → push → deploy → verify; two-hop social crew; QA pattern (content fails, name grounding, duplicate fold); Production / Photos / Models / Failed / Scout admin tabs. Rewrite: record schemas, county geography, category vocabulary, scout prompts. Drop: narration and audio. Not copied: downloading Instagram photos without a licence.
