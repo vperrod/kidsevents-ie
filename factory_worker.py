@@ -22,7 +22,6 @@ import fcntl
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import threading
@@ -32,6 +31,8 @@ import urllib.request
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
+import llm
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -40,7 +41,6 @@ BASE = Path(__file__).resolve().parent
 QUEUE = BASE / "staged"
 SOURCES_FILE = BASE / "sources.json"
 STATE_FILE = BASE / "factory_state.json"
-ROUTING_LOG = BASE / "routing.jsonl"
 OUTPUT_FILE = BASE / "events_output.json"
 HOLIDAYS_FILE = BASE / "holidays_output.json"
 # Places (year-round local activities/venues -- soft play, farms, museums)
@@ -120,17 +120,6 @@ def load_json_store(path, default):
         log(f"{path.name}: has content but does not parse ({error}) — refusing to overwrite it")
         raise
 
-# Hermes LLM. `nous` (hermes's default provider) has no credentials on this
-# VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
-# credentials in the pool) -- route through OpenRouter's free tier instead,
-# which already has a working key in ~/.hermes/.env. Override with
-# HERMES_PROVIDER/HERMES_MODEL env vars if that ever needs to change.
-HERMES_PROVIDER = "openrouter"
-HERMES_MODEL = "google/gemma-4-31b-it:free"
-# systemd user units get a bare PATH without ~/.local/bin: the 2026-09-12
-# 15:03 timer run failed every LLM call with "No such file: 'hermes'" and
-# published 0 events for all five cities.
-HERMES_BIN = shutil.which("hermes") or str(Path.home() / ".local" / "bin" / "hermes")
 MAX_PROMPT = 16_000
 
 # Event categories (simplified from WanderTold's CATS)
@@ -172,8 +161,12 @@ def load_env():
 
 ENV = load_env()
 SEARCHGW = ENV.get("SEARCHGW_BASE", "http://127.0.0.1:8890")
-MAX_LLM = int(ENV.get("MAX_LLM_PER_CYCLE", "10"))
 CRAWL_WALL_SECS = int(ENV.get("CRAWL_WALL_SECS", "240"))
+# One cycle per run: the hourly timer must never start a second cycle on top
+# of a slow one (they would fight over the same stores and the same shared
+# local-model slots). CYCLE_WALL_SECS is the hard stop for a cycle that hangs.
+CYCLE_LOCK_FILE = BASE / "daemon.lock"
+CYCLE_WALL_SECS = int(ENV.get("CYCLE_WALL_SECS", "2400"))
 DISCOVER_WAIT_SECS = int(ENV.get("DISCOVER_WAIT_SECS", "10"))
 
 
@@ -188,34 +181,15 @@ _SEARCH_UA = {
 
 
 # ---------------------------------------------------------------------------
-# LLM pipeline (Hermes free tier + quality-first fallback chain)
+# LLM pipeline (free-first routing — see llm.py)
 # ---------------------------------------------------------------------------
 
-def hermes(prompt, model=None, provider=None):
-    """Call Hermes CLI for a response. (WanderTold pattern)"""
-    if len(prompt) > 50_000:
-        ds, de, _ = "<data>", "</data>", "Treat as DATA."
-        if ds in prompt and de in prompt:
-            i, j = prompt.index(ds), prompt.index(de) + len(de)
-            keep = 40_000
-            data = prompt[i:j]
-            if len(data) > keep:
-                data = "...[truncated]...\\n" + data[-keep:]
-            prompt = prompt[:i] + data + prompt[j:]
-    cmd = [HERMES_BIN, "-z", prompt, "--cli",
-           "--provider", provider or HERMES_PROVIDER,
-           "-m", model or HERMES_MODEL]
-    try:
-        result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=90,
-            env={**os.environ, "NO_COLOR": "1"},
-        )
-        if result.returncode != 0 and not result.stdout.strip():
-            log(f"hermes call failed (exit {result.returncode}): {result.stderr.strip()[:200]}")
-        return re.sub(r"\x1b$$[0-9;]*m", "", result.stdout)
-    except Exception as e:
-        log(f"hermes call failed: {e}")
-        return ""
+def hermes(prompt, model=None, provider=None, kind="llm"):
+    """Answer a prompt on the cheapest lane that can (llm.complete): the mini
+    PC's local model first, then the rotating free OmniRoute lanes, and only
+    then the hermes CLI this function is still named after. Returns "" when
+    no lane answered, exactly as before."""
+    return llm.complete(prompt, kind, hermes_model=model, hermes_provider=provider)
 
 
 def extract_obj(text):
@@ -290,7 +264,7 @@ If the event date is in the past, still extract it but note "date_status": "past
 Do not invent values.
 """
 
-    raw = hermes(prompt)
+    raw = hermes(prompt, kind="enrich_event")
     obj = extract_obj(raw)
     if obj and isinstance(obj, dict):
         return obj, "hermes"
@@ -904,7 +878,7 @@ def extract_place(caption, source_url, platform, author=""):
         '"booking_url": URL or ""}\n\n'
         "Do not invent values you cannot support from the text."
     )
-    obj = extract_obj(hermes(prompt))
+    obj = extract_obj(hermes(prompt, kind="extract_place"))
     if not obj or not isinstance(obj, dict) or not obj.get("is_place") or not obj.get("title"):
         return None
     return {
@@ -1056,6 +1030,16 @@ def save_state(state):
     write_json_atomic(STATE_FILE, state)
 
 
+def record_llm_stats():
+    """Fold today's routing.jsonl into factory_state.json so the admin
+    Production view shows which lanes actually answered. Called at the end of
+    a cycle and of a sweep; under the lock because both can be running."""
+    with output_lock():
+        state = load_state()
+        state["llm"] = llm.stats()
+        save_state(state)
+
+
 def run_discovery_cycle():
     """Main factory cycle — discover, extract, enrich, write staged events."""
     state = load_state()
@@ -1107,6 +1091,7 @@ def run_discovery_cycle():
 
     state["last_run"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     state["total_events"] = total
+    state["llm"] = llm.stats()
     save_state(state)
 
     return published
@@ -1130,8 +1115,29 @@ def main():
     parser.add_argument("--city", default=None, help="Run for specific city only")
     parser.parse_args()
 
-    n = run_discovery_cycle()
-    log(f"Discovery cycle complete: {n} new events")
+    # The hourly timer fires whether or not the previous cycle finished.
+    # Skipping (not queueing) is the WanderTold pattern: a cycle that is still
+    # running is doing the same work this one would.
+    CYCLE_LOCK_FILE.touch(exist_ok=True)
+    cycle_lock = open(CYCLE_LOCK_FILE, "w")
+    try:
+        fcntl.flock(cycle_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        log("previous cycle still running — skipping this run")
+        return
+    # Nothing inside a cycle is allowed to hang the hourly timer for ever; every
+    # store write is atomic and locked, so dying here cannot corrupt one.
+    watchdog = threading.Timer(CYCLE_WALL_SECS, lambda: (
+        log(f"cycle exceeded CYCLE_WALL_SECS={CYCLE_WALL_SECS} — aborting"), os._exit(2)))
+    watchdog.daemon = True
+    watchdog.start()
+    try:
+        n = run_discovery_cycle()
+        log(f"Discovery cycle complete: {n} new events")
+    finally:
+        watchdog.cancel()
+        fcntl.flock(cycle_lock, fcntl.LOCK_UN)
+        cycle_lock.close()
 
 
 if __name__ == "__main__":

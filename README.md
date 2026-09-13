@@ -12,7 +12,8 @@ Three modules, nothing else:
 
 | Module | Role |
 |---|---|
-| `factory_worker.py` | The factory. One cycle per run: prune events that are over → discover URLs (local search gateway + the curated deep listing pages in `sources.json`) → crawl with crawl4AI → extract (schema.org `Event` JSON-LD first, Hermes LLM for free-text pages) → normalise → publish through the quality gate. Run hourly by `kidsevents-factory.timer`. |
+| `factory_worker.py` | The factory. One cycle per run: prune events that are over → discover URLs (local search gateway + the curated deep listing pages in `sources.json`) → crawl with crawl4AI → extract (schema.org `Event` JSON-LD first, an LLM for free-text pages) → normalise → publish through the quality gate. Run hourly by `kidsevents-factory.timer`, one cycle at a time (`daemon.lock`). |
+| `llm.py` | Model routing. Every LLM call in the project goes through `complete(prompt, kind)`, which picks the cheapest lane that can answer right now. |
 | `staging.py` | The staging desk for social candidates collected by the mini PC crew. Appends them to `staged/social_candidates.json` and, with `AUTO_APPROVE=on` (the default), runs each through the same gate immediately. Anything that does not clear it stays `needs_review` with a stored `reason`. |
 | `server.py` | Flask on `127.0.0.1:8128` (user unit `kidsevents-ie.service`): the public `/api/events`, `/api/places`, `/api/holidays` feeds, the member save API, and the `/admin` portal with its `/admin/api/*` routes. |
 
@@ -24,6 +25,37 @@ mini PC social crew (ssh)         → staging.py append → factory_worker.promo
                                        ↓
                               server.py → web/ + /admin
 ```
+
+### Model routing
+
+`llm.complete(prompt, kind)` is the only way this project talks to a model.
+It walks the lanes cheapest-first and an unavailable lane is never an error,
+just the next lane:
+
+| # | Lane | When it is used |
+|---|---|---|
+| 1 | `local` — the mini PC's `llama-server`, over the SSH forward on `127.0.0.1:18089` | `/health` is ok, `llamacpp:requests_processing` is below `LOCAL_BUSY_AT` (WanderTold shares those 2 slots), and the prompt is at most `LOCAL_MAX_PROMPT_CHARS`. A dead tunnel falls through in under 2 s. |
+| 2 | named free OmniRoute lanes (`ROUTING_LANES`), round-robin | The roster is probed once per process and only the lanes that answer a 5-token test are used; a lane that errors mid-run is parked for `LANE_PARK_SECS`. Free lanes rot constantly (404 / 402 / 429 / "cooling down"). |
+| 3 | OmniRoute `auto/best-free` | Nothing named answered. |
+| 4 | the `hermes` CLI | Last: slowest lane (22–90 s) and throttled at ~1 req/min per model. On 2026-09-13 it timed out on *every* call, which is what left the factory with no verdicts and why the lanes above exist. |
+| 5 | `""` | Nothing answered — callers already treat an empty answer as "no verdict". |
+
+The gateway is on loopback and takes no auth header; no key or token is stored
+for any of this. Every attempt appends a line to `routing.jsonl`
+(`{ts, kind, lane, model, ms, ok, prompt_chars, err}`), and each cycle/sweep
+folds today's lines into `factory_state.json` → `llm`
+(`calls_today`, `by_lane.{calls,errors,p50_ms}`, `last_probe`) for the admin
+Production view.
+
+The local lane needs the SSH forward to the mini PC, a user unit on this VM:
+
+```bash
+systemctl --user status kidsevents-llama-tunnel.service   # ssh -N -L 18089:127.0.0.1:8089 mini-pc
+curl -s 127.0.0.1:18089/health
+```
+
+Nothing is installed or changed on the mini PC — it is a plain local forward
+onto the llama-server it already runs.
 
 ### Quality gate
 
@@ -61,14 +93,18 @@ TARGET_CITIES=galway venv/bin/python3 factory_worker.py   # one city
 
 venv/bin/python3 staging.py sweep             # classify the needs_review backlog
 SWEEP_LIMIT=5 venv/bin/python3 staging.py sweep           # …just the first 5
+SWEEP_WORKERS=6 venv/bin/python3 staging.py sweep         # …6 items in flight (default 3)
 
 venv/bin/python3 server.py                    # Flask on 127.0.0.1:8128
 venv/bin/python3 -m pytest -q                 # tests (no network, no LLM)
 ```
 
-Useful environment (from `.env` or the systemd unit): `TARGET_CITIES`,
-`MAX_LLM_PER_CYCLE`, `CRAWL_WALL_SECS`, `DISCOVER_WAIT_SECS`, `SEARCHGW_BASE`,
-`AUTO_APPROVE`, `SWEEP_LIMIT`, `HERMES_PROVIDER`, `HERMES_MODEL`.
+Useful environment (from `.env`, the systemd unit, or the command line):
+`TARGET_CITIES`, `CRAWL_WALL_SECS`, `CYCLE_WALL_SECS`, `DISCOVER_WAIT_SECS`,
+`SEARCHGW_BASE`, `AUTO_APPROVE`, `SWEEP_LIMIT`, `SWEEP_WORKERS`,
+`MAX_ITEM_SECS`, and the routing knobs `LOCAL_LLM_URL`, `LOCAL_BUSY_AT`,
+`LOCAL_MAX_PROMPT_CHARS`, `OMNIROUTE_URL`, `ROUTING_LANES`, `LANE_TRIES`,
+`LANE_PARK_SECS`, `HERMES_PROVIDER`, `HERMES_MODEL`.
 
 ## Output format
 
@@ -127,6 +163,7 @@ out for that reason.
 ```
 kidsevents-ie/
 ├── factory_worker.py        # discovery, extraction, normalisation, quality gate
+├── llm.py                   # model routing: local → free gateway lanes → hermes
 ├── staging.py               # social candidate staging desk + auto-approve sweep
 ├── server.py                # Flask API + admin portal
 ├── firebase_auth.py         # member identity verification

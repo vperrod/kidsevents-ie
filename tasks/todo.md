@@ -12,12 +12,17 @@
 - [ ] catalog/facets.json (Appendix A + holidays facets), gate_meta validation, normaliser to the §3 contract, migration of existing records, QA gate §4.2
 
 ## Phase 2 — model routing + queue
-- [ ] local-first → 6 rotating OmniRoute lanes → hermes; per-item budget; needs-input reasons; backlog re-swept
+- [x] local-first → rotating OmniRoute lanes → `auto/best-free` → hermes (`llm.complete`, every attempt logged to `routing.jsonl`); `kidsevents-llama-tunnel.service` on the VM forwards 18089 → mini PC 8089; `factory_worker.hermes()` is now a thin wrapper; sweep runs `SWEEP_WORKERS` (3) with a `MAX_ITEM_SECS` wall; `factory_state.json.llm` = calls/errors/p50 per lane; hourly cycle takes `daemon.lock` and skips if the last one still runs (`CYCLE_WALL_SECS`). Backlog re-sweep belongs to phase 1 (needs the four-step pipeline + `needs_input` semantics)
 
 ## Phase 3 — discovery lanes (§4.3, §11/12)
 ## Phase 4 — links + media (maps, official, Instagram/TikTok, licensed hero, embeds, vision gate, alt)
-## Phase 5 — admin portal IA (8 areas) — parallel from phase 2
-## Phase D — domain, mail, analytics, search — blocked on IEDR activation of smalldays.ie (Victor uploads document)
+## Phase 5 — admin portal IA (8 areas)
+- [x] 0ca9087: eight areas, hash routes, badges, paginated everywhere, keyboard j/k/a/r, undo semantics, explicit "not available yet" states (64/64 browser checks). Plug points for phase 1 (`needsInputFeed`, `decisionHistory`) and phase 2 (`llmLanes`). Left disabled until endpoints exist: bulk actions, add source, photo upload, settings editing
+## Phase D — domain, mail, analytics, search — domain blocked on IEDR activation (Victor uploads document)
+- [x] Umami 3.3.1 on the mini PC (`~/tools/smalldays-umami`, unit `smalldays-umami`, 100.105.72.86:8150, secrets `mini-pc/umami.env` sops 5298dd2, website id 1dbff85a-b495-4436-ac7e-d43034c03517, tracker `/sd.js` + `/api/sd`)
+- [ ] VM Caddy site block smalldays.ie + www + stats → after delegation
+- [ ] mailboxes hello@/data@/admin@ on the Trystful docker-mailserver + DNS (MX/SPF/DKIM/DMARC) → after delegation
+- [ ] Search Console (Victor's 3 clicks) + Bing + IndexNow → after delegation
 ## Phase 6 — metrics + SEO (after D)
 ## Phase 7 — public facets + organiser loop
 

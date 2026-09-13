@@ -24,6 +24,7 @@ admin action (or the sweep and itself, across iterations) can otherwise
 silently clobber each other's writes.
 """
 
+import concurrent.futures
 import json
 import os
 import sys
@@ -35,6 +36,14 @@ import factory_worker
 BASE = Path(__file__).resolve().parent
 STAGED_FILE = BASE / "staged" / "social_candidates.json"
 AUTO_APPROVE = os.environ.get("AUTO_APPROVE", "on").strip().lower() != "off"
+# Classification is nearly all waiting on a model, so a few in flight at once
+# turns a backlog from hours into minutes. Three is what the mini PC's two
+# local slots plus the gateway lanes absorb without either queueing.
+SWEEP_WORKERS = int(os.environ.get("SWEEP_WORKERS", "3") or 3)
+# An item that is still unresolved after this long is left needs_review rather
+# than holding the sweep: with four model calls per item and several lanes to
+# fall through, a pathological item can otherwise stall a whole worker.
+MAX_ITEM_SECS = int(os.environ.get("MAX_ITEM_SECS", "300") or 300)
 
 REVIEW_NOTE = (
     "Verify destination, dates, age guidance and price on the organiser "
@@ -134,26 +143,49 @@ def write_staged(candidates):
     return len(additions)
 
 
+def approve_within_budget(source_url):
+    """try_approve_by_url with a hard MAX_ITEM_SECS wall. A worker thread
+    cannot be killed, so the overdue classification is abandoned on its own
+    thread (it ends when its lane timeouts do, and if it eventually succeeds
+    it applies its verdict under the usual lock) while the sweep moves on.
+    Raises TimeoutError when the budget is blown."""
+    runner = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    try:
+        return runner.submit(try_approve_by_url, source_url).result(timeout=MAX_ITEM_SECS)
+    finally:
+        runner.shutdown(wait=False)
+
+
 def sweep_pending():
     """Auto-approve every already-staged needs_review candidate (clears a
     backlog collected before AUTO_APPROVE existed, or after it was off).
     Goes through try_approve_by_url per item -- locked and freshly reloaded
     each time, so a concurrent admin action mid-sweep can't be clobbered by a
-    stale in-memory copy -- and logs progress since a backlog can be hundreds
-    deep and each item costs a real LLM call. Returns (checked, approved)."""
+    stale in-memory copy -- SWEEP_WORKERS at a time, and logs progress since a
+    backlog can be hundreds deep and each item costs a real LLM call.
+    Returns (checked, approved)."""
     pending_urls = [c["source_url"] for c in load_staged() if c.get("status") == "needs_review"]
     # SWEEP_LIMIT caps one run -- a 600-deep backlog is hours of real LLM calls,
     # and a short sweep is how you check the gate before spending them.
     limit = int(os.environ.get("SWEEP_LIMIT", "0") or 0)
     if limit > 0:
         pending_urls = pending_urls[:limit]
-    approved = 0
-    for i, url in enumerate(pending_urls, 1):
-        ok = try_approve_by_url(url)
-        if ok:
-            approved += 1
-        print(f"  [{i}/{len(pending_urls)}] {'approved' if ok else 'still needs review'} — {url[:70]}",
-              file=sys.stderr, flush=True)
+    approved = done = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=SWEEP_WORKERS) as pool:
+        futures = {pool.submit(approve_within_budget, url): url for url in pending_urls}
+        for future in concurrent.futures.as_completed(futures):
+            url = futures[future]
+            done += 1
+            try:
+                ok = future.result()
+                status = "approved" if ok else "still needs review"
+            except concurrent.futures.TimeoutError:
+                ok, status = False, f"timed out after {MAX_ITEM_SECS}s"
+            if ok:
+                approved += 1
+            print(f"  [{done}/{len(pending_urls)}] {status} — {url[:70]}",
+                  file=sys.stderr, flush=True)
+    factory_worker.record_llm_stats()
     return len(pending_urls), approved
 
 
