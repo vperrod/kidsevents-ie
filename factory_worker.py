@@ -182,14 +182,31 @@ def hermes(prompt, model=None, provider=None, kind="llm"):
 
 
 def extract_obj(text):
-    """Extract first JSON object/array from text, tolerant of prose."""
-    for pat in (r"\{.*\}", r"\[.*\]"):
-        m = re.search(pat, text, re.DOTALL)
-        if m:
-            try:
-                return json.loads(m.group(0))
-            except json.JSONDecodeError:
-                continue
+    """Extract the first JSON object from text, tolerant of prose.
+
+    Every prompt that calls this (classify/facts/extract/write) asks for a
+    JSON *object*; a model that wraps its answer in an array instead used to
+    slip through the old `\\[.*\\]` fallback and reach a caller's `.get(...)`
+    as a plain list, crashing with `AttributeError: 'list' object has no
+    attribute 'get'` (5 records during the 2026-09-13 phase 1b re-research).
+    Only ever return a dict or None so that can't happen again; if the model
+    answered with a list, take its first dict element instead of discarding
+    the whole answer.
+    """
+    m = re.search(r"\{.*\}", text, re.DOTALL)
+    if m:
+        try:
+            return json.loads(m.group(0))
+        except json.JSONDecodeError:
+            pass
+    m = re.search(r"\[.*\]", text, re.DOTALL)
+    if m:
+        try:
+            parsed = json.loads(m.group(0))
+        except json.JSONDecodeError:
+            return None
+        if isinstance(parsed, list):
+            return next((item for item in parsed if isinstance(item, dict)), None)
     return None
 
 
