@@ -19,7 +19,9 @@
 ## Phase 2 — model routing + queue
 - [x] local-first → rotating OmniRoute lanes → `auto/best-free` → hermes (`llm.complete`, every attempt logged to `routing.jsonl`); `kidsevents-llama-tunnel.service` on the VM forwards 18089 → mini PC 8089; `factory_worker.hermes()` is now a thin wrapper; sweep runs `SWEEP_WORKERS` (3) with a `MAX_ITEM_SECS` wall; `factory_state.json.llm` = calls/errors/p50 per lane; hourly cycle takes `daemon.lock` and skips if the last one still runs (`CYCLE_WALL_SECS`). Backlog re-sweep belongs to phase 1 (needs the four-step pipeline + `needs_input` semantics)
 
-## Phase 3 — discovery lanes (§4.3, §11/12)
+## Phase 3 — discovery lanes (§4.3, §11/12) — dispatched, in progress
+- [ ] follow-up gap found while phase 3 was starting: the 96 migrated records in `staged/needs_input.json` (phase 1b) are NOT exposed anywhere in the admin portal — phase 5's "Needs input" area reads `/admin/api/social/staged` → `staged/social_candidates.json` only, a different file. Someone should add a route + area tab for `needs_input.json` (or merge the two files/routes) so those 96 records are actually resubmittable, not just sitting on disk.
+
 ## Phase 4 — links + media (maps, official, Instagram/TikTok, licensed hero, embeds, vision gate, alt)
 ## Phase 5 — admin portal IA (8 areas)
 - [x] 0ca9087: eight areas, hash routes, badges, paginated everywhere, keyboard j/k/a/r, undo semantics, explicit "not available yet" states (64/64 browser checks). Plug points for phase 1 (`needsInputFeed`, `decisionHistory`) and phase 2 (`llmLanes`). Left disabled until endpoints exist: bulk actions, add source, photo upload, settings editing
