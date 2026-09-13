@@ -22,8 +22,10 @@ import fcntl
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
+import threading
 import time
 import urllib.parse
 import urllib.request
@@ -53,17 +55,29 @@ PLACES_FILE = BASE / "places_output.json"
 # just added. One lock file serializes all three; the operations are small
 # JSON read/writes, so contention cost is negligible next to the risk.
 _LOCK_FILE = BASE / ".output.lock"
+# Re-entrant per thread: flock() treats every open() of the lock file as an
+# independent lock owner, so a nested output_lock() in the same thread
+# (staging's locked mutation calling publish_event) deadlocked against itself
+# -- the backlog sweep sat in locks_lock_inode_wait for 20 h on 2026-09-12/13.
+_lock_state = threading.local()
 
 
 @contextlib.contextmanager
 def output_lock():
-    _LOCK_FILE.touch(exist_ok=True)
-    with open(_LOCK_FILE, "w") as fh:
-        fcntl.flock(fh, fcntl.LOCK_EX)
-        try:
-            yield
-        finally:
-            fcntl.flock(fh, fcntl.LOCK_UN)
+    depth = getattr(_lock_state, "depth", 0)
+    if depth == 0:
+        _LOCK_FILE.touch(exist_ok=True)
+        _lock_state.fh = open(_LOCK_FILE, "w")
+        fcntl.flock(_lock_state.fh, fcntl.LOCK_EX)
+    _lock_state.depth = depth + 1
+    try:
+        yield
+    finally:
+        _lock_state.depth -= 1
+        if _lock_state.depth == 0:
+            fcntl.flock(_lock_state.fh, fcntl.LOCK_UN)
+            _lock_state.fh.close()
+            _lock_state.fh = None
 
 # Hermes LLM. `nous` (hermes's default provider) has no credentials on this
 # VM (confirmed 2026-09-12: `hermes auth status nous` -> logged out, no
@@ -72,6 +86,10 @@ def output_lock():
 # HERMES_PROVIDER/HERMES_MODEL env vars if that ever needs to change.
 HERMES_PROVIDER = "openrouter"
 HERMES_MODEL = "google/gemma-4-31b-it:free"
+# systemd user units get a bare PATH without ~/.local/bin: the 2026-09-12
+# 15:03 timer run failed every LLM call with "No such file: 'hermes'" and
+# published 0 events for all five cities.
+HERMES_BIN = shutil.which("hermes") or str(Path.home() / ".local" / "bin" / "hermes")
 MAX_PROMPT = 16_000
 
 # Event categories (simplified from WanderTold's CATS)
@@ -143,7 +161,7 @@ def hermes(prompt, model=None, provider=None):
             if len(data) > keep:
                 data = "...[truncated]...\\n" + data[-keep:]
             prompt = prompt[:i] + data + prompt[j:]
-    cmd = ["hermes", "-z", prompt, "--cli",
+    cmd = [HERMES_BIN, "-z", prompt, "--cli",
            "--provider", provider or HERMES_PROVIDER,
            "-m", model or HERMES_MODEL]
     try:

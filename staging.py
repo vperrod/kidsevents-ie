@@ -70,32 +70,38 @@ def mark_candidate(source_url, mutate_fn):
         return result
 
 
-def classify_and_apply(candidate, hint=""):
-    """Run one candidate through the event/place gate and, on success, publish
-    it. Mutates candidate in place either way: on success sets status/
-    reviewed_at/review_note; on failure sets `reason` (why not) and, if given,
-    `hint` (what a curator already tried) so the admin page can show it.
-    Returns True if it published."""
-    kind, record, reason = factory_worker.promote_candidate(candidate, hint=hint)
+def apply_verdict(candidate, kind, record, reason, hint=""):
+    """Apply a classification verdict to the candidate in place and, on
+    success, publish the record. On success sets status/reviewed_at/
+    review_note; on failure sets `reason` (why not) and, if given, `hint`
+    (what a curator already tried) so the admin page can show it.
+    Returns True if it published. Call under mark_candidate's lock."""
+    if hint:
+        candidate["hint"] = hint
     if not record:
         candidate["reason"] = reason
-        if hint:
-            candidate["hint"] = hint
         return False
     (factory_worker.publish_event if kind == "event" else factory_worker.publish_place)(record)
     candidate["status"] = "approved"
     candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     candidate["review_note"] = f"Approved: classified as a{'n' if kind == 'event' else ''} {kind}."
     candidate.pop("reason", None)
-    if hint:
-        candidate["hint"] = hint
     return True
 
 
 def try_approve_by_url(source_url, hint=""):
-    """Locked, fresh-read version of classify_and_apply for an existing staged
-    candidate -- used by the admin approve/resubmit route and by the sweep."""
-    return mark_candidate(source_url, lambda c: classify_and_apply(c, hint=hint)) or False
+    """Classify one staged candidate and apply the verdict -- used by the admin
+    approve/resubmit route, the sweep, and newly appended candidates. The LLM
+    call (up to minutes) runs on a snapshot OUTSIDE the lock; only the
+    fresh-read mutation + publish hold it, so hourly appends and admin clicks
+    are never queued behind a long classification."""
+    snapshot = next((c for c in load_staged() if c.get("source_url") == source_url), None)
+    if snapshot is None:
+        return False
+    kind, record, reason = factory_worker.promote_candidate(snapshot, hint=hint)
+    return mark_candidate(
+        source_url, lambda c: apply_verdict(c, kind, record, reason, hint=hint)
+    ) or False
 
 
 def write_staged(candidates):
@@ -124,11 +130,11 @@ def write_staged(candidates):
                     "review_note": REVIEW_NOTE,
                 }
             )
-        if AUTO_APPROVE:
-            for candidate in additions:
-                classify_and_apply(candidate)
         save_staged(existing + additions)
-        return len(additions)
+    if AUTO_APPROVE:
+        for candidate in additions:
+            try_approve_by_url(candidate["source_url"])
+    return len(additions)
 
 
 def sweep_pending():
