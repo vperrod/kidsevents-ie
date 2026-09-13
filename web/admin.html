@@ -2,62 +2,129 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta name="theme-color" content="#1B5C63" />
     <title>Small Days — Editor desk</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" href="assets/small-days-mark.svg" type="image/svg+xml" />
     <style>
       :root {
-        --ink: #143d35;
-        --ink2: #24574b;
-        --lime: #c5ec70;
-        --paper: #f7f6ef;
-        --white: #fffefa;
-        --mist: #e7eee8;
-        --line: #cbd8cf;
-        --quiet: #64776f;
-        --red: #a94636;
-        --amber: #a8791b;
+        --primary: #1b5c63;
+        --primary-deep: #17312d;
+        --canvas: #f5f7f2;
+        --surface: #ffffff;
+        --ink: #17312d;
+        --muted: #46615b;
+        --line: #9fb2aa;
+        --line-soft: #dde8d7;
+        --accent: #f1c84b;
+        --warn: #8c6500;
+        --bad: #a23f3a;
+        --r-control: 12px;
+        --r-card: 20px;
+        --rail-w: 236px;
       }
       * {
         box-sizing: border-box;
       }
+      html {
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
       body {
         margin: 0;
-        background: var(--paper);
+        background: var(--canvas);
         color: var(--ink);
-        font:
-          15px/1.45 "DM Sans",
-          sans-serif;
+        font: 15px/1.55 "Atkinson Hyperlegible", Arial, sans-serif;
+      }
+      body.locked {
+        overflow: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      .display {
+        font-family: "Bricolage Grotesque", Arial, sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin: 0;
+      }
+      h1 {
+        font-size: 30px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      h3 {
+        font-size: 16px;
+      }
+      p {
+        margin: 0;
       }
       button,
-      input {
+      input,
+      select,
+      textarea {
         font: inherit;
+        color: inherit;
       }
       button {
         cursor: pointer;
       }
-      a {
-        color: inherit;
+      button[disabled] {
+        cursor: not-allowed;
+        opacity: 0.55;
       }
+      a {
+        color: var(--primary);
+      }
+      :focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+        box-shadow: 0 0 0 1px var(--primary-deep);
+        border-radius: 6px;
+      }
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--surface);
+        padding: 12px 16px;
+        z-index: 60;
+      }
+      .skip:focus {
+        left: 8px;
+        top: 8px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .small {
+        font-size: 13px;
+      }
+      /* ── shell ─────────────────────────────────────────── */
       .shell {
         min-height: 100vh;
         display: grid;
-        grid-template-columns: 236px minmax(0, 1fr);
+        grid-template-columns: var(--rail-w) minmax(0, 1fr);
       }
       .rail {
-        background: var(--ink);
-        color: #eaf2df;
-        padding: 24px 16px;
+        background: var(--primary-deep);
+        color: #e7efe9;
+        padding: 20px 14px;
         display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: 22px;
         position: sticky;
         top: 0;
         height: 100vh;
@@ -66,119 +133,544 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 0 8px;
-        font:
-          700 20px/1 Fraunces,
-          serif;
-        letter-spacing: -0.04em;
+        font-family: "Bricolage Grotesque", Arial, sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+        letter-spacing: -0.045em;
       }
-      .mark {
-        display: grid;
-        place-items: center;
-        width: 29px;
-        height: 29px;
-        border-radius: 50% 50% 43% 50%;
-        background: var(--lime);
-        color: var(--ink);
-        font:
-          700 21px/1 Fraunces,
-          serif;
+      .brand img {
+        width: 32px;
+        height: 32px;
+        display: block;
       }
       .nav {
-        display: grid;
+        display: flex;
+        flex-direction: column;
         gap: 4px;
+        overflow-y: auto;
       }
-      .nav button {
-        text-align: left;
-        border: 0;
-        border-radius: 9px;
-        background: transparent;
-        color: #c2d2c7;
-        padding: 11px 12px;
-        font-weight: 600;
+      .nav a {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-height: 44px;
+        padding: 0 12px;
+        border-radius: var(--r-control);
+        color: #e7efe9;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14.5px;
       }
-      .nav button:hover {
-        background: #24574b;
+      .nav a:hover {
+        background: #24554e;
+      }
+      .nav a[aria-current="page"] {
+        background: var(--accent);
+        color: var(--primary-deep);
+      }
+      .nav svg {
+        flex: none;
+        width: 20px;
+        height: 20px;
+      }
+      .nav .label {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .badge {
+        flex: none;
+        min-width: 24px;
+        padding: 2px 7px;
+        border-radius: 999px;
+        background: var(--accent);
+        color: var(--primary-deep);
+        font-size: 12px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .nav a[aria-current="page"] .badge {
+        background: var(--primary-deep);
+        color: var(--accent);
+      }
+      .badge.bad {
+        background: var(--bad);
         color: #fff;
-      }
-      .nav button.active {
-        background: var(--lime);
-        color: var(--ink);
       }
       .rail-foot {
         margin-top: auto;
-        padding: 12px 8px;
-        border-top: 1px solid #346257;
-        color: #b7c8ba;
-        font-size: 12px;
+        font-size: 12.5px;
+        color: #b9ccc4;
       }
       .rail-foot a {
-        display: block;
-        margin-top: 7px;
-        color: #fff;
+        color: #dff0e6;
+        display: inline-flex;
+        min-height: 44px;
+        align-items: center;
+      }
+      .topbar {
+        display: none;
+      }
+      main {
+        min-width: 0;
+        padding: 28px 30px 80px;
+      }
+      .page-head {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        margin-bottom: 22px;
+      }
+      .page-head p {
+        max-width: 62ch;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      /* ── controls ──────────────────────────────────────── */
+      .btn {
         text-decoration: none;
+        color: var(--ink);
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: var(--r-control);
+        border: 1px solid var(--line);
+        background: var(--surface);
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+      }
+      .btn:active:not([disabled]) {
+        transform: scale(0.98);
+      }
+      .btn.primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+      .btn.accent {
+        background: var(--accent);
+        border-color: #d9b23c;
+        color: var(--primary-deep);
+      }
+      .btn.danger {
+        border-color: #d3a9a4;
+        color: var(--bad);
+      }
+      .btn.small {
+        min-height: 38px;
+        padding: 0 12px;
+        font-size: 13.5px;
+      }
+      input[type="text"],
+      input[type="search"],
+      select,
+      textarea {
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        border-radius: var(--r-control);
+        background: var(--surface);
+        max-width: 100%;
+      }
+      .field {
+        display: inline-flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-bottom: 16px;
+      }
+      .toolbar .grow {
+        flex: 1 1 220px;
+      }
+      .toolbar .grow input {
+        width: 100%;
+      }
+      /* ── surfaces ──────────────────────────────────────── */
+      .card {
+        background: var(--surface);
+        border: 1px solid rgba(70, 97, 91, 0.28);
+        border-radius: var(--r-card);
+        padding: 18px;
+        box-shadow: 0 1px 2px rgba(23, 49, 45, 0.04), 0 6px 18px rgba(23, 49, 45, 0.04);
+      }
+      .grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      }
+      .stat b {
+        display: block;
+        font-family: "Bricolage Grotesque", Arial, sans-serif;
+        font-size: 34px;
+        line-height: 1.1;
+        color: var(--primary);
+      }
+      .stat .k {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .stat .n {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      .section {
+        margin-top: 22px;
+      }
+      .section > h2 {
+        margin-bottom: 4px;
+      }
+      .section > .sub {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 12px;
+        max-width: 70ch;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--canvas);
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .chip.miss {
+        border-color: #dcc48c;
+        background: #fdf6e3;
+        color: var(--warn);
+      }
+      .chip.ok {
+        border-color: #a9cbb2;
+        background: #eef7ee;
+        color: #2f6b3e;
+      }
+      .chip.bad {
+        border-color: #d9b4b0;
+        background: #fbeeed;
+        color: var(--bad);
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .notice {
+        border: 1px dashed var(--line);
+        border-radius: var(--r-control);
+        padding: 12px 14px;
+        color: var(--muted);
+        background: #fbfcfa;
+        font-size: 14px;
+      }
+      .notice.error {
+        border-style: solid;
+        border-color: #d9b4b0;
+        background: #fbeeed;
+        color: var(--bad);
+      }
+      .skeleton {
+        height: 92px;
+        border-radius: var(--r-card);
+        background: linear-gradient(90deg, #eef2ec, #f7faf5, #eef2ec);
+        border: 1px solid var(--line-soft);
+      }
+      /* ── tables ────────────────────────────────────────── */
+      .table-wrap {
+        overflow-x: auto;
+        border: 1px solid rgba(70, 97, 91, 0.28);
+        border-radius: var(--r-card);
+        background: var(--surface);
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 640px;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--line-soft);
+        vertical-align: top;
+      }
+      th {
+        font-size: 12.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        background: #f2f6f0;
+        position: sticky;
+        top: 0;
+      }
+      tbody tr:hover {
+        background: #f7faf5;
+      }
+      td .t {
         font-weight: 700;
       }
-      .page {
-        min-width: 0;
-        padding: 34px clamp(18px, 4vw, 58px) 56px;
-        max-width: 1500px;
-      }
-      .top {
+      .pager {
         display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 30px;
-      }
-      h1 {
-        margin: 0;
-        font:
-          600 clamp(34px, 4vw, 54px) / 0.98 Fraunces,
-          serif;
-        letter-spacing: -0.055em;
-      }
-      .sub {
-        margin: 10px 0 0;
-        max-width: 580px;
-        color: var(--quiet);
-      }
-      .live {
-        display: flex;
+        gap: 10px;
         align-items: center;
-        gap: 7px;
-        white-space: nowrap;
-        padding-top: 5px;
-        color: var(--quiet);
-        font-size: 12px;
+        flex-wrap: wrap;
+        padding: 10px 0;
+        font-size: 13.5px;
+        color: var(--muted);
       }
-      .dot {
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: #75a74a;
-        box-shadow: 0 0 0 4px #e1efd0;
+      .pager .btn {
+        min-height: 40px;
       }
-      .tabs {
+      /* ── queue ─────────────────────────────────────────── */
+      details.group {
+        margin-bottom: 14px;
+        border: 1px solid rgba(70, 97, 91, 0.28);
+        border-radius: var(--r-card);
+        background: var(--surface);
+        overflow: hidden;
+      }
+      details.group > summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        min-height: 44px;
         display: flex;
-        gap: 5px;
-        border-bottom: 1px solid var(--line);
-        margin-bottom: 28px;
+        gap: 10px;
+        align-items: center;
+        font-weight: 700;
+        background: #f2f6f0;
+      }
+      details.group > summary::-webkit-details-marker {
+        display: none;
+      }
+      details.group > summary .gt {
+        flex: 1;
+        min-width: 0;
+      }
+      .group-body {
+        padding: 14px 16px 6px;
+      }
+      .qcard {
+        border: 1px solid var(--line-soft);
+        border-radius: var(--r-card);
+        padding: 14px;
+        margin-bottom: 12px;
+        background: var(--surface);
+      }
+      .qcard:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+        box-shadow: 0 0 0 2px var(--primary);
+      }
+      .qcard .cap {
+        margin: 8px 0;
+        word-break: break-word;
+      }
+      .qcard .why {
+        font-size: 13.5px;
+        color: var(--warn);
+        background: #fdf6e3;
+        border: 1px solid #e6d3a2;
+        border-radius: var(--r-control);
+        padding: 8px 10px;
+        margin: 8px 0;
+      }
+      .qcard .acts {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .qcard .acts .btn {
+        flex: 1 1 140px;
+      }
+      .hint-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .hint-row input {
+        flex: 1 1 220px;
+      }
+      .qerr {
+        margin-top: 8px;
+        font-size: 13.5px;
+        color: var(--bad);
+      }
+      /* ── log ───────────────────────────────────────────── */
+      .log {
+        background: #10251f;
+        color: #d8e6dd;
+        border-radius: var(--r-card);
+        padding: 14px;
+        font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+        max-height: 460px;
         overflow: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
       }
-      .tab {
-        border: 0;
-        background: none;
-        padding: 0 2px 12px;
-        margin-right: 20px;
-        color: var(--quiet);
-        font-weight: 600;
-        white-space: nowrap;
-        border-bottom: 3px solid transparent;
+      .log .ln {
+        display: block;
       }
-      .tab.active {
+      .log .ln.err {
+        color: #ffb4a8;
+        font-weight: 700;
+      }
+      .bar {
+        height: 10px;
+        border-radius: 999px;
+        background: var(--line-soft);
+        overflow: hidden;
+        margin-top: 8px;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--primary);
+      }
+      /* ── overlays ──────────────────────────────────────── */
+      [hidden] {
+        display: none !important;
+      }
+      .scrim {
+        position: fixed;
+        inset: 0;
+        background: rgba(23, 49, 45, 0.44);
+        z-index: 40;
+        display: flex;
+      }
+      .drawer {
+        margin-left: auto;
+        width: min(520px, 100%);
+        background: var(--surface);
+        height: 100%;
+        overflow: auto;
+        padding: 20px 20px calc(28px + env(safe-area-inset-bottom));
+        animation: slideIn 0.24s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      .sheet {
+        margin-top: auto;
+        width: 100%;
+        background: var(--surface);
+        border-radius: var(--r-card) var(--r-card) 0 0;
+        padding: 14px 14px calc(18px + env(safe-area-inset-bottom));
+        max-height: 86vh;
+        overflow: auto;
+        animation: sheetIn 0.24s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      .modal {
+        margin: auto;
+        width: min(420px, calc(100% - 28px));
+        background: var(--surface);
+        border-radius: var(--r-card);
+        padding: 20px;
+        animation: sheetIn 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(18px);
+          opacity: 0;
+        }
+      }
+      @keyframes sheetIn {
+        from {
+          transform: scale(0.97);
+          opacity: 0;
+        }
+      }
+      .ov-head {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .kv {
+        width: 100%;
+        min-width: 0;
+        font-size: 14px;
+      }
+      .kv th {
+        width: 38%;
+        position: static;
+        background: transparent;
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      .kv td {
+        word-break: break-word;
+      }
+      .sheet .nav {
+        gap: 4px;
+      }
+      .sheet .nav a {
         color: var(--ink);
-        border-color: var(--lime);
+        border: 1px solid var(--line-soft);
+      }
+      .sheet .nav a[aria-current="page"] {
+        background: var(--accent);
+        border-color: #d9b23c;
+      }
+      .sheet .nav a:hover {
+        background: var(--canvas);
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: calc(18px + env(safe-area-inset-bottom));
+        transform: translate(-50%, 20px);
+        background: var(--primary-deep);
+        color: #f2f8f3;
+        border-radius: var(--r-control);
+        padding: 12px 14px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        z-index: 50;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s cubic-bezier(0.23, 1, 0.32, 1), transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        max-width: min(520px, calc(100% - 24px));
+        font-size: 14px;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+        pointer-events: auto;
+      }
+      .toast button {
+        background: var(--accent);
+        color: var(--primary-deep);
+        border: 0;
+        border-radius: 999px;
+        min-height: 36px;
+        padding: 0 14px;
+        font-weight: 700;
+        flex: none;
       }
       .view {
         display: none;
@@ -186,968 +678,269 @@
       .view.active {
         display: block;
       }
-      .hero {
-        background: var(--ink);
-        color: #eff6e8;
-        border-radius: 20px;
-        padding: clamp(22px, 3vw, 36px);
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(230px, 0.8fr);
-        gap: 28px;
-        margin-bottom: 25px;
-      }
-      .eyebrow {
-        color: #a9c6b6;
-        font:
-          500 11px/1 "DM Mono",
-          monospace;
-      }
-      .hero h2 {
-        margin: 10px 0;
-        font:
-          600 clamp(26px, 3.2vw, 41px) / 1.02 Fraunces,
-          serif;
-        letter-spacing: -0.045em;
-      }
-      .hero p {
-        color: #c5d7cc;
-        max-width: 570px;
-        margin: 0;
-      }
-      .actions {
-        margin-top: 23px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .button {
-        min-height: 43px;
-        border: 1px solid transparent;
-        border-radius: 9px;
-        padding: 0 15px;
-        font-weight: 700;
-      }
-      .primary {
-        background: var(--lime);
-        color: var(--ink);
-      }
-      .secondary {
-        background: transparent;
-        border-color: #608074;
-        color: #eff6e8;
-      }
-      .pulse {
-        align-self: end;
-        border-left: 1px solid #38665a;
-        padding-left: 26px;
-      }
-      .pulse b {
-        display: block;
-        margin: 7px 0 3px;
-        font:
-          600 39px/1 Fraunces,
-          serif;
-        color: var(--lime);
-        letter-spacing: -0.05em;
-      }
-      .pulse span {
-        color: #b9cfc0;
-        font-size: 13px;
-      }
-      .pulse hr {
-        border: 0;
-        border-top: 1px solid #38665a;
-        margin: 18px 0;
-      }
-      .metrics {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin: 0 0 25px;
-      }
-      .metric,
-      .panel {
-        background: var(--white);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-      }
-      .metric {
-        padding: 17px;
-        min-height: 123px;
-      }
-      .metric b {
-        display: block;
-        margin: 12px 0 4px;
-        font:
-          600 35px/1 Fraunces,
-          serif;
-        letter-spacing: -0.05em;
-      }
-      .metric span {
-        color: var(--quiet);
-        font-size: 13px;
-      }
-      .good {
-        color: #477a41;
-      }
-      .warn {
-        color: var(--amber);
-      }
-      .two {
-        display: grid;
-        grid-template-columns: 1.25fr 0.75fr;
-        gap: 20px;
-      }
-      .panel {
-        padding: 21px;
-        min-width: 0;
-      }
-      .panel h3 {
-        margin: 0;
-        font-size: 17px;
-        letter-spacing: -0.02em;
-      }
-      .head {
-        display: flex;
-        gap: 10px;
-        justify-content: space-between;
-        align-items: start;
-        margin-bottom: 10px;
-      }
-      .muted,
-      .section-copy {
-        color: var(--quiet);
-        font-size: 13px;
-      }
-      .link {
-        border: 0;
-        background: none;
-        color: var(--ink2);
-        text-decoration: underline;
-        font-size: 13px;
-        font-weight: 700;
-        padding: 2px;
-      }
-      .queue {
-        display: grid;
-      }
-      .queue-item {
-        display: grid;
-        grid-template-columns: 9px minmax(0, 1fr) auto;
-        align-items: center;
-        gap: 11px;
-        padding: 14px 0;
-        border-top: 1px solid var(--mist);
-      }
-      .queue-item:first-child {
-        border-top: 0;
-      }
-      .flag {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--amber);
-      }
-      .flag.red {
-        background: var(--red);
-      }
-      .queue-title {
-        font-weight: 700;
-      }
-      .queue-detail {
-        color: var(--quiet);
-        font-size: 12px;
-        margin-top: 2px;
-      }
-      .count {
-        font:
-          500 12px/1 "DM Mono",
-          monospace;
-        color: var(--quiet);
-      }
-      .coverage {
-        padding-top: 3px;
-        display: grid;
-        gap: 14px;
-      }
-      .coverage-row {
-        display: grid;
-        grid-template-columns: 92px 1fr 32px;
-        gap: 10px;
-        align-items: center;
-        font-size: 13px;
-      }
-      .bar {
-        height: 7px;
-        background: var(--mist);
-        border-radius: 99px;
-        overflow: hidden;
-      }
-      .bar i {
-        display: block;
-        height: 100%;
-        background: var(--ink2);
-        border-radius: 99px;
-      }
-      .coverage-row em {
-        font-style: normal;
-        color: var(--quiet);
-        text-align: right;
-        font:
-          11px "DM Mono",
-          monospace;
-      }
-      .section-title {
-        margin: 0 0 6px;
-        font:
-          600 29px/1 Fraunces,
-          serif;
-        letter-spacing: -0.04em;
-      }
-      .section-copy {
-        margin: 0 0 20px;
-      }
-      .filterbar {
-        display: flex;
-        gap: 9px;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 17px;
-        flex-wrap: wrap;
-      }
-      .search {
-        min-height: 42px;
-        width: min(100%, 340px);
-        padding: 0 12px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fff;
-        color: var(--ink);
-      }
-      .hint-input {
-        min-height: 34px;
-        width: 100%;
-        min-width: 200px;
-        padding: 0 10px;
-        margin-bottom: 8px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fff;
-        color: var(--ink);
-        font-size: 13px;
-        display: block;
-      }
-      .filters {
-        display: flex;
-        gap: 7px;
-        flex-wrap: wrap;
-      }
-      .chip {
-        border: 1px solid var(--line);
-        background: #fff;
-        border-radius: 99px;
-        padding: 7px 11px;
-        color: var(--ink);
-        font-size: 12px;
-        font-weight: 600;
-      }
-      .chip.active {
-        background: var(--ink);
-        color: #fff;
-        border-color: var(--ink);
-      }
-      .table-wrap {
-        overflow: auto;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        background: var(--white);
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        min-width: 700px;
-      }
-      th {
-        text-align: left;
-        color: var(--quiet);
-        font:
-          500 10px "DM Mono",
-          monospace;
-        letter-spacing: 0.03em;
-        padding: 13px 15px;
-        border-bottom: 1px solid var(--line);
-      }
-      td {
-        padding: 14px 15px;
-        border-bottom: 1px solid var(--mist);
-        vertical-align: top;
-      }
-      tr:last-child td {
-        border: 0;
-      }
-      .item-title {
-        font-weight: 700;
-        max-width: 330px;
-      }
-      .item-sub {
-        font-size: 12px;
-        color: var(--quiet);
-        margin-top: 3px;
-        max-width: 380px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .tag {
-        display: inline-block;
-        padding: 3px 7px;
-        border-radius: 5px;
-        background: var(--mist);
-        color: var(--ink2);
-        font-size: 11px;
-        font-weight: 700;
-      }
-      .tag.missing {
-        background: #f8edd0;
-        color: #855e13;
-      }
-      .status {
-        font:
-          500 11px "DM Mono",
-          monospace;
-      }
-      .status.ok {
-        color: #477a41;
-      }
-      .status.issue {
-        color: var(--amber);
-      }
-      .source-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-      }
-      .source {
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 16px;
-        background: var(--white);
-      }
-      .source b {
-        display: block;
-        font-size: 15px;
-      }
-      .source p {
-        font-size: 12px;
-        color: var(--quiet);
-        margin: 4px 0 13px;
-      }
-      .source a {
-        font-size: 12px;
-        color: var(--ink2);
-        word-break: break-word;
-      }
-      .source-meta {
-        display: flex;
-        justify-content: space-between;
-        gap: 5px;
-        border-top: 1px solid var(--mist);
-        padding-top: 10px;
-        font-size: 11px;
-        color: var(--quiet);
-      }
-      .stage {
-        display: grid;
-        grid-template-columns: 24px 1fr auto;
-        gap: 11px;
-        padding: 15px 0;
-        border-bottom: 1px solid var(--mist);
-        align-items: center;
-      }
-      .stage:last-child {
-        border: 0;
-      }
-      .stage-num {
-        font:
-          500 11px "DM Mono",
-          monospace;
-        color: var(--quiet);
-      }
-      .stage b {
-        font-size: 14px;
-      }
-      .stage span {
-        font-size: 12px;
-        color: var(--quiet);
-      }
-      .log {
-        max-height: 440px;
-        overflow: auto;
-        background: #102d27;
-        color: #d8e6d6;
-        border-radius: 10px;
-        padding: 16px;
-        font:
-          12px/1.7 "DM Mono",
-          monospace;
-        white-space: pre-wrap;
-      }
-      .empty {
-        padding: 30px;
-        color: var(--quiet);
-        text-align: center;
-      }
-      .toast {
-        position: fixed;
-        right: 18px;
-        bottom: 18px;
-        z-index: 5;
-        background: var(--ink);
-        color: #fff;
-        padding: 12px 15px;
-        border-radius: 9px;
-        box-shadow: 0 10px 24px #173f3533;
-        display: none;
-      }
-      .toast.show {
-        display: block;
-      }
-      @media (max-width: 900px) {
-        .shell {
-          grid-template-columns: 1fr;
+      /* ── responsive ────────────────────────────────────── */
+      @media (max-width: 1060px) {
+        :root {
+          --rail-w: 76px;
         }
         .rail {
-          height: auto;
-          position: static;
-          padding: 15px 17px;
-          gap: 13px;
+          padding: 18px 10px;
+          align-items: center;
         }
+        .nav {
+          width: 100%;
+        }
+        .nav a {
+          justify-content: center;
+          padding: 0 6px;
+          position: relative;
+        }
+        .nav .label,
+        .brand span,
         .rail-foot {
           display: none;
         }
-        .nav {
-          display: flex;
-          overflow: auto;
-          margin: 0 -5px;
+        .badge {
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          min-width: 20px;
+          padding: 0 5px;
+          font-size: 11px;
+          line-height: 18px;
         }
-        .nav button {
-          white-space: nowrap;
-          padding: 8px 10px;
-        }
-        .page {
-          padding: 25px 18px 44px;
-        }
-        .hero,
-        .two {
-          grid-template-columns: 1fr;
-        }
-        .pulse {
-          border-left: 0;
-          border-top: 1px solid #38665a;
-          padding: 18px 0 0;
-        }
-        .metrics {
-          grid-template-columns: repeat(2, 1fr);
-        }
-        .source-grid {
-          grid-template-columns: repeat(2, 1fr);
+        main {
+          padding: 24px 20px 80px;
         }
       }
-      @media (max-width: 520px) {
-        .top {
-          display: block;
+      @media (max-width: 760px) {
+        .shell {
+          grid-template-columns: minmax(0, 1fr);
         }
-        .live {
-          margin-top: 12px;
+        .rail {
+          display: none;
         }
-        .metric {
-          padding: 14px;
-          min-height: 110px;
+        .topbar {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: calc(8px + env(safe-area-inset-top)) 14px 8px;
+          background: var(--primary-deep);
+          color: #e7efe9;
+          position: sticky;
+          top: 0;
+          z-index: 30;
         }
-        .metric b {
-          font-size: 29px;
+        .topbar .brand {
+          font-size: 18px;
+          gap: 8px;
         }
-        .hero {
-          border-radius: 15px;
-          padding: 21px;
-        }
-        .tabs {
-          margin-right: -18px;
-        }
-        .source-grid {
-          grid-template-columns: 1fr;
-        }
-        .button {
+        .topbar .where {
           flex: 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 13px;
+          color: #bdd2c9;
+          text-align: right;
         }
-        .filterbar {
-          align-items: stretch;
+        main {
+          padding: 18px 14px calc(60px + env(safe-area-inset-bottom));
         }
-        .search {
+        h1 {
+          font-size: 24px;
+        }
+        .stat b {
+          font-size: 28px;
+        }
+        .drawer {
           width: 100%;
+          border-radius: 0;
+        }
+        /* The queue is the one screen that has to fit a decision on a phone:
+           a card's Resubmit/Reject must be reachable without hunting. */
+        .page-head {
+          margin-bottom: 14px;
+          align-items: center;
+        }
+        #page-sub {
+          font-size: 13.5px;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .toolbar {
+          gap: 8px;
+          margin-bottom: 10px;
+        }
+        .keys-hint {
+          display: none;
+        }
+        .pager label.field {
+          display: none;
+        }
+        details.group > summary {
+          padding: 10px 12px;
+        }
+        .group-body {
+          padding: 10px 12px 4px;
+        }
+        .qcard {
+          padding: 12px;
+        }
+        .qcard .cap {
+          margin: 6px 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .qcard .why {
+          margin: 6px 0;
+          padding: 7px 9px;
+          font-size: 13px;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
       }
       @media (prefers-reduced-motion: reduce) {
         * {
-          scroll-behavior: auto !important;
-          transition: none !important;
-        }
-      }
-    </style>
-    <link rel="stylesheet" href="admin-brand.css?v=2" />
-    <style>
-      .pager {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin: 12px 0;
-      }
-      .pager .link[disabled] {
-        opacity: 0.4;
-        cursor: default;
-        text-decoration: none;
-      }
-      .field {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        color: var(--quiet);
-        font-size: 13px;
-      }
-      .field select {
-        min-height: 40px;
-        padding: 0 8px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fff;
-        color: var(--ink);
-        font: inherit;
-      }
-      .cardlist {
-        display: grid;
-        gap: 12px;
-      }
-      .candidate {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 260px;
-        gap: 18px;
-        padding: 18px;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--white);
-      }
-      .candidate-main {
-        min-width: 0;
-      }
-      .candidate-decision {
-        align-self: start;
-        position: sticky;
-        top: 16px;
-        padding-left: 16px;
-        border-left: 1px solid var(--mist);
-      }
-      .candidate-decision .actions {
-        margin-top: 0;
-        gap: 8px;
-      }
-      .candidate-decision .button {
-        flex: 1;
-      }
-      /* .secondary is written for the dark hero; on a white card it needs ink. */
-      .candidate-decision .secondary {
-        color: var(--ink);
-      }
-      .chip.active .count {
-        color: inherit;
-      }
-      .chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin: 8px 0 10px;
-      }
-      .caption {
-        margin: 0 0 10px;
-        overflow-wrap: anywhere;
-      }
-      .reason {
-        margin: 0 0 10px;
-        color: var(--quiet);
-        font-size: 13px;
-        white-space: normal;
-        overflow-wrap: break-word;
-      }
-      .reason em {
-        display: block;
-        margin-top: 5px;
-      }
-      .candidate .item-sub {
-        white-space: normal;
-        overflow: visible;
-        text-overflow: clip;
-        max-width: none;
-      }
-      @media (max-width: 900px) {
-        .candidate {
-          grid-template-columns: 1fr;
-        }
-        .candidate-decision {
-          position: static;
-          padding: 14px 0 0;
-          border-left: 0;
-          border-top: 1px solid var(--mist);
-        }
-      }
-      @media (max-width: 760px) {
-        #view-content table {
-          min-width: 0;
-        }
-        #view-content thead {
-          position: absolute;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-          clip: rect(0 0 0 0);
-          white-space: nowrap;
-        }
-        #view-content table,
-        #view-content tbody,
-        #view-content tr,
-        #view-content td {
-          display: block;
-          width: 100%;
-        }
-        #view-content tr {
-          padding: 8px 0;
-          border-bottom: 1px solid var(--line);
-        }
-        #view-content tr:last-child {
-          border-bottom: 0;
-        }
-        #view-content td {
-          padding: 6px 15px;
-          border: 0;
-        }
-        #view-content td::before {
-          content: attr(data-label);
-          display: block;
-          margin-bottom: 4px;
-          color: var(--quiet);
-          font: 500 10px "DM Mono", monospace;
-          letter-spacing: 0.03em;
-        }
-        #view-content .item-title,
-        #view-content .item-sub {
-          max-width: none;
-          white-space: normal;
-          overflow: visible;
-          text-overflow: clip;
-        }
-        #view-content td {
-          overflow-wrap: anywhere;
-        }
-      }
-      /* Six rail labels, not the five the brand sheet's phone grid assumes. */
-      @media (max-width: 520px) {
-        .rail .nav {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 4px;
-        }
-        .rail .nav button {
-          padding: 10px 9px;
-          font-size: 13px;
-          text-align: left;
-          white-space: normal;
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
         }
       }
     </style>
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <div class="shell">
-      <aside class="rail">
+      <nav class="rail" aria-label="Admin areas">
         <div class="brand">
-          <span class="mark"><img src="assets/small-days-mark.svg" alt="" /></span>
-          Small Days
+          <img src="assets/small-days-mark.svg" alt="" /><span>Small Days</span>
         </div>
-        <nav class="nav" aria-label="Editor desk">
-          <button class="active" data-view="desk">Overview</button
-          ><button data-view="content">Editorial review</button
-          ><button data-view="sources">Coverage</button
-          ><button data-view="pipeline">Collection</button
-          ><button data-view="social">Social</button
-          ><button data-view="logs">Run log</button>
-        </nav>
+        <div class="nav" id="rail-nav"></div>
         <div class="rail-foot">
-          Small Days editorial desk<a href="/kidsevents/" target="_blank" rel="noopener"
-            >View public site ↗</a
-          >
+          <a href="/" target="_blank" rel="noopener">Open the public site</a>
+          <p id="rail-stamp">Loading…</p>
         </div>
-      </aside>
-      <main class="page">
-        <header class="top">
+      </nav>
+      <div class="topbar">
+        <div class="brand"><img src="assets/small-days-mark.svg" alt="" /></div>
+        <button class="btn small accent" id="areas-btn" aria-haspopup="dialog">Areas</button>
+        <span class="where" id="topbar-where"></span>
+      </div>
+      <main id="main">
+        <div class="page-head">
           <div>
-            <h1 id="page-title">Today’s desk</h1>
-            <p class="sub" id="page-subtitle">
-              A clear view of what parents can see, what needs a decision, and
-              what the next collection run will change.
-            </p>
+            <h1 id="page-title">Overview</h1>
+            <p id="page-sub"></p>
           </div>
-          <div class="live">
-            <i class="dot"></i><span id="refresh-label">Loading live data</span>
-          </div>
-        </header>
-        <section class="view active" id="view-desk">
-          <div class="hero">
-            <div>
-              <div class="eyebrow">Small Days editorial desk</div>
-              <h2 id="desk-title">
-                Your local guide is ready for its next polish.
-              </h2>
-              <p id="desk-copy">
-                Loading the current collection and quality checks.
-              </p>
-              <div class="actions">
-                <button class="button primary run">Run a collection</button
-                ><button class="button secondary" data-view="content">
-                  Review content
-                </button>
-              </div>
-            </div>
-            <aside class="pulse">
-              <span>Published now</span><b id="hero-total">—</b
-              ><span>events and family ideas</span>
-              <hr />
-              <span>Last collection</span
-              ><b id="hero-last" style="font-size: 25px">—</b
-              ><span id="hero-result">Checking the factory</span>
-            </aside>
-          </div>
-          <div class="metrics">
-            <article class="metric">
-              <span>Published items</span><b id="m-total">—</b
-              ><span id="m-total-note">Loading</span>
-            </article>
-            <article class="metric">
-              <span>Ready for parents</span><b class="good" id="m-ready">—</b
-              ><span>date, place, age and cost</span>
-            </article>
-            <article class="metric">
-              <span>Need context</span><b class="warn" id="m-context">—</b
-              ><span>missing useful planning details</span>
-            </article>
-            <article class="metric">
-              <span>Places & holidays</span><b id="m-holidays">—</b
-              ><span>saved guides</span>
-            </article>
-          </div>
-          <div class="head">
-            <div>
-              <h3>Review progress</h3>
-              <p class="muted">Overall, today, and this hour.</p>
-            </div>
-          </div>
-          <div class="metrics">
-            <article class="metric">
-              <span>Waiting for review</span><b class="warn" id="p-needs-review">—</b
-              ><span>overall, across Instagram and TikTok</span>
-            </article>
-            <article class="metric">
-              <span>Approved today</span><b class="good" id="p-today-approved">—</b
-              ><span id="p-today-rejected-note">— rejected today</span>
-            </article>
-            <article class="metric">
-              <span>Approved this hour</span><b id="p-hour-approved">—</b
-              ><span id="p-metrics-updated">—</span>
-            </article>
-          </div>
-          <div class="two">
-            <section class="panel">
-              <div class="head">
-                <div>
-                  <h3>What needs attention</h3>
-                  <p class="muted">A practical queue, not system noise.</p>
-                </div>
-                <button class="link" data-view="content">Open review</button>
-              </div>
-              <div class="queue" id="attention"></div>
-            </section>
-            <section class="panel">
-              <div class="head">
-                <div>
-                  <h3>Where we’re covering</h3>
-                  <p class="muted">Published items by county or city.</p>
-                </div>
-              </div>
-              <div class="coverage" id="coverage"></div>
-            </section>
-          </div>
-        </section>
-        <section class="view" id="view-content">
-          <h2 class="section-title">Editorial review</h2>
-          <p class="section-copy">
-            Check the facts families use to choose: timing, place, age fit,
-            price and original source.
-          </p>
-          <div class="filterbar">
-            <input
-              class="search"
-              id="search"
-              aria-label="Search title, place or county"
-              placeholder="Search title, place, county…"
-              type="search"
-            />
-            <div class="filters">
-              <button class="chip active" data-filter="all">
-                All <span id="all-count"></span></button
-              ><button class="chip" data-filter="needs">
-                Need details <span id="need-count"></span></button
-              ><button class="chip" data-filter="ready">
-                Ready <span id="ready-count"></span>
-              </button>
-            </div>
-          </div>
-          <div class="pager" id="ev-pager-top"></div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Listing</th>
-                  <th>When</th>
-                  <th>Family details</th>
-                  <th>Source</th>
-                  <th>Quality</th>
-                </tr>
-              </thead>
-              <tbody id="events"></tbody>
-            </table>
-          </div>
-          <div class="pager" id="ev-pager-bottom"></div>
-        </section>
-        <section class="view" id="view-sources">
-          <h2 class="section-title">Coverage map</h2>
-          <p class="section-copy">
-            These sites currently feed discovery. Being listed here does not
-            make an item publish-ready.
-          </p>
-          <div class="metrics">
-            <article class="metric">
-              <span>Discovery sources</span><b id="s-total">—</b
-              ><span>across <span id="s-regions">—</span> regions</span>
-            </article>
-            <article class="metric">
-              <span>Sources represented</span><b id="s-used">—</b
-              ><span>in published content</span>
-            </article>
-            <article class="metric">
-              <span>Social import</span><b class="warn">Paused</b
-              ><span>awaiting account session</span>
-            </article>
-            <article class="metric">
-              <span>Holidays</span><b id="s-holidays">—</b
-              ><span>curated ideas</span>
-            </article>
-          </div>
-          <div class="source-grid" id="sources"></div>
-        </section>
-        <section class="view" id="view-pipeline">
-          <div class="head">
-            <div>
-              <h2 class="section-title">Collection run</h2>
-              <p class="section-copy">
-                Web discovery and extraction only. Social collections remain in
-                review until account access is restored.
-              </p>
-            </div>
-            <button class="button primary run">Run a collection</button>
-          </div>
-          <div class="two">
-            <section class="panel">
-              <h3>Run status</h3>
-              <div id="stages"></div>
-            </section>
-            <section class="panel">
-              <h3>Recent runs</h3>
-              <div id="history"></div>
-            </section>
-          </div>
-        </section>
-        <section class="view" id="view-social">
-          <div class="head">
-            <div>
-              <h2 class="section-title">Social review</h2>
-              <p class="section-copy">
-                Saved collections and tag searches are read on the mini PC and
-                arrive here as candidates. Nothing publishes until you approve
-                it.
-              </p>
-            </div>
-            <button class="button secondary" id="refresh-social">Refresh</button>
-          </div>
-          <div class="metrics">
-            <article class="metric">
-              <span>Waiting for review</span><b class="warn" id="soc-total">—</b
-              ><span>Instagram and TikTok candidates</span>
-            </article>
-          </div>
-          <div class="two">
-            <section class="panel">
-              <div class="head">
-                <div>
-                  <h3>Where they came from</h3>
-                  <p class="muted">Collection or tag that surfaced each post.</p>
-                </div>
-              </div>
-              <div class="coverage" id="soc-found-via"></div>
-            </section>
-          </div>
-          <div class="filterbar">
-            <input
-              class="search"
-              id="soc-search"
-              aria-label="Search caption, account or link"
-              placeholder="Search caption, account or link…"
-              type="search"
-            />
-            <div class="filters" id="soc-status"></div>
-          </div>
-          <div class="filterbar">
-            <div class="filters">
-              <label class="field"
-                >Platform <select id="soc-platform"></select></label
-              ><label class="field"
-                >Found via <select id="soc-foundvia"></select></label
-              ><label class="field"
-                ><input type="checkbox" id="soc-caption" /> Has caption</label
-              >
-            </div>
-            <div class="pager" id="soc-pager-top"></div>
-          </div>
-          <div class="cardlist" id="social"></div>
-          <div class="pager" id="soc-pager-bottom"></div>
-        </section>
-        <section class="view" id="view-logs">
-          <div class="head">
-            <div>
-              <h2 class="section-title">Run log</h2>
-              <p class="section-copy">
-                The latest collection output, useful when a source needs
-                attention.
-              </p>
-              <p class="muted" id="log-run-note"></p>
-            </div>
-            <button class="button secondary" id="refresh-log">Refresh</button>
-          </div>
-          <div class="log" id="log">Loading…</div>
-        </section>
+          <button class="btn small" id="refresh">Refresh data</button>
+        </div>
+        <section class="view" id="view-overview" aria-labelledby="page-title"></section>
+        <section class="view" id="view-catalogue" aria-labelledby="page-title"></section>
+        <section class="view" id="view-needs-input" aria-labelledby="page-title"></section>
+        <section class="view" id="view-sources" aria-labelledby="page-title"></section>
+        <section class="view" id="view-production" aria-labelledby="page-title"></section>
+        <section class="view" id="view-photos" aria-labelledby="page-title"></section>
+        <section class="view" id="view-metrics" aria-labelledby="page-title"></section>
+        <section class="view" id="view-settings" aria-labelledby="page-title"></section>
       </main>
     </div>
+
+    <div class="scrim" id="sheet-scrim" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="Admin areas">
+        <div class="ov-head">
+          <h2>Areas</h2>
+          <button class="btn small" data-close-overlay>Close</button>
+        </div>
+        <div class="nav" id="sheet-nav"></div>
+      </div>
+    </div>
+
+    <div class="scrim" id="drawer-scrim" hidden>
+      <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+        <div class="ov-head">
+          <h2 id="drawer-title">Record</h2>
+          <button class="btn small" data-close-overlay>Close</button>
+        </div>
+        <div id="drawer-body"></div>
+      </div>
+    </div>
+
+    <div class="scrim" id="confirm-scrim" hidden>
+      <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title">
+        <h2 id="confirm-title">Are you sure?</h2>
+        <p class="muted" id="confirm-body" style="margin: 8px 0 16px"></p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <button class="btn" id="confirm-no" style="flex: 1 1 120px">Cancel</button>
+          <button class="btn primary" id="confirm-yes" style="flex: 1 1 120px">Confirm</button>
+        </div>
+      </div>
+    </div>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
     <script>
       (() => {
-        const match = location.pathname.match(/^(.*)\/admin/),
-          API = match ? match[1] : "";
-        $ = (s) => document.querySelector(s);
+        "use strict";
+        const $ = (s, r) => (r || document).querySelector(s);
+        const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+
+        /* ───────────── data adapter ─────────────
+           Every network read/write in this page goes through Api. Phase 1 adds
+           /api/v1/*, a staged needs_input feed and a missing_field on staged
+           records: swap the paths here and the views keep working. */
+        const ROOT = (location.pathname.match(/^(.*)\/admin/) || ["", ""])[1] || "";
+        async function req(path, opts) {
+          const res = await fetch(ROOT + path, opts);
+          let body = null;
+          try {
+            body = await res.json();
+          } catch (e) {
+            body = null;
+          }
+          if (!res.ok) {
+            const err = new Error((body && (body.message || body.error)) || "HTTP " + res.status);
+            err.status = res.status;
+            err.body = body;
+            throw err;
+          }
+          return body;
+        }
+        const post = (path, body) =>
+          req(path, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body || {}),
+          });
+        const Api = {
+          status: () => req("/admin/api/status"),
+          metrics: () => req("/admin/api/metrics"),
+          stats: () => req("/admin/api/stats"),
+          sources: () => req("/admin/api/sources").then((d) => (d && d.sources) || []),
+          pipeline: () => req("/admin/api/pipeline"),
+          logs: () => req("/admin/api/logs").then((d) => (d && d.lines) || []),
+          events: () => req("/admin/api/events").then((d) => (d && d.events) || []),
+          places: () => req("/api/places"),
+          holidays: () => req("/api/holidays"),
+          staged: () => req("/admin/api/social/staged"),
+          runPipeline: () => post("/admin/api/pipeline/run", {}),
+          approve: (source_url, hint) => post("/admin/api/social/approve", { source_url, hint }),
+          reject: (source_url, note) => post("/admin/api/social/reject", { source_url, note }),
+          // Not served by today's API. Phase 1 fills these in; until then the
+          // views render an explicit "not available yet" state instead.
+          needsInputFeed: null,
+          decisionHistory: null,
+          llmLanes: (status, pipeline) =>
+            (status && status.llm) || (pipeline && pipeline.llm) || null,
+        };
+
+        /* ───────────── helpers ───────────── */
         // Upstream text arrives already HTML-escaped, so decode once before
         // escaping for output — otherwise titles render a literal &#039;.
         const clean = (v) =>
@@ -1162,655 +955,1282 @@
         const esc = (v) =>
           clean(v).replace(
             /[&<>"']/g,
-            (c) =>
-              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c],
+            (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c],
           );
+        const DASH = "—";
+        const txt = (v) => {
+          if (v == null) return DASH;
+          if (typeof v === "number") return Number.isFinite(v) ? String(v) : DASH;
+          if (typeof v === "boolean") return v ? "Yes" : "No";
+          if (Array.isArray(v)) return v.length ? v.map((x) => txt(x)).join(", ") : DASH;
+          if (typeof v === "object") return JSON.stringify(v);
+          const s = clean(v).trim();
+          return s ? s : DASH;
+        };
+        const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : 0);
+        const MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" ");
+        const pad = (n) => String(n).padStart(2, "0");
+        // One time zone on this desk: UTC.
+        const stamp = (v) => {
+          if (!v) return "Not recorded";
+          const raw = String(v);
+          const iso = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(raw) ? raw.replace(" ", "T") + "Z" : raw;
+          const d = new Date(iso);
+          if (Number.isNaN(d.valueOf())) return raw;
+          return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${pad(d.getUTCHours())}:${pad(
+            d.getUTCMinutes(),
+          )} UTC`;
+        };
+        const ago = (v) => {
+          if (!v) return "never";
+          const raw = String(v);
+          const iso = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(raw) ? raw.replace(" ", "T") + "Z" : raw;
+          const d = new Date(iso);
+          if (Number.isNaN(d.valueOf())) return "unknown";
+          const h = Math.floor((Date.now() - d.valueOf()) / 36e5);
+          return h < 1 ? "less than an hour ago" : h < 24 ? h + "h ago" : Math.floor(h / 24) + "d ago";
+        };
+        const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : 0);
         const PAGE_SIZES = [25, 50, 100];
-        let S = {
-          events: [],
-          sources: [],
-          holidays: [],
-          places: [],
-          metrics: null,
-          filter: "all",
-          contentPage: 1,
-          contentSize: 25,
-          social: {
-            items: [],
-            page: 1,
-            size: 25,
-            status: "all",
-            platform: "all",
-            foundVia: "all",
-            hasCaption: false,
-            q: "",
-          },
-        };
-        const get = async (u, o) => {
-            let r = await fetch(u, o);
-            if (!r.ok) throw Error(r.status);
-            return r.json();
-          },
-          src = (e) =>
-            (e.source || "Unknown").split(":")[0].replace(/[_-]/g, " "),
-          place = (e) => !!(e.venue_name || e.city || e.county),
-          ready = (e) => !!(e.start_date && place(e) && e.age_group && e.cost),
-          ago = (v) => {
-            if (!v) return "Not recorded";
-            let n = Date.now() - new Date(v);
-            let h = Math.floor(n / 36e5);
-            return h < 1
-              ? "just now"
-              : h < 24
-                ? h + "h ago"
-                : Math.floor(h / 24) + "d ago";
-          },
-          toast = (t) => {
-            let e = $("#toast");
-            e.textContent = t;
-            e.classList.add("show");
-            setTimeout(() => e.classList.remove("show"), 3500);
-          },
-          // Fixed month names: the platform locale renders September as
-          // "Sept", and the desk reads one time zone only.
-          MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" "),
-          pad = (n) => String(n).padStart(2, "0"),
-          stampUTC = (v) => {
-            let d = new Date(v);
-            if (!v || Number.isNaN(d.valueOf())) return "—";
-            return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())} UTC`;
+        const pageCount = (total, size) => Math.max(1, Math.ceil(total / size));
+        function pager(id, page, total, size) {
+          const last = pageCount(total, size);
+          return `<div class="pager" data-pager="${id}">
+            <button class="btn small" data-step="-1"${page <= 1 ? " disabled" : ""}>&lsaquo; Prev</button>
+            <span>Page ${page} of ${last} &middot; ${total} item${total === 1 ? "" : "s"}</span>
+            <button class="btn small" data-step="1"${page >= last ? " disabled" : ""}>Next &rsaquo;</button>
+            <label class="field" style="flex-direction:row;align-items:center;gap:6px">Show
+              <select data-size>${PAGE_SIZES.map(
+                (n) => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`,
+              ).join("")}</select>
+            </label>
+          </div>`;
+        }
+        const NOT_YET = (what, when) =>
+          `<p class="notice">${esc(what)} is not available yet${when ? ` ${esc(when)}` : ""}.</p>`;
+
+        function toast(message, undoLabel, onUndo) {
+          const el = $("#toast");
+          el.innerHTML = `<span>${esc(message)}</span>`;
+          if (undoLabel) {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.textContent = undoLabel;
+            b.onclick = () => {
+              el.classList.remove("show");
+              onUndo();
+            };
+            el.appendChild(b);
+          }
+          el.classList.add("show");
+          clearTimeout(toast._t);
+          toast._t = setTimeout(() => el.classList.remove("show"), undoLabel ? 9000 : 3500);
+        }
+
+        /* ───────────── overlays (back button closes one) ───────────── */
+        let closer = null;
+        function openOverlay(el, onClose) {
+          if (closer) closer();
+          el.hidden = false;
+          document.body.classList.add("locked");
+          closer = () => {
+            el.hidden = true;
+            document.body.classList.remove("locked");
+            closer = null;
+            if (onClose) onClose();
           };
-        function pages(total, size) {
-          return Math.max(1, Math.ceil(total / size));
+          history.pushState({ overlay: Date.now() }, "");
+          const focusable = el.querySelector("button, a, input, select");
+          if (focusable) focusable.focus();
         }
-        function pagerHtml(page, total, size) {
-          const last = pages(total, size);
-          return `<button class="link" data-page-step="-1"${page <= 1 ? " disabled" : ""}>‹ Prev</button><span class="muted">Page ${page} of ${last} · ${total} item${total === 1 ? "" : "s"}</span><button class="link" data-page-step="1"${page >= last ? " disabled" : ""}>Next ›</button><label class="field">Show <select data-page-size>${PAGE_SIZES.map((n) => `<option value="${n}"${n === size ? " selected" : ""}>${n}</option>`).join("")}</select></label>`;
-        }
-        const VIEWS = {
-          desk: [
-            "Today’s desk",
-            "A clear view of what parents can see, what needs a decision, and what the next collection run will change.",
-          ],
-          content: [
-            "Editorial review",
-            "The details that turn a listing into a confident family plan.",
-          ],
-          sources: [
-            "Coverage map",
-            "See what is feeding Small Days and where the feed is thin.",
-          ],
-          pipeline: [
-            "Collection run",
-            "Run and monitor the web collection pipeline.",
-          ],
-          social: [
-            "Social review",
-            "Candidates collected from saved collections and tag searches.",
-          ],
-          logs: ["Run log", "The latest system output, in one place."],
+        const closeOverlay = () => {
+          if (closer) history.back();
         };
+        $$("[data-close-overlay]").forEach((b) => (b.onclick = closeOverlay));
+        $$(".scrim").forEach(
+          (s) => (s.onclick = (e) => (e.target === s && s.id !== "confirm-scrim" ? closeOverlay() : null)),
+        );
+
+        let confirmResolve = null;
+        function askConfirm(title, body, confirmLabel) {
+          const scrim = $("#confirm-scrim");
+          $("#confirm-title").textContent = title;
+          $("#confirm-body").textContent = body;
+          $("#confirm-yes").textContent = confirmLabel || "Confirm";
+          scrim.hidden = false;
+          $("#confirm-yes").focus();
+          return new Promise((resolve) => {
+            confirmResolve = (v) => {
+              scrim.hidden = true;
+              confirmResolve = null;
+              resolve(v);
+            };
+          });
+        }
+        $("#confirm-yes").onclick = () => confirmResolve && confirmResolve(true);
+        $("#confirm-no").onclick = () => confirmResolve && confirmResolve(false);
+        addEventListener("keydown", (e) => {
+          if (e.key !== "Escape") return;
+          if (confirmResolve) confirmResolve(false);
+          else if (closer) closeOverlay();
+        });
+        addEventListener("popstate", () => {
+          if (closer) closer();
+        });
+
+        /* ───────────── areas + routing ───────────── */
+        const ICONS = {
+          overview: "M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z",
+          catalogue: "M4 5h16M4 5v14M20 5v14M4 19h16M9 5v14M14 5v14",
+          "needs-input": "M3 12h5l2 3h4l2-3h5M5 5h14l2 7v7H3v-7z",
+          sources: "M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18",
+          production: "M3 17l5-6 4 4 5-7 4 5M3 21h18",
+          photos: "M3 6h18v13H3zM3 15l5-5 4 4 3-3 6 6M8.5 9.5h.01",
+          metrics: "M5 20V9M12 20V4M19 20v-7M3 20h18",
+          settings: "M5 7h14M5 12h14M5 17h14M9 5v4M16 10v4M11 15v4",
+        };
+        const AREAS = {
+          overview: {
+            label: "Overview",
+            title: "Overview",
+            sub: "One screen: what is on air, what moved today, what needs a decision, and when the collection last ran.",
+          },
+          catalogue: {
+            label: "Catalogue",
+            title: "Catalogue",
+            sub: "Everything parents can see, with a completeness read on every row. Open a row for its full record.",
+          },
+          "needs-input": {
+            label: "Needs input",
+            title: "Needs input",
+            sub: "The only review queue, grouped by why the automatic gate could not publish the post.",
+          },
+          sources: {
+            label: "Sources",
+            title: "Sources & discovery",
+            sub: "The lanes that feed the catalogue, and the one control that starts a collection run.",
+          },
+          production: {
+            label: "Production",
+            title: "Production",
+            sub: "Collection runs, the run log, and the model lanes behind them.",
+          },
+          photos: {
+            label: "Photos",
+            title: "Photos",
+            sub: "Image coverage per catalogue, computed from the records themselves.",
+          },
+          metrics: {
+            label: "Metrics",
+            title: "Metrics",
+            sub: "Content numbers from the API. Visitors and search are not wired up yet.",
+          },
+          settings: {
+            label: "Settings",
+            title: "Settings",
+            sub: "Read-only for now: what the running system reports about itself.",
+          },
+        };
+        const CATALOGUES = { events: "Events", places: "Things to do", holidays: "Holidays" };
+
         function parseHash() {
-          const raw = location.hash.replace(/^#/, ""),
-            cut = raw.indexOf("/"),
-            name = cut < 0 ? raw : raw.slice(0, cut);
+          const raw = location.hash.replace(/^#/, "");
+          const cut = raw.indexOf("/");
+          const area = cut < 0 ? raw : raw.slice(0, cut);
           let param = "";
           try {
             param = cut < 0 ? "" : decodeURIComponent(raw.slice(cut + 1));
           } catch (e) {
             param = "";
           }
-          return { name: VIEWS[name] ? name : "desk", param };
+          return { area: AREAS[area] ? area : "overview", param };
         }
-        function view(n, param) {
-          if (!VIEWS[n]) n = "desk";
-          if (parseHash().name !== n)
-            history.replaceState(
-              null,
-              "",
-              "#" + n + (param ? "/" + encodeURIComponent(param) : ""),
-            );
-          document
-            .querySelectorAll(".view")
-            .forEach((e) => e.classList.toggle("active", e.id === "view-" + n));
-          document.querySelectorAll("[data-view]").forEach((e) => {
-            const active = e.dataset.view === n;
-            e.classList.toggle("active", active);
-            e.setAttribute("aria-pressed", String(active));
-          });
-          let x = VIEWS[n];
-          $("#page-title").textContent = x[0];
-          $("#page-subtitle").textContent = x[1];
-          if (n === "logs") {
-            $("#log-run-note").textContent = param
-              ? `Opened from the failed collection run at ${param}.`
-              : "";
-            logs();
-          }
-          if (n === "social") socialQueue();
-          scrollTo({ top: 0 });
+        function href(area, param) {
+          return "#" + area + (param ? "/" + encodeURIComponent(param) : "");
         }
-        function dashboard() {
-          let e = S.events,
-            total = e.length,
-            date = e.filter((x) => x.start_date).length,
-            loc = e.filter(place).length,
-            age = e.filter((x) => x.age_group).length,
-            cost = e.filter((x) => x.cost).length,
-            full = e.filter(ready).length;
-          $("#hero-total").textContent = total;
-          $("#hero-last").textContent = ago(S.status?.last_run);
-          $("#hero-result").textContent =
-            S.status?.last_run_result ||
-            (S.status?.factory_timer === "active"
-              ? "Scheduled collection is on"
-              : "Collection is not scheduled");
-          $("#m-total").textContent = total;
-          $("#m-total-note").textContent =
-            `from ${Object.keys(S.stats?.sources_by_type || {}).length} represented sources`;
-          $("#m-ready").textContent = full;
-          $("#m-context").textContent = total - full;
-          $("#m-holidays").textContent = S.holidays.length + S.places.length;
-          $("#desk-title").textContent = total
-            ? `${total} things to do are live. Make the next run more useful, not just bigger.`
-            : "Start with a first collection of family plans.";
-          $("#desk-copy").textContent = total
-            ? `${date} have a date, ${loc} have a place and ${full} have the full parent-facing essentials.`
-            : "Run a collection to build the first editorial queue.";
-          let q = [
-            [
-              "Listings without a date",
-              total - date,
-              "Families cannot plan these yet",
-              "red",
-            ],
-            [
-              "Listings without an age range",
-              total - age,
-              "Add a broad fit such as “3–7” or “all ages”",
-              "",
-            ],
-            [
-              "Listings without price details",
-              total - cost,
-              "Add free, paid or “check source”",
-              "",
-            ],
-            [
-              "Listings without a usable location",
-              total - loc,
-              "Add a venue, town or county",
-              "",
-            ],
-          ];
-          $("#attention").innerHTML = q
+        function navHtml() {
+          return Object.keys(AREAS)
             .map(
-              (x) =>
-                `<div class="queue-item"><i class="flag ${x[3]}"></i><div><div class="queue-title">${x[0]}</div><div class="queue-detail">${x[2]}</div></div><span class="count">${x[1]}</span></div>`,
+              (k) =>
+                `<a href="${href(k, k === "catalogue" ? S.catalogue : "")}" data-area="${k}">
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${ICONS[k]}"/></svg>
+                   <span class="label">${esc(AREAS[k].label)}</span>
+                   <span class="badge" data-badge="${k}" hidden></span>
+                 </a>`,
             )
             .join("");
-          let g = {};
-          e.forEach((x) => {
-            let k = x.county || x.city || "Location missing";
-            g[k] = (g[k] || 0) + 1;
-          });
-          let m = Math.max(1, ...Object.values(g));
-          $("#coverage").innerHTML =
-            Object.entries(g)
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 6)
-              .map(
-                ([k, v]) =>
-                  `<div class="coverage-row"><span>${esc(k)}</span><div class="bar"><i style="width:${(100 * v) / m}%"></i></div><em>${v}</em></div>`,
-              )
-              .join("") ||
-            '<div class="empty">No locations available yet.</div>';
         }
-        function renderProgress() {
-          let m = S.metrics;
-          if (!m) return;
-          $("#p-needs-review").textContent = m.totals?.needs_review ?? "—";
-          $("#p-today-approved").textContent = m.today?.approved ?? "—";
-          $("#p-today-rejected-note").textContent =
-            `${m.today?.rejected ?? 0} rejected today`;
-          $("#p-hour-approved").textContent = m.hour?.approved ?? "—";
-          $("#p-metrics-updated").textContent = m.generated_at
-            ? "as of " +
-              new Date(m.generated_at).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : "";
-        }
-        function events() {
-          let q = $("#search").value.toLowerCase(),
-            e = S.events.filter((x) => {
-              let t = [
-                x.title,
-                x.venue_name,
-                x.city,
-                x.county,
-                x.description,
-                src(x),
-              ]
-                .join(" ")
-                .toLowerCase();
-              return (
-                (!q || t.includes(q)) &&
-                (S.filter === "all" ||
-                  (S.filter === "ready" && ready(x)) ||
-                  (S.filter === "needs" && !ready(x)))
-              );
-            });
-          $("#all-count").textContent = S.events.length;
-          $("#need-count").textContent = S.events.filter(
-            (x) => !ready(x),
-          ).length;
-          $("#ready-count").textContent = S.events.filter(ready).length;
-          S.contentPage = Math.min(
-            Math.max(1, S.contentPage),
-            pages(e.length, S.contentSize),
-          );
-          const start = (S.contentPage - 1) * S.contentSize;
-          const pager = pagerHtml(S.contentPage, e.length, S.contentSize);
-          $("#ev-pager-top").innerHTML = pager;
-          $("#ev-pager-bottom").innerHTML = pager;
-          $("#events").innerHTML =
-            e
-              .slice(start, start + S.contentSize)
-              .map((x) => {
-                let d = [
-                  x.age_group && `Ages ${x.age_group}`,
-                  x.cost || "Cost to check",
-                  place(x)
-                    ? x.venue_name || x.city || x.county
-                    : "Place to add",
-                ].filter(Boolean);
-                return `<tr><td data-label="Listing"><div class="item-title">${esc(x.title || "Untitled")}</div><div class="item-sub">${esc(x.description || "No description")}</div></td><td data-label="When">${x.start_date ? esc(x.start_date) : '<span class="tag missing">Date needed</span>'}</td><td data-label="Family details">${d.map((v) => `<span class="tag ${v === "Cost to check" || v === "Place to add" ? "missing" : ""}">${esc(v)}</span>`).join(" ")}</td><td data-label="Source"><div class="item-sub">${esc(src(x))}</div><a class="item-sub" href="${esc(x.url)}" target="_blank">Original link ↗</a></td><td data-label="Quality"><span class="status ${ready(x) ? "ok" : "issue"}">${ready(x) ? "Ready" : "Needs details"}</span></td></tr>`;
-              })
-              .join("") ||
-            '<tr><td colspan="5" class="empty">No listings match this view.</td></tr>';
-        }
-        function sources() {
-          let a = S.sources,
-            r = new Set(a.map((x) => x.city).filter(Boolean));
-          $("#s-total").textContent = a.length;
-          $("#s-regions").textContent = r.size;
-          $("#s-used").textContent = Object.keys(
-            S.stats?.sources_by_type || {},
-          ).length;
-          $("#s-holidays").textContent = S.holidays.length;
-          $("#sources").innerHTML =
-            a
-              .map(
-                (x) =>
-                  `<article class="source"><b>${esc(x.name || x.type || "Source")}</b><p>${esc(x.city || "Ireland")} · ${esc(x.type || "web")}</p><a href="${esc(x.url)}" target="_blank">${esc(x.url)}</a><div class="source-meta"><span>Discovery enabled</span><span>Web</span></div></article>`,
-              )
-              .join("") || '<div class="empty">No sources loaded.</div>';
-        }
-        function renderPipeline() {
-          let p = S.pipeline || {},
-            a = [
-              ["Discover URLs", p.url_discovery],
-              ["Crawl source pages", p.crawling],
-              ["Extract event details", p.extraction],
-              ["Remove duplicates", p.deduplication],
-              ["Publish feed", p.output],
-            ];
-          $("#stages").innerHTML = a
-            .map(
-              (x, i) =>
-                `<div class="stage"><span class="stage-num">0${i + 1}</span><div><b>${x[0]}</b><br><span>${x[1] === "idle" ? "Waiting for the next collection" : x[1] || "Unknown"}</span></div><span class="status ${x[1] === "error" ? "issue" : "ok"}">${esc(x[1] || "idle")}</span></div>`,
-            )
-            .join("");
-          a = p.history || [];
-          $("#history").innerHTML = a.length
-            ? a
-                .slice()
-                .reverse()
-                .map((x) => {
-                  const error = x.error || x.error_message || x.message || "",
-                    runId = x.run_id || x.id || x.time || "";
-                  const why = x.success
-                    ? ""
-                    : error
-                      ? `<br><span class="status issue">${esc(error)}</span>`
-                      : `<br><a class="link" href="#logs/${encodeURIComponent(runId)}">Open the run log ↗</a>`;
-                  return `<div class="stage"><span class="stage-num">${x.success ? "OK" : "NO"}</span><div><b>${esc(x.time)}</b><br><span>${x.events_count || 0} items · ${x.sources_count || 0} sources · ${esc(x.duration || "—")}</span>${why}</div><span class="status ${x.success ? "ok" : "issue"}">${x.success ? "Complete" : "Failed"}</span></div>`;
-                })
-                .join("")
-            : '<div class="empty">No collection history yet.</div>';
-        }
-        async function logs() {
-          try {
-            $("#log").textContent = (
-              await get(API + "/admin/api/logs")
-            ).lines.join("\n");
-          } catch (e) {
-            $("#log").textContent = "Could not load the run log.";
-          }
-        }
-        const SOCIAL_STATUSES = [
-          ["all", "All"],
-          ["needs_review", "Needs review"],
-          ["approved", "Approved"],
-          ["rejected", "Rejected"],
-        ];
-        async function socialQueue() {
-          let d;
-          try {
-            d = await get(API + "/admin/api/social/staged");
-          } catch (e) {
-            $("#social").innerHTML =
-              '<div class="empty">Could not load social candidates.</div>';
-            return;
-          }
-          S.social.items = d.candidates || [];
-          $("#soc-total").textContent = d.total || 0;
-          let g = d.found_via || {},
-            m = Math.max(1, ...Object.values(g));
-          $("#soc-found-via").innerHTML =
-            Object.entries(g)
-              .sort((x, y) => y[1] - x[1])
-              .map(
-                ([k, v]) =>
-                  `<div class="coverage-row"><span>${esc(k)}</span><div class="bar"><i style="width:${(100 * v) / m}%"></i></div><em>${v}</em></div>`,
-              )
-              .join("") ||
-            '<div class="empty">Nothing waiting for review.</div>';
-          socialOptions();
-          socialRender();
-        }
-        function socialOptions() {
-          const fill = (sel, values, chosen, allLabel) => {
-            $(sel).innerHTML = [
-              `<option value="all">${allLabel}</option>`,
-              ...values.map(
-                (v) =>
-                  `<option value="${esc(v)}"${v === chosen ? " selected" : ""}>${esc(v)}</option>`,
-              ),
-            ].join("");
-          };
-          const uniq = (field) =>
-            [
-              ...new Set(S.social.items.map((x) => x[field]).filter(Boolean)),
-            ].sort();
-          fill(
-            "#soc-platform",
-            uniq("platform"),
-            S.social.platform,
-            "All platforms",
-          );
-          fill(
-            "#soc-foundvia",
-            uniq("found_via"),
-            S.social.foundVia,
-            "All sources",
-          );
-          const counts = {};
-          S.social.items.forEach((x) => {
-            const k = x.status || "needs_review";
-            counts[k] = (counts[k] || 0) + 1;
-          });
-          $("#soc-status").innerHTML = SOCIAL_STATUSES.map(
-            ([value, label]) =>
-              `<button class="chip${S.social.status === value ? " active" : ""}" data-soc-status="${value}" aria-pressed="${S.social.status === value}">${label} <span class="count">${value === "all" ? S.social.items.length : counts[value] || 0}</span></button>`,
-          ).join("");
-        }
-        function socialFiltered() {
-          const f = S.social,
-            q = f.q.trim().toLowerCase();
-          return f.items.filter((x) => {
-            const status = x.status || "needs_review";
-            if (f.status !== "all" && status !== f.status) return false;
-            if (f.platform !== "all" && x.platform !== f.platform) return false;
-            if (f.foundVia !== "all" && x.found_via !== f.foundVia)
-              return false;
-            if (f.hasCaption && !String(x.caption || "").trim()) return false;
-            if (
-              q &&
-              ![x.caption, x.author, x.source_url]
-                .join(" ")
-                .toLowerCase()
-                .includes(q)
-            )
-              return false;
-            return true;
-          });
-        }
-        function socialRender() {
-          const list = socialFiltered(),
-            f = S.social;
-          f.page = Math.min(Math.max(1, f.page), pages(list.length, f.size));
-          const pager = pagerHtml(f.page, list.length, f.size),
-            start = (f.page - 1) * f.size;
-          $("#soc-pager-top").innerHTML = pager;
-          $("#soc-pager-bottom").innerHTML = pager;
-          $("#social").innerHTML =
-            list
-              .slice(start, start + f.size)
-              .map((x) => {
-                let u = esc(x.source_url);
-                return `<article class="candidate"><div class="candidate-main"><div class="item-title">${esc(x.author || "Unknown account")}</div><div class="chips"><span class="tag">${esc(x.platform || "social")}</span>${x.found_via ? `<span class="tag">via ${esc(x.found_via)}</span>` : '<span class="tag missing">Unattributed</span>'}<span class="tag">${esc(stampUTC(x.captured_at))}</span><span class="tag">${esc((x.status || "needs_review").replace(/_/g, " "))}</span></div><p class="caption">${esc(x.caption || "No caption captured")}</p><p class="reason">${esc(x.reason || "Not checked yet")}${x.hint ? `<em>Note tried: ${esc(x.hint)}</em>` : ""}</p><a class="item-sub" href="${u}" target="_blank" rel="noopener">Original post ↗</a></div><div class="candidate-decision"><input type="text" class="hint-input" data-hint="${u}" placeholder="Add a date or venue, then resubmit" value="${esc(x.hint || "")}"/><div class="actions"><button class="button primary" data-approve="${u}">Approve</button><button class="button secondary" data-reject="${u}">Reject</button></div></div></article>`;
-              })
-              .join("") ||
-            '<div class="empty">No social candidates match this view.</div>';
-        }
-        async function decide(url, action) {
-          let b = [
-            ...document.querySelectorAll(
-              `[data-approve="${CSS.escape(url)}"],[data-reject="${CSS.escape(url)}"]`,
-            ),
-          ];
-          b.forEach((x) => (x.disabled = true));
-          let hintInput = document.querySelector(
-            `[data-hint="${CSS.escape(url)}"]`,
-          );
-          try {
-            let r = await fetch(API + "/admin/api/social/" + action, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  source_url: url,
-                  hint: action === "approve" ? hintInput?.value || "" : undefined,
-                }),
-              }),
-              d = await r.json();
-            if (!r.ok) throw Error(d.message || d.error || "Request failed");
-            toast(
-              action === "approve"
-                ? d.published
-                  ? "Published to the live feed"
-                  : "Approved — already in the feed"
-                : "Candidate rejected",
-            );
-            socialQueue();
-            if (action === "approve") load();
-          } catch (e) {
-            toast(e.message || "Could not save that decision");
-            b.forEach((x) => (x.disabled = false));
-          }
-        }
-        async function run() {
-          let b = [...document.querySelectorAll(".run")];
-          b.forEach((x) => {
-            x.disabled = true;
-            x.textContent = "Collection running…";
-          });
-          try {
-            let d = await get(API + "/admin/api/pipeline/run", {
-              method: "POST",
-            });
-            toast(d.message || "Collection started");
-            let t = setInterval(async () => {
-              let x = await get(API + "/admin/api/pipeline/run");
-              if (x.status !== "running") {
-                clearInterval(t);
-                b.forEach((y) => {
-                  y.disabled = false;
-                  y.textContent = "Run a collection";
-                });
-                load();
-                toast(
-                  x.success
-                    ? "Collection complete"
-                    : "Collection finished — check the run log",
-                );
-              }
-            }, 4000);
-          } catch (e) {
-            toast("Could not start collection");
-            b.forEach((x) => {
-              x.disabled = false;
-              x.textContent = "Run a collection";
-            });
-          }
-        }
-        async function load() {
-          try {
-            let [stats, status, pipeline, sourceData, holidays, places, metrics] =
-              await Promise.all([
-                get(API + "/admin/api/stats"),
-                get(API + "/admin/api/status"),
-                get(API + "/admin/api/pipeline"),
-                get(API + "/admin/api/sources"),
-                get(API + "/api/holidays"),
-                get(API + "/api/places"),
-                get(API + "/admin/api/metrics"),
-              ]);
-            S = {
-              ...S,
-              stats,
-              status,
-              pipeline,
-              sources: sourceData.sources || [],
-              events: stats.all_events || [],
-              holidays: Array.isArray(holidays)
-                ? holidays
-                : holidays.holidays || [],
-              places: Array.isArray(places) ? places : [],
-              metrics,
-            };
-            dashboard();
-            renderProgress();
-            events();
-            sources();
-            renderPipeline();
-            $("#refresh-label").textContent =
-              "Updated " +
-              new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-          } catch (e) {
-            $("#refresh-label").textContent = "Could not load live data";
-            console.error(e);
-          }
-        }
-        document
-          .querySelectorAll("[data-view]")
-          .forEach((x) =>
-            x.addEventListener(
-              "click",
-              () => (location.hash = "#" + x.dataset.view),
-            ),
-          );
-        const applyHash = () => {
-          const h = parseHash();
-          view(h.name, h.param);
+
+        /* ───────────── state ───────────── */
+        const S = {
+          area: "overview",
+          catalogue: "events",
+          cat: { page: 1, size: 25, q: "", county: "all", status: "all", selected: new Set() },
+          queue: { view: "queue", groupPage: {}, size: 25, open: null, acted: [], restored: new Set() },
+          log: { q: "" },
+          photos: { page: 1, size: 25 },
         };
-        addEventListener("hashchange", applyHash);
-        $("#search").addEventListener("input", () => {
-          S.contentPage = 1;
-          events();
-        });
-        document.querySelectorAll("#view-content .chip").forEach((x) =>
-          x.addEventListener("click", () => {
-            S.filter = x.dataset.filter;
-            document
-              .querySelectorAll("#view-content .chip")
-              .forEach((y) => {
-                const active = x === y;
-                y.classList.toggle("active", active);
-                y.setAttribute("aria-pressed", String(active));
-              });
-            S.contentPage = 1;
-            events();
-          }),
-        );
-        document.addEventListener("click", (ev) => {
-          const step = ev.target.closest("[data-page-step]");
-          if (step && !step.disabled) {
-            const social = step.closest("#view-social");
-            if (social) {
-              S.social.page += Number(step.dataset.pageStep);
-              socialRender();
-            } else {
-              S.contentPage += Number(step.dataset.pageStep);
-              events();
-            }
+        const store = {};
+        const RESOURCES = {
+          status: Api.status,
+          metrics: Api.metrics,
+          stats: Api.stats,
+          sources: Api.sources,
+          pipeline: Api.pipeline,
+          logs: Api.logs,
+          events: Api.events,
+          places: Api.places,
+          holidays: Api.holidays,
+          staged: Api.staged,
+        };
+        const ok = (k) => store[k] && store[k].ok;
+        const val = (k, fallback) => (ok(k) ? store[k].data : fallback);
+        const failed = (k, what) =>
+          `<p class="notice error">Could not load ${esc(what)}: ${esc(
+            (store[k] && store[k].error) || "unknown error",
+          )}. Use “Refresh data” to try again.</p>`;
+
+        async function loadAll() {
+          await Promise.all(
+            Object.keys(RESOURCES).map(async (k) => {
+              try {
+                store[k] = { ok: true, data: await RESOURCES[k]() };
+              } catch (e) {
+                store[k] = { ok: false, error: String((e && e.message) || e) };
+              }
+            }),
+          );
+        }
+
+        /* ───────────── completeness model ───────────── */
+        const PHOTO_KEYS = ["image", "image_url", "photo", "photo_url", "images", "hero_image", "thumbnail"];
+        const hasPhoto = (r) =>
+          PHOTO_KEYS.some((k) => {
+            const v = r[k];
+            return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim());
+          });
+        const filled = (v) => (Array.isArray(v) ? v.length > 0 : v != null && String(v).trim() !== "");
+        const FIELDS = {
+          events: [
+            ["date", (r) => filled(r.start_date)],
+            ["price", (r) => filled(r.cost) || filled(r.price_range)],
+            ["age", (r) => filled(r.age_group)],
+            ["category", (r) => filled(r.category)],
+            ["photo", hasPhoto],
+            ["maps", (r) => filled(r.latitude) && filled(r.longitude)],
+          ],
+          places: [
+            ["price", (r) => filled(r.price_range) || filled(r.cost)],
+            ["age", (r) => filled(r.age_group)],
+            ["category", (r) => filled(r.category)],
+            ["photo", hasPhoto],
+            ["maps", (r) => filled(r.latitude) && filled(r.longitude)],
+          ],
+          holidays: [
+            ["price", (r) => filled(r.price_range) || filled(r.cost)],
+            ["age", (r) => filled(r.age_group)],
+            ["category", (r) => filled(r.category)],
+            ["photo", hasPhoto],
+            ["maps", (r) => filled(r.latitude) && filled(r.longitude)],
+          ],
+        };
+        const missingOf = (rec, cat) =>
+          (FIELDS[cat] || []).filter(([, test]) => !test(rec)).map(([name]) => name);
+        const recTitle = (r) => clean(r.title || r.name || r.venue_name || "Untitled record");
+        const recCounty = (r) => clean(r.county || r.city || r.region || "");
+        const catRecords = (cat) =>
+          cat === "events" ? val("events", []) : cat === "places" ? val("places", []) : val("holidays", []);
+        const catKey = (cat) => (cat === "events" ? "events" : cat === "places" ? "places" : "holidays");
+
+        /* ───────────── views ───────────── */
+        function renderOverview() {
+          const el = $("#view-overview");
+          if (!ok("metrics") && !ok("status")) {
+            el.innerHTML = failed("metrics", "the overview numbers");
             return;
           }
-          const chip = ev.target.closest("[data-soc-status]");
-          if (chip) {
-            S.social.status = chip.dataset.socStatus;
-            S.social.page = 1;
-            socialOptions();
-            socialRender();
+          const m = val("metrics", {});
+          const totals = (m && m.totals) || {};
+          const today = (m && m.today) || {};
+          const hour = (m && m.hour) || {};
+          const st = val("status", {});
+          const pl = val("pipeline", {});
+          const history = (pl && pl.history) || [];
+          const last = history.length ? history[history.length - 1] : null;
+          const sources = val("sources", []);
+          const byType = (val("stats", {}) || {}).sources_by_type || {};
+          const needs = num(totals.needs_review);
+
+          const stat = (k, v, note) =>
+            `<div class="card stat"><span class="k">${esc(k)}</span><b>${esc(String(v))}</b><span class="n">${note}</span></div>`;
+
+          el.innerHTML = `
+            <div class="grid">
+              ${stat("Events on air", num(totals.events), "Dated things happening")}
+              ${stat("Things to do on air", num(totals.places), "Evergreen places")}
+              ${stat("Holidays on air", num(totals.holidays), num(totals.holidays) ? "Curated day trips" : "Nothing curated yet")}
+              ${stat(
+                "Needs input",
+                needs,
+                `<a href="${href("needs-input")}">Open the queue</a>`,
+              )}
+            </div>
+            <div class="section">
+              <h2>Today, in UTC</h2>
+              <p class="sub">Straight from <code>/admin/api/metrics</code>: decisions taken, not traffic.</p>
+              <div class="grid">
+                ${stat("Approved today", num(today.approved), "Published to the catalogue")}
+                ${stat("Rejected today", num(today.rejected), "Sent back, kept as an audit trail")}
+                ${stat("Approved this hour", num(hour.approved), "Since the top of the hour")}
+                <div class="card"><span class="k">Counted at</span><p style="margin-top:8px"><b>${esc(
+                  stamp(m && m.generated_at),
+                )}</b></p><p class="n">Every time on this desk is UTC.</p></div>
+              </div>
+            </div>
+            <div class="section">
+              <h2>Collection</h2>
+              <div class="grid">
+                <div class="card">
+                  <span class="k small muted"><b>LAST RUN</b></span>
+                  <p style="margin-top:6px"><b>${esc(stamp(st.last_run || (pl && pl.last_run)))}</b></p>
+                  <p class="small muted">${esc(ago(st.last_run || (pl && pl.last_run)))}${
+                    st.last_run_result ? " &middot; " + esc(st.last_run_result) : ""
+                  }</p>
+                  ${
+                    last
+                      ? `<p class="small muted">Last recorded run: ${esc(txt(last.events_count))} events in ${esc(
+                          txt(last.duration),
+                        )} &middot; ${last.success ? "succeeded" : "failed"}</p>`
+                      : ""
+                  }
+                </div>
+                <div class="card">
+                  <span class="k small muted"><b>NEXT RUN</b></span>
+                  <p class="notice" style="margin-top:6px">A next-run time is not exposed by the API yet. The systemd timer reports itself as <b>${esc(
+                    txt(st.factory_timer),
+                  )}</b>.</p>
+                </div>
+                <div class="card">
+                  <span class="k small muted"><b>RUNNING NOW</b></span>
+                  <p style="margin-top:6px"><b>${st.factory_running ? "Yes — a run is in flight" : "No"}</b></p>
+                  <p class="small muted">Factory service active: ${esc(txt(st.factory_service_active))}</p>
+                </div>
+              </div>
+            </div>
+            <div class="section">
+              <h2>Source health</h2>
+              <p class="sub">${sources.length} source${sources.length === 1 ? "" : "s"} configured across ${
+                new Set(sources.map((s) => s.city || "unknown")).size
+              } cities. Counts below are events currently on air per source (from <code>/admin/api/stats</code>) — a per-cycle breakdown is not in the API yet.</p>
+              <div class="chips">
+                ${
+                  Object.keys(byType).length
+                    ? Object.keys(byType)
+                        .sort((a, b) => byType[b] - byType[a])
+                        .map((k) => `<span class="chip">${esc(k)} &middot; ${num(byType[k])}</span>`)
+                        .join("")
+                    : `<span class="chip">no run data yet</span>`
+                }
+              </div>
+              <p class="notice" style="margin-top:12px">No 7-day history is exposed by the API, so no sparkline is drawn here. It arrives with the phase 1 metrics feed.</p>
+            </div>`;
+        }
+
+        function renderCatalogue() {
+          const el = $("#view-catalogue");
+          const cat = S.catalogue;
+          const key = catKey(cat);
+          if (!ok(key)) {
+            el.innerHTML = failed(key, CATALOGUES[cat]);
+            return;
+          }
+          const all = catRecords(cat);
+          const counties = Array.from(new Set(all.map(recCounty).filter(Boolean))).sort();
+          const q = S.cat.q.toLowerCase();
+          let rows = all.filter((r) => {
+            if (S.cat.county !== "all" && recCounty(r) !== S.cat.county) return false;
+            if (S.cat.status !== "all") {
+              const miss = missingOf(r, cat);
+              if (S.cat.status === "complete" && miss.length) return false;
+              if (S.cat.status === "incomplete" && !miss.length) return false;
+              if (cat === "events") {
+                const d = r.start_date ? new Date(r.start_date) : null;
+                const okDate = d && !Number.isNaN(d.valueOf());
+                if (S.cat.status === "undated" && okDate) return false;
+                if (S.cat.status === "upcoming" && !(okDate && d.valueOf() >= Date.now())) return false;
+                if (S.cat.status === "past" && !(okDate && d.valueOf() < Date.now())) return false;
+              }
+            }
+            if (!q) return true;
+            return [recTitle(r), recCounty(r), r.description, r.venue_name, r.location, r.category]
+              .map((v) => clean(v).toLowerCase())
+              .join(" ")
+              .includes(q);
+          });
+          const total = rows.length;
+          const last = pageCount(total, S.cat.size);
+          if (S.cat.page > last) S.cat.page = last;
+          const start = (S.cat.page - 1) * S.cat.size;
+          const page = rows.slice(start, start + S.cat.size);
+          const statusOptions =
+            cat === "events"
+              ? [
+                  ["all", "All"],
+                  ["upcoming", "Upcoming"],
+                  ["past", "Past"],
+                  ["undated", "No date"],
+                  ["complete", "Complete"],
+                  ["incomplete", "Incomplete"],
+                ]
+              : [
+                  ["all", "All"],
+                  ["complete", "Complete"],
+                  ["incomplete", "Incomplete"],
+                ];
+
+          el.innerHTML = `
+            <div class="chips" role="tablist" aria-label="Catalogues" style="margin-bottom:14px">
+              ${Object.keys(CATALOGUES)
+                .map(
+                  (k) =>
+                    `<a class="btn small${k === cat ? " accent" : ""}" role="tab" aria-selected="${
+                      k === cat
+                    }" href="${href("catalogue", k)}">${esc(CATALOGUES[k])} &middot; ${
+                      ok(catKey(k)) ? catRecords(k).length : "?"
+                    }</a>`,
+                )
+                .join("")}
+            </div>
+            <div class="toolbar">
+              <label class="field grow">Search<input type="search" id="cat-q" value="${esc(
+                S.cat.q,
+              )}" placeholder="Title, venue, county, description" /></label>
+              <label class="field">County<select id="cat-county"><option value="all">All counties</option>${counties
+                .map(
+                  (c) => `<option value="${esc(c)}"${c === S.cat.county ? " selected" : ""}>${esc(c)}</option>`,
+                )
+                .join("")}</select></label>
+              <label class="field">Status<select id="cat-status">${statusOptions
+                .map(
+                  ([v, l]) => `<option value="${v}"${v === S.cat.status ? " selected" : ""}>${esc(l)}</option>`,
+                )
+                .join("")}</select></label>
+              <button class="btn small" id="cat-bulk" disabled title="No bulk endpoint exists yet">Bulk actions (coming with phase 1)</button>
+            </div>
+            ${
+              all.length === 0
+                ? `<p class="notice">Nothing in ${esc(
+                    CATALOGUES[cat],
+                  )} yet. Approve a candidate in Needs input, or run a collection from Sources, and rows will appear here.</p>`
+                : total === 0
+                  ? `<p class="notice">No ${esc(
+                      CATALOGUES[cat],
+                    )} match this search and these filters. Clear the search box or set the filters back to “All”.</p>`
+                  : `${pager("cat", S.cat.page, total, S.cat.size)}
+                     <div class="table-wrap"><table>
+                       <thead><tr>
+                         <th style="width:34px"><input type="checkbox" id="cat-all" aria-label="Select every row on this page" /></th>
+                         <th>Title</th><th>${cat === "events" ? "Starts (UTC)" : "Where"}</th><th>County</th><th>Completeness</th><th></th>
+                       </tr></thead>
+                       <tbody>${page
+                         .map((r, i) => {
+                           const idx = start + i;
+                           const miss = missingOf(r, cat);
+                           return `<tr>
+                             <td><input type="checkbox" data-row="${idx}" aria-label="Select ${esc(
+                               recTitle(r),
+                             )}"${S.cat.selected.has(idx) ? " checked" : ""} /></td>
+                             <td><span class="t">${esc(recTitle(r))}</span><br /><span class="small muted">${esc(
+                               (clean(r.description) || "").slice(0, 90),
+                             )}</span></td>
+                             <td>${esc(
+                               cat === "events" ? stamp(r.start_date) : txt(r.location || r.venue_name),
+                             )}</td>
+                             <td>${esc(recCounty(r) || DASH)}</td>
+                             <td><div class="chips">${
+                               miss.length
+                                 ? miss.map((m) => `<span class="chip miss">no ${esc(m)}</span>`).join("")
+                                 : `<span class="chip ok">complete</span>`
+                             }</div></td>
+                             <td><button class="btn small" data-open="${idx}">Open</button></td>
+                           </tr>`;
+                         })
+                         .join("")}</tbody>
+                     </table></div>
+                     ${pager("cat", S.cat.page, total, S.cat.size)}`
+            }`;
+
+          const qBox = $("#cat-q");
+          if (qBox)
+            qBox.oninput = () => {
+              S.cat.q = qBox.value;
+              S.cat.page = 1;
+              const pos = qBox.selectionStart;
+              renderCatalogue();
+              const nb = $("#cat-q");
+              nb.focus();
+              nb.setSelectionRange(pos, pos);
+            };
+          const cSel = $("#cat-county");
+          if (cSel)
+            cSel.onchange = () => {
+              S.cat.county = cSel.value;
+              S.cat.page = 1;
+              renderCatalogue();
+            };
+          const sSel = $("#cat-status");
+          if (sSel)
+            sSel.onchange = () => {
+              S.cat.status = sSel.value;
+              S.cat.page = 1;
+              renderCatalogue();
+            };
+          wirePager(el, "cat", S.cat, total, renderCatalogue);
+          $$("[data-open]", el).forEach(
+            (b) => (b.onclick = () => openRecord(rows[Number(b.dataset.open)], cat)),
+          );
+          $$("[data-row]", el).forEach(
+            (c) =>
+              (c.onchange = () => {
+                const i = Number(c.dataset.row);
+                c.checked ? S.cat.selected.add(i) : S.cat.selected.delete(i);
+              }),
+          );
+          const allBox = $("#cat-all", el);
+          if (allBox)
+            allBox.onchange = () =>
+              $$("[data-row]", el).forEach((c) => {
+                c.checked = allBox.checked;
+                c.onchange();
+              });
+        }
+
+        function openRecord(rec, cat) {
+          if (!rec) return;
+          $("#drawer-title").textContent = recTitle(rec);
+          const miss = missingOf(rec, cat);
+          const rowsHtml = Object.keys(rec)
+            .map((k) => `<tr><th>${esc(k)}</th><td>${esc(txt(rec[k]))}</td></tr>`)
+            .join("");
+          $("#drawer-body").innerHTML = `
+            <p class="small muted">${esc(CATALOGUES[cat])} record &middot; every field the API returns.</p>
+            <div class="chips" style="margin:10px 0 14px">${
+              miss.length
+                ? miss.map((m) => `<span class="chip miss">no ${esc(m)}</span>`).join("")
+                : `<span class="chip ok">complete</span>`
+            }</div>
+            <div class="table-wrap"><table class="kv" style="min-width:0"><tbody>${rowsHtml}</tbody></table></div>
+            <p class="notice" style="margin-top:14px">Editing a record from here arrives with phase 1 — today's API is read-only for the catalogue.</p>`;
+          openOverlay($("#drawer-scrim"));
+        }
+
+        /* ───────────── needs input ───────────── */
+        const QUEUE_STATUSES = ["needs_review", "needs_input"];
+        const NO_REASON = "No reason recorded by the gate yet";
+        function queueItems() {
+          const d = val("staged", {});
+          const list = (d && d.candidates) || [];
+          const acted = new Set(S.queue.acted.map((a) => a.item.source_url));
+          const live = list.filter(
+            (c) => QUEUE_STATUSES.indexOf(c.status) >= 0 && !acted.has(c.source_url),
+          );
+          const restored = S.queue.acted
+            .filter((a) => S.queue.restored.has(a.item.source_url))
+            .map((a) => Object.assign({}, a.item, { _restored: a.kind }));
+          return live.concat(restored);
+        }
+        function groupQueue(items) {
+          const groups = new Map();
+          items.forEach((c) => {
+            const key = clean(c.reason).trim() || NO_REASON;
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(c);
+          });
+          return Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length);
+        }
+        function renderNeedsInput() {
+          const el = $("#view-needs-input");
+          if (!ok("staged")) {
+            el.innerHTML = failed("staged", "the review queue");
+            return;
+          }
+          const head = `
+            <div class="toolbar">
+              <label class="field">Show<select id="q-view">
+                <option value="queue"${S.queue.view === "queue" ? " selected" : ""}>Queue (waiting on a decision)</option>
+                <option value="history"${S.queue.view === "history" ? " selected" : ""}>History (decided)</option>
+              </select></label>
+              <p class="small muted keys-hint" style="flex:1 1 240px">Keys: <b>j</b> / <b>k</b> move between cards, <b>a</b> resubmits, <b>r</b> rejects. Both ask first.</p>
+            </div>`;
+          if (S.queue.view === "history") {
+            el.innerHTML =
+              head +
+              `<p class="notice">Decisions taken earlier are not served by <code>/admin/api/social/staged</code> — it only returns candidates still waiting. A full history feed arrives with phase 1.</p>` +
+              (S.queue.acted.length
+                ? `<div class="section"><h2>Decided in this session</h2><div class="table-wrap"><table>
+                     <thead><tr><th>When (UTC)</th><th>Decision</th><th>Author</th><th>Post</th></tr></thead>
+                     <tbody>${S.queue.acted
+                       .slice()
+                       .reverse()
+                       .map(
+                         (a) =>
+                           `<tr><td>${esc(stamp(a.at))}</td><td><span class="chip ${
+                             a.kind === "rejected" ? "bad" : "ok"
+                           }">${esc(a.kind)}</span></td><td>${esc(txt(a.item.author))}</td><td><a href="${esc(
+                             a.item.source_url,
+                           )}" target="_blank" rel="noopener">open</a></td></tr>`,
+                       )
+                       .join("")}</tbody></table></div></div>`
+                : `<p class="notice" style="margin-top:12px">You have not decided anything in this session yet.</p>`);
+            $("#q-view").onchange = (e) => {
+              S.queue.view = e.target.value;
+              renderNeedsInput();
+            };
+            return;
+          }
+
+          const items = queueItems();
+          const groups = groupQueue(items);
+          // Keep a group open across re-renders: a decision must not collapse
+          // the group the curator is working through.
+          if (!S.queue.open) S.queue.open = new Set(groups.length ? [groups[0][0]] : []);
+          el.innerHTML =
+            head +
+            (items.length === 0
+              ? `<p class="notice">The queue is clear — every collected candidate has a decision. New posts land here after the next social collection.</p>`
+              : `<p class="small muted" style="margin-bottom:12px">${items.length} candidate${
+                  items.length === 1 ? "" : "s"
+                } in ${groups.length} group${groups.length === 1 ? "" : "s"}.</p>` +
+                groups
+                  .map(([reason, list], gi) => {
+                    const size = S.queue.size;
+                    const page = S.queue.groupPage[reason] || 1;
+                    const lastPage = pageCount(list.length, size);
+                    const p = Math.min(page, lastPage);
+                    const slice = list.slice((p - 1) * size, (p - 1) * size + size);
+                    return `<details class="group" data-gi="${gi}" ${
+                      S.queue.open.has(reason) ? "open" : ""
+                    }>
+                        <summary>
+                          <span class="gt">${esc(reason)}</span>
+                          <span class="badge">${list.length}</span>
+                        </summary>
+                        <div class="group-body">
+                          <button class="btn small danger" data-reject-all="${gi}">Reject all ${
+                            list.length
+                          } in this group</button>
+                          ${pager("queue-" + gi, p, list.length, size)}
+                          ${slice.map((c) => queueCard(c)).join("")}
+                        </div>
+                      </details>`;
+                  })
+                  .join(""));
+
+          $("#q-view").onchange = (e) => {
+            S.queue.view = e.target.value;
+            renderNeedsInput();
+          };
+          $$("[data-reject-all]", el).forEach(
+            (b) => (b.onclick = () => rejectGroup((groups[Number(b.dataset.rejectAll)] || [""])[0])),
+          );
+          $$("[data-pager^='queue-']", el).forEach((p) => {
+            const gi = Number(p.dataset.pager.slice(6));
+            const reason = (groups[gi] || [""])[0];
+            const list = (groups[gi] || [null, []])[1];
+            p.querySelectorAll("[data-step]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const cur = S.queue.groupPage[reason] || 1;
+                  S.queue.groupPage[reason] = Math.min(
+                    Math.max(1, cur + Number(b.dataset.step)),
+                    pageCount(list.length, S.queue.size),
+                  );
+                  renderNeedsInput();
+                }),
+            );
+            const sizeSel = p.querySelector("[data-size]");
+            if (sizeSel)
+              sizeSel.onchange = () => {
+                S.queue.size = Number(sizeSel.value);
+                S.queue.groupPage = {};
+                renderNeedsInput();
+              };
+          });
+          $$("details.group", el).forEach((d) => {
+            const reason = (groups[Number(d.dataset.gi)] || [""])[0];
+            d.ontoggle = () => (d.open ? S.queue.open.add(reason) : S.queue.open.delete(reason));
+          });
+          $$(".qcard", el).forEach((card) => {
+            const url = card.dataset.url;
+            $("[data-act='approve']", card).onclick = () => approveCandidate(url, card);
+            $("[data-act='reject']", card).onclick = () => rejectCandidate(url, card);
+          });
+        }
+        function queueCard(c) {
+          const chips = [
+            c.platform ? `<span class="chip">${esc(c.platform)}</span>` : "",
+            c.found_via ? `<span class="chip">found via ${esc(c.found_via)}</span>` : "",
+            c._restored ? `<span class="chip bad">${esc(c._restored)} just now</span>` : "",
+          ].join("");
+          const caption = clean(c.caption).trim();
+          return `<article class="qcard" tabindex="0" data-url="${esc(c.source_url)}" aria-label="Candidate by ${esc(
+            txt(c.author),
+          )}">
+            <div class="chips">${chips}</div>
+            <p class="cap">${caption ? esc(caption) : '<span class="muted">No caption was captured for this post.</span>'}</p>
+            <p class="small muted">${esc(txt(c.author))} &middot; captured ${esc(
+              stamp(c.captured_at),
+            )} &middot; <a href="${esc(c.source_url)}" target="_blank" rel="noopener">open the post</a></p>
+            ${c.reason ? `<p class="why">${esc(c.reason)}</p>` : ""}
+            ${c.missing_field ? `<p class="small"><b>Missing field:</b> ${esc(txt(c.missing_field))}</p>` : ""}
+            ${
+              c._restored
+                ? `<p class="small muted">Undo only brought this card back on screen — the server still has it as ${esc(
+                    c._restored,
+                  )}. An un-reject endpoint arrives with phase 1.</p>`
+                : ""
+            }
+            <div class="hint-row">
+              <input type="text" data-hint placeholder="Add what the gate is missing — a date, or the real venue name" value="${esc(
+                txt(c.hint) === DASH ? "" : c.hint,
+              )}" aria-label="Hint for this candidate" />
+            </div>
+            <div class="acts">
+              <button class="btn primary" data-act="approve">Resubmit</button>
+              <button class="btn danger" data-act="reject">Reject</button>
+            </div>
+            <p class="qerr" data-err hidden></p>
+          </article>`;
+        }
+        function candidateByUrl(url) {
+          return (val("staged", {}).candidates || []).find((c) => c.source_url === url) || { source_url: url };
+        }
+        function recordDecision(url, kind) {
+          S.queue.acted.push({ item: candidateByUrl(url), kind, at: new Date().toISOString() });
+          S.queue.restored.delete(url);
+        }
+        async function approveCandidate(url, card) {
+          const hint = ($("[data-hint]", card) || {}).value || "";
+          const go = await askConfirm(
+            "Resubmit this candidate?",
+            "It runs through the publishing gate again. If it clears, it goes live on the public site.",
+            "Resubmit",
+          );
+          if (!go) return;
+          const err = $("[data-err]", card);
+          err.hidden = true;
+          try {
+            await Api.approve(url, hint.trim());
+            recordDecision(url, "approved");
+            toast("Published. It is on the public site now.");
+            renderNeedsInput();
+            refreshBadges();
+          } catch (e) {
+            err.hidden = false;
+            err.textContent =
+              e.status === 422
+                ? "Still not enough to publish: " + txt(e.message)
+                : "Could not resubmit: " + txt(e.message);
+          }
+        }
+        async function rejectCandidate(url, card) {
+          const go = await askConfirm(
+            "Reject this candidate?",
+            "It leaves the queue and is kept as a rejected record. Nothing is deleted.",
+            "Reject",
+          );
+          if (!go) return;
+          const err = card ? $("[data-err]", card) : null;
+          if (err) err.hidden = true;
+          try {
+            await Api.reject(url, "");
+            recordDecision(url, "rejected");
+            renderNeedsInput();
+            refreshBadges();
+            toast("Rejected.", "Undo", () => {
+              S.queue.restored.add(url);
+              renderNeedsInput();
+            });
+          } catch (e) {
+            if (err) {
+              err.hidden = false;
+              err.textContent = "Could not reject: " + txt(e.message);
+            } else toast("Could not reject: " + txt(e.message));
+          }
+        }
+        async function rejectGroup(reason) {
+          const list = groupQueue(queueItems()).find((g) => g[0] === reason);
+          if (!list) return;
+          const items = list[1];
+          const go = await askConfirm(
+            "Reject every candidate in this group?",
+            `${items.length} candidate${items.length === 1 ? "" : "s"} will be rejected one by one. Nothing is deleted.`,
+            "Reject all",
+          );
+          if (!go) return;
+          let done = 0;
+          for (const c of items) {
+            try {
+              await Api.reject(c.source_url, "");
+              recordDecision(c.source_url, "rejected");
+              done++;
+            } catch (e) {
+              /* keep going; the tally reports what landed */
+            }
+          }
+          renderNeedsInput();
+          refreshBadges();
+          toast(`Rejected ${done} of ${items.length}.`);
+        }
+
+        /* ───────────── sources ───────────── */
+        function renderSources() {
+          const el = $("#view-sources");
+          if (!ok("sources")) {
+            el.innerHTML = failed("sources", "the source list");
+            return;
+          }
+          const sources = val("sources", []);
+          const byType = (val("stats", {}) || {}).sources_by_type || {};
+          const st = val("status", {});
+          const pl = val("pipeline", {});
+          const running = !!st.factory_running;
+          const stages = ["url_discovery", "crawling", "extraction", "deduplication", "output"];
+          el.innerHTML = `
+            <div class="card">
+              <div class="toolbar" style="margin:0">
+                <button class="btn primary" id="run-now"${running ? " disabled" : ""}>${
+                  running ? "A run is in flight" : "Run collection now"
+                }</button>
+                <button class="btn small" disabled title="No create-source endpoint exists yet">Add source (phase 3)</button>
+                <span class="small muted" style="flex:1 1 200px">Pipeline stages right now: ${stages
+                  .map((s) => `${s.replace(/_/g, " ")} <b>${esc(txt(pl[s]))}</b>`)
+                  .join(" &middot; ")}</span>
+              </div>
+            </div>
+            <div class="section">
+              <h2>Sources</h2>
+              <p class="sub">${sources.length} configured. The count column is events currently on air from that lane (<code>/admin/api/stats</code>); a per-cycle found/rejected split is not in the API yet.</p>
+              ${
+                sources.length === 0
+                  ? `<p class="notice">No sources are configured yet.</p>`
+                  : `<div class="table-wrap"><table>
+                      <thead><tr><th>City</th><th>Lane</th><th>URL</th><th>On air now</th></tr></thead>
+                      <tbody>${sources
+                        .map(
+                          (s) => `<tr>
+                            <td>${esc(txt(s.city))}</td>
+                            <td>${esc(txt(s.name || s.type))}</td>
+                            <td><a href="${esc(s.url || "#")}" target="_blank" rel="noopener">${esc(
+                              txt(s.url),
+                            )}</a></td>
+                            <td>${
+                              byType[s.name || s.type] != null
+                                ? esc(String(byType[s.name || s.type]))
+                                : '<span class="muted">no run data yet</span>'
+                            }</td>
+                          </tr>`,
+                        )
+                        .join("")}</tbody></table></div>`
+              }
+            </div>`;
+          const run = $("#run-now");
+          if (run && !running)
+            run.onclick = async () => {
+              const go = await askConfirm(
+                "Start a collection run?",
+                "The factory crawls every configured source. It can take several minutes and it writes to the live catalogue.",
+                "Run now",
+              );
+              if (!go) return;
+              run.disabled = true;
+              try {
+                const r = await Api.runPipeline();
+                toast(r && r.status === "already_running" ? "A run is already going." : "Collection run started.");
+                store.status = { ok: true, data: await Api.status() };
+                renderSources();
+              } catch (e) {
+                run.disabled = false;
+                toast("Could not start a run: " + txt(e.message));
+              }
+            };
+        }
+
+        /* ───────────── production ───────────── */
+        function renderProduction() {
+          const el = $("#view-production");
+          const pl = val("pipeline", {});
+          const history = ((pl && pl.history) || []).slice().reverse();
+          const lines = val("logs", []);
+          const lanes = Api.llmLanes(val("status", {}), pl);
+          const q = S.log.q.toLowerCase();
+          const shown = q ? lines.filter((l) => String(l).toLowerCase().includes(q)) : lines;
+          const isErr = (l) => /error|fail|timeout|traceback|exception|no such file/i.test(String(l));
+          el.innerHTML = `
+            <div class="section" style="margin-top:0">
+              <h2>Runs</h2>
+              <p class="sub">Newest first, from <code>/admin/api/pipeline</code>.</p>
+              ${
+                !ok("pipeline")
+                  ? failed("pipeline", "the run history")
+                  : history.length === 0
+                    ? `<p class="notice">No collection run has been recorded yet. Start one from Sources.</p>`
+                    : `<div class="table-wrap"><table>
+                        <thead><tr><th>Started</th><th>Result</th><th>Events</th><th>Sources</th><th>Duration</th><th>Error</th></tr></thead>
+                        <tbody>${history
+                          .map(
+                            (r) => `<tr>
+                              <td>${esc(stamp(r.time))}</td>
+                              <td><span class="chip ${r.success ? "ok" : "bad"}">${
+                                r.success ? "succeeded" : "failed"
+                              }</span></td>
+                              <td>${esc(txt(r.events_count))}</td>
+                              <td>${esc(txt(r.sources_count))}</td>
+                              <td>${esc(txt(r.duration))}</td>
+                              <td>${
+                                r.error
+                                  ? esc(txt(r.error))
+                                  : r.success
+                                    ? DASH
+                                    : `<a href="#" data-jump-log>no error text recorded — open the run log</a>`
+                              }</td>
+                            </tr>`,
+                          )
+                          .join("")}</tbody></table></div>`
+              }
+            </div>
+            <div class="section">
+              <h2>LLM lanes</h2>
+              ${
+                lanes
+                  ? `<div class="table-wrap"><table class="kv"><tbody>${Object.keys(lanes)
+                      .map((k) => `<tr><th>${esc(k)}</th><td>${esc(txt(lanes[k]))}</td></tr>`)
+                      .join("")}</tbody></table></div>`
+                  : `<p class="notice">No routing data yet — neither <code>/admin/api/status</code> nor <code>/admin/api/pipeline</code> exposes <code>factory_state.json.llm</code>. Phase 2 adds it.</p>`
+              }
+            </div>
+            <div class="section" id="log-section">
+              <h2>Run log</h2>
+              <p class="sub">Last ${lines.length} line${
+                lines.length === 1 ? "" : "s"
+              } of <code>pipeline.log</code>. Error lines are highlighted.</p>
+              <div class="toolbar">
+                <label class="field grow">Search the log<input type="search" id="log-q" value="${esc(
+                  S.log.q,
+                )}" placeholder="source name, error text…" /></label>
+                <span class="small muted">${shown.length} line${shown.length === 1 ? "" : "s"} shown</span>
+              </div>
+              ${
+                !ok("logs")
+                  ? failed("logs", "the run log")
+                  : shown.length === 0
+                    ? `<p class="notice">No log line matches “${esc(S.log.q)}”.</p>`
+                    : `<div class="log">${shown
+                        .map((l) => `<span class="ln${isErr(l) ? " err" : ""}">${esc(l) || "&nbsp;"}</span>`)
+                        .join("")}</div>`
+              }
+            </div>`;
+          const lq = $("#log-q");
+          if (lq)
+            lq.oninput = () => {
+              S.log.q = lq.value;
+              const pos = lq.selectionStart;
+              renderProduction();
+              const nb = $("#log-q");
+              nb.focus();
+              nb.setSelectionRange(pos, pos);
+            };
+          $$("[data-jump-log]", el).forEach(
+            (a) =>
+              (a.onclick = (e) => {
+                e.preventDefault();
+                $("#log-section").scrollIntoView({ behavior: "smooth", block: "start" });
+              }),
+          );
+        }
+
+        /* ───────────── photos ───────────── */
+        function renderPhotos() {
+          const el = $("#view-photos");
+          const cats = Object.keys(CATALOGUES).filter((c) => ok(catKey(c)));
+          if (!cats.length) {
+            el.innerHTML = failed("events", "the catalogues");
+            return;
+          }
+          const without = [];
+          const cards = cats
+            .map((c) => {
+              const recs = catRecords(c);
+              const withPhoto = recs.filter(hasPhoto);
+              recs.filter((r) => !hasPhoto(r)).forEach((r) => without.push({ cat: c, rec: r }));
+              return `<div class="card stat">
+                  <span class="k">${esc(CATALOGUES[c])}</span>
+                  <b>${withPhoto.length}/${recs.length}</b>
+                  <span class="n">${pct(withPhoto.length, recs.length)}% have an image field</span>
+                  <div class="bar"><i style="width:${pct(withPhoto.length, recs.length)}%"></i></div>
+                </div>`;
+            })
+            .join("");
+          const total = without.length;
+          const first = without.slice(0, 50);
+          el.innerHTML = `
+            <div class="grid">${cards}</div>
+            <p class="notice" style="margin-top:14px">Coverage is computed here from the records themselves (any of ${PHOTO_KEYS.join(
+              ", ",
+            )}). Today's data contract carries no image field at all, so nothing is counted as covered.</p>
+            <div class="section">
+              <div class="toolbar">
+                <h2 style="flex:1 1 200px">Records with no image ${
+                  total > 50 ? `<span class="small muted">(first 50 of ${total})</span>` : ""
+                }</h2>
+                <button class="btn small" disabled title="No upload endpoint exists yet">Upload a photo (phase 4)</button>
+              </div>
+              ${
+                total === 0
+                  ? `<p class="notice">Every record has an image. Nothing to chase.</p>`
+                  : `<div class="table-wrap"><table>
+                      <thead><tr><th>Catalogue</th><th>Title</th><th>County</th><th>Source</th></tr></thead>
+                      <tbody>${first
+                        .map(
+                          (x) => `<tr>
+                            <td>${esc(CATALOGUES[x.cat])}</td>
+                            <td>${esc(recTitle(x.rec))}</td>
+                            <td>${esc(recCounty(x.rec) || DASH)}</td>
+                            <td>${
+                              x.rec.url || x.rec.source_url
+                                ? `<a href="${esc(
+                                    x.rec.url || x.rec.source_url,
+                                  )}" target="_blank" rel="noopener">open</a>`
+                                : DASH
+                            }</td>
+                          </tr>`,
+                        )
+                        .join("")}</tbody></table></div>`
+              }
+            </div>`;
+        }
+
+        /* ───────────── metrics ───────────── */
+        function renderMetrics() {
+          const el = $("#view-metrics");
+          const m = val("metrics", {});
+          const totals = (m && m.totals) || {};
+          const events = val("events", []);
+          const rows = FIELDS.events.map(([name, test]) => {
+            const n = events.filter(test).length;
+            return { name, n, p: pct(n, events.length) };
+          });
+          el.innerHTML = `
+            <div class="grid">
+              <div class="card">
+                <h3>Visitors</h3>
+                <p class="notice" style="margin-top:8px">Not connected yet (phase D).</p>
+              </div>
+              <div class="card">
+                <h3>Search</h3>
+                <p class="notice" style="margin-top:8px">Not connected yet (phase D).</p>
+              </div>
+              <div class="card">
+                <h3>Content</h3>
+                ${
+                  ok("metrics")
+                    ? `<p class="small muted" style="margin-top:8px">On air right now</p>
+                       <p><b>${num(totals.events)}</b> events &middot; <b>${num(
+                         totals.places,
+                       )}</b> things to do &middot; <b>${num(totals.holidays)}</b> holidays</p>
+                       <p class="small muted" style="margin-top:8px">${num(
+                         totals.needs_review,
+                       )} waiting in Needs input</p>`
+                    : failed("metrics", "the content numbers")
+                }
+              </div>
+            </div>
+            <div class="section">
+              <h2>Event completeness</h2>
+              <p class="sub">Computed here from <code>/admin/api/events</code> over ${
+                events.length
+              } event${events.length === 1 ? "" : "s"}.</p>
+              ${
+                events.length === 0
+                  ? `<p class="notice">No events to measure yet.</p>`
+                  : `<div class="table-wrap"><table>
+                      <thead><tr><th>Field</th><th>Filled</th><th>Share</th></tr></thead>
+                      <tbody>${rows
+                        .map(
+                          (r) => `<tr><td>${esc(r.name)}</td><td>${r.n} of ${events.length}</td>
+                            <td><b>${r.p}%</b><div class="bar"><i style="width:${r.p}%"></i></div></td></tr>`,
+                        )
+                        .join("")}</tbody></table></div>`
+              }
+            </div>`;
+        }
+
+        /* ───────────── settings ───────────── */
+        function renderSettings() {
+          const el = $("#view-settings");
+          const st = val("status", {});
+          const sources = val("sources", []);
+          const row = (k, v) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`;
+          const unknown = '<span class="muted">Not exposed by the API yet</span>';
+          el.innerHTML = `
+            ${ok("status") ? "" : failed("status", "the system status")}
+            <div class="table-wrap"><table class="kv"><tbody>
+              ${row("Factory service active", esc(txt(st.factory_service_active)))}
+              ${row("Factory timer unit", esc(txt(st.factory_timer)))}
+              ${row("Timer cadence", unknown)}
+              ${row("A run is in flight", esc(txt(st.factory_running)))}
+              ${row("Last run", esc(stamp(st.last_run)))}
+              ${row("Last run result", st.last_run_result ? esc(txt(st.last_run_result)) : unknown)}
+              ${row("Auto-approve", unknown)}
+              ${row("Quality thresholds", unknown)}
+              ${row("Sources configured", esc(String(sources.length)))}
+            </tbody></table></div>
+            <p class="notice" style="margin-top:14px">This page is read-only. Editing these — auto-approve, thresholds, the facet and tag lists — arrives with phase 1's facet file.</p>`;
+        }
+
+        /* ───────────── pager wiring (shared) ───────────── */
+        function wirePager(root, id, state, total, rerender) {
+          $$(`[data-pager="${id}"]`, root).forEach((p) => {
+            p.querySelectorAll("[data-step]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  state.page = Math.min(
+                    Math.max(1, state.page + Number(b.dataset.step)),
+                    pageCount(total, state.size),
+                  );
+                  rerender();
+                  scrollTo({ top: 0, behavior: "smooth" });
+                }),
+            );
+            const sel = p.querySelector("[data-size]");
+            if (sel)
+              sel.onchange = () => {
+                state.size = Number(sel.value);
+                state.page = 1;
+                rerender();
+              };
+          });
+        }
+
+        /* ───────────── badges + chrome ───────────── */
+        function refreshBadges() {
+          const pending = ok("staged") ? queueItems().length : null;
+          const fails = ((val("pipeline", {}) || {}).history || []).filter((r) => !r.success).length;
+          const set = (k, n, bad) =>
+            $$(`[data-badge="${k}"]`).forEach((b) => {
+              if (!n) {
+                b.hidden = true;
+                return;
+              }
+              b.hidden = false;
+              b.textContent = String(n);
+              b.classList.toggle("bad", !!bad);
+            });
+          set("needs-input", pending);
+          set("production", fails, true);
+          $("#rail-stamp").textContent = ok("metrics")
+            ? "Counted " + stamp(val("metrics", {}).generated_at)
+            : "Counts unavailable";
+        }
+        function markNav() {
+          $$("[data-area]").forEach((a) => {
+            const active = a.dataset.area === S.area;
+            if (active) a.setAttribute("aria-current", "page");
+            else a.removeAttribute("aria-current");
+            if (a.dataset.area === "catalogue") a.setAttribute("href", href("catalogue", S.catalogue));
+          });
+        }
+
+        const RENDER = {
+          overview: renderOverview,
+          catalogue: renderCatalogue,
+          "needs-input": renderNeedsInput,
+          sources: renderSources,
+          production: renderProduction,
+          photos: renderPhotos,
+          metrics: renderMetrics,
+          settings: renderSettings,
+        };
+        function route() {
+          const { area, param } = parseHash();
+          S.area = area;
+          if (area === "catalogue" && CATALOGUES[param] && param !== S.catalogue) {
+            S.catalogue = param;
+            S.cat.page = 1;
+            S.cat.selected = new Set();
+          }
+          const meta = AREAS[area];
+          $("#page-title").textContent = meta.title;
+          $("#page-sub").textContent = meta.sub;
+          $("#topbar-where").textContent = meta.label;
+          document.title = "Small Days — " + meta.title;
+          $$(".view").forEach((v) => v.classList.toggle("active", v.id === "view-" + area));
+          markNav();
+          try {
+            RENDER[area]();
+          } catch (e) {
+            $("#view-" + area).innerHTML = `<p class="notice error">This area failed to render: ${esc(
+              String((e && e.message) || e),
+            )}</p>`;
+          }
+          refreshBadges();
+        }
+
+        /* ───────────── keyboard on the queue ───────────── */
+        addEventListener("keydown", (e) => {
+          if (S.area !== "needs-input" || closer || confirmResolve) return;
+          if (e.metaKey || e.ctrlKey || e.altKey) return;
+          const tag = (e.target.tagName || "").toLowerCase();
+          if (tag === "input" || tag === "textarea" || tag === "select") return;
+          const cards = $$("#view-needs-input .qcard");
+          if (!cards.length) return;
+          const key = e.key.toLowerCase();
+          if (key === "j" || key === "k") {
+            e.preventDefault();
+            const cur = cards.indexOf(document.activeElement.closest(".qcard"));
+            const next = key === "j" ? Math.min(cur + 1, cards.length - 1) : Math.max(cur - 1, 0);
+            const target = cards[cur < 0 ? 0 : next];
+            target.focus();
+            target.scrollIntoView({ block: "center" });
+          } else if (key === "a" || key === "r") {
+            const card = document.activeElement.closest(".qcard") || cards[0];
+            if (!card) return;
+            e.preventDefault();
+            card.focus();
+            key === "a" ? approveCandidate(card.dataset.url, card) : rejectCandidate(card.dataset.url, card);
           }
         });
-        document.addEventListener("change", (ev) => {
-          const size = ev.target.closest("[data-page-size]");
-          if (!size) return;
-          if (size.closest("#view-social")) {
-            S.social.size = Number(size.value);
-            S.social.page = 1;
-            socialRender();
-          } else {
-            S.contentSize = Number(size.value);
-            S.contentPage = 1;
-            events();
-          }
-        });
-        $("#soc-search").addEventListener("input", (ev) => {
-          S.social.q = ev.target.value;
-          S.social.page = 1;
-          socialRender();
-        });
-        ["#soc-platform", "#soc-foundvia"].forEach((sel) =>
-          $(sel).addEventListener("change", (ev) => {
-            S.social[sel === "#soc-platform" ? "platform" : "foundVia"] =
-              ev.target.value;
-            S.social.page = 1;
-            socialRender();
-          }),
+
+        /* ───────────── boot ───────────── */
+        $("#rail-nav").innerHTML = navHtml();
+        $("#sheet-nav").innerHTML = navHtml();
+        $("#areas-btn").onclick = () => openOverlay($("#sheet-scrim"));
+        $$("#sheet-nav [data-area]").forEach(
+          (a) =>
+            (a.onclick = (e) => {
+              e.preventDefault();
+              const target = a.getAttribute("href");
+              closeOverlay();
+              setTimeout(() => {
+                location.hash = target;
+              }, 0);
+            }),
         );
-        $("#soc-caption").addEventListener("change", (ev) => {
-          S.social.hasCaption = ev.target.checked;
-          S.social.page = 1;
-          socialRender();
-        });
-        document
-          .querySelectorAll(".run")
-          .forEach((x) => x.addEventListener("click", run));
-        $("#refresh-log").addEventListener("click", logs);
-        $("#refresh-social").addEventListener("click", socialQueue);
-        $("#social").addEventListener("click", (e) => {
-          let t = e.target.closest("[data-approve],[data-reject]");
-          if (!t) return;
-          t.dataset.approve
-            ? decide(t.dataset.approve, "approve")
-            : decide(t.dataset.reject, "reject");
-        });
-        applyHash();
-        document.querySelectorAll("#view-content .chip").forEach((chip) =>
-          chip.setAttribute(
-            "aria-pressed",
-            String(chip.classList.contains("active")),
-          ),
-        );
-        load();
-        setInterval(load, 60000);
+        $("#refresh").onclick = async () => {
+          $("#refresh").disabled = true;
+          $("#refresh").textContent = "Refreshing…";
+          await loadAll();
+          $("#refresh").disabled = false;
+          $("#refresh").textContent = "Refresh data";
+          route();
+          toast("Data refreshed.");
+        };
+        addEventListener("hashchange", route);
+
+        $("#view-overview").innerHTML =
+          '<div class="grid"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>';
+        $$(".view").forEach((v) => v.classList.toggle("active", v.id === "view-" + parseHash().area));
+        loadAll().then(route);
       })();
     </script>
   </body>
