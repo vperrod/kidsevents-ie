@@ -24,6 +24,11 @@ staged/
 # One-shot re-research ledger (runtime state)
 recatalog_progress.json
 
+# Discovery runtime state: the URL ledger churns every cycle, and the cache
+# holds third-party data files (OpenFlights) that are re-downloadable
+discovery/ledger.json
+discovery/cache/
+
 # Playwright browsers (downloaded separately)
 ~/.cache/ms-playwright/
 

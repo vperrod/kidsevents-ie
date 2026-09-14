@@ -1,44 +1,156 @@
 {
   "fails": {},
-  "last_run": "2026-09-13T20:40:22+00:00",
+  "last_run": "2026-09-13T23:41:08+00:00",
   "sources_hit": {},
-  "total_events": 61,
+  "total_events": 4,
   "llm": {
-    "calls_today": 1888,
+    "calls_today": 1968,
     "by_lane": {
       "local": {
-        "calls": 1129,
+        "calls": 1167,
         "errors": 1,
-        "p50_ms": 15892
+        "p50_ms": 15519
       },
       "auto": {
-        "calls": 406,
-        "errors": 303,
+        "calls": 424,
+        "errors": 318,
         "p50_ms": 15055
       },
       "hermes": {
-        "calls": 302,
-        "errors": 94,
-        "p50_ms": 80378
+        "calls": 316,
+        "errors": 99,
+        "p50_ms": 80205
       },
       "kg/stepfun/step-3.7-flash:free": {
-        "calls": 50,
-        "errors": 45,
-        "p50_ms": 9127
+        "calls": 59,
+        "errors": 53,
+        "p50_ms": 7242
       },
       "oc/mimo-v2.5-free": {
-        "calls": 1,
-        "errors": 1,
-        "p50_ms": 4571
+        "calls": 2,
+        "errors": 2,
+        "p50_ms": 4778
       }
     },
-    "last_probe": "2026-09-13T22:49:19+00:00"
+    "last_probe": "2026-09-13T23:38:05+00:00"
   },
   "facet_drops": {
-    "setting": 10,
+    "setting": 12,
     "price_band": 4,
     "activity_types": 58,
     "age_bands": 78,
     "accessibility": 100
+  },
+  "lanes": [
+    {
+      "lane": "listings",
+      "key": "corkcity.ie",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "discoverireland.ie",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "heritageireland.ie",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "museum.ie",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "mykidstime.com",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "parkrun.ie",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "purecork.ie",
+      "found": 1,
+      "new": 1,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "listings",
+      "key": "yourdaysout.com",
+      "found": 3,
+      "new": 3,
+      "errors": [],
+      "ms": 31029
+    },
+    {
+      "lane": "feeds",
+      "key": "monaghan-council",
+      "found": 16,
+      "new": 4,
+      "errors": [],
+      "ms": 2186
+    },
+    {
+      "lane": "sitemaps",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
+    },
+    {
+      "lane": "search",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
+    }
+  ],
+  "lane_cursor": {
+    "listings": 10
+  },
+  "lane_last_run": {
+    "listings": "2026-09-13T23:41:08+00:00",
+    "feeds": "2026-09-13T23:41:08+00:00"
+  },
+  "lane_calls": {},
+  "discovery": {
+    "found": 14,
+    "staged": 14,
+    "outcomes": {
+      "on-air": 0,
+      "needs-input": 3,
+      "rejected": 11,
+      "lane-failed": 0
+    }
   }
 }

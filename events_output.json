@@ -1,6 +1,151 @@
 [
   {
     "schema_version": 1,
+    "id": "event-ken-o-sullivan-stories-from-the-sea-cork",
+    "kind": "event",
+    "title": "Ken O'Sullivan: Stories from the Sea",
+    "slug": "ken-o-sullivan-stories-from-the-sea-cork",
+    "summary": "A live show by filmmaker Ken O'Sullivan featuring his 25-year journey exploring the North Atlantic.",
+    "description": "Ken O'Sullivan presents a live show titled Stories from the Sea, featuring his experiences exploring the North Atlantic Ocean and seas around Ireland. The event combines film and stories from his 20-plus year career, including personal insights from being surrounded by killer whales, swimming with dolphins, and encounters with fin and blue whales. O'Sullivan has produced more than twenty natural history documentaries for RTÉ, and his series North Atlantic was acquired by the BBC and broadcast in over 30 countries. He also features alongside David Attenborough in BBC Earth's Stunning Underwater Nature Footage, which has 7 million views on YouTube. The show pays homage to his family's 250-year history on Fenit Island, Co. Kerry, and discusses education and conservation, which have been central to his work since 2005. His documentaries are included in the secondary school exam curriculum for Junior Cycle Geography and Business Studies. His book, Stories from the Deep, is critically acclaimed for its writing and descriptions of nature. The event takes place at 15 MacCurtain Street, Victorian Quarter, Cork, from 19:30 to 21:10 on 26 September 2026.",
+    "family_relevant": true,
+    "location": {
+      "name": "Ken O'Sullivan: Stories from the Sea",
+      "address": "15 MacCurtain Street, Victorian Quarter",
+      "city": "Cork",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Ken%20O%27Sullivan%3A%20Stories%20from%20the%20Sea%2C%2015%20MacCurtain%20Street%2C%20Victorian%20Quarter%2C%20Cork%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "10-25",
+      "setting": "indoor",
+      "activity_types": [
+        "theatre-show",
+        "cinema"
+      ],
+      "accessibility": [],
+      "price_detail": "Adult - €25.00 Child - €20.00 Family - €60.00",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375",
+          "fetched_at": "2026-09-13T23:43:36+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The event is a live show by Ken O'Sullivan featuring his experiences exploring the North Atlantic ocean and seas around Ireland.",
+          "quote": "In his new show,&nbsp; Stories from the Sea , award-winning filmmaker Ken O&rsquo;Sullivan brings us on his 25 year journey exploring the North Atlantic ocean and seas around Ireland, with stories, video pieces and personal insights into his experiences, from being surrounded by a pod of killer whal",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "The show is a mix of film and stories from Ken O'Sullivan's 20 plus year long career.",
+          "quote": "The live show is a mix of film and stories from Ken&rsquo;s 20 plus year long career.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Ken O'Sullivan has produced more than twenty natural history documentaries for RTÉ.",
+          "quote": "Ken has now produced more than twenty natural history documentaries for RT&Eacute;",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Ken O'Sullivan's last series, North Atlantic, was acquired by the BBC and broadcast in over 30 countries.",
+          "quote": "with his last series&nbsp; North Atlantic &nbsp;acquired by BBC and broadcast in over 30 countries.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Ken O'Sullivan features alongside David Attenborough in BBC Earth's Stunning Underwater Nature Footage.",
+          "quote": "He features alongside David Attenborough in BBC Earth&rsquo;s&nbsp; Stunning Underwater Nature Footage",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "The BBC Earth footage featuring Ken O'Sullivan has 7 million views on YouTube.",
+          "quote": "which has 7 million views on YouTube.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Ken O'Sullivan pays homage to his family's 250-year history on Fenit Island, Co. Kerry.",
+          "quote": "He pays homage to his family&rsquo;s 250-year history on Fenit Island, Co. Kerry",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Education and conservation have been at the heart of Ken O'Sullivan's work since 2005.",
+          "quote": "Education and conservation have been at the heart of Ken&rsquo;s work since 2005",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Ken O'Sullivan's documentaries are featured on the secondary school exam curriculum within the Junior cycle Geography and Business Studies courses.",
+          "quote": "Ken has donated his documentaries to education, where they now feature on the secondary school exam curriculum within the Junior cycle Geography and Business Studies courses.",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "Ken O'Sullivan's book Stories from the Deep is critically acclaimed for its lyrical writing and descriptions of nature and animal encounters.",
+          "quote": "His book&nbsp; Stories from the Deep &nbsp;is critically acclaimed for its lyrical writing and descriptions of nature and animal encounters",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "The event is located at 15 MacCurtain Street, Victorian Quarter, Cork, T23 E094, Ireland.",
+          "quote": "15 MacCurtain Street, Victorian Quarter, Cork, T23 E094, Ireland",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        },
+        {
+          "claim": "The event takes place on 26 Sept 2026 from 19:30:00 to 21:10:00.",
+          "quote": "26 Sept 2026, 19:30:00 - 26 Sept 2026, 21:10:00",
+          "source_url": "https://yourdaysout.com/events-on-in-county-cork-ireland/ken-osullivan-stories-from-the-sea-6375"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-13T23:45:38+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "event": {
+      "start_date": "2026-09-26",
+      "end_date": "2026-09-26",
+      "times": [
+        "19:30",
+        "21:10"
+      ],
+      "recurrence": "",
+      "organizer": "",
+      "booking_required": "none",
+      "date_evidence": "26 Sept 2026, 19:30:00 - 26 Sept 2026, 21:10:00",
+      "cancelled": false
+    }
+  },
+  {
+    "schema_version": 1,
     "id": "event-the-piano-by-irish-national-opera-cork",
     "kind": "event",
     "title": "The Piano by Irish National Opera",

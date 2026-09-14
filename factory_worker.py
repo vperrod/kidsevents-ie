@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 """
-Kids Events Ireland Factory — free-model agent pipeline.
+Small Days factory — free-model agent pipeline.
 
-ADOPTED FROM WANDERTOLD FACTORY PATTERNS:
-- Parallel multi-source URL discovery (search gateway + travel bidders + Wikipedia)
-- crawl4AI extraction with nav-chrome filtering
-- Hermes LLM pipeline with quality-first fallback chain
-- Structured metadata model with facets/tags
-- Human review workflow (staged → approved → published)
-- schema.org/Event JSON-LD extraction where available
+One cycle (`run_discovery_cycle`): prune events that are over, run the
+`discovery/` lanes, stage what they found in `staged/candidates.json`, then
+research each new candidate through `promote()` -- a research fetch on this VM
+followed by the four grounded steps (classify, facts, extract, write) and
+`gate.qa`. Nothing is published that has not passed that gate, and nothing in
+a record is invented: every value came from a verified quote, from open data,
+or from `contract.derive`.
 
-Pipeline per event: discovered -> researched -> enriched -> tagged -> staged
--> (human) approved -> published (or rejected)
+Lifted from the WanderTold factory: parallel multi-source URL discovery,
+crawl4AI extraction with nav-chrome filtering, the cheapest-lane-first model
+chain (`llm.complete`), and schema.org/Event JSON-LD harvesting.
 
-Run: python3 factory_worker.py discover --query "kids events dublin"
+Run: python3 factory_worker.py [--lane feeds] [--budget 10]
 """
 import asyncio
 import concurrent.futures
@@ -531,8 +532,17 @@ def _is_chrome(text):
     return sum(is_nav_line(l) for l in lines) / len(lines) > 0.6
 
 
-def _crawl_pages(discovered, limit, skip_chrome_filter=False):
-    """crawl4AI extraction. WanderTold pattern."""
+def _crawl_pages(discovered, limit, skip_chrome_filter=False,
+                 max_lines=220, max_chars=4000):
+    """crawl4AI extraction. WanderTold pattern.
+
+    The line and character caps are the prompt budget for a page that IS the
+    item. A listing page is not: its links start well past them (a
+    yourdaysout county page spends its first 4,000 characters on a cookie
+    consent notice and reaches its first real link at character 27,836 --
+    measured 2026-09-13), so the discovery lane that harvests those links asks
+    for a bigger slice.
+    """
     from crawl4ai import AsyncWebCrawler
     if not discovered:
         return []
@@ -572,7 +582,7 @@ def _crawl_pages(discovered, limit, skip_chrome_filter=False):
                             if res and res.success and res.markdown:
                                 text = res.markdown.raw_markdown or ""
                                 text = os.linesep.join(l.rstrip() for l in text.splitlines() if l.strip())
-                                text = os.linesep.join(text.splitlines()[:220]).strip()
+                                text = os.linesep.join(text.splitlines()[:max_lines]).strip()
                                 imgs = []
                                 if res.media and "images" in res.media:
                                     for img in res.media["images"][:12]:
@@ -585,7 +595,7 @@ def _crawl_pages(discovered, limit, skip_chrome_filter=False):
                                 chrome = False if skip_chrome_filter else _is_chrome(text)
                                 if len(text) > 180 and not chrome and item["url"] not in seen:
                                     seen.add(item["url"])
-                                    entry = {"url": item["url"], "title": item.get("title", ""), "markdown": text[:4000]}
+                                    entry = {"url": item["url"], "title": item.get("title", ""), "markdown": text[:max_chars]}
                                     if imgs:
                                         entry["images"] = imgs
                                     out.append(entry)
@@ -712,49 +722,9 @@ def _load_city_sources():
     return load_json_store(SOURCES_FILE, {})
 
 
-CITY_SOURCES = _load_city_sources()
-
-
-def _crawl_city_sources(city, cats):
-    """Crawl this city's curated sources.json URLs."""
-    urls = [{"url": one, "title": cat} for cat, u in CITY_SOURCES.get(city, {}).items()
-            if cat in cats and u for one in (u if isinstance(u, list) else [u])]
-    if not urls:
-        return []
-    return _crawl_pages(urls, len(urls), skip_chrome_filter=True)
-
-
 # ---------------------------------------------------------------------------
 # Main pipeline
 # ---------------------------------------------------------------------------
-
-def discover_events(city, query, limit=20):
-    """Discover + crawl event URLs for a city using search gateway + curated sources.
-    Returns list of {url, title, markdown} pages ready for enrichment.
-    """
-    log(f"Discovering events for {city} with query: {query}")
-
-    # 1. Search gateway (parallel multi-source discovery)
-    discovered = _discover_urls(query, limit=limit)
-
-    # 2. Curated city sources (from sources.json)
-    curated = _crawl_city_sources(
-        city, ("tourism", "timeout", "familyfriendly", "yourdaysout", "listings")) or []
-
-    # 3. Crawl discovered URLs
-    crawled = _crawl_pages(discovered, limit, skip_chrome_filter=False) or []
-
-    # Deduplicate and combine
-    all_pages = crawled + curated
-    seen_urls = set()
-    unique_pages = []
-    for p in all_pages:
-        if p["url"] not in seen_urls:
-            seen_urls.add(p["url"])
-            unique_pages.append(p)
-
-    return unique_pages
-
 
 # ---------------------------------------------------------------------------
 # Public event contract (see EVENT_DATA_CONTRACT.md / deduplicator.to_dict)
@@ -1092,6 +1062,12 @@ def _coord(value):
         return None
 
 
+def _either(first, second):
+    """`first` unless it is empty -- and 0.0 is a real latitude, so `or` will
+    not do."""
+    return second if first in (None, "") else first
+
+
 def _safe_url(value):
     url = str(value or "").strip()
     return url if url.startswith(("http://", "https://")) else ""
@@ -1116,15 +1092,21 @@ def _build_record(kind, candidate, source, facts, name, details, written, verdic
     record["description"] = str(written.get("description") or "").strip()
     record["family_relevant"] = verdict.get("family_relevant") is not False
 
-    city, county = normalize_location(details.get("city", ""), details.get("county", ""))
+    # A discovery lane that read the location out of open data (OSM, Wikidata,
+    # a council CSV) knows it better than any model reading prose: its
+    # `location` is the fallback for everything the extract step left empty.
+    known = candidate.get("location") or {}
+    city, county = normalize_location(details.get("city") or known.get("city", ""),
+                                      details.get("county") or known.get("county", ""))
     location = record["location"]
-    location["name"] = str(details.get("name") or name or "")[:200]
-    location["address"] = str(details.get("address") or "")[:300]
+    location["name"] = str(details.get("name") or name or known.get("name") or "")[:200]
+    location["address"] = str(details.get("address") or known.get("address") or "")[:300]
     location["city"] = city
     location["county"] = county
-    location["country"] = _country_code(details.get("country") or verdict.get("country"))
-    location["lat"] = _coord(details.get("lat"))
-    location["lon"] = _coord(details.get("lon"))
+    location["country"] = _country_code(details.get("country") or known.get("country")
+                                        or verdict.get("country"))
+    location["lat"] = _coord(_either(details.get("lat"), known.get("lat")))
+    location["lon"] = _coord(_either(details.get("lon"), known.get("lon")))
 
     url = candidate.get("source_url", "")
     links = record["links"]
@@ -1163,8 +1145,18 @@ def _build_record(kind, candidate, source, facts, name, details, written, verdic
         record["holiday"].update(holiday)
         dropped += holiday_dropped
 
+    # A holiday must be grounded in two independent domains (gate._qa_holiday),
+    # which one fetch can never supply -- lane 8 researches both and hands them
+    # over on the candidate.
+    sources = [source] if source else []
+    known_urls = {one.get("url") for one in sources}
+    for extra in candidate.get("sources") or []:
+        if extra.get("url") and extra["url"] not in known_urls:
+            known_urls.add(extra["url"])
+            sources.append(extra)
+
     record["provenance"].update({
-        "sources": [source] if source else [],
+        "sources": sources,
         "facts": [{**fact, "source_url": url} for fact in facts],
         "last_checked": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "produced_by": ["classify", "facts", "extract", "write"],
@@ -1185,7 +1177,10 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
     before any step runs, same do-not-invent discipline either way.
     `prefetched` skips the research fetch (the discovery cycle already has the
     page text); `prefill` supplies `event.*` from schema.org JSON-LD, which
-    skips the extract step. At most four model calls, one per step.
+    skips the extract step. For a place or a holiday `prefill` instead overlays
+    the values a discovery lane computed rather than read (a destination's
+    climate months, its flight time from Dublin) on top of what the extract
+    step found. At most four model calls, one per step.
     """
     if prefetched is None:
         text, source, missing = research_fetch(candidate)
@@ -1216,7 +1211,9 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
     if prefill and kind == "event":
         details = dict(prefill)
     else:
-        details = extract_details(kind, text, facts, candidate.get("found_via", ""))
+        details = extract_details(kind, text, facts, candidate.get("county", ""))
+        if prefill:
+            details.update({k: v for k, v in prefill.items() if v not in (None, "", [])})
     written = write_copy(kind, text, facts, name)
 
     record = _build_record(kind, candidate, source, facts, name, details, written, verdict)
@@ -1264,34 +1261,6 @@ def _jsonld_evidence(event):
     return f"schema.org startDate {event.get('start', '')}"
 
 
-def extract_events_from_pages(pages, city, today, horizon):
-    """Contract records from crawled pages, through the same four steps the
-    social lane uses. A page carrying a schema.org Event pre-fills `event.*`
-    and skips the extract step."""
-    seeds = {}
-    for event in _extract_jsonld_events([{"url": p["url"]} for p in pages], today, horizon):
-        seeds.setdefault(event.get("url") or "", event)
-    records = []
-    for page in pages:
-        if not page.get("markdown"):
-            continue
-        seed = seeds.get(page["url"])
-        text = page["markdown"]
-        prefill = None
-        if seed:
-            prefill = _jsonld_prefill(seed, city)
-            text = f"{text}\n{_jsonld_evidence(seed)}"
-        record, reason, _missing_field = promote(
-            {"source_url": page["url"], "platform": "web", "found_via": city},
-            prefetched=text, prefill=prefill,
-        )
-        if record:
-            records.append(record)
-        else:
-            log(f"rejected {page['url'][:60]}: {reason}")
-    return records
-
-
 def load_state():
     return load_json_store(STATE_FILE, {"fails": {}, "last_run": None, "sources_hit": {}})
 
@@ -1310,62 +1279,79 @@ def record_llm_stats():
         save_state(state)
 
 
-def run_discovery_cycle():
-    """Main factory cycle — discover, extract, enrich, write staged events."""
-    state = load_state()
+# One cycle researches at most this many candidates. The lanes find far more
+# than that -- the ledger and this cap are what keep an hourly timer from
+# turning a good discovery run into a queue nothing ever drains.
+MAX_CANDIDATES_PER_CYCLE = int(ENV.get("MAX_CANDIDATES_PER_CYCLE", "60"))
+# Research stops at this fraction of the cycle wall so the state write at the
+# end always happens; the rest of the desk is picked up by the next cycle.
+_RESEARCH_SHARE = 0.8
+# The desk and the ledger name the same verdict differently on purpose: the
+# desk speaks `staging.py`'s vocabulary, so one admin view can render both
+# candidate files, while the ledger records the contract's own word.
+_DESK_STATUS = {"on-air": "approved", "needs-input": "needs_input",
+                "rejected": "rejected", "lane-failed": "needs_review"}
+
+
+def run_discovery_cycle(budget=None, only=None):
+    """One factory cycle: run the discovery lanes, stage what they found, and
+    research each new candidate through `promote()`.
+
+    Returns the outcome counts. `lane-failed` is not a rejection -- it is "no
+    model lane answered", which the ledger deliberately does not stamp, so the
+    candidate comes back next cycle when the free lanes have recovered.
+    """
+    import discovery
+    from discovery import common as candidates, ledger
+
     prune_past_events()
-    today = date.today()
-    horizon = today + timedelta(days=EVENT_HORIZON_DAYS)
+    found, rows, cursors, ran, calls = discovery.run_all(
+        budget or MAX_CANDIDATES_PER_CYCLE, load_state(), only=only)
+    staged = candidates.append_candidates(found)
+    log(f"discovery: {len(found)} candidates from {len(ran)} lanes, "
+        f"{len(staged)} to research (new, plus any due for a recheck)")
 
-    # Target cities (from env or default to Irish cities)
-    target_cities = ENV.get("TARGET_CITIES", "dublin,cork,galway,waterford,limerick").split(",")
-    target_cities = [c.strip() for c in target_cities if c.strip()]
+    outcomes = {"on-air": 0, "needs-input": 0, "rejected": 0, "lane-failed": 0}
+    deadline = time.time() + CYCLE_WALL_SECS * _RESEARCH_SHARE
+    for index, item in enumerate(staged, 1):
+        if time.time() > deadline:
+            log(f"cycle wall reached after {index - 1} candidates — the rest wait for the next run")
+            break
+        record, reason, missing_field = promote(
+            item, prefetched=item.get("text"), prefill=item.get("prefill"))
+        if record and publish_record(record):
+            status, kind = "on-air", record["kind"]
+        elif record:
+            status, kind = "rejected", record["kind"]
+            reason = "already published under this id"
+        elif reason.startswith("no model lane answered"):
+            status, kind = "lane-failed", item.get("kind_hint", "")
+        else:
+            status = "needs-input" if missing_field else "rejected"
+            kind = item.get("kind_hint", "")
+        outcomes[status] += 1
+        ledger.record(item["source_url"], kind, status)
+        candidates.set_candidate_status(item["source_url"], _DESK_STATUS[status],
+                                        reason, missing_field)
+        log(f"  [{index}/{len(staged)}] {status} — {item['source_url'][:70]} {reason[:60]}")
 
-    all_events = []
-
-    for city in target_cities:
-        # Build search query
-        # A generic topic phrase ("kids events X Ireland family activities")
-        # ranks brand homepages, not listings -- confirmed 2026-09-12 against
-        # the live search gateway: a dated/"this weekend" phrasing surfaces
-        # actual event-listing and calendar pages (eventbrite .../events--this-
-        # weekend/, dublin.ie/whats-on/, dublinevents.com/events/kids-children/)
-        # instead of dublinzoo.ie/, familyfun.ie/, tiktok.com/discover/... .
-        query = f"kids events {city} this weekend"
-
-        # Discover + crawl
-        pages = discover_events(city, query, limit=15)
-        log(f"  {city}: found {len(pages)} pages to process")
-
-        # Extract events
-        events = extract_events_from_pages(pages, city, today, horizon)
-        log(f"  {city}: extracted {len(events)} events")
-
-        # Deduplicate by contract id (kind + slug + county)
-        seen = set()
-        for ev in events:
-            key = ev.get("id") or event_key(ev)
-            if key not in seen:
-                seen.add(key)
-                all_events.append(ev)
-
-    # Publish through publish_record so discovery passes the same quality gate
-    # as the admin approve route, and a page that turned out to be a place or a
-    # holiday lands in its own catalogue. Holding the lock across the loop keeps
-    # the read-modify-write atomic against a concurrent approve/sweep --
-    # confirmed live 2026-09-12, a stale read here silently dropped events a
-    # concurrent sweep had just added.
+    # Re-read under the lock rather than saving the copy loaded above: a
+    # concurrent sweep's record_llm_stats() and gate.record_drops() write the
+    # same file while a cycle runs, and a stale write here would erase them.
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     with output_lock():
-        published = sum(1 for ev in all_events if publish_record(ev))
-        total = len(load_json_store(OUTPUT_FILE, []))
-    log(f"Total events: {total} ({published} new)")
-
-    state["last_run"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    state["total_events"] = total
-    state["llm"] = llm.stats()
-    save_state(state)
-
-    return published
+        state = load_state()
+        state["lanes"] = rows
+        state.setdefault("lane_cursor", {}).update(cursors)
+        state.setdefault("lane_last_run", {}).update({name: now for name in ran})
+        state.setdefault("lane_calls", {}).update(calls)
+        state["discovery"] = {"found": len(found), "staged": len(staged), "outcomes": outcomes}
+        state["last_run"] = now
+        state["total_events"] = len(load_json_store(OUTPUT_FILE, []))
+        state["llm"] = llm.stats()
+        save_state(state)
+    log(f"cycle outcomes: {outcomes}")
+    return outcomes
 
 
 def _web_block(pages):
@@ -1383,8 +1369,11 @@ def _web_block(pages):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Kids Events Ireland factory worker")
-    parser.add_argument("--city", default=None, help="Run for specific city only")
-    parser.parse_args()
+    parser.add_argument("--lane", action="append", default=None,
+                        help="Run only this discovery lane (repeatable)")
+    parser.add_argument("--budget", type=int, default=None,
+                        help=f"Candidates to research this cycle (default {MAX_CANDIDATES_PER_CYCLE})")
+    args = parser.parse_args()
 
     # The hourly timer fires whether or not the previous cycle finished.
     # Skipping (not queueing) is the WanderTold pattern: a cycle that is still
@@ -1403,8 +1392,8 @@ def main():
     watchdog.daemon = True
     watchdog.start()
     try:
-        n = run_discovery_cycle()
-        log(f"Discovery cycle complete: {n} new events")
+        outcomes = run_discovery_cycle(budget=args.budget, only=args.lane)
+        log(f"Discovery cycle complete: {outcomes['on-air']} published")
     finally:
         watchdog.cancel()
         fcntl.flock(cycle_lock, fcntl.LOCK_UN)

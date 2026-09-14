@@ -1,0 +1,41 @@
+{
+  "always": [
+    "family events {county} this weekend",
+    "things to do with kids {county} rainy day",
+    "{county} library events children",
+    "toddler groups {county}",
+    "soft play {county}",
+    "open farm {county}",
+    "pet farm {county}",
+    "free things to do with kids {county}",
+    "baby and toddler classes {county}",
+    "playground {county} new",
+    "kids activities {county} indoor",
+    "junior parkrun {county}",
+    "museum family day {county}",
+    "library storytime {county}",
+    "family festival {county} {year}"
+  ],
+  "seasonal": {
+    "santa": {
+      "months": [10, 11, 12],
+      "templates": ["santa experience {county} {year}", "christmas panto {county} {year}"]
+    },
+    "halloween": {
+      "months": [9, 10],
+      "templates": ["halloween {county} kids {year}", "kids workshop {county} october midterm"]
+    },
+    "summer_camps": {
+      "months": [3, 4, 5, 6],
+      "templates": ["summer camps {county} {year}", "school holiday camps {county} summer"]
+    },
+    "easter": {
+      "months": [2, 3],
+      "templates": ["easter camp {county} {year}", "easter events {county} kids"]
+    },
+    "midterm": {
+      "months": [1, 9],
+      "templates": ["school holidays camps {county} midterm", "midterm activities {county} kids"]
+    }
+  }
+}

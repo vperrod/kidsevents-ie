@@ -12,21 +12,63 @@ The modules, and nothing else:
 
 | Module | Role |
 |---|---|
-| `factory_worker.py` | The factory. One cycle per run: prune events that are over → discover URLs (local search gateway + the curated deep listing pages in `sources.json`) → crawl with crawl4AI → extract (schema.org `Event` JSON-LD first, an LLM for free-text pages) → normalise → publish through the quality gate. Run hourly by `kidsevents-factory.timer`, one cycle at a time (`daemon.lock`). |
+| `factory_worker.py` | The factory. One cycle per run: prune events that are over → run the discovery lanes → stage what they found → research each new candidate through `promote()` (fetch → classify → facts → extract → write) → publish through the quality gate. Run hourly by `kidsevents-factory.timer`, one cycle at a time (`daemon.lock`). |
+| `discovery/` | The eight lanes that find things to research, plus the URL ledger that stops the factory re-researching what it published last hour — see below. |
 | `llm.py` | Model routing. Every LLM call in the project goes through `complete(prompt, kind)`, which picks the cheapest lane that can answer right now. |
 | `contract.py` + `gate.py` + `catalog/facets.json` | The record contract, the facet vocabulary and the QA gate — see below. Every record written to a catalogue has passed both. |
 | `staging.py` | The staging desk for social candidates collected by the mini PC crew. Appends them to `staged/social_candidates.json` and, with `AUTO_APPROVE=on` (the default), runs each through the same gate immediately. Anything that does not clear it becomes `needs_input` with the one `missing_field` a curator's note would fix, or `rejected`. |
 | `server.py` | Flask on `127.0.0.1:8128` (user unit `kidsevents-ie.service`): the public `/api/events`, `/api/places`, `/api/holidays` feeds (the legacy view), the full-contract `/api/v1/*` feeds, the member save API, and the `/admin` portal with its `/admin/api/*` routes. |
 
 ```
-kidsevents-factory.timer (hourly) → factory_worker.run_discovery_cycle()
-mini PC social crew (ssh)         → staging.py append → factory_worker.promote()
+kidsevents-factory.timer (hourly) → run_discovery_cycle() → discovery.run_all()
+                                          ↓ staged/candidates.json
+mini PC social crew (ssh)         → staging.py append → staged/social_candidates.json
+                                          ↓
+                            factory_worker.promote()
               research fetch → classify → facts → extract → write → gate.qa()
-                                       ↓
+                                          ↓
         events_output.json · places_output.json · holidays_output.json
-                                       ↓
+                                          ↓
                               server.py → web/ + /admin
 ```
+
+### Discovery lanes
+
+`discovery/lanes/<name>.py` each expose `run(state) -> list[Candidate]`, where
+a candidate is the same dict the social desk stores: `source_url`,
+`found_via: "<lane>:<key>"`, and optionally `title`, `caption` (text the lane
+already holds, merged with the live fetch), `text` (a page the lane already
+crawled — skips the fetch), `county`, `location` (coordinates from open data),
+`prefill` (values computed rather than read) and `sources` (a second grounded
+source, which a holiday needs to pass the gate).
+
+| Lane | Cadence | What it reads |
+|---|---|---|
+| `listings` | every cycle | The curated deep listing pages in `sources.json` — a yourdaysout slug for each of the 26 Republic counties plus the hand-picked city and national pages, on a rotating cursor. schema.org `Event` markup becomes candidates directly; otherwise the page is reduced to its own link index in code and one model call picks the links that are things a family can go to. |
+| `feeds` | every cycle | The RSS/Atom and ICS feeds in `catalog/lanes.json`. Stdlib parsing (`xml.etree`, a VEVENT reader). |
+| `sitemaps` | every cycle | `sitemap.xml` of each curated domain, filtered to `event\|whats-on\|things-to-do\|family\|kids`. |
+| `search` | every cycle | `catalog/search_templates.json` × 32 counties × the current season, through the search gateway only. 40 queries a cycle on a rotating cursor. |
+| `opendata_places` | weekly | OpenStreetMap Overpass (one bbox per province), `data.gov.ie` CSVs found through its CKAN API, Coillte and Blue Flag pages. Fáilte Ireland is registration-gated and logs "no key" until one exists. |
+| `wikidata` | weekly | SPARQL for Irish museums, attractions, zoos and parks with a website (P856) and an Instagram handle (P2003), merged against what is already on air by name-fold and a 1 km geo match. |
+| `ticketmaster` | every cycle | Discovery API, `countryCode=IE`, family classification. Needs `TICKETMASTER_API_KEY`; logs "no key" and skips without one. |
+| `holidays_seed` | weekly | A cached model-generated seed list of destinations (`catalog/holiday_seeds.json`), `batch` of them researched per run from its Wikivoyage article *and* the official tourism site Wikidata records — two domains, which is what the gate demands of a holiday — with `best_months` computed from Open-Meteo's daily archive and `direct_flight`/`flight_time_from_dublin` from OpenFlights. |
+
+`catalog/lanes.json` holds each lane's `enabled` flag and its sources.
+`discovery/ledger.json` (git-ignored) records what was researched and when, so
+a URL is looked at once and re-checked no sooner than its kind's window —
+3 days for an event, 30 for a place, 60 for a holiday. A URL whose window has
+expired is re-staged and researched again, so a listing that changed is picked
+up rather than remembered as whatever it was last week. `promote()` answering
+"no model lane answered" is a lane outage, not a verdict: the ledger does not
+stamp it and the candidate comes back next cycle.
+
+A lane that caps how many candidates it offers per source (`sitemaps`,
+`opendata_places`, `wikidata`) drops the already-researched ones *before* that
+cap, so each run works further down its list. The others rotate on a cursor
+kept in `factory_state.json["lane_cursor"]`.
+
+Every lane writes a `{lane, key, found, new, errors, ms}` row into
+`factory_state.json["lanes"]`, which is what the admin Sources area reads.
 
 ### Model routing
 
@@ -158,8 +200,8 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 playwright install chromium
 
-venv/bin/python3 factory_worker.py            # one discovery cycle, all cities
-TARGET_CITIES=galway venv/bin/python3 factory_worker.py   # one city
+venv/bin/python3 factory_worker.py            # one discovery cycle, every enabled lane
+venv/bin/python3 factory_worker.py --lane feeds --budget 10   # one lane, 10 candidates
 
 venv/bin/python3 staging.py sweep             # classify the needs_review backlog
 SWEEP_LIMIT=5 venv/bin/python3 staging.py sweep           # …just the first 5
@@ -170,7 +212,7 @@ venv/bin/python3 -m pytest -q                 # tests (no network, no LLM)
 ```
 
 Useful environment (from `.env`, the systemd unit, or the command line):
-`TARGET_CITIES`, `CRAWL_WALL_SECS`, `CYCLE_WALL_SECS`, `DISCOVER_WAIT_SECS`,
+`MAX_CANDIDATES_PER_CYCLE`, `TICKETMASTER_API_KEY`, `CRAWL_WALL_SECS`, `CYCLE_WALL_SECS`, `DISCOVER_WAIT_SECS`,
 `SEARCHGW_BASE`, `AUTO_APPROVE`, `SWEEP_LIMIT`, `SWEEP_WORKERS`,
 `MAX_ITEM_SECS`, and the routing knobs `LOCAL_LLM_URL`, `LOCAL_BUSY_AT`,
 `LOCAL_MAX_PROMPT_CHARS`, `OMNIROUTE_URL`, `ROUTING_LANES`, `LANE_TRIES`,
@@ -230,12 +272,19 @@ event, and `DESIGN.md` for the front-end.
 
 ## Sources
 
-`sources.json` holds the curated deep listing URLs per city, by category
-(`tourism`, `timeout`, `familyfriendly`, `yourdaysout`, `listings`). Only
-categories listed in `discover_events()` are crawled. Entries that go dead or
-start blocking get removed rather than retried — Eventbrite (405), Songkick,
+`sources.json` holds the curated deep listing URLs, keyed by county (plus
+`_national`), by category (`tourism`, `timeout`, `familyfriendly`,
+`yourdaysout`, `listings`). Every `http` value under every key is crawled by
+the `listings` lane on a rotating cursor. Entries that go dead or start
+blocking get removed rather than retried — Eventbrite (405), Songkick,
 Facebook groups (login wall) and `visitcork.com` (broken certificate) are all
 out for that reason.
+
+`catalog/lanes.json` holds the other lanes' sources. Of the four council
+calendar exports the plan named, only Monaghan's actually serves
+`text/calendar`: Cork County, South Dublin and Kildare answer `?ical=1` with
+their ordinary HTML page (probed 2026-09-13). Add a feed here once it exists —
+the lane checks the payload, not the status code.
 
 ## File structure
 
@@ -246,14 +295,17 @@ kidsevents-ie/
 ├── gate.py                  # facet vocabulary fold + the on-air decision
 ├── migrate_contract.py      # one-shot, idempotent migration onto the contract
 ├── catalog/facets.json      # the facet vocabulary (counties, ages, prices, activities)
+├── catalog/lanes.json       # per-lane enable flag + that lane's sources
+├── catalog/search_templates.json  # the search lane's templates, always-on and seasonal
+├── discovery/               # the eight lanes + the URL ledger
 ├── llm.py                   # model routing: local → free gateway lanes → hermes
 ├── staging.py               # social candidate staging desk + auto-approve sweep
 ├── server.py                # Flask API + admin portal
 ├── firebase_auth.py         # member identity verification
 ├── member_store.py          # member saves (sqlite)
-├── sources.json             # curated listing URLs per city
+├── sources.json             # curated listing URLs per county
 ├── web/                     # index.html (public) + admin.html
-├── staged/                  # social_candidates.json, needs_input.json
+├── staged/                  # candidates.json, social_candidates.json, needs_input.json
 ├── systemd/                 # unit examples
 └── events_output.json · places_output.json · holidays_output.json
 ```

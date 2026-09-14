@@ -1,42 +1,114 @@
 {
+  "_national": {
+    "listings": [
+      "https://www.discoverireland.ie/events",
+      "https://www.mykidstime.com/tag/days-out/",
+      "https://www.heritageireland.ie/visit/family-fun/",
+      "https://www.museum.ie/en-IE/Whats-On",
+      "https://parkrun.ie/events/events/"
+    ]
+  },
+  "carlow": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-carlow-ireland/"
+  },
+  "cavan": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-cavan-ireland/"
+  },
+  "clare": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-clare-ireland/"
+  },
+  "cork": {
+    "listings": [
+      "https://www.purecork.ie/whats-on",
+      "https://www.corkcity.ie/en/things-to-do/festivals-events/"
+    ],
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-cork-ireland/"
+  },
+  "donegal": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-donegal-ireland/"
+  },
   "dublin": {
-    "tourism": "https://www.visitdublin.com/events/",
-    "timeout": "https://www.timeout.com/dublin/things-to-do",
     "familyfriendly": "https://www.familyfun.ie/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-dublin-ireland/",
     "listings": [
       "https://www.familyfun.ie/family-event-calendar/",
       "https://www.familyfun.ie/kids-events-on-now/",
       "https://dublin.ie/whats-on/",
       "https://www.dublincity.ie/events/library-events-children"
-    ]
-  },
-  "cork": {
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-cork-ireland/",
-    "listings": [
-      "https://www.purecork.ie/whats-on",
-      "https://www.corkcity.ie/en/things-to-do/festivals-events/"
-    ]
+    ],
+    "timeout": "https://www.timeout.com/dublin/things-to-do",
+    "tourism": "https://www.visitdublin.com/events/",
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-dublin-ireland/"
   },
   "galway": {
-    "tourism": "https://www.visitgalway.ie/events/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-galway-ireland/",
     "listings": [
       "https://thisisgalway.ie/events/"
-    ]
+    ],
+    "tourism": "https://www.visitgalway.ie/events/",
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-galway-ireland/"
   },
-  "waterford": {
-    "tourism": "https://www.waterford.org/events/",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-waterford-ireland/",
-    "listings": [
-      "https://visitwaterford.com/our-events"
-    ]
+  "kerry": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-kerry-ireland/"
+  },
+  "kildare": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-kildare-ireland/"
+  },
+  "kilkenny": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-kilkenny-ireland/"
+  },
+  "laois": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-laois-ireland/"
+  },
+  "leitrim": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-leitrim-ireland/"
   },
   "limerick": {
-    "tourism": "https://www.limerick.ie/discover/eat-see-do/family-fun",
-    "yourdaysout": "https://yourdaysout.com/events-on-in-county-limerick-ireland/",
     "listings": [
       "https://www.limerick.ie/discover/whats-on"
-    ]
+    ],
+    "tourism": "https://www.limerick.ie/discover/eat-see-do/family-fun",
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-limerick-ireland/"
+  },
+  "longford": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-longford-ireland/"
+  },
+  "louth": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-louth-ireland/"
+  },
+  "mayo": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-mayo-ireland/"
+  },
+  "meath": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-meath-ireland/"
+  },
+  "monaghan": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-monaghan-ireland/"
+  },
+  "offaly": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-offaly-ireland/"
+  },
+  "roscommon": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-roscommon-ireland/"
+  },
+  "sligo": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-sligo-ireland/"
+  },
+  "tipperary": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-tipperary-ireland/"
+  },
+  "waterford": {
+    "listings": [
+      "https://visitwaterford.com/our-events"
+    ],
+    "tourism": "https://www.waterford.org/events/",
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-waterford-ireland/"
+  },
+  "westmeath": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-westmeath-ireland/"
+  },
+  "wexford": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-wexford-ireland/"
+  },
+  "wicklow": {
+    "yourdaysout": "https://yourdaysout.com/events-on-in-county-wicklow-ireland/"
   }
 }

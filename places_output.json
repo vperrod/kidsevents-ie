@@ -516,5 +516,895 @@
       "duration_hint": "",
       "seasonal_note": ""
     }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-the-playcentre-kingscourt-indoor-playground-parties-cavan",
+    "kind": "place",
+    "title": "The Playcentre Kingscourt: Indoor Playground & Parties",
+    "slug": "the-playcentre-kingscourt-indoor-playground-parties-cavan",
+    "summary": "Indoor playground in Kingscourt, Cavan with 5 levels, baby and toddler areas, football arena, and birthday parties.",
+    "description": "The Playcentre is a purpose-built indoor play and party centre located on the Kells Road in Kingscourt, County Cavan. It is situated on the Cavan/Meath border and is rated 4.7 based on 18 reviews. The main playground area features 5 levels of fun, including a spiral slide, swings, and punchbags. There is a height restriction of 4'7\" for the playground. The facility includes a dedicated Baby Area for children under 12 months of age, which is free of charge and features a sensory waterbed for tummy time and a ball pool. The Toddler Area caters to children between 1 and 3 years of age, offering a moving carousel, a flashing slide, and numerous ride-ons. A separate football arena is available for older kids and football fanatics. Adults can relax in a modern seating area overlooking the play areas, with a menu serving Italian coffees, herbal teas, fresh pastries, and an extensive hot food menu including chips, cocktail sausages, and chicken nuggets. Birthday parties last two hours, comprising 75 minutes in the play area and 45 minutes in a themed party room chosen from football, disco, or princess options. A dedicated host manages the party. Admission fees are €6 per session for ages 1-3 on weekdays and €7 on weekends, and €7 for ages 4-11 on weekdays, rising to €8 on weekends. Under 12 months is free.",
+    "family_relevant": true,
+    "location": {
+      "name": "The Playcentre",
+      "address": "on the Kells road",
+      "city": "Kingscourt",
+      "county": "Cavan",
+      "region": "Ulster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=The%20Playcentre%2C%20on%20the%20Kells%20road%2C%20Cavan%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9"
+      ],
+      "price_band": "10-25",
+      "setting": "indoor",
+      "activity_types": [
+        "playground",
+        "soft-play",
+        "sports"
+      ],
+      "accessibility": [],
+      "price_detail": "Admission Age 1 - 3 Years Monday-Thursday &euro;6 per session Friday, Saturday, Sunday, Bank Hol. &euro;7 per session Age 4 -11 Years Monday-Thursday &euro;7 per session Friday, Saturday, Sunday, Bank Hol. &euro;8 per session Under 12 Months FREE Prices &euro;200 for up to 10 children and &euro;18 per extra child School Tours Age 3 years (group of 15 or more ) A) &euro;6.00 for one and a half hours play B) &euro;8.00 for 2 hours",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483",
+          "fetched_at": "2026-09-13T23:45:42+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is located in Kingscourt, Cavan.",
+          "quote": "The Playcentre, Kingscourt, Cavan",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "The venue has a 4.7 rating based on 18 reviews.",
+          "quote": "Top Rated 4.7 18 reviews",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "A dedicated party host looks after guests during the party.",
+          "quote": "A dedicated party host will look after you for the duration of your party",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "Adults can relax in a seating area serving coffee and food.",
+          "quote": "adults can relax in our modern seating area which overlooks the play areas and serves a selection of Specialities, Italian coffees, Herbal teas and Fresh pastries as well as an extensive Hot food menu.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "The main playground area has 5 levels of fun.",
+          "quote": "The main playground area features 5 levels of fun",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "There is a height restriction of 4'7\" for the playground.",
+          "quote": "Height restriction of 4&rsquo;7&Prime; applies",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "The Baby Area is for children under 12 months of age and is free.",
+          "quote": "The Baby Area is designed for children under 12 months of age and is free of charge.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "The Toddler Area caters to children between 1 and 3 years of age.",
+          "quote": "The Toddler Area caters for children between 1 and 3 years of age.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "There is a separate football arena for older kids.",
+          "quote": "Separate to the main area is our football arena. It&#39;s a big hit with the football fanatics and older kids.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "Birthday parties include 75 minutes in the play area and 45 minutes in a party room.",
+          "quote": "75 minutes in the play area 45 minutes in the party room of your choice.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        },
+        {
+          "claim": "The price for birthday parties is €200 for up to 10 children.",
+          "quote": "Prices &euro;200 for up to 10 children and &euro;18&nbsp;per extra child",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-13T23:47:15+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-tearaways-pet-farm-activity-centre-tipperary",
+    "kind": "place",
+    "title": "Tearaways Pet Farm & Activity Centre",
+    "slug": "tearaways-pet-farm-activity-centre-tipperary",
+    "summary": "Indoor and outdoor family activities in Tipperary featuring a pet farm, soft play, and party facilities.",
+    "description": "Tearaways Pet Farm & Activity Centre is located in North Tipperary at Clonmona, Rathcabbin. The venue offers indoor and outdoor activities designed to keep families happy and active all year round, regardless of the weather. A key feature is the purpose-built 6,000 square foot indoor activity centre. This space includes slides, crawling tunnels, ball pits, and a separate toddler area. The indoor play structure consists of two levels with a four-lane wave slide, two tunnel slides, cargo nets, and ball pits. Please note that under 3s are not allowed to use the indoor mega slides. Visitors must wear socks, long trousers, and long sleeves to use the indoor facilities; socks can be purchased at the venue. The outdoor facilities include a Pet Farm, an outdoor playground, a sports area, a sledge run, a games area, a go-cart track, and a barrel train. The site houses many friendly animals, including goats, pigs, donkeys, alpacas, llamas, emus, sheep, calves, rabbits, and Scottish Highlanders. The venue caters to groups of all sizes for birthday parties and school tours, with special rates depending on the day of the week. For dining, there is a coffee shop where visitors can relax while children play, alongside a viewing area with comfortable seating. Various hot and cold food and drinks can be purchased. Opening hours are Saturday and Sunday from 11:00 to 18:00, and Wednesday to Sunday during school holidays. The venue is closed on Mondays and Tuesdays.",
+    "family_relevant": true,
+    "location": {
+      "name": "Tearaways Pet Farm & Activity Centre",
+      "address": "Clonmona, Rathcabbin",
+      "city": "",
+      "county": "Tipperary",
+      "region": "Munster",
+      "country": "IE",
+      "lat": 53.100367,
+      "lon": -7.980883,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=53.100367%2C-7.980883",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12"
+      ],
+      "price_band": "10-25",
+      "setting": "both",
+      "activity_types": [
+        "playground",
+        "farm",
+        "soft-play",
+        "zoo-wildlife",
+        "sports",
+        "seasonal",
+        "food-market"
+      ],
+      "accessibility": [],
+      "price_detail": "Adult - €6.00 Child - €12.00",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830",
+          "fetched_at": "2026-09-13T23:47:19+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue offers birthday parties and school tours for groups of all sizes.",
+          "quote": "We cater for groups of all sizes for birthday parties and school tours.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830"
+        },
+        {
+          "claim": "The facility includes an indoor activity centre of 6,000 square feet.",
+          "quote": "We have a purpose built 6,000 square foot indoor activity centre",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830"
+        },
+        {
+          "claim": "The indoor play area includes slides, crawling tunnels, and ball pits.",
+          "quote": "with slides, crawling tunnels, ball pits",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830"
+        },
+        {
+          "claim": "There is a separate toddler area for young children.",
+          "quote": "and a separate toddler area",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830"
+        },
+        {
+          "claim": "The venue has a coffee shop where visitors can relax.",
+          "quote": "Tearaways has a coffee shop for you to relax in whilst your kids play and have fun.",
+          "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830"
+        }
+      ],
+      "confidence": 1.0,
+      "last_checked": "2026-09-13T23:48:30+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Saturday 11:00 - 18:00 Sunday 11:00 - 18:00 Open Wednesday-Sunday during school holidays. Closed Monday & Tuesday.",
+      "duration_hint": "",
+      "seasonal_note": "Open Wednesday-Sunday during school holidays."
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-westgrove-hotel-and-leisure-club-clane-kildare",
+    "kind": "place",
+    "title": "Westgrove Hotel and Leisure Club, Clane",
+    "slug": "westgrove-hotel-and-leisure-club-clane-kildare",
+    "summary": "Family-friendly hotel in Clane with a 20m pool, kids pool, and underground parking.",
+    "description": "Westgrove Hotel and Leisure Club is located in Abbeylands, Clane, Co. Kildare. This 4 Star hotel is within 30 minutes' drive from Dublin City Centre and 40 minutes from Dublin Airport. The venue features a Leisure Club with a 20-metre pool and a Kiddies pool. All guests can enjoy complimentary WiFi in the bedrooms and public areas, along with complimentary underground secure parking. Family rooms include one double bed and one single bed, accommodating a maximum of two adults and up to two children. Camp beds or cots are available upon request and are free of charge. Spacious apartments are also available on-site, featuring separate living rooms, kitchens, and flexible sleeping arrangements. Nearby facilities include a small shopping centre with a supermarket, pharmacy, and hairdressers, as well as a playground located just 5 minutes' walk away. Hotel guests can avail of discounts for nearby attractions such as Kildare Village, the Irish National Stud & Gardens, and Newbridge Silverware. The hotel also offers a variety of local outdoor activities including golf, horse racing, and equestrian pursuits.",
+    "family_relevant": true,
+    "location": {
+      "name": "Westgrove Hotel and Leisure Club",
+      "address": "Abbeylands",
+      "city": "Clane",
+      "county": "Kildare",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Westgrove%20Hotel%20and%20Leisure%20Club%2C%20Abbeylands%2C%20Kildare%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": "https://www.familyfun.ie/"
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12"
+      ],
+      "price_band": "free",
+      "setting": "both",
+      "activity_types": [
+        "swimming",
+        "playground",
+        "sports"
+      ],
+      "accessibility": [],
+      "price_detail": "Camp beds or cots are available upon request and are free of charge",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/westgrove-hotel-kildare/",
+          "fetched_at": "2026-09-13T23:49:55+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is located in Clane, Co. Kildare",
+          "quote": "Westgrove Hotel &amp; Leisure Centre A Family Friendly Hotel in Co. Kildare",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "The venue's address is Abbeylands, Clane, Co. Kildare",
+          "quote": "Address: Abbeylands, Clane, Co. Kildare",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "Guests can avail of discounts at nearby attractions",
+          "quote": "hotel guests can avail of discounts for these",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "The venue provides complimentary WiFi in bedrooms and public areas",
+          "quote": "All guests can enjoy complimentary WiFi in the bedrooms and public areas",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "The venue has a 20-metre pool",
+          "quote": "access to the extensive Leisure Club including 20-metre pool",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "The venue has a Kiddies pool",
+          "quote": "and a Kiddies pool",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "Parking is complimentary and secure underground",
+          "quote": "There is also complimentary underground secure parking",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "Family rooms have one double bed and one single bed",
+          "quote": "Each Family room has one double bed and one single bed",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        },
+        {
+          "claim": "Camps beds or cots are free of charge upon request",
+          "quote": "Camp beds or cots are available upon request and are free of charge",
+          "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-13T23:51:37+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-beyond-the-trees-avondale-wicklow",
+    "kind": "place",
+    "title": "Beyond The Trees Avondale",
+    "slug": "beyond-the-trees-avondale-wicklow",
+    "summary": "1.3km treetop walk, viewing tower, historic house tours, and Ireland's first outdoor wooden marble run.",
+    "description": "Beyond The Trees Avondale is located in Avondale Forest Park, Rathdrum, Co. Wicklow. The venue features a unique 1.3km treetop walk that allows visitors to journey through the forest and high above the canopy. The walk includes multiple activity stations and stories of the historic Avondale Estate. The experience culminates at a 38m high Viewing Tower offering panoramic 360-degree views of the Wicklow Mountains, the Vale of Avoca, and the Avonmore River. Visitors can return to the ground via an optional gigantic 90m spiral slide. At Home with the Parnells offers guided tours of the historic 18th Century Avondale House. These 45-minute tours take place in multiple slots every day and cover the Parnell family heritage, including Charles Stewart Parnell and the forestry school history. The venue also features Ireland's first outdoor wooden marble run, which spans 50 metres and consists of eight interconnected wooden tables designed for hands-on physics learning. A contemporary Seed Café serves locally sourced food with views of the Walled Garden. The site includes an adventurous children's playground, a sensory garden, and forest walking trails. The Treetop Walk, Viewing Tower, and Avondale House are buggy and wheelchair accessible. U18s must be accompanied by an adult, and U6s require adult supervision on the slide.",
+    "family_relevant": true,
+    "location": {
+      "name": "Beyond the Trees Avondale",
+      "address": "Avondale Forest Park Rathdrum Co. Wicklow A67 P303",
+      "city": "Rathdrum",
+      "county": "Wicklow",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Beyond%20the%20Trees%20Avondale%2C%20Avondale%20Forest%20Park%20Rathdrum%20Co.%20Wicklow%20A67%20P303%2C%20Wicklow%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "outdoor",
+      "activity_types": [
+        "adventure-climbing",
+        "nature-reserve",
+        "park",
+        "trail-hike",
+        "playground"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "buggy"
+      ],
+      "price_detail": "",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/beyond-the-trees-avondale/",
+          "fetched_at": "2026-09-13T23:51:37+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is located in Avondale Forest Park, Rathdrum, Co. Wicklow with postcode A67 P303",
+          "quote": "Address: Avondale Forest Park Rathdrum Co. Wicklow A67 P303",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "The telephone number for the venue is 0404 46111",
+          "quote": "Tel.: 0404 46111",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "The Treetop Walk is 1.3km long",
+          "quote": "experience this unique 1.3km treetop walk",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "The Viewing Tower offers 360-degree views",
+          "quote": "panoramic 360-degree views",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "There is a spiral slide that is 90m long",
+          "quote": "gigantic 90m spiral slide",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "Avondale House is an 18th Century historic house",
+          "quote": "historic 18th Century Avondale House",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "Tours of Avondale House are available in multiple 45-minute slots",
+          "quote": "Multiple 45-minute tours available every day",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "The wooden marble run spans 50 metres",
+          "quote": "The run spans 50 metres",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "The marble run consists of eight interconnected wooden tables",
+          "quote": "consists of eight interconnected wooden tables",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        },
+        {
+          "claim": "The Treetop Walk, Viewing Tower and Avondale House are buggy and wheelchair accessible",
+          "quote": "The Treetop Walk, Viewing Tower and Avondale House are all buggy and wheelchair accessible",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-13T23:53:31+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-michael-collins-house-museum-clonakilty-cork",
+    "kind": "place",
+    "title": "Michael Collins House Museum, Clonakilty",
+    "slug": "michael-collins-house-museum-clonakilty-cork",
+    "summary": "Museum in Clonakilty dedicated to Michael Collins, opened in 2016, with guided tours and interactive displays.",
+    "description": "Michael Collins House Museum is located at 7 Emmet Square, Clonakilty, County Cork, Ireland. It is situated in a house built in the 1800s, restored to its original era layout on a Georgian square outside Dublin. The museum, which opened in 2016, is dedicated to Michael Collins, offering insight into his life as a farmer's son, rebel, politician, and soldier, known as 'The Big Fella'. It also explores local patriots like Jeremiah O'Donovan Rossa and the history of Irish independence, including the 1798 Rebellion. The venue features interactive displays, activity sheets, audio-visual presentations, artefacts, and information boards. It is suitable for all ages and levels of interest, promoting a family-friendly atmosphere. Popular with schools and tour groups, it offers curriculum-appropriate tours, age-appropriate worksheets, and bespoke options. Guided tours last approximately one hour for groups or 1.5 hours for school groups. The museum is fully wheelchair accessible and includes baby changing facilities, toilets, and a book and gift shop. Nearby picnic areas and parks are available, with free on-street parking. Coffee, lunch, and dinner offers are available in conjunction with the Emmet Hotel. The museum is open Tuesday to Saturday from 10am to 5pm, with last admission at 4pm.",
+    "family_relevant": true,
+    "location": {
+      "name": "Michael Collins House Museum",
+      "address": "7 Emmet Square, Clonakilty, County Cork, Ireland",
+      "city": "Clonakilty",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Michael%20Collins%20House%20Museum%2C%207%20Emmet%20Square%2C%20Clonakilty%2C%20County%20Cork%2C%20Ireland%2C%20Cork%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "under-10",
+      "setting": "indoor",
+      "activity_types": [
+        "museum",
+        "workshop-class"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "changing-places-toilet"
+      ],
+      "price_detail": "Adult: €6 Students/Senior Citizens: €4 Children: €2 Children under 5 Free Family (2 adults + 2 children U14): €12",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/michael-collins-house-museum-cork/",
+          "fetched_at": "2026-09-13T23:53:32+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "Michael Collins House Museum is located at 7 Emmet Square, Clonakilty, County Cork, Ireland.",
+          "quote": "Address: 7 Emmet Square, Clonakilty, County Cork, Ireland",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "The museum opened in 2016.",
+          "quote": "The museum, which opened in 2016",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "Michael Collins House is dedicated to Michael Collins.",
+          "quote": "Michael Collins House, Clonakilty is a new museum dedicated to Michael Collins.",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "The museum is wheelchair accessible.",
+          "quote": "Fully Wheelchair Accessible",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "There are baby changing facilities available.",
+          "quote": "Baby Changing Facilities",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "The museum has a book and gift shop.",
+          "quote": "Gift and books shop",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "Adult admission is €6.",
+          "quote": "Adult: €6",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "Children under 5 enter for free.",
+          "quote": "Children under 5 Free",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "The museum is open Tuesday to Saturday from 10am-5pm.",
+          "quote": "Tuesday to Saturday 10am-5pm",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        },
+        {
+          "claim": "Teachers and guides go free for school tours.",
+          "quote": "Teachers/Guides go free.",
+          "source_url": "https://www.familyfun.ie/michael-collins-house-museum-cork/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-13T23:55:29+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Tuesday to Saturday 10am-5pm",
+      "duration_hint": "1.5 hours for tour",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-astropark-kids-parties-summer-camps-in-dublin-dublin",
+    "kind": "place",
+    "title": "Astropark: Kids Parties & Summer Camps in Dublin",
+    "slug": "astropark-kids-parties-summer-camps-in-dublin-dublin",
+    "summary": "Multi-activity centres in Coolock and Tallaght offering birthday parties, summer camps, and school tours for children.",
+    "description": "Astropark operates activity centres in Coolock and Tallaght, Dublin. The Coolock location is at Coolock Lane, Dublin 17, and can be contacted at (01) 806 0088. The Tallaght venue is reachable at (01) 459 9822. The centres provide a range of activities for kids and teens, including birthday parties, summer camps, and school tours. Birthday parties are suitable for boys and girls aged six and up, with Bubble Football parties available for ages seven and up. Each party runs for two hours, consisting of 60 minutes of supervised activities on the pitch, 30 minutes for food in a party room, and 30 minutes of unsupervised free play. Options include Bubble Football, NERF AstroWars, Football and Sports Day, Sport and Activity, and Craft and Activity parties. An upgrade for Bubble Football, NERF AstroWars, Football and Sports Day, Sport and Activity, or Craft and Activity parties costs €20 for each additional child, requiring a minimum of 12 children. Summer camps run from 29th June to 28th August 2026, Monday to Friday from 9:00am to 3:00pm. They are designed for boys and girls aged five to 12 and include activities such as football coaching, NERF AstroWars, Bubble Football, dodgeball, uni-hoc, rounders, bouncy castles, and colouring. The camps cost €110 for five days or €90 for four-day weeks during bank holidays. A 5% group discount is available for up to five children. School tours are available at both locations.",
+    "family_relevant": true,
+    "location": {
+      "name": "Astropark",
+      "address": "Astropark Coolock, Coolock Lane, Coolock, Dublin 17 D17 Y998",
+      "city": "Coolock",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Astropark%2C%20Astropark%20Coolock%2C%20Coolock%20Lane%2C%20Coolock%2C%20Dublin%2017%20D17%20Y998%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12"
+      ],
+      "price_band": "10-25",
+      "setting": "both",
+      "activity_types": [
+        "sports",
+        "craft",
+        "seasonal"
+      ],
+      "accessibility": [],
+      "price_detail": "€110 for 5 days or €90 for 4-day weeks (bank holidays)",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/astro-park-tallaght-coolock/",
+          "fetched_at": "2026-09-13T23:55:30+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue has locations in Coolock and Tallaght.",
+          "quote": "With locations in Coolock and Tallaght",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "The Coolock address is Coolock Lane, Coolock, Dublin 17 D17 Y998.",
+          "quote": "Address: Astropark Coolock, Coolock Lane, Coolock, Dublin 17 D17 Y998",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "The Tallaght phone number is (01) 459 9822.",
+          "quote": "Tel.: Tallaght: (01) 459 9822",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "The Coolock phone number is (01) 806 0088.",
+          "quote": "Coolock: (01) 806 0088",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "Birthday parties are for boys and girls aged six and up.",
+          "quote": "Astropark’s Birthday Parties are perfect for boys and girls aged six and up.",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "Birthday parties run for two hours.",
+          "quote": "Each party runs for two hours",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "The Bubble Football upgrade costs €20 for each additional child with a minimum of 12 children.",
+          "quote": "€20 for each additional child (minimum of 12 children)",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "Bubble Football parties are for ages 7 and up.",
+          "quote": "Age 7+",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "Summer camps run from 29th June to 28th August 2026.",
+          "quote": "Running from 29th June to 28th August 2026",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "Summer camps run Monday to Friday from 9:00am to 3:00pm.",
+          "quote": "Monday to Friday from 9:00am to 3:00pm",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        },
+        {
+          "claim": "The cost for Summer camps is €110 for 5 days or €90 for 4-day weeks.",
+          "quote": "The camps are €110 for 5 days or €90 for 4-day weeks (bank holidays)",
+          "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-13T23:57:53+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "Each party runs for two hours",
+      "seasonal_note": "Summer camps run from 29th June to 28th August 2026"
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-glendeer-pet-farm-athlone-westmeath",
+    "kind": "place",
+    "title": "Glendeer Pet Farm, Athlone",
+    "slug": "glendeer-pet-farm-athlone-westmeath",
+    "summary": "Irish tourist board approved pet farm in Athlone with animals, play areas, and seasonal opening times.",
+    "description": "Glendeer Pet Farm is an Irish tourist board approved pet farm located in Athlone, the heart of Ireland. Since opening its gates to the public in April 1991, the farm has been featured on numerous TV programmes and won several awards. Visitors can enjoy interactive animal experiences where they can feed, pet, and hold animals including guinea pigs, chicks, lizards, tortoises, deer, pigs, llamas, alpacas, emus, goats, donkeys, and sheep. The farm also offers cute cuddle baby animals such as kid goats, lambs, and rabbits. There is something for all ages, including a double obstacle course, a maze, a zipwire, a soft play toddler area, and a sand barn with diggers. An 1850s restored cottage and a secluded Fairy Trail are also available. The venue is suitable for any weather with indoor play areas and a large section of animals housed undercover. Facilities include a coffee shop, indoor and outdoor picnic areas, a children's playground, pets corner, toilets, baby changing facilities, a souvenir shop, and ample parking. The farm is wheelchair accessible and caters to groups with additional needs. Opening times run from March 16th to the end of September, closed on Tuesdays and Wednesdays in March, April, and May (excluding Easter Mid Term). Regular hours are Monday to Saturday from 11am to 6pm, and Sunday from 12pm to 6pm.",
+    "family_relevant": true,
+    "location": {
+      "name": "Glendeer Pet Farm",
+      "address": "Drum, Athlone, Co. Westmeath N37 HY39",
+      "city": "Athlone",
+      "county": "Westmeath",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/glendeer-pet-farm/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Glendeer%20Pet%20Farm%2C%20Drum%2C%20Athlone%2C%20Co.%20Westmeath%20N37%20HY39%2C%20Westmeath%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12"
+      ],
+      "price_band": "under-10",
+      "setting": "both",
+      "activity_types": [
+        "farm",
+        "zoo-wildlife",
+        "soft-play",
+        "playground",
+        "trail-hike"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "changing-places-toilet"
+      ],
+      "price_detail": "€10 per person. Children under 18 months are free. Family of 5 is €47 and €7 for any additional children. Group rate is €9 for 20 or more. Season tickets are €50 each. School tour or group appointments can arrive from 10am. For smaller groups entry is €10 per person. Admission is €10 and careers go free.",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/glendeer-pet-farm/",
+          "fetched_at": "2026-09-13T23:57:54+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "Glendeer Pet Farm is an Irish tourist board approved pet farm located in Athlone.",
+          "quote": "Glendeer Pet Farm is an Irish tourist board approved pet farm located in Athlone the heart of Ireland.",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Baby animals available include kid goats, lambs, and rabbits.",
+          "quote": "not to mention all the cute cuddle baby animals such as kid goats, lambs, rabbits and lots more.",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "The farm opened to the public in April 1991.",
+          "quote": "The Glendeer Pet Farm opened its gates to the public in April 1991",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "The farm has been featured on numerous TV programmes and has won several awards.",
+          "quote": "Since the pet farm opened it has been featured on numerous TV programmes and has won several awards.",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Facilities include a double obstacle course, maze, and zipwire.",
+          "quote": "There is something for all ages including the double obstacle course, maze and zipwire",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Opening times are 11am to 6pm Monday to Saturday.",
+          "quote": "Open Mon to Sat 11am to 6pm",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Opening times are 12pm to 6pm on Sunday.",
+          "quote": "and Sun 12pm to 6pm.",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Admission is €10 per person.",
+          "quote": "Glendeer Pet Farm Admission €10 per person",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "A family of 5 costs €47.",
+          "quote": "Family of 5 is €47",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Children under 18 months are free.",
+          "quote": "Children under 18 months are free",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        },
+        {
+          "claim": "Season tickets cost €50 each.",
+          "quote": "they are €50 each.",
+          "source_url": "https://www.familyfun.ie/glendeer-pet-farm/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T00:00:09+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Open Mon to Sat 11am to 6pm and Sun 12pm to 6pm. Open from March 16th to the end of Sept. Closed Tuesdays and Wednesdays in Mar, Apr and May (excluding Easter Mid Term)",
+      "duration_hint": "",
+      "seasonal_note": "Open from March 16th to the end of Sept. Season tickets available for the Summer Season which runs from Mar 16th to the end of Sept"
+    }
   }
 ]

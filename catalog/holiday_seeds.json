@@ -1,0 +1,205 @@
+{
+  "generated_at": "2026-09-13T23:44:57+00:00",
+  "destinations": [
+    {
+      "name": "Benidorm",
+      "country": "ES"
+    },
+    {
+      "name": "Costa del Sol",
+      "country": "ES"
+    },
+    {
+      "name": "Tenerife",
+      "country": "ES"
+    },
+    {
+      "name": "Gran Canaria",
+      "country": "ES"
+    },
+    {
+      "name": "Lanzarote",
+      "country": "ES"
+    },
+    {
+      "name": "Fuerteventura",
+      "country": "ES"
+    },
+    {
+      "name": "Mallorca",
+      "country": "ES"
+    },
+    {
+      "name": "Menorca",
+      "country": "ES"
+    },
+    {
+      "name": "Ibiza",
+      "country": "ES"
+    },
+    {
+      "name": "Costa Brava",
+      "country": "ES"
+    },
+    {
+      "name": "Albufeira",
+      "country": "PT"
+    },
+    {
+      "name": "Algarve",
+      "country": "PT"
+    },
+    {
+      "name": "Faro",
+      "country": "PT"
+    },
+    {
+      "name": "Madeira",
+      "country": "PT"
+    },
+    {
+      "name": "Tenerife South",
+      "country": "ES"
+    },
+    {
+      "name": "Costa Dorada",
+      "country": "ES"
+    },
+    {
+      "name": "Salou",
+      "country": "ES"
+    },
+    {
+      "name": "Magaluf",
+      "country": "ES"
+    },
+    {
+      "name": "Palma",
+      "country": "ES"
+    },
+    {
+      "name": "Alicante",
+      "country": "ES"
+    },
+    {
+      "name": "Rethymno",
+      "country": "GR"
+    },
+    {
+      "name": "Heraklion",
+      "country": "GR"
+    },
+    {
+      "name": "Chania",
+      "country": "GR"
+    },
+    {
+      "name": "Crete",
+      "country": "GR"
+    },
+    {
+      "name": "Rhodes",
+      "country": "GR"
+    },
+    {
+      "name": "Cyprus",
+      "country": "CY"
+    },
+    {
+      "name": "Paphos",
+      "country": "CY"
+    },
+    {
+      "name": "Limassol",
+      "country": "CY"
+    },
+    {
+      "name": "Paphos",
+      "country": "CY"
+    },
+    {
+      "name": "Malaga",
+      "country": "ES"
+    },
+    {
+      "name": "Seville",
+      "country": "ES"
+    },
+    {
+      "name": "Barcelona",
+      "country": "ES"
+    },
+    {
+      "name": "Valencia",
+      "country": "ES"
+    },
+    {
+      "name": "Dubrovnik",
+      "country": "HR"
+    },
+    {
+      "name": "Split",
+      "country": "HR"
+    },
+    {
+      "name": "Zagreb",
+      "country": "HR"
+    },
+    {
+      "name": "Munich",
+      "country": "DE"
+    },
+    {
+      "name": "Berlin",
+      "country": "DE"
+    },
+    {
+      "name": "Paris",
+      "country": "FR"
+    },
+    {
+      "name": "Nice",
+      "country": "FR"
+    },
+    {
+      "name": "Cannes",
+      "country": "FR"
+    },
+    {
+      "name": "Rome",
+      "country": "IT"
+    },
+    {
+      "name": "Florence",
+      "country": "IT"
+    },
+    {
+      "name": "Naples",
+      "country": "IT"
+    },
+    {
+      "name": "Amsterdam",
+      "country": "NL"
+    },
+    {
+      "name": "Brussels",
+      "country": "BE"
+    },
+    {
+      "name": "Prague",
+      "country": "CZ"
+    },
+    {
+      "name": "Budapest",
+      "country": "HU"
+    },
+    {
+      "name": "Malta",
+      "country": "MT"
+    },
+    {
+      "name": "Valletta",
+      "country": "MT"
+    }
+  ]
+}
