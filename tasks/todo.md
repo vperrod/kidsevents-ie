@@ -54,6 +54,13 @@
 - [ ] Search Console (Victor's 3 clicks) + Bing + IndexNow → after delegation
 ## Phase 6 — metrics + SEO (after D)
 ## Phase 7 — public facets + organiser loop
+- [x] one facet panel (age / price / setting / activity with search / county / accessibility / rainy day / near me) mounted into Today, Events, Things to do and Holidays; OR within a category, AND across; full state in the query string, survives reload; real empty state. The old keyword-guessing checkboxes (`data-filter`, `data-holiday-filter`, `data-place-category`) and the now-dead `ageKind()` are gone — they guessed bands from the wording of a description instead of reading the taxonomy
+- [x] `/api/v2/{events,places,holidays}`: the flat rendering view plus each record's `facets` block. `/api/v1/*` and the legacy `/api/*` feeds untouched
+- [x] claim/update link on every on-air record (detail modal for events, card for places/holidays) → `POST /api/claim`, validated, naively rate-limited one-per-listing-per-IP-per-hour, appended to `staged/claims.json` under `output_lock()`; `GET /admin/api/claims` + a list in the admin Settings area
+- [x] 271 → 288 tests green (17 new in `test_claims_api.py`); both viewports verified in a real browser (filter + URL + reload, zero-results, near-me granted and denied, claim from a card and from an event modal, admin list), zero console errors, zero failed requests; two real claims stored end to end
+- [ ] no email is sent — the outbound half of §4.6 (`hello@smalldays.ie` writes to the organiser when a listing goes on air) needs the domain and mailboxes, still blocked on the IEDR activation
+- [ ] "Near me" sorts only the 2 records that currently carry lat/lon; the rest keep their order behind them. It gets useful as `links.py`/`media.py` and the factory fill coordinates in
+- [ ] county select is built from the counties actually on air (13 today), not all 32 — a clickable province map was explicitly a nice-to-have and is not built; the existing Holidays province map now writes the same shared `region` state
 
 ## Review notes
 - (append as phases close)

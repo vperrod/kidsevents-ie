@@ -929,6 +929,7 @@
           places: () => req("/api/places"),
           holidays: () => req("/api/holidays"),
           staged: () => req("/admin/api/social/staged"),
+          claims: () => req("/admin/api/claims").then((d) => (d && d.claims) || []),
           runPipeline: () => post("/admin/api/pipeline/run", {}),
           approve: (source_url, hint) => post("/admin/api/social/approve", { source_url, hint }),
           reject: (source_url, note) => post("/admin/api/social/reject", { source_url, note }),
@@ -1169,6 +1170,7 @@
           queue: { view: "queue", groupPage: {}, size: 25, open: null, acted: [], restored: new Set() },
           log: { q: "" },
           photos: { page: 1, size: 25 },
+          claims: { page: 1, size: 25 },
         };
         const store = {};
         const RESOURCES = {
@@ -1182,6 +1184,7 @@
           places: Api.places,
           holidays: Api.holidays,
           staged: Api.staged,
+          claims: Api.claims,
         };
         const ok = (k) => store[k] && store[k].ok;
         const val = (k, fallback) => (ok(k) ? store[k].data : fallback);
@@ -2085,7 +2088,53 @@
               ${row("Quality thresholds", unknown)}
               ${row("Sources configured", esc(String(sources.length)))}
             </tbody></table></div>
-            <p class="notice" style="margin-top:14px">This page is read-only. Editing these — auto-approve, thresholds, the facet and tag lists — arrives with phase 1's facet file.</p>`;
+            <p class="notice" style="margin-top:14px">This page is read-only. Editing these — auto-approve, thresholds, the facet and tag lists — arrives with phase 1's facet file.</p>
+            <div class="section" id="claims-section"></div>`;
+          renderClaims();
+        }
+
+        /* ───────────── organiser claims (inbound half of §4.6) ───────────── */
+        const RELATIONSHIP = { owner: "Owns it", manager: "Manages or works there", other: "Other" };
+        function renderClaims() {
+          const el = $("#claims-section");
+          if (!el) return;
+          if (!ok("claims")) {
+            el.innerHTML = `<h2>Organiser claims</h2>${failed("claims", "the organiser claims")}`;
+            return;
+          }
+          const all = val("claims", []);
+          const size = S.claims.size;
+          S.claims.page = Math.min(S.claims.page, pageCount(all.length, size));
+          const page = all.slice((S.claims.page - 1) * size, S.claims.page * size);
+          el.innerHTML = `
+            <h2>Organiser claims</h2>
+            <p class="sub">Venues telling us about their own listing, newest first. Nothing is emailed out yet — reply from your own mailbox until <code>hello@smalldays.ie</code> exists.</p>
+            ${
+              all.length
+                ? `<div class="table-wrap"><table><thead><tr>
+                     <th>Received</th><th>Listing</th><th>From</th><th>Relationship</th><th>Photos</th><th>What needs to change</th>
+                   </tr></thead><tbody>
+                   ${page
+                     .map(
+                       (c) => `<tr>
+                         <td>${esc(stamp(c.received_at))}</td>
+                         <td>${esc(txt(c.record_title))}${
+                           c.source_url
+                             ? `<br><a href="${esc(c.source_url)}" target="_blank" rel="noopener noreferrer" class="small">source</a>`
+                             : ""
+                         }</td>
+                         <td>${esc(txt(c.name))}<br><a href="mailto:${esc(c.email)}" class="small">${esc(txt(c.email))}</a></td>
+                         <td>${esc(RELATIONSHIP[c.relationship] || txt(c.relationship))}</td>
+                         <td>${c.has_photos ? "Offered" : DASH}</td>
+                         <td>${esc(txt(c.message))}</td>
+                       </tr>`,
+                     )
+                     .join("")}
+                   </tbody></table></div>
+                   ${pager("claims", S.claims.page, all.length, size)}`
+                : `<p class="notice">No organiser has written in yet. The form is live on every listing.</p>`
+            }`;
+          wirePager(el, "claims", S.claims, all.length, renderClaims);
         }
 
         /* ───────────── pager wiring (shared) ───────────── */

@@ -299,6 +299,44 @@ current front end reads:
 }
 ```
 
+`/api/v2/events`, `/api/v2/places` and `/api/v2/holidays` serve that same flat
+shape plus the record's `id` and a `facets` block — the taxonomy, the county
+and the coordinates the public filter panel reads. That is what `web/index.html`
+loads; `/api/v1/*` (the whole contract record) and `/api/events` &c. (the flat
+view alone) are unchanged.
+
+```json
+"facets": {
+  "age_bands": ["0-2", "3-5"], "price_band": "free", "setting": "indoor",
+  "activity_types": ["library"], "accessibility": ["buggy"],
+  "county": "Dublin", "region": "Leinster", "lat": 53.3441, "lon": -6.2527
+}
+```
+
+### Public filters
+
+One facet panel, mounted into Today, Events, Things to do and Holidays, driven
+by those `facets` blocks: age band, price band, setting, activity type (the 20
+values in `catalog/facets.json`, with a search box), county, accessibility,
+plus "Rainy day" (setting = indoor) and "Near me" (`navigator.geolocation` and
+a haversine against each record's own coordinates — no mapping service, and a
+no-op if the browser refuses). Selections OR inside a category and AND across
+categories, and the whole state lives in the query string, so
+`?price=free&age=0-2&setting=indoor&tab=places` is a shareable, reloadable
+view. Filtering to nothing shows a real empty state, never a blank screen.
+
+### Organiser claims
+
+Every on-air record carries a "Is this your venue? Claim or update this
+listing" link — in the detail modal for events, on the card for places and
+holidays. `POST /api/claim` validates (email shape, a relationship from
+`owner|manager|other`, a non-empty message), refuses a second claim on the same
+listing from the same IP within the hour, and appends the submission to
+`staged/claims.json` under the shared output lock. `GET /admin/api/claims`
+lists them newest first and the admin Settings area renders them. **Nothing is
+emailed**: the outbound half of the organiser loop (`hello@smalldays.ie` writing
+to an organiser when a listing goes on air) waits on the domain and mailboxes.
+
 ### Migration
 
 `migrate_contract.py` maps the pre-contract records onto the contract through
@@ -354,7 +392,7 @@ kidsevents-ie/
 ├── sources.json             # curated listing URLs per county
 ├── web/                     # index.html (public) + admin.html
 ├── web/media/               # hero photos, git-ignored, served at /media/… (media_index.json)
-├── staged/                  # candidates.json, social_candidates.json, needs_input.json
+├── staged/                  # candidates.json, social_candidates.json, needs_input.json, claims.json
 ├── systemd/                 # unit examples
 └── events_output.json · places_output.json · holidays_output.json
 ```

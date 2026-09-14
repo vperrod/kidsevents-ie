@@ -18,8 +18,9 @@ firebase-service-account*.json
 # Scraper output
 events_output.json
 
-# Social review queue (runtime state)
+# Social review queue and organiser claims (runtime state, both under staged/)
 staged/
+staged/claims.json
 
 # One-shot re-research ledger (runtime state)
 recatalog_progress.json

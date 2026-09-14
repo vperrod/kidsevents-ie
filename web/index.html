@@ -461,6 +461,121 @@
         border-color: var(--pine);
         color: #fff;
       }
+      /* One facet panel, mounted into every browse screen. A chip is a
+         two-state button rather than a checkbox because the same control has
+         to read as pressed on a phone, in a sidebar and inside a summary. */
+      .facets {
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+      }
+      .facets > b {
+        display: block;
+        margin-bottom: 8px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .chip {
+        min-height: 34px;
+        padding: 6px 10px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--pine);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .chip[aria-pressed="true"] {
+        background: var(--pine);
+        border-color: var(--pine);
+        color: #fff;
+      }
+      .chip[hidden] {
+        display: none;
+      }
+      .facetsearch,
+      .facetselect {
+        width: 100%;
+        min-height: 42px;
+        margin-bottom: 8px;
+        padding: 8px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--ink);
+        font: inherit;
+      }
+      .chipscroll {
+        max-height: 176px;
+        overflow: auto;
+      }
+      .todayfilters {
+        margin: 18px 0 0;
+        padding: 12px 15px;
+        border: 1px solid var(--line);
+        background: var(--mist);
+      }
+      .todayfilters > summary {
+        font-weight: 700;
+        color: var(--pine);
+        cursor: pointer;
+      }
+      .claimlink {
+        display: inline-block;
+        margin-top: 14px;
+      }
+      .claimform label {
+        display: block;
+        margin-bottom: 16px;
+        font-weight: 700;
+      }
+      .claimform input[type="text"],
+      .claimform input[type="email"],
+      .claimform select,
+      .claimform textarea {
+        display: block;
+        width: 100%;
+        margin-top: 6px;
+        padding: 11px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        color: var(--ink);
+        font: inherit;
+      }
+      .claimcheck {
+        font-weight: 400;
+      }
+      .claimcheck input {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        accent-color: var(--pine);
+        vertical-align: -3px;
+      }
+      .claimnote,
+      .claimintro {
+        color: var(--quiet);
+        max-width: 62ch;
+      }
+      .claimerror {
+        padding: 11px 13px;
+        border-left: 3px solid #a3301f;
+        background: var(--mist);
+        color: #a3301f;
+      }
+      .claimform button[type="submit"] {
+        min-height: 48px;
+        padding: 12px 22px;
+        border: 0;
+        background: var(--pine);
+        color: #fff;
+        font-weight: 700;
+      }
+      .claimdone {
+        padding: 20px;
+        border-left: 3px solid var(--leaf);
+        background: var(--mist);
+      }
       .resultshead {
         display: flex;
         justify-content: space-between;
@@ -1468,6 +1583,10 @@
             </div>
             <button class="daynext" data-page="find">Browse all ideas</button>
           </div>
+          <details class="todayfilters">
+            <summary id="todayFilterSummary">Refine what you see</summary>
+            <div data-facets></div>
+          </details>
           <div class="homegrid">
             <article class="lead">
               <button
@@ -1536,53 +1655,7 @@
                   </button>
                 </div>
               </div>
-              <div class="filtergroup">
-                <b>Location</b
-                ><label
-                  ><input type="checkbox" data-filter="dublin" /> Dublin</label
-                ><label><input type="checkbox" data-filter="cork" /> Cork</label
-                ><label
-                  ><input type="checkbox" data-filter="galway" /> Galway</label
-                >
-              </div>
-              <div class="filtergroup">
-                <b>What kind of day?</b
-                ><label><input type="checkbox" data-filter="free" /> Free</label
-                ><label><input type="checkbox" data-filter="paid" /> Paid</label
-                ><label
-                  ><input type="checkbox" data-filter="indoor" /> Indoor</label
-                ><label
-                  ><input type="checkbox" data-filter="outdoor" />
-                  Outdoor</label
-                ><label
-                  ><input type="checkbox" data-filter="museum" /> Museum</label
-                ><label
-                  ><input type="checkbox" data-filter="workshop" />
-                  Workshop</label
-                ><label
-                  ><input type="checkbox" data-filter="performance" /> Show or
-                  performance</label
-                >
-              </div>
-              <div class="filtergroup">
-                <b>Age guidance</b
-                ><label
-                  ><input type="checkbox" data-filter="toddlers" />
-                  Toddlers</label
-                ><label
-                  ><input type="checkbox" data-filter="preschool" />
-                  Preschool</label
-                ><label
-                  ><input type="checkbox" data-filter="school-age" /> School
-                  age</label
-                ><label
-                  ><input type="checkbox" data-filter="all-ages" /> All
-                  ages</label
-                >
-              </div>
-              <button class="linkbutton" id="clearFilters">
-                Clear filters
-              </button>
+              <div data-facets></div>
             </aside>
             <div class="results">
               <button
@@ -1639,32 +1712,7 @@
             <div class="holidayfilters">
               <h2>Choose the shape of the day.</h2>
               <p id="holidayResultText" role="status" aria-live="polite">Loading holiday ideas…</p>
-              <div class="filtergroup">
-                <b>Budget</b
-                ><label
-                  ><input type="checkbox" data-holiday-filter="free" /> Has a
-                  free option</label
-                ><label
-                  ><input type="checkbox" data-holiday-filter="paid" /> Ticketed
-                  option</label
-                >
-              </div>
-              <div class="filtergroup">
-                <b>Type</b
-                ><label
-                  ><input type="checkbox" data-holiday-filter="nature" />
-                  Nature</label
-                ><label
-                  ><input type="checkbox" data-holiday-filter="indoor" />
-                  Indoor</label
-                ><label
-                  ><input type="checkbox" data-holiday-filter="activity" />
-                  Activity</label
-                >
-              </div>
-              <button class="linkbutton" id="clearHolidayFilters">
-                Show all places
-              </button>
+              <div data-facets></div>
             </div>
           </div>
           <div class="holidaycards" id="holidayCards"></div>
@@ -1679,10 +1727,7 @@
           </p>
           <div class="holidayfilters">
             <p id="placeResultText" role="status" aria-live="polite">Loading places…</p>
-            <div class="filtergroup" id="placeCategoryFilters"></div>
-            <button class="linkbutton" id="clearPlaceFilters">
-              Show all places
-            </button>
+            <div data-facets></div>
           </div>
           <div class="holidaycards" id="placeCards"></div>
         </section>
@@ -1791,6 +1836,70 @@
           description and link back to the page where the event was captured.
           Always confirm timing and availability with the organiser.
         </p>
+        <button class="linkbutton claimlink" id="detailClaim" type="button">
+          Is this your venue? Claim or update this listing
+        </button>
+      </div>
+    </section>
+    <section
+      class="detail"
+      id="claim"
+      role="dialog"
+      aria-modal="true"
+      aria-hidden="true"
+      aria-labelledby="claimTitle"
+    >
+      <div class="detailbar">
+        <button class="back" id="closeClaim" type="button">
+          ← Back to ideas
+        </button>
+      </div>
+      <div class="detailinner">
+        <p class="eyebrow" id="claimFor"></p>
+        <h2 id="claimTitle">Claim or update this listing.</h2>
+        <p class="claimintro">
+          You know this place better than we do. Tell us what is wrong or
+          missing and we will check it against the source before we change it.
+        </p>
+        <form class="claimform" id="claimForm" novalidate>
+          <label
+            >Your name<input id="claimName" type="text" autocomplete="name"
+          /></label>
+          <label
+            >Email<input id="claimEmail" type="email" autocomplete="email"
+          /></label>
+          <label
+            >Your relationship to the venue<select id="claimRelationship">
+              <option value="owner">I own it</option>
+              <option value="manager">I manage or work there</option>
+              <option value="other">Something else</option>
+            </select></label
+          >
+          <label
+            >What needs to change?<textarea
+              id="claimMessage"
+              rows="6"
+              placeholder="Opening hours, prices, ages, the description — anything that is wrong or missing."
+            ></textarea
+          ></label>
+          <label class="claimcheck"
+            ><input type="checkbox" id="claimPhotos" /> I have photos I can
+            share</label
+          >
+          <p class="claimnote">
+            Send us a photo and, with your say-so, we may publish it on your
+            listing with a credit to you. We never take photographs from your
+            website or your social accounts without asking first.
+          </p>
+          <p class="claimerror" id="claimError" role="alert" hidden></p>
+          <button type="submit" id="claimSubmit">Send this to Small Days</button>
+        </form>
+        <div class="claimdone" id="claimDone" tabindex="-1" hidden>
+          <p id="claimDoneText"></p>
+          <button class="linkbutton" type="button" data-close-claim>
+            Back to ideas
+          </button>
+        </div>
       </div>
     </section>
     <div class="toast" id="toast" aria-live="polite" hidden></div>
@@ -1801,10 +1910,10 @@
         saved = JSON.parse(localStorage.getItem("smalldays-saved") || "[]"),
         current = null,
         detailTrigger = null,
+        claimFor = null,
+        lead = null,
         holidays = [],
-        holidayRegion = "",
         places = [],
-        placeCategory = "",
         calendarMode = "";
       const clean = (v) =>
         String(v || "")
@@ -1825,6 +1934,290 @@
             })[c],
         );
       const key = (e) => e.url || `${e.title}|${e.start_date}|${e.city}`;
+      /* ── facet filters ───────────────────────────────────────────────────
+         One panel, one state object, mounted into every browse screen. The
+         vocabulary is catalog/facets.json, served on each record's `facets`
+         block by /api/v2/*; nothing here guesses a band out of the wording of
+         a description the way the old keyword checkboxes did. Selections OR
+         inside a category and AND across categories, and the whole state
+         lives in the query string so a filtered view is a shareable link. */
+      const FACET_GROUPS = {
+        age: {
+          label: "Ages",
+          field: "age_bands",
+          values: [
+            ["0-2", "0–2"],
+            ["3-5", "3–5"],
+            ["6-9", "6–9"],
+            ["10-12", "10–12"],
+            ["13+", "13+"],
+          ],
+        },
+        price: {
+          label: "Price",
+          field: "price_band",
+          values: [
+            ["free", "Free"],
+            ["under-10", "Under €10"],
+            ["10-25", "€10–25"],
+            ["25-plus", "€25+"],
+          ],
+        },
+        setting: {
+          label: "Indoors or out",
+          field: "setting",
+          values: [
+            ["indoor", "Indoor"],
+            ["outdoor", "Outdoor"],
+            ["both", "Both"],
+          ],
+        },
+        activity: {
+          label: "What kind of thing",
+          field: "activity_types",
+          search: "Search activities",
+          values: [
+            ["playground", "Playground"],
+            ["park", "Park"],
+            ["museum", "Museum"],
+            ["farm", "Farm"],
+            ["soft-play", "Soft play"],
+            ["zoo-wildlife", "Zoo & wildlife"],
+            ["trail-hike", "Trail & hike"],
+            ["swimming", "Swimming"],
+            ["water-sports", "Water sports"],
+            ["adventure-climbing", "Adventure & climbing"],
+            ["workshop-class", "Workshop or class"],
+            ["festival", "Festival"],
+            ["theatre-show", "Theatre & shows"],
+            ["cinema", "Cinema"],
+            ["library", "Library"],
+            ["craft", "Craft"],
+            ["sports", "Sports"],
+            ["seasonal", "Seasonal"],
+            ["food-market", "Food market"],
+            ["nature-reserve", "Nature reserve"],
+          ],
+        },
+        access: {
+          label: "Accessibility",
+          field: "accessibility",
+          values: [
+            ["wheelchair", "Wheelchair"],
+            ["step-free", "Step-free"],
+            ["buggy", "Buggy friendly"],
+            ["changing-places-toilet", "Changing Places toilet"],
+            ["sensory-friendly", "Sensory friendly"],
+            ["elder-friendly", "Elder friendly"],
+          ],
+        },
+      };
+      const F = {
+        age: [],
+        price: [],
+        setting: [],
+        activity: [],
+        access: [],
+        county: "",
+        region: "",
+        near: false,
+      };
+      let here = null; // {lat, lon} once the browser shares a position
+      const recordIndex = new Map();
+      const facetsOf = (item) => item.facets || {};
+      const activeCount = () =>
+        Object.keys(FACET_GROUPS).reduce((n, g) => n + F[g].length, 0) +
+        (F.county ? 1 : 0) +
+        (F.region ? 1 : 0) +
+        (F.near ? 1 : 0);
+      function matchesFacets(item) {
+        const f = facetsOf(item);
+        const anyOf = (chosen, have) =>
+          !chosen.length || chosen.some((v) => (have || []).includes(v));
+        // A record marked "both" is genuinely indoor and genuinely outdoor, so
+        // it answers either question; only "Both" asks for that record alone.
+        const settingOk =
+          !F.setting.length ||
+          F.setting.some((v) =>
+            v === "both" ? f.setting === "both" : f.setting === v || f.setting === "both",
+          );
+        return (
+          anyOf(F.age, f.age_bands) &&
+          anyOf(F.activity, f.activity_types) &&
+          anyOf(F.access, f.accessibility) &&
+          settingOk &&
+          (!F.price.length || F.price.includes(f.price_band)) &&
+          (!F.county || f.county === F.county) &&
+          (!F.region || f.region === F.region)
+        );
+      }
+      // Straight-line kilometres, computed in the browser from the record's own
+      // coordinates — no geocoding service, no map key.
+      function distanceKm(item) {
+        const f = facetsOf(item);
+        if (!here || f.lat == null || f.lon == null) return Infinity;
+        const rad = (d) => (d * Math.PI) / 180;
+        const dLat = rad(Number(f.lat) - here.lat),
+          dLon = rad(Number(f.lon) - here.lon);
+        const a =
+          Math.sin(dLat / 2) ** 2 +
+          Math.cos(rad(here.lat)) *
+            Math.cos(rad(Number(f.lat))) *
+            Math.sin(dLon / 2) ** 2;
+        return 6371 * 2 * Math.asin(Math.min(1, Math.sqrt(a)));
+      }
+      function byDistance(list) {
+        if (!F.near || !here) return list;
+        // Records with no coordinates all score Infinity, and Infinity minus
+        // Infinity is NaN — an invalid comparator that may reorder them
+        // arbitrarily. Equal distances compare equal and keep their order.
+        return [...list].sort((a, b) => {
+          const near = distanceKm(a),
+            far = distanceKm(b);
+          return near === far ? 0 : near - far;
+        });
+      }
+      function askForLocation() {
+        if (!navigator.geolocation) {
+          notice("This browser cannot share a location.");
+          return;
+        }
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            here = {
+              lat: position.coords.latitude,
+              lon: position.coords.longitude,
+            };
+            F.near = true;
+            applyFilters();
+          },
+          () => {
+            here = null;
+            F.near = false;
+            applyFilters();
+            notice("Location not shared — showing the usual order.");
+          },
+          { timeout: 8000, maximumAge: 300000 },
+        );
+      }
+      function readFilterUrl() {
+        const params = new URLSearchParams(location.search);
+        const list = (name) =>
+          (params.get(name) || "")
+            .split(",")
+            .map((v) => v.trim())
+            .filter(Boolean);
+        Object.keys(FACET_GROUPS).forEach((group) => {
+          const allowed = FACET_GROUPS[group].values.map(([v]) => v);
+          F[group] = list(group).filter((v) => allowed.includes(v));
+        });
+        F.county = params.get("county") || "";
+        F.region = params.get("region") || "";
+        F.near = params.get("near") === "1";
+        $("#searchInput").value = params.get("q") || "";
+        $("#calendarDate").value = params.get("date") || "";
+        calendarMode = params.get("when") === "weekend" ? "weekend" : "";
+        return params.get("tab") || "";
+      }
+      function writeFilterUrl() {
+        const params = new URLSearchParams();
+        Object.keys(FACET_GROUPS).forEach((group) => {
+          if (F[group].length) params.set(group, F[group].join(","));
+        });
+        if (F.county) params.set("county", F.county);
+        if (F.region) params.set("region", F.region);
+        if (F.near) params.set("near", "1");
+        const q = $("#searchInput").value.trim();
+        if (q) params.set("q", q);
+        if ($("#calendarDate").value) params.set("date", $("#calendarDate").value);
+        if (calendarMode) params.set("when", calendarMode);
+        const page = $(".screen.active")?.id;
+        if (page && page !== "today") params.set("tab", page);
+        const query = params.toString();
+        history.replaceState(
+          {},
+          "",
+          location.pathname + (query ? `?${query}` : "") + location.hash,
+        );
+      }
+      function facetPanelHtml() {
+        const group = (name) => {
+          const spec = FACET_GROUPS[name];
+          const chips = spec.values
+            .map(
+              ([value, label]) =>
+                `<button type="button" class="chip" data-chip data-group="${name}" data-value="${esc(value)}" data-label="${esc(label.toLowerCase())}" aria-pressed="false">${esc(label)}</button>`,
+            )
+            .join("");
+          return `<div class="facets"><b>${esc(spec.label)}</b>${
+            spec.search
+              ? `<input class="facetsearch" type="search" data-chip-search="${name}" placeholder="${esc(spec.search)}" aria-label="${esc(spec.search)}" />`
+              : ""
+          }<div class="chips${spec.search ? " chipscroll" : ""}">${chips}</div></div>`;
+        };
+        return `<div class="facets"><b>Quick picks</b><div class="chips">
+            <button type="button" class="chip" data-quick="rainy" aria-pressed="false">Rainy day</button
+            ><button type="button" class="chip" data-quick="near" aria-pressed="false">Near me</button>
+          </div></div>
+          ${group("age")}${group("price")}${group("setting")}${group("activity")}
+          <div class="facets"><b>County</b><select class="facetselect" data-county aria-label="County"><option value="">Anywhere in Ireland</option></select></div>
+          ${group("access")}
+          <div class="facets"><button class="linkbutton" type="button" data-clear-facets>Clear filters</button></div>`;
+      }
+      function fillCounties() {
+        const counties = [
+          ...new Set(
+            [...events, ...places, ...holidays]
+              .map((item) => facetsOf(item).county)
+              .filter(Boolean),
+          ),
+        ].sort();
+        $$("[data-county]").forEach((select) => {
+          select.innerHTML =
+            '<option value="">Anywhere in Ireland</option>' +
+            counties
+              .map((c) => `<option value="${esc(c)}">${esc(c)}</option>`)
+              .join("");
+          select.value = counties.includes(F.county) ? F.county : "";
+        });
+        if (F.county && !counties.includes(F.county)) F.county = "";
+      }
+      function syncPanels() {
+        $$("[data-chip]").forEach((chip) =>
+          chip.setAttribute(
+            "aria-pressed",
+            F[chip.dataset.group].includes(chip.dataset.value),
+          ),
+        );
+        $$('[data-quick="rainy"]').forEach((b) =>
+          b.setAttribute("aria-pressed", F.setting.includes("indoor")),
+        );
+        $$('[data-quick="near"]').forEach((b) =>
+          b.setAttribute("aria-pressed", F.near),
+        );
+        $$("[data-county]").forEach((s) => (s.value = F.county));
+        $$(".mapspot").forEach((spot) =>
+          spot.classList.toggle("active", spot.dataset.region === F.region),
+        );
+        const count = activeCount();
+        $("#todayFilterSummary").textContent = count
+          ? `Refine what you see — ${count} filter${count === 1 ? "" : "s"} on`
+          : "Refine what you see";
+      }
+      const NOTHING_MATCHES =
+        '<p class="empty">Nothing matches — try widening your filters. <button class="linkbutton" type="button" data-clear-facets>Clear filters</button></p>';
+      function applyFilters() {
+        syncPanels();
+        writeFilterUrl();
+        render();
+        renderHolidays();
+        renderPlaces();
+      }
+      function toggleFacet(group, value) {
+        F[group] = F[group].includes(value)
+          ? F[group].filter((v) => v !== value)
+          : [...F[group], value];
+      }
       // Anything that becomes an href has to survive this: only http(s) links
       // are rendered as links, everything else falls back to plain text.
       function safeUrl(value) {
@@ -1938,18 +2331,6 @@
         );
         return match ? `Ages ${match[1].replace(/\s/g, "")}` : "Ages to check";
       }
-      function ageKind(e) {
-        const age = ageLabel(e).toLowerCase(),
-          numbers = age.match(/\d+/g)?.map(Number) || [],
-          youngest = numbers[0];
-        if (/all ages|family/.test(age)) return "all-ages";
-        if (/toddler|baby|under 3/.test(age) || youngest <= 3)
-          return "toddlers";
-        if (/preschool|pre-school/.test(age) || youngest <= 5)
-          return "preschool";
-        if (numbers.length || /kids|children/.test(age)) return "school-age";
-        return "";
-      }
       // The backend score is a completeness score, so it may never read higher
       // than the fields actually present: a listing still showing "to check"
       // placeholders cannot claim 100%.
@@ -1997,12 +2378,32 @@
         let selected = filtered();
         $("#resultsList").innerHTML = selected.length
           ? selected.map(eventRow).join("")
-          : '<p class="empty">No events match those filters. Try clearing one.</p>';
-        $("#resultText").textContent =
-          `${selected.length} event${selected.length === 1 ? "" : "s"} to consider`;
-        $("#todayList").innerHTML =
-          events.slice(1, 4).map(eventRow).join("") ||
-          '<p class="empty">No further listings yet.</p>';
+          : NOTHING_MATCHES;
+        $("#resultText").textContent = selected.length
+          ? `${selected.length} event${selected.length === 1 ? "" : "s"} to consider${
+              F.near && here ? ", nearest first" : ""
+            }`
+          : "Nothing matches those filters.";
+        // Today runs on the same selection, so a shared filtered link opens on
+        // a front page that agrees with the list behind it.
+        lead = selected[0] || null;
+        $("#leadTitle").textContent = lead
+          ? clean(lead.title)
+          : events.length
+            ? "Nothing matches those filters."
+            : "Small days are loading.";
+        $("#leadMeta").textContent = lead
+          ? shortMeta(lead)
+          : "Try widening your filters";
+        $("#leadCopy").textContent = lead
+          ? clean(lead.description).slice(0, 190) +
+            (clean(lead.description).length > 190 ? "…" : "")
+          : "Clear a filter or two and the day comes back.";
+        $("#openLead").hidden = !lead;
+        $("#todayList").innerHTML = selected.length
+          ? selected.slice(1, 4).map(eventRow).join("") ||
+            '<p class="empty">No further listings match.</p>'
+          : NOTHING_MATCHES;
         let own = events.filter((e) => saved.includes(key(e)));
         $("#savedCount").textContent = own.length ? `(${own.length})` : "";
         $("#savedTitle").textContent = own.length
@@ -2023,47 +2424,20 @@
       }
       function filtered() {
         let q = $("#searchInput").value.trim().toLowerCase(),
-          on = [...$$("[data-filter]:checked")].map((x) => x.dataset.filter),
           selectedDate = $("#calendarDate").value;
-        return events.filter((e) => {
-          let hay = eventText(e),
-            date = String(e.start_date || e.date || "").slice(0, 10),
-            weekday = date ? new Date(`${date}T12:00:00`).getDay() : -1;
-          const dateMatches = selectedDate
-            ? date === selectedDate
-            : calendarMode === "weekend"
-              ? [0, 6].includes(weekday)
-              : true;
-          return (
-            (!q || hay.includes(q)) &&
-            dateMatches &&
-            on.every((f) =>
-              f === "free"
-                ? priceLabel(e) === "Free"
-                : f === "paid"
-                  ? priceLabel(e) !== "Free" &&
-                    priceLabel(e) !== "Cost to check"
-                  : f === "indoor"
-                    ? eventKinds(e).includes("Indoor")
-                    : f === "outdoor"
-                      ? eventKinds(e).includes("Outdoor")
-                      : f === "museum"
-                        ? eventKinds(e).includes("Museum")
-                        : f === "workshop"
-                          ? eventKinds(e).includes("Workshop")
-                          : f === "performance"
-                            ? eventKinds(e).includes("Performance")
-                            : [
-                                  "toddlers",
-                                  "preschool",
-                                  "school-age",
-                                  "all-ages",
-                                ].includes(f)
-                              ? ageKind(e) === f
-                              : hay.includes(f),
-            )
-          );
-        });
+        return byDistance(
+          events.filter((e) => {
+            let hay = eventText(e),
+              date = String(e.start_date || e.date || "").slice(0, 10),
+              weekday = date ? new Date(`${date}T12:00:00`).getDay() : -1;
+            const dateMatches = selectedDate
+              ? date === selectedDate
+              : calendarMode === "weekend"
+                ? [0, 6].includes(weekday)
+                : true;
+            return (!q || hay.includes(q)) && dateMatches && matchesFacets(e);
+          }),
+        );
       }
       function holidayMapUrl(item) {
         const query =
@@ -2094,100 +2468,62 @@
       }
       function placeCard(item, eyebrowParts) {
         const eyebrow = eyebrowParts.filter(Boolean).map(clean).join(" · ");
-        return `<article class="holidaycard">${cardHero(item)}${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks">${linkRow(item)}</div></article>`;
+        return `<article class="holidaycard">${cardHero(item)}${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks">${linkRow(item)}</div><button class="linkbutton claimlink" type="button" data-claim="${esc(claimKey(item))}">Is this your venue? Claim or update this listing</button></article>`;
       }
-      function filteredHolidays() {
-        const filters = $$("[data-holiday-filter]:checked").map(
-          (input) => input.dataset.holidayFilter,
-        );
-        return holidays.filter((item) => {
-          const text = [
-            item.category,
-            item.description,
-            item.price_range,
-            item.age_group,
-          ]
-            .join(" ")
-            .toLowerCase();
-          return (
-            (!holidayRegion || item.region === holidayRegion) &&
-            filters.every((filter) =>
-              filter === "free"
-                ? /free/.test(item.price_range.toLowerCase())
-                : filter === "paid"
-                  ? /paid|ticket/.test(item.price_range.toLowerCase())
-                  : text.includes(filter),
-            )
-          );
-        });
+      const claimKey = (item) => item.id || item.source_url || item.title || "";
+      function indexRecord(item) {
+        recordIndex.set(claimKey(item), item);
       }
       function renderHolidays() {
-        const selected = filteredHolidays();
+        const selected = byDistance(holidays.filter(matchesFacets));
         $("#holidayResultText").textContent = selected.length
-          ? `${selected.length} place${selected.length === 1 ? "" : "s"} to consider${holidayRegion ? ` in ${holidayRegion}` : ""}.`
-          : "No places match that combination yet.";
+          ? `${selected.length} place${selected.length === 1 ? "" : "s"} to consider${F.region ? ` in ${F.region}` : ""}${
+              F.near && here ? ", nearest first" : ""
+            }.`
+          : holidays.length
+            ? "Nothing matches those filters."
+            : "No curated holiday ideas are on air yet.";
         $("#holidayCards").innerHTML = selected.length
           ? selected
               .map((item) => placeCard(item, [item.region, item.category]))
               .join("")
-          : '<p class="empty">Try another region or show all places.</p>';
-        $$(".mapspot").forEach((spot) =>
-          spot.classList.toggle(
-            "active",
-            spot.dataset.region === holidayRegion,
-          ),
-        );
+          : holidays.length
+            ? NOTHING_MATCHES
+            : '<p class="empty">Curated day trips arrive as they are researched.</p>';
       }
       async function loadHolidays() {
         try {
-          const response = await fetch("api/holidays");
+          const response = await fetch("api/v2/holidays");
           if (!response.ok) throw new Error();
           holidays = await response.json();
+          holidays.forEach(indexRecord);
           renderHolidays();
         } catch {
           $("#holidayResultText").textContent =
             "Holiday ideas are temporarily unavailable.";
         }
       }
-      function renderPlaceCategoryFilters() {
-        const categories = [...new Set(places.map((p) => p.category).filter(Boolean))].sort();
-        $("#placeCategoryFilters").innerHTML = categories
-          .map(
-            (cat) =>
-              `<label><input type="checkbox" data-place-category="${esc(cat)}" ${placeCategory === cat ? "checked" : ""}/> ${esc(cat)}</label>`,
-          )
-          .join("");
-        $$("[data-place-category]").forEach((input) =>
-          input.addEventListener("change", () => {
-            placeCategory = input.checked ? input.dataset.placeCategory : "";
-            $$("[data-place-category]").forEach((other) => {
-              if (other !== input) other.checked = false;
-            });
-            renderPlaces();
-          }),
-        );
-      }
       function renderPlaces() {
-        const selected = placeCategory
-          ? places.filter((p) => p.category === placeCategory)
-          : places;
+        const selected = byDistance(places.filter(matchesFacets));
         $("#placeResultText").textContent = selected.length
-          ? `${selected.length} place${selected.length === 1 ? "" : "s"} nearby${placeCategory ? ` · ${placeCategory}` : ""}.`
-          : "No places match that yet — check back after the next round.";
+          ? `${selected.length} place${selected.length === 1 ? "" : "s"} to go${
+              F.near && here ? ", nearest first" : ""
+            }.`
+          : "Nothing matches those filters.";
         $("#placeCards").innerHTML = selected.length
           ? selected
               .map((item) =>
                 placeCard(item, [item.county || item.region, item.category]),
               )
               .join("")
-          : '<p class="empty">Try a different category or show all places.</p>';
+          : NOTHING_MATCHES;
       }
       async function loadPlaces() {
         try {
-          const response = await fetch("api/places");
+          const response = await fetch("api/v2/places");
           if (!response.ok) throw new Error();
           places = await response.json();
-          renderPlaceCategoryFilters();
+          places.forEach(indexRecord);
           renderPlaces();
         } catch {
           $("#placeResultText").textContent =
@@ -2271,6 +2607,77 @@
         $(".app").inert = false;
         detailTrigger?.focus();
       }
+      /* ── organiser claims ─────────────────────────────────────────────────
+         The inbound half of the organiser loop: a venue tells us what is wrong
+         and we store it. No mail is sent from here — that waits on the domain
+         and the mailboxes. */
+      function openClaim(item) {
+        claimFor = item;
+        if ($("#detail").classList.contains("open")) closeDetail();
+        $("#claimFor").textContent = clean(item.title || "");
+        $("#claimForm").hidden = false;
+        $("#claimDone").hidden = true;
+        $("#claimError").hidden = true;
+        $("#claim").setAttribute("aria-hidden", "false");
+        $("#claim").classList.add("open");
+        $(".app").inert = true;
+        requestAnimationFrame(() => $("#claimName").focus());
+      }
+      function closeClaim() {
+        $("#claim").classList.remove("open");
+        $("#claim").setAttribute("aria-hidden", "true");
+        $(".app").inert = false;
+        claimFor = null;
+        detailTrigger?.focus();
+      }
+      $("#closeClaim").onclick = closeClaim;
+      $$("[data-close-claim]").forEach((b) => (b.onclick = closeClaim));
+      $("#detailClaim").onclick = () => current && openClaim(current);
+      $("#claimForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = $("#claimSubmit"),
+          error = $("#claimError");
+        const body = {
+          record_id: claimFor?.id || "",
+          record_title: claimFor?.title || "",
+          source_url: claimFor ? claimFor.source_url || sourceUrl(claimFor) : "",
+          name: $("#claimName").value.trim(),
+          email: $("#claimEmail").value.trim(),
+          relationship: $("#claimRelationship").value,
+          message: $("#claimMessage").value.trim(),
+          has_photos: $("#claimPhotos").checked,
+        };
+        button.disabled = true;
+        button.textContent = "Sending…";
+        try {
+          const response = await fetch("api/claim", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok)
+            throw new Error(data.error || "That did not send. Please try again.");
+          $("#claimForm").hidden = true;
+          $("#claimDoneText").textContent =
+            data.message || "Thank you — your message is with us.";
+          $("#claimDone").hidden = false;
+          $("#claimDone").focus();
+        } catch (failure) {
+          error.textContent = failure.message;
+          error.hidden = false;
+          error.focus?.();
+        } finally {
+          button.disabled = false;
+          button.textContent = "Send this to Small Days";
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && $("#claim").classList.contains("open")) {
+          event.preventDefault();
+          closeClaim();
+        }
+      });
       let noticeHide = null,
         noticeClear = null;
       function notice(message) {
@@ -2318,26 +2725,89 @@
           openEvent(events[Number(open.dataset.event)]);
           return;
         }
-        let page = e.target.closest("[data-page]");
-        if (page) {
-          let id = page.dataset.page;
-          $$(".screen").forEach((x) =>
-            x.classList.toggle("active", x.id === id),
-          );
-          $$("[data-page]").forEach((x) =>
-            x.classList.toggle("active", x.dataset.page === id),
-          );
-          $$(".desktopnav [data-page], .bottomnav [data-page]").forEach((x) => {
-            if (x.dataset.page === id) x.setAttribute("aria-current", "page");
-            else x.removeAttribute("aria-current");
-          });
-          const names = { today: "Today", find: "Events", places: "Things to do", holidays: "Holidays", guides: "Guides", saved: "Saved" };
-          document.title = `${names[id] || "Small Days"} — Small Days`;
-          window.scrollTo({ top: 0 });
-          const heading = $(`#${id} h1`);
-          heading?.setAttribute("tabindex", "-1");
-          heading?.focus({ preventScroll: true });
+        let claim = e.target.closest("[data-claim]");
+        if (claim) {
+          const item = recordIndex.get(claim.dataset.claim);
+          if (item) {
+            detailTrigger = claim;
+            openClaim(item);
+          }
+          return;
         }
+        let chip = e.target.closest("[data-chip]");
+        if (chip) {
+          toggleFacet(chip.dataset.group, chip.dataset.value);
+          applyFilters();
+          return;
+        }
+        let quick = e.target.closest("[data-quick]");
+        if (quick) {
+          if (quick.dataset.quick === "rainy") {
+            toggleFacet("setting", "indoor");
+            applyFilters();
+          } else if (F.near) {
+            F.near = false;
+            here = null;
+            applyFilters();
+          } else {
+            askForLocation();
+          }
+          return;
+        }
+        if (e.target.closest("[data-clear-facets]")) {
+          clearFacets();
+          return;
+        }
+        let page = e.target.closest("[data-page]");
+        if (page) showPage(page.dataset.page);
+      });
+      function showPage(id) {
+        if (!$(`#${CSS.escape(id)}.screen`)) return;
+        $$(".screen").forEach((x) => x.classList.toggle("active", x.id === id));
+        $$("[data-page]").forEach((x) =>
+          x.classList.toggle("active", x.dataset.page === id),
+        );
+        $$(".desktopnav [data-page], .bottomnav [data-page]").forEach((x) => {
+          if (x.dataset.page === id) x.setAttribute("aria-current", "page");
+          else x.removeAttribute("aria-current");
+        });
+        const names = { today: "Today", find: "Events", places: "Things to do", holidays: "Holidays", guides: "Guides", saved: "Saved" };
+        document.title = `${names[id] || "Small Days"} — Small Days`;
+        window.scrollTo({ top: 0 });
+        writeFilterUrl();
+        const heading = $(`#${CSS.escape(id)} h1`);
+        heading?.setAttribute("tabindex", "-1");
+        heading?.focus({ preventScroll: true });
+      }
+      function clearFacets() {
+        Object.keys(FACET_GROUPS).forEach((group) => (F[group] = []));
+        F.county = "";
+        F.region = "";
+        F.near = false;
+        here = null;
+        $("#searchInput").value = "";
+        $("#calendarDate").value = "";
+        calendarMode = "";
+        $$("[data-date-shortcut]").forEach((x) => x.classList.remove("active"));
+        applyFilters();
+      }
+      // The activity list is 20 values, so it gets a search box rather than 20
+      // buttons fighting for the same column; hiding chips beats re-rendering
+      // the panel, which would take the caret out of the box being typed in.
+      document.addEventListener("input", (event) => {
+        const box = event.target.closest("[data-chip-search]");
+        if (!box) return;
+        const needle = box.value.trim().toLowerCase();
+        const panel = box.closest(".facets");
+        [...panel.querySelectorAll("[data-chip]")].forEach((chip) => {
+          chip.hidden = !!needle && !chip.dataset.label.includes(needle);
+        });
+      });
+      document.addEventListener("change", (event) => {
+        const select = event.target.closest("[data-county]");
+        if (!select) return;
+        F.county = select.value;
+        applyFilters();
       });
       $("#detailSave").onclick = () => current && toggle(current);
       $("#closeDetail").onclick = closeDetail;
@@ -2401,13 +2871,12 @@
           detail.style.setProperty("--detail-y", "0px");
         });
       })();
-      $("#searchButton").onclick = render;
-      $("#searchInput").addEventListener("input", render);
-      $$("[data-filter]").forEach((x) => x.addEventListener("change", render));
+      $("#searchButton").onclick = applyFilters;
+      $("#searchInput").addEventListener("input", applyFilters);
       $("#calendarDate").addEventListener("change", () => {
         calendarMode = "";
         $$("[data-date-shortcut]").forEach((x) => x.classList.remove("active"));
-        render();
+        applyFilters();
       });
       $$("[data-date-shortcut]").forEach((button) =>
         button.addEventListener("click", () => {
@@ -2419,19 +2888,12 @@
           $$("[data-date-shortcut]").forEach((x) =>
             x.classList.toggle("active", x === button),
           );
-          render();
+          applyFilters();
         }),
       );
-      $("#clearFilters").onclick = () => {
-        $$("[data-filter]").forEach((x) => (x.checked = false));
-        $("#calendarDate").value = "";
-        calendarMode = "";
-        $$("[data-date-shortcut]").forEach((x) => x.classList.remove("active"));
-        render();
-      };
       $("#clearSearch").onclick = () => {
         $("#searchInput").value = "";
-        render();
+        applyFilters();
       };
       $("#mobileFilter").onclick = () => {
         const filters = $(".filters"),
@@ -2441,29 +2903,15 @@
           ? "Hide filters"
           : "Filters and location";
       };
-      $$("[data-holiday-filter]").forEach((input) =>
-        input.addEventListener("change", renderHolidays),
-      );
       $$(".mapspot").forEach((spot) =>
         spot.addEventListener("click", () => {
-          holidayRegion =
-            holidayRegion === spot.dataset.region ? "" : spot.dataset.region;
-          renderHolidays();
+          F.region = F.region === spot.dataset.region ? "" : spot.dataset.region;
+          applyFilters();
         }),
       );
-      $("#clearHolidayFilters").onclick = () => {
-        holidayRegion = "";
-        $$("[data-holiday-filter]").forEach((input) => (input.checked = false));
-        renderHolidays();
-      };
-      $("#clearPlaceFilters").onclick = () => {
-        placeCategory = "";
-        $$("[data-place-category]").forEach((input) => (input.checked = false));
-        renderPlaces();
-      };
       $("#openLead").onclick = () => {
         detailTrigger = $("#openLead");
-        events[0] && openEvent(events[0]);
+        lead && openEvent(lead);
       };
       window.addEventListener("small-days:remote-saves", (event) => {
         saved = Array.isArray(event.detail) ? event.detail : saved;
@@ -2472,7 +2920,7 @@
       });
       async function load() {
         try {
-          let response = await fetch("api/events");
+          let response = await fetch("api/v2/events");
           if (!response.ok) throw new Error();
           events = await response.json();
           events.sort((a, b) =>
@@ -2480,14 +2928,7 @@
               String(b.start_date || "9999"),
             ),
           );
-          let lead = events[0];
-          if (lead) {
-            $("#leadTitle").textContent = clean(lead.title);
-            $("#leadMeta").textContent = shortMeta(lead);
-            $("#leadCopy").textContent =
-              clean(lead.description).slice(0, 190) +
-              (clean(lead.description).length > 190 ? "…" : "");
-          }
+          events.forEach(indexRecord);
           $("#todayDate").textContent = new Date().toLocaleDateString("en-IE", {
             day: "numeric",
             month: "long",
@@ -2502,9 +2943,15 @@
             '<p class="empty">The event feed is temporarily unavailable.</p>';
         }
       }
-      load();
-      loadHolidays();
-      loadPlaces();
+      $$("[data-facets]").forEach((slot) => (slot.innerHTML = facetPanelHtml()));
+      const startTab = readFilterUrl();
+      if (startTab) showPage(startTab);
+      syncPanels();
+      if (F.near) askForLocation();
+      Promise.all([load(), loadHolidays(), loadPlaces()]).then(() => {
+        fillCounties();
+        applyFilters();
+      });
     </script>
     <script type="module" src="member-sync.js"></script>
   </body>

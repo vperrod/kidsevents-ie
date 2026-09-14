@@ -7,6 +7,7 @@ from firebase_auth import AuthenticationError, public_config, verified_member
 from member_store import MemberStore
 import json
 import os
+import re
 import subprocess
 import time
 import threading
@@ -29,6 +30,7 @@ SOURCES_FILE = os.path.join(BASE_DIR, "sources.json")
 FACTORY_SCRIPT = os.path.join(BASE_DIR, "factory_worker.py")
 PIPELINE_LOG = os.path.join(BASE_DIR, "pipeline.log")
 
+CLAIMS_FILE = os.path.join(BASE_DIR, "staged", "claims.json")
 ADMIN_STATE_FILE = os.path.join(BASE_DIR, "admin_state.json")
 FACTORY_STATE_FILE = os.path.join(BASE_DIR, "factory_state.json")
 MEMBERS_DB = os.path.join(BASE_DIR, "members.sqlite3")
@@ -111,9 +113,142 @@ def api_v1_holidays():
     return jsonify(_on_air(HOLIDAYS_FILE))
 
 
+def _faceted(path):
+    """The legacy view plus the facets the public filters need.
+
+    `/api/v1/*` carries the whole contract record, which is far more than a
+    browser filtering a list has any use for (every fact and its quote, the
+    full provenance). This is the same on-air set flattened for rendering with
+    the taxonomy, county and coordinates the facet panel reads kept alongside.
+    """
+    feed = []
+    for record in _on_air(path):
+        taxonomy = record.get("taxonomy") or {}
+        location = record.get("location") or {}
+        view = contract.legacy_view(record)
+        view["id"] = record.get("id", "")
+        view["facets"] = {
+            "age_bands": taxonomy.get("age_bands") or [],
+            "price_band": taxonomy.get("price_band") or "",
+            "setting": taxonomy.get("setting") or "",
+            "activity_types": taxonomy.get("activity_types") or [],
+            "accessibility": taxonomy.get("accessibility") or [],
+            "county": location.get("county") or "",
+            "region": location.get("region") or "",
+            "lat": location.get("lat"),
+            "lon": location.get("lon"),
+        }
+        feed.append(view)
+    return feed
+
+
+@app.route("/api/v2/events")
+def api_v2_events():
+    events = _faceted(EVENTS_FILE)
+    events.sort(key=lambda e: e.get("start_date", ""))
+    return jsonify(events)
+
+
+@app.route("/api/v2/places")
+def api_v2_places():
+    return jsonify(_faceted(PLACES_FILE))
+
+
+@app.route("/api/v2/holidays")
+def api_v2_holidays():
+    return jsonify(_faceted(HOLIDAYS_FILE))
+
+
 @app.route("/api/health")
 def health():
     return jsonify({"status": "ok", "events_count": len(_on_air(EVENTS_FILE))})
+
+
+# ─────────────────────────────────────────────
+# ORGANISER CLAIMS (public, unauthenticated)
+# ─────────────────────────────────────────────
+
+_RELATIONSHIPS = ("owner", "manager", "other")
+# Deliberately loose: this rejects the typos and the obvious junk, and nothing
+# short of sending mail can tell a real mailbox from a well-formed one.
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
+_CLAIM_WINDOW_SECS = 3600
+_claim_seen = {}
+_claim_seen_lock = threading.Lock()
+
+
+def _claim_throttled(ip, source_url):
+    """One claim per listing per IP per hour. The form is public and has no
+    login, so this blunts a script hammering one listing; it is not access
+    control and it is in memory, so a restart forgives everyone."""
+    now = time.time()
+    with _claim_seen_lock:
+        for stale in [k for k, seen in _claim_seen.items() if now - seen > _CLAIM_WINDOW_SECS]:
+            del _claim_seen[stale]
+        return (ip, source_url) in _claim_seen
+
+
+def _claim_recorded(ip, source_url):
+    with _claim_seen_lock:
+        _claim_seen[(ip, source_url)] = time.time()
+
+
+@app.route("/api/claim", methods=["POST"])
+def api_claim():
+    """An organiser telling us about their own listing. Stored only — phase 7
+    builds the inbound half of §4.6; the outbound mail needs the domain and the
+    mailboxes, which do not exist yet."""
+    body = request.get_json(silent=True) or {}
+
+    def field(name, limit):
+        return str(body.get(name) or "").strip()[:limit]
+
+    name = field("name", 120)
+    email = field("email", 254)
+    relationship = field("relationship", 20).lower()
+    message = field("message", 4000)
+    source_url = field("source_url", 2048)
+
+    if not name:
+        return jsonify({"error": "Please tell us your name."}), 400
+    if not _EMAIL_RE.match(email):
+        return jsonify({"error": "Please enter an email address we can reply to."}), 400
+    if relationship not in _RELATIONSHIPS:
+        return jsonify({"error": "Please tell us how you are connected to the venue."}), 400
+    if not message:
+        return jsonify({"error": "Please tell us what needs to change."}), 400
+
+    ip = request.remote_addr or "unknown"
+    if _claim_throttled(ip, source_url):
+        return jsonify({
+            "error": "We already have a message about this listing from you. "
+                     "Give us a little time to read it."
+        }), 429
+
+    claim = {
+        "received_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "record_id": field("record_id", 256),
+        "record_title": field("record_title", 200),
+        "source_url": source_url,
+        "name": name,
+        "email": email,
+        "relationship": relationship,
+        "message": message,
+        "has_photos": bool(body.get("has_photos")),
+        "status": "new",
+    }
+    os.makedirs(os.path.dirname(CLAIMS_FILE), exist_ok=True)
+    with factory_worker.output_lock():
+        claims = _read_store(CLAIMS_FILE, [])
+        claims.append(claim)
+        factory_worker.write_json_atomic(CLAIMS_FILE, claims)
+    _claim_recorded(ip, source_url)
+
+    return jsonify({
+        "status": "received",
+        "message": "Thank you — your message is with us. We will email you at "
+                   f"{email} if we need anything else.",
+    })
 
 
 def _member_from_request():
@@ -417,6 +552,14 @@ def admin_events():
     events = _read_store(EVENTS_FILE, [])
     events.sort(key=lambda e: contract.legacy_view(e).get("start_date") or "")
     return jsonify({"events": events})
+
+@app.route("/admin/api/claims")
+def admin_claims():
+    """Organiser claim/update messages, newest first."""
+    claims = _read_store(CLAIMS_FILE, [])
+    claims.sort(key=lambda c: c.get("received_at", ""), reverse=True)
+    return jsonify({"claims": claims, "total": len(claims)})
+
 
 @app.route("/admin/api/social/staged")
 def admin_social_staged():
