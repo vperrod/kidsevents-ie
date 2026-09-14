@@ -1406,5 +1406,142 @@
       "duration_hint": "",
       "seasonal_note": "Open from March 16th to the end of Sept. Season tickets available for the Summer Season which runs from Mar 16th to the end of Sept"
     }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-the-maritime-hotel-west-cork-cork",
+    "kind": "place",
+    "title": "The Maritime Hotel, West Cork",
+    "slug": "the-maritime-hotel-west-cork-cork",
+    "summary": "Family hotel on Bantry Bay with suites, dining, and Club Maritime leisure facilities.",
+    "description": "The Maritime Hotel is located on Bantry Bay in West Cork. It features 110 guest bedrooms, all including free Wi-Fi, an en-suite bathroom, and a flat screen TV. Dining options include the relaxing Maritime Bar and The Ocean Restaurant, which serves modern Irish cuisine. Club Maritime offers a leisure space with a 19m pool, sauna, Jacuzzi, steam room, and gym. The hotel provides one and two-bedroom suites suitable for families. The one-bedroom suite is 43m² and sleeps up to 2 adults and 2 children. The two-bedroom suite is 74m² and sleeps up to 2 adults and 4 children. Children's menus are available at The Maritime Bar from 12 noon until 9pm and at The Ocean Restaurant from 6pm until 9pm; the menu doubles as a colouring book. During Easter Family Breaks from March 30 to April 11, 2026, under-12s receive a free main course every day and eat free at carvery lunch. A Flying Solo package offers a twin room for one adult and up to two children. Family facilities include high chairs, cots, porter service, and sensory boxes available on request. Baby sitting can be organised with 24 hours' notice. The hotel is near activities like Mizen Head, Barleycove Beach, Garnish Island, and the Dursey Island Cable Car.",
+    "family_relevant": true,
+    "location": {
+      "name": "The Maritime Hotel",
+      "address": "The Quay Bantry",
+      "city": "Bantry",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/maritime-hotel-cork/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=The%20Maritime%20Hotel%2C%20The%20Quay%20Bantry%2C%20Cork%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": ""
+    },
+    "media": {
+      "hero": null,
+      "embeds": []
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12"
+      ],
+      "price_band": "free",
+      "setting": "both",
+      "activity_types": [
+        "swimming"
+      ],
+      "accessibility": [
+        "sensory-friendly"
+      ],
+      "price_detail": "U12s get a free main course every day and kids dine free at carvery lunch.",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/maritime-hotel-cork/",
+          "fetched_at": "2026-09-14T00:10:40+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The hotel is located on Bantry Bay in West Cork.",
+          "quote": "The Maritime Hotel is located on Bantry Bay in the heart of West Cork",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The hotel has 110 guest bedrooms.",
+          "quote": "The hotel offers 110 guest bedrooms",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "All guest rooms include free Wi-Fi, an en-suite bathroom and a flat screen TV.",
+          "quote": "The hotel offers 110 guest bedrooms which all include free Wi-Fi, an en-suite bathroom and a flat screen TV.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The hotel offers two dining options: the Maritime Bar and The Ocean Restaurant.",
+          "quote": "The Maritime Hotel has 2 dining options: the relaxing Maritime Bar and The Ocean Restaurant serving modern Irish cuisine.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "Club Maritime includes a 19m pool, sauna, Jacuzzi, and Steam Room.",
+          "quote": "Club Maritime provide guests with a space to escape from it all with a 19m pool, sauna, Jacuzzi, Sauna, Steam Room and Gym.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "Easter Family Breaks run from March 30 to April 11 2026.",
+          "quote": "Easter Family Breaks from March 30 to April 11 2026 at the stylish 4-star Maritime Hotel.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "Under 12s get a free main course every day during Easter breaks.",
+          "quote": "U12s get a free main course every day and kids dine free at carvery lunch.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The 1 Bedroom suite is 43m² and sleeps up to 2 adults and 2 children.",
+          "quote": "Our 1 Bedroom suite comprises of a 43m² room, that sleeps up to 2 adults and 2 children.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The 2 Bedroom suite is 74m² and sleeps up to 2 adults and 4 children.",
+          "quote": "Our 2 Bedroom suite comprises of a 74m² room, that sleeps up to 2 adults and 4 children",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The children's menu is available at The Maritime Bar from 12 noon until 9pm.",
+          "quote": "Our Childrens menu is available from 12 noon each day until 9pm at The Maritime Bar",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The children's menu doubles as a colouring book.",
+          "quote": "The menu doubles up as a colouring book to keep children entertained during dinner time.",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        },
+        {
+          "claim": "The Flying Solo package includes a Twin Room for 1 adult and max 2 children.",
+          "quote": "Their Flying Solo Package includes –a Twin Room for 1 Adult and Max 2 Children",
+          "source_url": "https://www.familyfun.ie/maritime-hotel-cork/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T00:13:37+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": "Easter Family Breaks from March 30 to April 11 2026"
+    }
   }
 ]

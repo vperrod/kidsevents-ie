@@ -1208,13 +1208,21 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
         return None, f"not family-relevant: {why}", ""
 
     facts, name = gather_facts(text)
+    # An empty answer from a step is a lane outage, not a verdict: `extract_obj`
+    # returns None for "" and every step falls back to {}. Saying so here is
+    # what keeps the discovery ledger honest -- a write step that never
+    # answered would otherwise be filed as needs-input "no title", stamped, and
+    # not looked at again for days, when all that happened was a busy night.
     if prefill and kind == "event":
         details = dict(prefill)
     else:
         details = extract_details(kind, text, facts, candidate.get("county", ""))
-        if prefill:
-            details.update({k: v for k, v in prefill.items() if v not in (None, "", [])})
+        if not details and not prefill:
+            return None, "no model lane answered the extract step", ""
+        details.update({k: v for k, v in (prefill or {}).items() if v not in (None, "", [])})
     written = write_copy(kind, text, facts, name)
+    if not written:
+        return None, "no model lane answered the write step", ""
 
     record = _build_record(kind, candidate, source, facts, name, details, written, verdict)
     problems = contract.validate(record)

@@ -768,6 +768,34 @@ def test_a_prefill_on_a_place_overlays_the_extract_step_rather_than_replacing_it
         == ("open daily", "summer only")
 
 
+def test_a_write_step_that_never_answered_is_a_lane_outage_not_needs_input(
+        promote_without_a_model, monkeypatch):
+    monkeypatch.setattr(factory_worker, "write_copy", lambda *a, **k: {})
+    _record, reason, missing = factory_worker.promote(
+        {"source_url": "https://a.ie/x", "location": {"county": "Cork"}},
+        prefetched="open daily")
+    assert reason.startswith("no model lane answered") and missing == ""
+
+
+def test_an_extract_step_that_never_answered_is_a_lane_outage_not_needs_input(
+        promote_without_a_model, monkeypatch):
+    monkeypatch.setattr(factory_worker, "extract_details", lambda *a, **k: {})
+    _record, reason, missing = factory_worker.promote(
+        {"source_url": "https://a.ie/x", "location": {"county": "Cork"}},
+        prefetched="open daily")
+    assert reason.startswith("no model lane answered") and missing == ""
+
+
+def test_a_lane_supplied_prefill_carries_a_place_past_a_silent_extract_step(
+        promote_without_a_model, monkeypatch):
+    monkeypatch.setattr(factory_worker, "extract_details", lambda *a, **k: {})
+    record, _reason, _missing = factory_worker.promote(
+        {"source_url": "https://a.ie/x",
+         "location": {"county": "Cork", "lat": 51.9, "lon": -8.5}},
+        prefetched="open daily", prefill={"opening_hours": "open daily"})
+    assert record["place"]["opening_hours"] == "open daily"
+
+
 def test_a_prefill_on_an_event_still_replaces_the_extract_step(monkeypatch):
     monkeypatch.setattr(factory_worker, "classify",
                         lambda text, candidate=None: {"kind": "event", "family_relevant": True})
