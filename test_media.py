@@ -167,7 +167,9 @@ def test_a_hero_carries_the_licence_it_was_downloaded_under(tmp_path, monkeypatc
 
 
 def test_a_hero_is_stored_under_its_kind_and_id(tmp_path, monkeypatch):
-    assert _one_hero(tmp_path, monkeypatch)["url"].startswith("/media/place/place-lough-key-roscommon-")
+    # Relative, no leading slash: the site is served under a path prefix in
+    # production, and a leading "/media/..." resolves against the wrong app.
+    assert _one_hero(tmp_path, monkeypatch)["url"].startswith("media/place/place-lough-key-roscommon-")
 
 
 def _one_hero(tmp_path, monkeypatch, verdict="hero"):

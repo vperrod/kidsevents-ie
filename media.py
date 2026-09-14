@@ -335,17 +335,25 @@ def to_jpeg(data, max_width=MAX_WIDTH):
 
 def store_image(kind, record_id, image_url, data):
     """Write the photo under `web/media/<kind>/` and return its public path.
-    The hash is of the source URL, so re-running never leaves two copies."""
+    The hash is of the source URL, so re-running never leaves two copies.
+
+    Relative, no leading slash: the site is served under a path prefix in
+    production (Caddy `handle_path /kidsevents*` strips it before forwarding
+    to this Flask app, which itself answers at "/"), same as the page's own
+    favicon link. A leading "/media/..." resolves against the *site* root
+    from the browser's point of view, which is a different app in
+    production -- found 2026-09-14 when every hero photo 401'd on the public
+    URL despite loading fine when the app was hit directly."""
     digest = hashlib.sha1(str(image_url).encode("utf-8")).hexdigest()[:10]
     folder = MEDIA_DIR / kind
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / f"{record_id}-{digest}.jpg"
     path.write_bytes(data)
-    return f"/media/{kind}/{path.name}"
+    return f"media/{kind}/{path.name}"
 
 
 def public_path_to_file(url):
-    return MEDIA_DIR / str(url or "").replace("/media/", "", 1)
+    return MEDIA_DIR / str(url or "").lstrip("/").removeprefix("media/")
 
 
 # ---------------------------------------------------------------------------

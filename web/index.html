@@ -609,12 +609,17 @@
         font-size: 17px;
       }
       .holidaytools {
-        display: grid;
-        grid-template-columns: minmax(260px, 0.8fr) 1.2fr;
-        gap: 26px;
+        /* Was a two-column grid, map beside the filter card: the map was an
+           Ireland province picker on a page for worldwide destinations
+           (Benidorm, Dubrovnik, ...), so it never mapped to anything a
+           holiday record actually had -- removed 2026-09-14, not just
+           restyled, so there is no dead second column to fill. */
         padding: 20px 0;
         border-top: 2px solid var(--pine);
         border-bottom: 1px solid var(--line);
+      }
+      .holidaytools .holidayfilters {
+        max-width: 560px;
       }
       .holidaymap {
         position: relative;
@@ -1681,34 +1686,11 @@
           <p class="eyebrow">Places that hold a whole day</p>
           <h1>Go somewhere good.</h1>
           <p class="holidayintro">
-            Evergreen family ideas, separate from dated events. Start on the
-            map, weigh up the price range and open the original source before
-            you leave.
+            Family holiday destinations worldwide, chosen for real families
+            with kids. Weigh up the season and price range, then open the
+            original source before you book.
           </p>
           <div class="holidaytools">
-            <div
-              class="holidaymap"
-              aria-label="Choose a region on the Ireland map"
-            >
-              <svg
-                viewBox="0 0 260 220"
-                role="img"
-                aria-label="Stylised map of Ireland"
-              >
-                <path
-                  d="M100 13c26 3 47 17 55 36l20 13-2 33 20 20-12 29 10 36-26 24-10 38-34 16-38-14-13-28-28-16-4-34 14-23-2-33 25-22 3-33z"
-                />
-              </svg>
-              <button class="mapspot" type="button" data-region="Connacht">
-                Connacht</button
-              ><button class="mapspot" type="button" data-region="Leinster">
-                Leinster</button
-              ><button class="mapspot" type="button" data-region="Munster">
-                Munster</button
-              ><button class="mapspot" type="button" data-region="Ulster">
-                Ulster
-              </button>
-            </div>
             <div class="holidayfilters">
               <h2>Choose the shape of the day.</h2>
               <p id="holidayResultText" role="status" aria-live="polite">Loading holiday ideas…</p>
@@ -2456,7 +2438,7 @@
       // it ships with the image or the image does not ship.
       function cardHero(item) {
         const src = item.image_url || "";
-        if (!src.startsWith("/media/")) return "";
+        if (!src.startsWith("media/")) return "";
         return `<figure class="cardhero"><img src="${esc(src)}" alt="${esc(item.image_alt || item.title || "")}" loading="lazy"/>${item.image_credit ? `<figcaption>${esc(item.image_credit)}</figcaption>` : ""}</figure>`;
       }
       function linkRow(item) {
@@ -2596,7 +2578,7 @@
       function showHero(e) {
         const figure = $("#detailHero"),
           src = e.image_url || "";
-        figure.hidden = !src.startsWith("/media/");
+        figure.hidden = !src.startsWith("media/");
         if (figure.hidden) return;
         $("#detailHeroImage").src = src;
         $("#detailHeroImage").alt = clean(e.image_alt || e.title || "");
