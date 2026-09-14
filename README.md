@@ -16,6 +16,7 @@ The modules, and nothing else:
 | `discovery/` | The eight lanes that find things to research, plus the URL ledger that stops the factory re-researching what it published last hour — see below. |
 | `llm.py` | Model routing. Every LLM call in the project goes through `complete(prompt, kind)`, which picks the cheapest lane that can answer right now. |
 | `contract.py` + `gate.py` + `catalog/facets.json` | The record contract, the facet vocabulary and the QA gate — see below. Every record written to a catalogue has passed both. |
+| `links.py` + `media.py` | What a record links to and what it looks like. `links.resolve()` finds the official site, the Instagram and the TikTok account (markup → Wikidata → the venue's own site → a search whose result must fold onto the venue's name), verifies each before storing it; `media.attach()` downloads a CC0/CC BY/CC BY-SA hero from Wikimedia Commons or Openverse, puts it through a vision gate, and turns Instagram and TikTok posts into embeds — they are never rehosted. Both run at the end of `promote()` and nightly (`links.py refresh`, `media.py refresh`) — see below. |
 | `staging.py` | The staging desk for social candidates collected by the mini PC crew. Appends them to `staged/social_candidates.json` and, with `AUTO_APPROVE=on` (the default), runs each through the same gate immediately. Anything that does not clear it becomes `needs_input` with the one `missing_field` a curator's note would fix, or `rejected`. |
 | `server.py` | Flask on `127.0.0.1:8128` (user unit `kidsevents-ie.service`): the public `/api/events`, `/api/places`, `/api/holidays` feeds (the legacy view), the full-contract `/api/v1/*` feeds, the member save API, and the `/admin` portal with its `/admin/api/*` routes. |
 
@@ -184,6 +185,41 @@ contract and "do not invent values":
 5. `write_copy()` — title, summary, description and the taxonomy, from the
    verified facts only.
 
+### Links and media
+
+`promote()` finishes a record it has already put on air by resolving its links
+and attaching its media. Neither can block publication: both are wrapped, and a
+venue with no website and no photo is still a venue.
+
+**Links** (`links.py`). `official_url` comes from the source page's JSON-LD
+(`url`/`sameAs`), then Wikidata `P856` disambiguated by county, then an
+outbound link on the source page whose domain folds onto the venue's name — and
+is stored only after it answers a request. Instagram and TikTok come from the
+same markup, from Wikidata (`P2003`/`P7085`), from the official site's own
+footer, or from a `site:instagram.com "<venue>" <county>` search, and a handle
+is accepted **only when it folds onto the venue's name**: a listing page's
+`sameAs` names the publisher's account, not the venue's. A record found on
+Instagram or TikTok keeps the author's account when `classify` says
+`is_venue_account`. `links_checked` stamps the pass; `links.py refresh` re-runs
+the records that are still missing one, at most every 14 days each.
+
+**Media** (`media.py`). A hero photo is downloaded from Wikimedia Commons or
+Openverse, and only under CC0, CC BY, CC BY-SA or public domain, with the
+photographer and the licence kept beside it for the credit line. When neither
+has anything, the site's own `og:image` is stored flagged `placeholder` and is
+replaced the first time a licensed one turns up. Every candidate goes through a
+vision gate — one call, local model first, rules lifted from WanderTold's
+`photo-gate.py` — which answers `hero`/`pass`/`reject` and writes the alt text
+in the same reply; a gate that cannot answer marks it `skip` and keeps the
+photo, because an outage is not a verdict. At most 3 downloads and 3 gate calls
+per record, 200 records per `media.py refresh`.
+
+Instagram and TikTok photos are **never** downloaded. A post becomes
+`media.embeds[] = [{platform, url}]` and is rendered as an iframe by the
+browser looking at it, only when a detail modal opens. Files live in
+`web/media/<kind>/` (git-ignored, served by Flask's static route at `/media/…`)
+and `media_index.json` records what each one is and where it came from.
+
 ### Storage
 
 Every JSON store is written with `write_json_atomic()` (temp file in the same
@@ -206,6 +242,9 @@ venv/bin/python3 factory_worker.py --lane feeds --budget 10   # one lane, 10 can
 venv/bin/python3 staging.py sweep             # classify the needs_review backlog
 SWEEP_LIMIT=5 venv/bin/python3 staging.py sweep           # …just the first 5
 SWEEP_WORKERS=6 venv/bin/python3 staging.py sweep         # …6 items in flight (default 3)
+
+venv/bin/python3 links.py refresh 200          # nightly: on-air records still missing a link
+venv/bin/python3 media.py refresh 200          # nightly: on-air records still missing a hero
 
 venv/bin/python3 server.py                    # Flask on 127.0.0.1:8128
 venv/bin/python3 -m pytest -q                 # tests (no network, no LLM)
@@ -299,12 +338,15 @@ kidsevents-ie/
 ├── catalog/search_templates.json  # the search lane's templates, always-on and seasonal
 ├── discovery/               # the eight lanes + the URL ledger
 ├── llm.py                   # model routing: local → free gateway lanes → hermes
+├── links.py                 # official site, Instagram, TikTok — verified, never guessed
+├── media.py                 # licensed hero photo + vision gate; social posts as embeds
 ├── staging.py               # social candidate staging desk + auto-approve sweep
 ├── server.py                # Flask API + admin portal
 ├── firebase_auth.py         # member identity verification
 ├── member_store.py          # member saves (sqlite)
 ├── sources.json             # curated listing URLs per county
 ├── web/                     # index.html (public) + admin.html
+├── web/media/               # hero photos, git-ignored, served at /media/… (media_index.json)
 ├── staged/                  # candidates.json, social_candidates.json, needs_input.json
 ├── systemd/                 # unit examples
 └── events_output.json · places_output.json · holidays_output.json

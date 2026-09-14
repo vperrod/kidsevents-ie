@@ -1,122 +1,243 @@
 {
   "fails": {},
-  "last_run": "2026-09-14T00:13:37+00:00",
+  "last_run": "2026-09-14T04:38:43+00:00",
   "sources_hit": {},
-  "total_events": 5,
+  "total_events": 12,
   "llm": {
-    "calls_today": 63,
+    "calls_today": 775,
     "by_lane": {
       "local": {
-        "calls": 24,
+        "calls": 601,
         "errors": 1,
-        "p50_ms": 30188
+        "p50_ms": 10005
       },
       "openrouter/nvidia/nemotron-3-super-120b-a12b:free": {
-        "calls": 24,
+        "calls": 86,
         "errors": 0,
-        "p50_ms": 11903
+        "p50_ms": 11139
       },
       "oc/mimo-v2.5-free": {
-        "calls": 4,
-        "errors": 4,
-        "p50_ms": 42183
+        "calls": 24,
+        "errors": 20,
+        "p50_ms": 17748
       },
       "kg/stepfun/step-3.7-flash:free": {
-        "calls": 1,
-        "errors": 1,
-        "p50_ms": 84
+        "calls": 16,
+        "errors": 16,
+        "p50_ms": 4986
       },
       "auto": {
-        "calls": 4,
-        "errors": 2,
-        "p50_ms": 11045
+        "calls": 22,
+        "errors": 12,
+        "p50_ms": 11024
       },
       "openrouter/dots-studio/dots-3-note-preview:free": {
-        "calls": 5,
-        "errors": 5,
-        "p50_ms": 13515
+        "calls": 18,
+        "errors": 18,
+        "p50_ms": 13039
       },
       "hermes": {
-        "calls": 1,
+        "calls": 8,
         "errors": 0,
-        "p50_ms": 30390
+        "p50_ms": 52786
       }
     },
-    "last_probe": "2026-09-14T00:12:07+00:00"
+    "last_probe": "2026-09-14T04:09:21+00:00"
   },
   "facet_drops": {
-    "setting": 12,
-    "price_band": 4,
+    "setting": 23,
+    "price_band": 6,
     "activity_types": 58,
     "age_bands": 78,
-    "accessibility": 100
+    "accessibility": 100,
+    "budget_band": 1
   },
   "lanes": [
     {
       "lane": "listings",
-      "key": "dublin.ie",
-      "found": 5,
-      "new": 0,
+      "key": "corkcity.ie",
+      "found": 10,
+      "new": 10,
       "errors": [],
-      "ms": 15715
-    },
-    {
-      "lane": "listings",
-      "key": "dublincity.ie",
-      "found": 3,
-      "new": 0,
-      "errors": [],
-      "ms": 15715
+      "ms": 21249
     },
     {
       "lane": "listings",
       "key": "familyfun.ie",
-      "found": 17,
-      "new": 11,
-      "errors": [],
-      "ms": 15715
+      "found": 11,
+      "new": 5,
+      "errors": [
+        "nothing split out of 46 links on the listing"
+      ],
+      "ms": 21249
     },
     {
       "lane": "listings",
-      "key": "timeout.com",
-      "found": 3,
+      "key": "parkrun.ie",
+      "found": 1,
       "new": 0,
-      "errors": [],
-      "ms": 15715
+      "errors": [
+        "nothing split out of 0 links on the listing"
+      ],
+      "ms": 21249
     },
     {
       "lane": "listings",
-      "key": "visitdublin.com",
+      "key": "purecork.ie",
       "found": 10,
-      "new": 0,
+      "new": 10,
       "errors": [],
-      "ms": 15715
+      "ms": 21249
     },
     {
       "lane": "listings",
       "key": "yourdaysout.com",
-      "found": 8,
-      "new": 4,
+      "found": 11,
+      "new": 0,
       "errors": [],
-      "ms": 15715
+      "ms": 21249
+    },
+    {
+      "lane": "feeds",
+      "key": "dublinzoo",
+      "found": 10,
+      "new": 10,
+      "errors": [],
+      "ms": 979
+    },
+    {
+      "lane": "feeds",
+      "key": "familyfun",
+      "found": 16,
+      "new": 1,
+      "errors": [],
+      "ms": 979
+    },
+    {
+      "lane": "feeds",
+      "key": "heritageireland",
+      "found": 10,
+      "new": 10,
+      "errors": [],
+      "ms": 979
+    },
+    {
+      "lane": "feeds",
+      "key": "monaghan-council",
+      "found": 16,
+      "new": 0,
+      "errors": [],
+      "ms": 979
+    },
+    {
+      "lane": "feeds",
+      "key": "mykidstime",
+      "found": 10,
+      "new": 0,
+      "errors": [],
+      "ms": 979
+    },
+    {
+      "lane": "feeds",
+      "key": "visitwaterford",
+      "found": 10,
+      "new": 5,
+      "errors": [],
+      "ms": 979
+    },
+    {
+      "lane": "sitemaps",
+      "key": "familyfun.ie",
+      "found": 15,
+      "new": 0,
+      "errors": [],
+      "ms": 5694
+    },
+    {
+      "lane": "sitemaps",
+      "key": "thisisgalway.ie",
+      "found": 15,
+      "new": 9,
+      "errors": [],
+      "ms": 5694
+    },
+    {
+      "lane": "sitemaps",
+      "key": "yourdaysout.com",
+      "found": 15,
+      "new": 0,
+      "errors": [],
+      "ms": 5694
+    },
+    {
+      "lane": "search",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
+    },
+    {
+      "lane": "opendata_places",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
+    },
+    {
+      "lane": "wikidata",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
+    },
+    {
+      "lane": "ticketmaster",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
+    },
+    {
+      "lane": "holidays_seed",
+      "key": "-",
+      "found": 0,
+      "new": 0,
+      "errors": [
+        "budget spent"
+      ],
+      "ms": 0
     }
   ],
   "lane_cursor": {
-    "listings": 20
+    "listings": 14,
+    "sitemaps": 2
   },
   "lane_last_run": {
-    "listings": "2026-09-14T00:13:37+00:00",
-    "feeds": "2026-09-13T23:41:08+00:00"
+    "listings": "2026-09-14T04:38:43+00:00",
+    "feeds": "2026-09-14T04:38:43+00:00",
+    "sitemaps": "2026-09-14T04:38:43+00:00"
   },
   "lane_calls": {},
   "discovery": {
-    "found": 14,
-    "staged": 14,
+    "found": 60,
+    "staged": 60,
     "outcomes": {
-      "on-air": 9,
+      "on-air": 7,
       "needs-input": 5,
-      "rejected": 0,
-      "lane-failed": 0
+      "rejected": 9,
+      "lane-failed": 2
     }
   }
 }

@@ -29,6 +29,11 @@ recatalog_progress.json
 discovery/ledger.json
 discovery/cache/
 
+# Hero photos and their index: licensed images fetched from Commons/Openverse,
+# kept on disk and re-fetchable, never in git (phase 4)
+web/media/
+media_index.json
+
 # Playwright browsers (downloaded separately)
 ~/.cache/ms-playwright/
 

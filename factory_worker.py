@@ -360,6 +360,8 @@ def classify(text, candidate=None):
           'trade or adult-only shopping events,\n'
         + '"country": ISO code of where it is - "IE" for the Republic of Ireland, "GB" for '
           'Northern Ireland or Britain, otherwise the real code,\n'
+        + '"is_venue_account": true only if the account or author above IS the venue, '
+          'organiser or destination itself rather than a visitor posting about it,\n'
         + '"why": at most 120 characters saying why}'
     )
     return extract_obj(hermes(prompt, kind="classify"))
@@ -1239,8 +1241,26 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
                                     date.today() + timedelta(days=EVENT_HORIZON_DAYS))
         if window:
             return None, window, ""
+    attach_links_and_media(record, candidate, verdict)
     record["status"] = "on-air"
     return record, "", ""
+
+
+def attach_links_and_media(record, candidate, verdict):
+    """Resolve the record's outbound links and give it a hero photo and its
+    embeds (phase 4). Imported here, not at module level: both modules import
+    this one. Runs on records that have already passed the gate -- a rejected
+    record is not worth a Commons search -- and never blocks publication: a
+    listing with no photo and no Instagram is still a listing."""
+    import links
+    import media
+
+    for step, run in (("links", lambda: links.resolve(record, candidate, verdict)),
+                      ("media", lambda: media.attach(record))):
+        try:
+            run()
+        except Exception as error:
+            log(f"{step} {record.get('id', '')}: {error}")
 
 
 def promote_candidate(candidate, hint=""):

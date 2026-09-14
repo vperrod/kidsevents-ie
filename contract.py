@@ -117,8 +117,9 @@ def EMPTY_RECORD(kind):
         "links": {
             "source_url": "", "official_url": "", "maps_url": "",
             "instagram_url": "", "tiktok_url": "", "booking_url": "",
+            "links_checked": "",
         },
-        "media": {"hero": None, "embeds": []},
+        "media": {"hero": None, "embeds": [], "checked": ""},
         "taxonomy": {
             "age_bands": [], "price_band": "", "price_detail": "", "setting": "",
             "activity_types": [], "rainy_ok": None, "accessibility": [],
@@ -285,6 +286,8 @@ def legacy_view(record):
     taxonomy = record.get("taxonomy") or {}
     event = record.get("event") or {}
     provenance = record.get("provenance") or {}
+    media = record.get("media") or {}
+    hero = media.get("hero") or {}
     source_url = links.get("source_url", "")
     price = taxonomy.get("price_detail") or _PRICE_LABELS.get(taxonomy.get("price_band", ""), "")
     return {
@@ -311,6 +314,16 @@ def legacy_view(record):
         "source_url": source_url,
         "source_name": _source_name(source_url),
         "booking_url": links.get("booking_url", ""),
+        # Phase 4: the links row and the hero photo. `image_alt` rides along
+        # because a content image with no alt text is not publishable, and the
+        # vision gate writes one in the same call that grades the photo.
+        "image_url": hero.get("url", ""),
+        "image_credit": hero.get("credit", ""),
+        "image_alt": hero.get("alt", ""),
+        "official_url": links.get("official_url", ""),
+        "instagram_url": links.get("instagram_url", ""),
+        "tiktok_url": links.get("tiktok_url", ""),
+        "embeds": media.get("embeds") or [],
     }
 
 

@@ -582,6 +582,49 @@
         gap: 12px;
         margin-top: 16px;
       }
+      .cardhero {
+        margin: 0 0 14px;
+      }
+      .cardhero img {
+        display: block;
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+        background: var(--mist);
+      }
+      .cardhero figcaption,
+      .detailhero figcaption {
+        margin-top: 6px;
+        color: var(--quiet);
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .detailhero {
+        max-width: 720px;
+        margin: 0 0 22px;
+      }
+      .detailhero img {
+        display: block;
+        width: 100%;
+        max-height: 340px;
+        object-fit: cover;
+        background: var(--mist);
+      }
+      .detailembeds {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        max-width: 720px;
+        margin-top: 26px;
+      }
+      .detailembeds iframe {
+        width: 326px;
+        max-width: 100%;
+        height: 560px;
+        border: 1px solid var(--line);
+        background: var(--mist);
+      }
       .holidaylinks a {
         color: var(--pine);
         font-weight: 700;
@@ -806,6 +849,11 @@
       .detailactions a:first-child {
         background: var(--pine);
         color: #fff;
+      }
+      /* The resolved links are one element so the JS can replace them in one
+         write; `contents` keeps each anchor a flex item of the row itself. */
+      #detailLinks {
+        display: contents;
       }
       .sourcenote {
         max-width: 720px;
@@ -1715,6 +1763,10 @@
       </div>
       <div class="detailinner">
         <p class="eyebrow" id="detailSource"></p>
+        <figure class="detailhero" id="detailHero" hidden>
+          <img id="detailHeroImage" alt="" />
+          <figcaption id="detailHeroCredit"></figcaption>
+        </figure>
         <h2 id="detailTitle"></h2>
         <p class="location" id="detailLocation"></p>
         <div class="facts">
@@ -1731,8 +1783,9 @@
             >View original listing</a
           ><a id="mapLink" target="_blank" rel="noopener noreferrer"
             >Search Google Maps</a
-          >
+          ><span id="detailLinks"></span>
         </div>
+        <div class="detailembeds" id="detailEmbeds"></div>
         <p class="sourcenote">
           <b>Original details, clearly labelled.</b> We show the original
           description and link back to the page where the event was captured.
@@ -2019,9 +2072,29 @@
             : item.location;
         return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query })}`;
       }
+      // The hero is a licensed photograph, so the credit line is not optional:
+      // it ships with the image or the image does not ship.
+      function cardHero(item) {
+        const src = item.image_url || "";
+        if (!src.startsWith("/media/")) return "";
+        return `<figure class="cardhero"><img src="${esc(src)}" alt="${esc(item.image_alt || item.title || "")}" loading="lazy"/>${item.image_credit ? `<figcaption>${esc(item.image_credit)}</figcaption>` : ""}</figure>`;
+      }
+      function linkRow(item) {
+        return [
+          [item.official_url, "Official site"],
+          [item.source_url, "Original source"],
+          [holidayMapUrl(item), "Google Maps"],
+          [item.instagram_url, "Instagram"],
+          [item.tiktok_url, "TikTok"],
+          [item.booking_url, "Check options"],
+        ]
+          .filter(([url]) => safeUrl(url))
+          .map(([url, label]) => dataLink(url, label))
+          .join("");
+      }
       function placeCard(item, eyebrowParts) {
         const eyebrow = eyebrowParts.filter(Boolean).map(clean).join(" · ");
-        return `<article class="holidaycard">${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks">${dataLink(item.source_url, "Original source")}${dataLink(holidayMapUrl(item), "Google Maps")}${dataLink(item.booking_url, "Check options")}</div></article>`;
+        return `<article class="holidaycard">${cardHero(item)}${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks">${linkRow(item)}</div></article>`;
       }
       function filteredHolidays() {
         const filters = $$("[data-holiday-filter]:checked").map(
@@ -2151,6 +2224,26 @@
           e.latitude && e.longitude
             ? "Open in Google Maps"
             : "Search Google Maps";
+        showHero(e);
+        $("#detailLinks").innerHTML = [
+          [e.official_url, "Official site"],
+          [e.instagram_url, "Instagram"],
+          [e.tiktok_url, "TikTok"],
+          [e.booking_url, "Book"],
+        ]
+          .filter(([url]) => safeUrl(url))
+          .map(([url, label]) => dataLink(url, label))
+          .join("");
+        // Instagram and TikTok are embedded, never rehosted — and only here,
+        // when a modal is actually open: an iframe per card would load a
+        // third-party player for every listing on the page.
+        $("#detailEmbeds").innerHTML = (e.embeds || [])
+          .map(({ url, platform }) =>
+            safeUrl(url)
+              ? `<iframe src="${esc(url)}" loading="lazy" title="${esc(platform)} post" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>`
+              : "",
+          )
+          .join("");
         $("#detail").style.setProperty("--detail-y", "18px");
         $("#detail").setAttribute("aria-hidden", "false");
         $("#detail").classList.add("open");
@@ -2158,8 +2251,20 @@
         requestAnimationFrame(() => $("#closeDetail").focus());
         render();
       }
+      function showHero(e) {
+        const figure = $("#detailHero"),
+          src = e.image_url || "";
+        figure.hidden = !src.startsWith("/media/");
+        if (figure.hidden) return;
+        $("#detailHeroImage").src = src;
+        $("#detailHeroImage").alt = clean(e.image_alt || e.title || "");
+        $("#detailHeroCredit").textContent = clean(e.image_credit || "");
+      }
       function closeDetail() {
         const detail = $("#detail");
+        // Drop the iframes on the way out: a closed modal must not leave a
+        // third-party player running behind it.
+        $("#detailEmbeds").innerHTML = "";
         detail.classList.remove("open");
         detail.setAttribute("aria-hidden", "true");
         detail.style.removeProperty("--detail-y");

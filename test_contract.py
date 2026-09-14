@@ -120,6 +120,8 @@ def test_legacy_view_exposes_the_keys_the_frontend_reads():
         "city", "county", "country", "latitude", "longitude", "url", "source", "cost",
         "age_group", "category", "confidence", "region", "location", "price_range",
         "source_url", "source_name", "booking_url",
+        "image_url", "image_credit", "image_alt", "official_url", "instagram_url",
+        "tiktok_url", "embeds",
     }
     assert set(contract.legacy_view(_event())) == expected
 

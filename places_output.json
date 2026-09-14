@@ -21,15 +21,17 @@
     },
     "links": {
       "source_url": "https://visitwicklow.ie/listing/avondale-house-forest-park/",
-      "official_url": "",
+      "official_url": "http://www.beyondthetreesavondale.com/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=52.91184%2C-6.22205",
-      "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "instagram_url": "https://www.instagram.com/beyondthetreesavondale/",
+      "tiktok_url": "https://www.tiktok.com/@bttavondale",
+      "booking_url": "",
+      "links_checked": "2026-09-14T04:59:57+00:00"
     },
     "media": {
       "hero": null,
-      "embeds": []
+      "embeds": [],
+      "checked": "2026-09-14T05:13:09+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -163,12 +165,27 @@
       "official_url": "",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Lough%20Key%20Forest%20%26%20Activity%20Park%2C%20Lough%20Key%20Forest%20%26%20Activity%20Park%2C%20Roscommon%2C%20Ireland",
       "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "tiktok_url": "https://www.tiktok.com/@lough.key.forest",
+      "booking_url": "",
+      "links_checked": "2026-09-14T04:59:58+00:00"
     },
     "media": {
-      "hero": null,
-      "embeds": []
+      "hero": {
+        "url": "/media/place/place-lough-key-forest-activity-park-roscommon-330bc39cca.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:County_Roscommon_-_Lough_Key_Forest_Park_-_20230929150925.jpeg",
+        "licence": "CC BY-SA 4.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Dieglop",
+        "credit": "Photo: Dieglop · CC BY-SA 4.0",
+        "alt": "Aerial view of Lough Key Forest & Activity Park showing its lake, islands, and surrounding green forest under a bright s",
+        "gate": "hero",
+        "why": "Aerial view of Lough Key Forest Park's lake and islands, no people.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:13:30+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:13:30+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -291,13 +308,28 @@
       "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157",
       "official_url": "",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Kidspace%20Rathcoole%20%7C%20Events%2C%20Greenogue%20Business%20Park%2C%20County%20Dublin%2C%20Ireland%2C%20Dublin%2C%20Ireland",
-      "instagram_url": "",
+      "instagram_url": "https://www.instagram.com/kidspace_rathcoole/",
       "tiktok_url": "",
-      "booking_url": ""
+      "booking_url": "https://www.kidspace.ie/",
+      "links_checked": "2026-09-14T05:00:03+00:00"
     },
     "media": {
-      "hero": null,
-      "embeds": []
+      "hero": {
+        "url": "/media/place/place-kidspace-rathcoole-superhero-brunch-event-dublin-7639c95c8c.jpg",
+        "source": "official-site",
+        "source_url": "https://yourdaysout.com/events-on-in-county-dublin-ireland/kidspace-rathcoole-events-5157",
+        "licence": "",
+        "licence_url": "",
+        "attribution": "yourdaysout.com",
+        "credit": "Photo: yourdaysout.com",
+        "alt": "Photo of Kidspace Rathcoole | Events, Dublin",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": true,
+        "checked": "2026-09-14T05:01:19+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:13:36+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -413,11 +445,26 @@
       "maps_url": "https://www.google.com/maps/search/?api=1&query=GoKidsGo%20%7C%20Birthday%20Parties%2C%20Porters%20Rd%2C%20Coolmine%20Industrial%20Estate%2C%20Dublin%2C%20Ireland",
       "instagram_url": "",
       "tiktok_url": "",
-      "booking_url": ""
+      "booking_url": "https://www.gokidsgo.ie/",
+      "links_checked": "2026-09-14T05:00:23+00:00"
     },
     "media": {
-      "hero": null,
-      "embeds": []
+      "hero": {
+        "url": "/media/place/place-gokidsgo-birthday-parties-dublin-f3616e8ac5.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:H.M._The_Patrioteer.djvu",
+        "licence": "Public domain",
+        "licence_url": "",
+        "attribution": "Heinrich Mann",
+        "credit": "Photo: Heinrich Mann · Public domain",
+        "alt": "Photo of GoKidsGo | Birthday Parties, Dublin",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:01:24+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:13:37+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -539,15 +586,17 @@
     },
     "links": {
       "source_url": "https://yourdaysout.com/things-to-do-in-county-cavan-ireland/the-playcentre-kingscourt-cavan-2483",
-      "official_url": "",
+      "official_url": "http://www.theplaycentre.ie/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=The%20Playcentre%2C%20on%20the%20Kells%20road%2C%20Cavan%2C%20Ireland",
-      "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "instagram_url": "https://www.instagram.com/the_playcentre_trim/",
+      "tiktok_url": "https://www.tiktok.com/@theplayyardrct",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:29+00:00"
     },
     "media": {
       "hero": null,
-      "embeds": []
+      "embeds": [],
+      "checked": "2026-09-14T05:14:02+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -672,13 +721,28 @@
       "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830",
       "official_url": "",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=53.100367%2C-7.980883",
-      "instagram_url": "",
+      "instagram_url": "https://www.instagram.com/tearaways_petfarm/",
       "tiktok_url": "",
-      "booking_url": ""
+      "booking_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830",
+      "links_checked": "2026-09-14T05:00:36+00:00"
     },
     "media": {
-      "hero": null,
-      "embeds": []
+      "hero": {
+        "url": "/media/place/place-tearaways-pet-farm-activity-centre-tipperary-1158b29081.jpg",
+        "source": "official-site",
+        "source_url": "https://yourdaysout.com/things-to-do-in-county-tipperary-ireland/tearaways-pet-farm-activity-centre-830",
+        "licence": "",
+        "licence_url": "",
+        "attribution": "yourdaysout.com",
+        "credit": "Photo: yourdaysout.com",
+        "alt": "Blue wooden pirate ship playground structure on wood chips at Tearaways Pet Farm.",
+        "gate": "hero",
+        "why": "Real photo of play equipment at the place, no people as subject.",
+        "placeholder": true,
+        "checked": "2026-09-14T05:14:24+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:24+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -776,15 +840,17 @@
     },
     "links": {
       "source_url": "https://www.familyfun.ie/westgrove-hotel-kildare/",
-      "official_url": "",
+      "official_url": "http://www.westgrovehotel.com/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Westgrove%20Hotel%20and%20Leisure%20Club%2C%20Abbeylands%2C%20Kildare%2C%20Ireland",
-      "instagram_url": "",
+      "instagram_url": "https://www.instagram.com/westgrovehotel/",
       "tiktok_url": "",
-      "booking_url": "https://www.familyfun.ie/"
+      "booking_url": "https://www.familyfun.ie/",
+      "links_checked": "2026-09-14T05:00:40+00:00"
     },
     "media": {
       "hero": null,
-      "embeds": []
+      "embeds": [],
+      "checked": "2026-09-14T05:14:26+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -898,15 +964,17 @@
     },
     "links": {
       "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale/",
-      "official_url": "",
+      "official_url": "https://www.beyondthetreesavondale.com/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Beyond%20the%20Trees%20Avondale%2C%20Avondale%20Forest%20Park%20Rathdrum%20Co.%20Wicklow%20A67%20P303%2C%20Wicklow%2C%20Ireland",
-      "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "instagram_url": "https://www.instagram.com/beyondthetreesavondale/",
+      "tiktok_url": "https://www.tiktok.com/@bttavondale",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:41+00:00"
     },
     "media": {
       "hero": null,
-      "embeds": []
+      "embeds": [],
+      "checked": "2026-09-14T05:14:40+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -1035,11 +1103,26 @@
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Michael%20Collins%20House%20Museum%2C%207%20Emmet%20Square%2C%20Clonakilty%2C%20County%20Cork%2C%20Ireland%2C%20Cork%2C%20Ireland",
       "instagram_url": "",
       "tiktok_url": "",
-      "booking_url": ""
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:44+00:00"
     },
     "media": {
-      "hero": null,
-      "embeds": []
+      "hero": {
+        "url": "/media/place/place-michael-collins-house-museum-clonakilty-cork-f6fb6045cc.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:The_Michael_Collins_House_Museum,_Clonakilty_-_geograph.org.uk_-_8150588.jpg",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Marathon",
+        "credit": "Photo: Marathon · CC BY-SA 2.0",
+        "alt": "Street view of the Michael Collins House Museum in Cork, Ireland.",
+        "gate": "pass",
+        "why": "The building is the subject, but a person is visible on the left.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:02:25+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:03:07+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -1161,15 +1244,17 @@
     },
     "links": {
       "source_url": "https://www.familyfun.ie/astro-park-tallaght-coolock/",
-      "official_url": "",
+      "official_url": "https://www.astropark.ie/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Astropark%2C%20Astropark%20Coolock%2C%20Coolock%20Lane%2C%20Coolock%2C%20Dublin%2017%20D17%20Y998%2C%20Dublin%2C%20Ireland",
-      "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "instagram_url": "https://www.instagram.com/astropark_football/",
+      "tiktok_url": "https://www.tiktok.com/@astroparkdublin",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:45+00:00"
     },
     "media": {
       "hero": null,
-      "embeds": []
+      "embeds": [],
+      "checked": "2026-09-14T05:14:40+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -1292,15 +1377,17 @@
     },
     "links": {
       "source_url": "https://www.familyfun.ie/glendeer-pet-farm/",
-      "official_url": "",
+      "official_url": "http://www.glendeerpetfarm.ie/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=Glendeer%20Pet%20Farm%2C%20Drum%2C%20Athlone%2C%20Co.%20Westmeath%20N37%20HY39%2C%20Westmeath%2C%20Ireland",
-      "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "instagram_url": "https://www.instagram.com/glendeerfarm/",
+      "tiktok_url": "https://www.tiktok.com/@glendeerpetfarm",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:46+00:00"
     },
     "media": {
       "hero": null,
-      "embeds": []
+      "embeds": [],
+      "checked": "2026-09-14T05:14:41+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -1429,15 +1516,30 @@
     },
     "links": {
       "source_url": "https://www.familyfun.ie/maritime-hotel-cork/",
-      "official_url": "",
+      "official_url": "http://www.themaritime.ie/",
       "maps_url": "https://www.google.com/maps/search/?api=1&query=The%20Maritime%20Hotel%2C%20The%20Quay%20Bantry%2C%20Cork%2C%20Ireland",
-      "instagram_url": "",
-      "tiktok_url": "",
-      "booking_url": ""
+      "instagram_url": "https://www.instagram.com/themaritimehotel/",
+      "tiktok_url": "https://www.tiktok.com/@themaritimehotelbantry",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:47+00:00"
     },
     "media": {
-      "hero": null,
-      "embeds": []
+      "hero": {
+        "url": "/media/place/place-the-maritime-hotel-west-cork-cork-82c9548eb0.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:The_Dean_Hotel,_Cork,_Sept_2025_02.jpg",
+        "licence": "CC BY-SA 4.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "William Murphy",
+        "credit": "Photo: William Murphy · CC BY-SA 4.0",
+        "alt": "Photo of The Maritime Hotel, Cork",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:14:42+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:43+00:00"
     },
     "taxonomy": {
       "age_bands": [
@@ -1542,6 +1644,2072 @@
       "opening_hours": "",
       "duration_hint": "",
       "seasonal_note": "Easter Family Breaks from March 30 to April 11 2026"
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-beyond-the-trees-avondale-treetop-walk-wicklow",
+    "kind": "place",
+    "title": "Beyond The Trees Avondale: Treetop Walk",
+    "slug": "beyond-the-trees-avondale-treetop-walk-wicklow",
+    "summary": "A 1.3km treetop walk, viewing tower, and historic house in Avondale Forest Park, Rathdrum.",
+    "description": "Beyond The Trees Avondale is a visitor destination located in Avondale Forest Park in Rathdrum, Co. Wicklow. The site includes a Viewing Tower and the historic Avondale House. Visitors can experience a unique 1.3km treetop walk that journeys through the forest and high above the canopy of the trees. The experience offers multiple activity stations and immersive learning opportunities interweaved with stories of the historic Avondale Estate. A previous competition was organized by Beyond the Trees Avondale and Familyfun.ie to give away a Family Annual Pass. This pass covers 2 adults and up to 3 children. The competition was open to residents in Ireland only. The closing date was 24th August 2026. The winner of the competition was the O'Doherty Family. The competition has since closed.",
+    "family_relevant": true,
+    "location": {
+      "name": "Beyond The Trees Avondale",
+      "address": "Rathdrum Co. Wicklow A67 P303",
+      "city": "",
+      "county": "Wicklow",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Beyond%20The%20Trees%20Avondale%2C%20Rathdrum%20Co.%20Wicklow%20A67%20P303%2C%20Wicklow%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/beyondthetreesavondale/",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:48+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-beyond-the-trees-avondale-treetop-walk-wicklow-abbc81a988.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:The_life_and_times_of_King_Edward_VII_by_Whates,_Harry_Richard_3.djvu",
+        "licence": "Public domain",
+        "licence_url": "",
+        "attribution": "Harry Richard Whates",
+        "credit": "Photo: Harry Richard Whates · Public domain",
+        "alt": "Photo of Beyond The Trees Avondale, Wicklow",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:14:44+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:44+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "outdoor",
+      "activity_types": [
+        "trail-hike",
+        "park",
+        "nature-reserve"
+      ],
+      "accessibility": [],
+      "price_detail": "",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/",
+          "fetched_at": "2026-09-14T01:09:56+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The competition is closed.",
+          "quote": "Competition Closed",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The treetop walk is 1.3km long.",
+          "quote": "unique 1.3km treetop walk",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The venue is located in Avondale Forest Park.",
+          "quote": "Avondale Forest Park",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The venue includes a Viewing Tower.",
+          "quote": "Viewing Tower",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The venue includes Avondale House.",
+          "quote": "Avondale House",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The competition is organized by Beyond the Trees Avondale and Familyfun.ie.",
+          "quote": "Beyond the Trees Avondale and Familyfun.ie have teamed up",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The prize is a Family Annual Pass.",
+          "quote": "give away a Family Annual Pass",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The pass covers 2 adults and up to 3 children.",
+          "quote": "1 Annual Pass for 2 adults and up to 3 children",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The closing date for the competition was 24th August 2026.",
+          "quote": "The closing date is 24th August 2026",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The winner was the O' Doherty Family.",
+          "quote": "Congratulations To:- O&#8217; Doherty Family",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        },
+        {
+          "claim": "The competition is open only to residents in Ireland.",
+          "quote": "This competition is open to residents in Ireland only",
+          "source_url": "https://www.familyfun.ie/beyond-the-trees-avondale-competition/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T01:11:09+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-the-sing-factory-recording-studio-experience-dublin",
+    "kind": "place",
+    "title": "The Sing Factory: Recording Studio Experience",
+    "slug": "the-sing-factory-recording-studio-experience-dublin",
+    "summary": "Family singing experience in a Dublin recording studio with a competition for a recording and video voucher.",
+    "description": "The Sing Factory offers a unique singing experience located in a real working recording studio in Dublin City Centre. The venue is situated at The Basement 32 Merrion Street Upper Dublin 2 Ireland D02 FD39. It provides singers with the opportunity to step behind a microphone and experience a professional recording session. This activity is suitable for families, friends, and aspiring performers of all ages. The Sing Factory accommodates those celebrating special occasions, developing vocal skills, or simply looking for a fun and memorable activity. Currently, Familyfun.ie and The Sing Factory Dublin are running a free competition. One lucky winner can win a fantastic song recording and an HD video voucher. To enter, participants must answer the question regarding the county where The Sing Factory is located and provide required details. Entries must be submitted by Friday 17th July 2026 at 12 noon. Entries after this date will not be considered. Winners are randomly selected on that Friday and will be contacted by email or phone. Winner names will also appear on the Familyfun.ie website and Facebook page. This competition is open only to residents in Ireland. There is no cash alternative for any prizes. All entries to the competitions will be subscribed to the Familyfun.ie newsletter. All entries are free to enter, with one entry allowed per email address per competition. Prizes are non-transferable, non-refundable, and subject to availability.",
+    "family_relevant": true,
+    "location": {
+      "name": "The Sing Factory",
+      "address": "The Basement 32 Merrion Street Upper Dublin 2 Ireland D02 FD39",
+      "city": "Dublin City Centre",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/sing-factory-competition/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=The%20Sing%20Factory%2C%20The%20Basement%2032%20Merrion%20Street%20Upper%20Dublin%202%20Ireland%20D02%20FD39%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:49+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-the-sing-factory-recording-studio-experience-dublin-59bf5e0362.jpg",
+        "source": "openverse",
+        "source_url": "https://www.flickr.com/photos/80824546@N00/6899224568",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+        "attribution": "infomatique",
+        "credit": "Photo: infomatique · CC BY-SA 2.0",
+        "alt": "Photo of The Sing Factory, Dublin",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:14:45+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:45+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "free",
+      "setting": "indoor",
+      "activity_types": [
+        "workshop-class"
+      ],
+      "accessibility": [],
+      "price_detail": "Free competition",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/sing-factory-competition/",
+          "fetched_at": "2026-09-14T01:11:10+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The Sing Factory is located in a real working recording studio in Dublin City Centre.",
+          "quote": "Located in a real working recording studio in Dublin City Centre",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "The Sing Factory address is The Basement 32 Merrion Street Upper Dublin 2 Ireland D02 FD39.",
+          "quote": "Address: The Basement 32 Merrion Street Upper Dublin 2 Ireland D02 FD39",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "The competition prize includes a fantastic song recording and an HD video voucher.",
+          "quote": "Win A fantastic Song Recording + HD Video Voucher",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "The competition closing date is Friday 17th July 2026 at 12 noon.",
+          "quote": "The closing date is Friday 17th July 2026 at 12 noon",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "Winners will be randomly selected on the Friday of the draw date.",
+          "quote": "The winners will be randomly selected on that Friday of the draw date",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "The competition is open to residents in Ireland only.",
+          "quote": "This competition is open to residents in Ireland only.",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "There is no cash alternative for any prizes.",
+          "quote": "There is no cash alternative for any prizes",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        },
+        {
+          "claim": "All entries to the competitions will be subscribed to the Familyfun.ie newsletter.",
+          "quote": "All entries to our competitions will be subscribed to the Familyfun.ie newsletter.",
+          "source_url": "https://www.familyfun.ie/sing-factory-competition/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T01:12:24+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-inflatable-world-cookstown-family-bouncy-castle-venue-tyrone",
+    "kind": "place",
+    "title": "Inflatable World Cookstown - Family Bouncy Castle Venue",
+    "slug": "inflatable-world-cookstown-family-bouncy-castle-venue-tyrone",
+    "summary": "Toddler-friendly indoor bouncy castle venue in Cookstown, open Fri-Sun term time and school holidays with free parking.",
+    "description": "Inflatable World Cookstown is located at G6 Kilcronagh Business Park, Cookstown, Northern Ireland, BT80 9HJ. The venue is designed for toddlers and up. Children must be supervised on the main frame, though a separate toddler area is noted as still to be installed. The experience features inflatables designed with different countries and famous landmarks, including giant bouncy castles, slides, and obstacles inspired by cities and landmarks like the pyramids. The facility is suitable for rainy weather, offering a solution when outdoor plans are disrupted. Parents can relax while children play or book a session to join in the fun. The venue is open Friday through Sunday during term time and school holidays. Amenities include free parking right outside, accessible toilets, and baby change facilities. A cafe is also available on-site. Visitors are advised to book ahead as popular days can fill up quickly. It is recommended to bring water, dress in comfortable light clothes and socks, and arrive early to make the most of the session. For the most up-to-date times, days, and prices, checking the website is suggested. The pricing structure includes £12.99 for a one-hour session and £16.99 for 1.5 hours. A combined ticket for one toddler and one adult is priced at £12.99.",
+    "family_relevant": true,
+    "location": {
+      "name": "INFLATABLE WORLD COOKSTOWN",
+      "address": "G6 Kilcronagh Business Park, Cookstown, Northern Ireland, BT80 9HJ",
+      "city": "Cookstown",
+      "county": "Tyrone",
+      "region": "Ulster",
+      "country": "GB",
+      "lat": null,
+      "lon": null,
+      "ireland": false
+    },
+    "links": {
+      "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=INFLATABLE%20WORLD%20COOKSTOWN%2C%20G6%20Kilcronagh%20Business%20Park%2C%20Cookstown%2C%20Northern%20Ireland%2C%20BT80%209HJ%2C%20Tyrone",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:55+00:00"
+    },
+    "media": {
+      "hero": null,
+      "embeds": [
+        {
+          "platform": "tiktok",
+          "url": "https://www.tiktok.com/embed/v2/7616462561650740503"
+        }
+      ],
+      "checked": "2026-09-14T05:14:46+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9"
+      ],
+      "price_band": "10-25",
+      "setting": "indoor",
+      "activity_types": [
+        "soft-play",
+        "adventure-climbing"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "step-free",
+        "buggy"
+      ],
+      "price_detail": "£12.99 for 1 hour, £16.99 1.5 hours, Toddler + Adult ticket £12.99",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503",
+          "fetched_at": "2026-09-14T01:55:32+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The address is G6 Kilcronagh Business Park, Cookstown, Northern Ireland, BT80 9HJ",
+          "quote": "📍 G6 Kilcronagh Business Park, Cookstown, Northern Ireland, BT80 9HJ",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "The price is £12.99 for 1 hour",
+          "quote": "💷 £12.99 for 1 hour",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "The price is £16.99 for 1.5 hours",
+          "quote": "£16.99 1.5 hours",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "A Toddler + Adult ticket costs £12.99",
+          "quote": "Toddler + Adult ticket £12.99",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "The venue is open Friday-Sunday",
+          "quote": "⏰Friday-Sunday",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "The venue is open during Term Time",
+          "quote": "Term Time",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "The venue is open during school holidays",
+          "quote": "And school holidays",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "The venue is for toddlers and up",
+          "quote": "🧒From toddlers and up",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "Toddlers have to be supervised on the main frame",
+          "quote": "(toddlers have to be supervised on main frame",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "There is free parking right outside",
+          "quote": "🅿️ Free parking right outside",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "There are accessible toilets",
+          "quote": "🚾 accessible toilets",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        },
+        {
+          "claim": "There is baby change available",
+          "quote": "and baby change",
+          "source_url": "https://www.tiktok.com/@wee.adventurers_ni/video/7616462561650740503"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T01:57:38+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Friday-Sunday, Term Time, school holidays",
+      "duration_hint": "1 hour, 1.5 hours",
+      "seasonal_note": "Term Time, And school holidays"
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-arklow-arts-centre-mixed-media-art-events-wicklow",
+    "kind": "place",
+    "title": "Arklow Arts Centre: Mixed-Media Art & Events",
+    "slug": "arklow-arts-centre-mixed-media-art-events-wicklow",
+    "summary": "Mixed-media art from Arklow's creative community, founded by 402 Art Collective, open Tue-Sat 10:00-17:00.",
+    "description": "The Arklow Arts Centre is a venue located in Arklow, Co Wicklow, specifically at 87 Lower Main Street with the postcode Y14 A256. This space was founded by the 402 Art Collective as a bold step toward building a lasting cultural hub for the town. Visitors can come and see mixed-media art from the town's vibrant creative community on display. The centre hosts various events, including the upcoming Arklow Open Visual Arts Exhibition and the Arklow Plein Air Festival, which has previously been noted as sold out. Regarding accessibility, the source text does not specify features like wheelchair access, step-free entry, buggy accessibility, changing-places toilets, sensory-friendly environments, or facilities for the elderly. There is no information provided regarding specific age bands for visitors or a price band, though a note advises mentioning Family Fun when booking. The facility is situated indoors within the town. Opening hours are listed as Tuesday to Saturday, running from 10:00 until 17:00. For further details or bookings, the telephone number available is +353 87 490 8120, and visitors are encouraged to visit the website or contact via email for more information.",
+    "family_relevant": true,
+    "location": {
+      "name": "Arklow Arts Centre",
+      "address": "87 Lower Main St.",
+      "city": "Arklow",
+      "county": "Wicklow",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/arklow-arts-centre/",
+      "official_url": "https://arklowartscentre.ie/",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Arklow%20Arts%20Centre%2C%2087%20Lower%20Main%20St.%2C%20Wicklow%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/arklowartscentre/",
+      "tiktok_url": "https://www.tiktok.com/@fionnmaccumhail1",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:00:56+00:00"
+    },
+    "media": {
+      "hero": null,
+      "embeds": [],
+      "checked": "2026-09-14T05:14:47+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [],
+      "price_band": "unknown",
+      "setting": "indoor",
+      "activity_types": [
+        "festival",
+        "museum",
+        "craft"
+      ],
+      "accessibility": [],
+      "price_detail": "",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/arklow-arts-centre/",
+          "fetched_at": "2026-09-14T02:03:24+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is called Arklow Arts Centre",
+          "quote": "Arklow Arts Centre",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The venue features mixed-media art from the town's creative community",
+          "quote": "Come and see mixed-media art from the town&#8217;s vibrant creative community at Arklow Arts Centre.",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The venue was founded by the 402 Art Collective",
+          "quote": "Founded by the 402 Art Collective",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The venue is located on Lower Main Street",
+          "quote": "this space on Lower Main Street",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The address is 87 Lower Main St.",
+          "quote": "Address: 87 Lower Main St.",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The town is Arklow",
+          "quote": "Arklow",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The county is Co Wicklow",
+          "quote": "Arklow Co Wicklow",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The postcode is Y14 A256",
+          "quote": "Y14 A256",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "The telephone number is +353 87 490 8120",
+          "quote": "Tel.: +353 87 490 8120",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "Opening hours are Tuesday to Saturday",
+          "quote": "Opening Hours Tuesday to Saturday",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "Opening hours are from 10:00 to 17:00",
+          "quote": "10:00 &#8211; 17:00",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        },
+        {
+          "claim": "There is an event called the Arklow Plein Air Festival",
+          "quote": "Arklow Plein Air Festival",
+          "source_url": "https://www.familyfun.ie/arklow-arts-centre/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T02:05:24+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Tuesday to Saturday 10:00 – 17:00",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-dodublin-walking-tours-south-and-north-side-dublin",
+    "kind": "place",
+    "title": "DoDublin Walking Tours: South and North Side",
+    "slug": "dodublin-walking-tours-south-and-north-side-dublin",
+    "summary": "Guided 2.5-hour walks exploring Dublin's southside and northside history, culture, and landmarks.",
+    "description": "DoDublin Walking Tours offers guided experiences covering the history, culture, and hidden stories of Dublin. The Southside tour explores famous landmarks including Dublin Castle, St Patrick’s Cathedral, Temple Bar, and Christ Church Cathedral. This experience uncovers the city's Viking and cultural past. The tour lasts approximately 2.5 hours and departs from the Molly Malone Statue on Suffolk Street. The Northside tour explores the rich history and famous landmarks of Dublin's northside. It uncovers stories behind O'Connell Street, the GPO, and Trinity College. This tour also lasts approximately 2.5 hours and departs from the Dublin Bus Head Office on O'Connell Street. Both tours are suitable for adults, families, and visitors to Dublin. Under 18s must be accompanied by an adult. Comfortable walking shoes are recommended. The tours are conducted in English. Private Spanish and German tours are available for both the southside and northside options. The Southside experience combines local storytelling, medieval history, and iconic attractions. The Northside tour combines fascinating storytelling, historic sites, and hidden gems throughout the city centre. Both tours offer opportunities for photography.",
+    "family_relevant": true,
+    "location": {
+      "name": "DoDublin Walking Tours",
+      "address": "59 Upper O'Connell Street Dublin 1",
+      "city": "Dublin",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/dublin-walking-tours/",
+      "official_url": "https://dodublin.ie/",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=DoDublin%20Walking%20Tours%2C%2059%20Upper%20O%27Connell%20Street%20Dublin%201%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/dodublintours/",
+      "tiktok_url": "https://www.tiktok.com/@dodublin",
+      "booking_url": "https://dodublin.ie/dublin-city-sightseeing-tours/dublin-city-walking-tour/guided-walking-tour-dublin-city/stories-and-splendour-south-walking-tour#familyfun",
+      "links_checked": "2026-09-14T05:01:02+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-dodublin-walking-tours-south-and-north-side-dublin-7569b91369.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Dublin_-_Pearse_Street_Garda_Station_-_geograph.org.uk_-_1494270.jpg",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Joseph Mischyshyn",
+        "credit": "Photo: Joseph Mischyshyn · CC BY-SA 2.0",
+        "alt": "Photo of DoDublin Walking Tours, Dublin",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:05:06+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:49+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "outdoor",
+      "activity_types": [
+        "trail-hike"
+      ],
+      "accessibility": [],
+      "price_detail": "",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/dublin-walking-tours/",
+          "fetched_at": "2026-09-14T02:05:25+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The tour covers the history, culture and hidden stories of Dublin's southside.",
+          "quote": "Discover the fascinating history, culture and hidden stories of Dublin’s southside on this guided walking tour through the heart of the city.",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The southside tour explores famous landmarks including Dublin Castle, St Patrick’s Cathedral, Temple Bar and Christ Church Cathedral.",
+          "quote": "explores famous landmarks including Dublin Castle, St Patrick’s Cathedral, Temple Bar and Christ Church Cathedral.",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The southside tour uncovers the city's Viking and cultural past.",
+          "quote": "uncovering the city’s Viking and cultural past.",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The southside walking tour lasts approximately 2.5 hours.",
+          "quote": "Duration: Approx. 2.5 hours",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The departure point for the southside tour is the Molly Malone Statue.",
+          "quote": "Departure Point: Molly Malone Statue, Suffolk Street",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The southside tour is suitable for adults, families and visitors to Dublin.",
+          "quote": "Suitable For: Adults, families and visitors to Dublin",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "Private Spanish and German tours are available for the southside tour.",
+          "quote": "Languages: English, with private Spanish &amp; German tours available",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "Under 18s must be accompanied by an adult for the southside tour.",
+          "quote": "Under 18s must be accompanied by an adult",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The northside tour explores the rich history and famous landmarks of Dublin’s northside.",
+          "quote": "Explore the rich history and famous landmarks of Dublin’s northside on this guided walking tour through the heart of the capital.",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The northside tour uncovers stories behind O’Connell Street, the GPO, Trinity College.",
+          "quote": "uncovers the stories behind O’Connell Street, the GPO, Trinity College and many of Dublin’s most iconic locations.",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The northside tour lasts approximately 2.5 hours.",
+          "quote": "Duration: Approx. 2.5 hours",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        },
+        {
+          "claim": "The departure point for the northside tour is the Dublin Bus Head Office.",
+          "quote": "Departure Point: Dublin Bus Head Office, O’Connell Street",
+          "source_url": "https://www.familyfun.ie/dublin-walking-tours/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T02:07:09+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "Approx. 2.5 hours",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-battle-of-the-boyne-visitor-centre-oldbridge-estate-meath",
+    "kind": "place",
+    "title": "Battle of the Boyne Visitor Centre – Oldbridge Estate",
+    "slug": "battle-of-the-boyne-visitor-centre-oldbridge-estate-meath",
+    "summary": "Visitor centre and grounds commemorating the 1690 battle, featuring exhibitions, a walled garden, and battlesite walkways.",
+    "description": "The Battle of the Boyne Visitor Centre is part of the Oldbridge Estate in Oldbridge, County Meath. It occupies a recently restored eighteenth-century house on the battleground where King William III clashed with King James II on 1 July 1690. The site includes the visitor centre and the grounds with a Walled Garden. Access to the visitor experience is currently through the Stable yard, where the exhibition is located. Oldbridge House remains closed. The visitor centre contains original weapons and a laser model of the battlefield. Admission to the grounds and Walled Garden is free. Entry to the exhibition is free for a limited time only. However, admission to the Battle of the Boyne Visitor experience has specific charges: adults are €5.00, groups and seniors €4.00, children and students €3.00, and families €13.00. Groups of 10 or more need to book in advance. The average length of a visit to the Visitor Centre is 45 minutes, while self-guiding walks take about an hour. The site is open all year, with seasonal opening times varying between 09:00-16:00 and 10:00-17:00 depending on the month. Last admission is one hour before closing. The grounds allow dogs on leads but prohibit cycling, fire lighting, camping, and barbecues. There are wheelchair accessible facilities and toilets. The nearest train station is Thurles. During winter, the centre may close due to weather, and a hazard warning notes deep water nearby and uneven terrain.",
+    "family_relevant": true,
+    "location": {
+      "name": "Battle of the Boyne Visitor Centre – Oldbridge Estate",
+      "address": "Oldbridge House, Oldbridge",
+      "city": "Drogheda",
+      "county": "Meath",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Battle%20of%20the%20Boyne%20Visitor%20Centre%20%E2%80%93%20Oldbridge%20Estate%2C%20Oldbridge%20House%2C%20Oldbridge%2C%20Meath%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:09+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-battle-of-the-boyne-visitor-centre-oldbridge-estate-meath-1d7c80cb31.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Battle_of_the_Boyne_Visitor_Centre_-_Display_of_battle_equipment_-_geograph.org.uk_-_4637133.jpg",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Colin Park",
+        "credit": "Photo: Colin Park · CC BY-SA 2.0",
+        "alt": "Photo of Battle of the Boyne Visitor Centre – Oldbridge Estate, Meath",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:05:44+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:51+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "under-10",
+      "setting": "both",
+      "activity_types": [
+        "museum",
+        "park",
+        "trail-hike"
+      ],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "price_detail": "Admission Adult: €5.00; Group/Senior: €4.00; Child/Student: €3.00; Family: €13.00; Free admission to the grounds and Walled Garden (battlesite walkways)",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/",
+          "fetched_at": "2026-09-14T03:27:30+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The Battle of the Boyne Visitor Centre is part of the Oldbridge Estate.",
+          "quote": "Battle of the Boyne Visitor Centre &#8211; Oldbridge Estate",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "Access to the Battle of the Boyne Visitor experience is currently through the Stable yard.",
+          "quote": "Battle of the Boyne's Visitor experience access point is currently through the Stable yard.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "Oldbridge House remains closed.",
+          "quote": "Oldbridge House remains closed",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "",
+          "quote": "We are offering free entry to all visitors via Stable yard.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "The admission price for adults is €5.00.",
+          "quote": "Admission Adult: €5.00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "The admission price for groups and seniors is €4.00.",
+          "quote": "Group/Senior: €4.00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "The admission price for children and students is €3.00.",
+          "quote": "Child/Student: €3.00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "The admission price for a family is €13.00.",
+          "quote": "Family: €13.00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "Admission to the grounds and Walled Garden is free.",
+          "quote": "Free admission to the grounds and Walled Garden (battlesite walkways).",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "Groups of 10 or more need to book in advance.",
+          "quote": "Groups of 10 or more need to book in advance.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "The average length of a visit to the Visitor Centre is 45 minutes.",
+          "quote": "Average Length of Visit: Visitor Centre – 45 minutes .",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        },
+        {
+          "claim": "The nearest train station is Thurles.",
+          "quote": "The nearest train station is Thurles.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/battle-of-the-boyne-visitor-centre-oldbridge-estate/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T03:29:52+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "January - April Daily 9:00 – 16:00; May – September Daily 10:00 – 17:00; October – December Daily 09:00 – 16:00",
+      "duration_hint": "Visitor Centre – 45 minutes; Self Guiding Walks – 1 hour",
+      "seasonal_note": "During the winter season, the Visitor Centre may not open due to adverse weather conditions. Free self-guided admission into the Exhibition for a limited time only."
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-custom-house-visitor-centre-dublin-dublin",
+    "kind": "place",
+    "title": "Custom House Visitor Centre, Dublin",
+    "slug": "custom-house-visitor-centre-dublin-dublin",
+    "summary": "A visitor centre exploring 230 years of Irish history in a building by James Gandon.",
+    "description": "The Custom House Visitor Centre is an architectural marvel located at Custom House Quay, Dublin 1. Opened in November 2021, the venue explores over 230 years of Irish history, covering the stories of the building, its burning during the war of independence, and its restoration. It also reveals narratives of political scandal, rebellion, and tragedy that shaped the history of Ireland. The site allows visitors to take in the architectural beauty of James Gandon's designs and admire the statues on the exterior, including Edward Smyth's 14 riverine heads. The venue operates daily from 09:30 to 17:30, with the last admission at 16:45. Guided tours are available, and the facility includes a bike trail, an audio guide for the exhibition, a café concession, and a brochure. Facilities include a lift, wheelchair access, toilets, baby changing, and WiFi. Admission is available for adults, seniors, children, students, and families. Guided admission is Adult €8.00, Senior €6.00, Child/Student €4.00, and Family €20.00. Self-guided admission is Adult €6.00, Senior €5.00, Child/Student €3.00, and Family €15.00. The venue is open all year. For mobility access, visitors should contact the site at least three days in advance. Assistance dogs are permitted.",
+    "family_relevant": true,
+    "location": {
+      "name": "Custom House Visitor Centre",
+      "address": "Custom House Quay",
+      "city": "Dublin 1",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/",
+      "official_url": "https://heritageireland.ie/places-to-visit/custom-house-visitor-centre/",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Custom%20House%20Visitor%20Centre%2C%20Custom%20House%20Quay%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/customhousevisitorcentreopw/",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:10+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-custom-house-visitor-centre-dublin-dublin-c32e2c2c96.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Custom_House_Museum_Key_West.jpg",
+        "licence": "CC BY-SA 4.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Herbert wie",
+        "credit": "Photo: Herbert wie · CC BY-SA 4.0",
+        "alt": "Photo of Custom House Visitor Centre, Dublin",
+        "gate": "skip",
+        "why": "no vision lane answered",
+        "placeholder": false,
+        "checked": "2026-09-14T05:05:49+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:14:53+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "10-25",
+      "setting": "both",
+      "activity_types": [
+        "museum",
+        "trail-hike"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "step-free",
+        "buggy",
+        "changing-places-toilet",
+        "elder-friendly"
+      ],
+      "price_detail": "Admission Guided/Self-Guided: Adult €8.00/€6.00 Senior €6.00/€5.00 Child/Student €4.00/€3.00 Family €20.00/€15.00",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/",
+          "fetched_at": "2026-09-14T03:29:53+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is the Custom House Visitor Centre.",
+          "quote": "Custom House Visitor Centre",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The venue operates daily from 09:30 to 17:30.",
+          "quote": "09:30 - 17:30",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The last admission time is 16:45.",
+          "quote": "Last admission 16:45",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "Admission is available for adults, seniors, children, students, and families.",
+          "quote": "Admission Guided/Self-Guided: Adult €8.00/€6.00 Senior €6.00/€5.00 Child/Student €4.00/€3.00 Family €20.00/€15.00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The venue is located at Custom House Quay Dublin 1 D01 W6X0.",
+          "quote": "Custom House Quay Dublin 1 D01 W6X0",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The venue was opened in November 2021.",
+          "quote": "Opened in November 2021",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The venue explores over 230 years of Irish history.",
+          "quote": "encompassing over 230 years of Irish history",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The building features designs by James Gandon.",
+          "quote": "Take in the architectural beauty of James Gandon’s designs",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The exterior features Edward Smyth’s 14 riverine heads.",
+          "quote": "admire the many statues that adorn the exterior, including Edward Smyth’s 14 riverine heads",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "Guided tours are available.",
+          "quote": "Guided tours",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        },
+        {
+          "claim": "The venue has a bike trail available.",
+          "quote": "Bike Trail",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/custom-house-visitor-centre/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T03:32:18+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "09:30 - 17:30 (Last admission 16:45)",
+      "duration_hint": "",
+      "seasonal_note": "Open all year"
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-doneraile-court-and-estate-cork",
+    "kind": "place",
+    "title": "Doneraile Court and Estate",
+    "slug": "doneraile-court-and-estate-cork",
+    "summary": "Historic house and parkland in North Cork with guided tours, tearooms, wildlife walks and free access to gardens.",
+    "description": "Doneraile Court and Estate in North Cork offers a historic house and 160-hectare parkland open seven days a week. Guided tours of the house run on the hour from 10:00. Sarah's Tearooms is open seven days per week, closing at 17:00 with last indoor orders at 16:00. Admission prices: adult guided tour €8.00, senior €6.00, student/child €4.00, family €20.00, group rate €6.00, children under 12 free. The house was built around 1645 by the St Leger family on the site of a ruined castle and refurbished in the mid‑eighteenth century into an outstanding example of Georgian architecture. Thirteen generations of the St Leger family lived here over three centuries; Elizabeth St Leger became the first woman Freemason in the world in 1712. The parklands, designed in the naturalistic style of Capability Brown, feature water features, a parterre walled garden, gardeners’ cottages, and numerous pathways and graded walks. Visitors may spot red deer, fallow deer, sika deer and Kerry cattle on the estate. Opening times vary seasonally: the house is open 10:00–17:00 (extended to 18:00 in July–August 2026); the parkland is free to visit during its own hours, which range from 08:00–20:00 in spring/summer/autumn and 08:00–17:00 in winter, with adjusted gate and toilet closing times listed on site.",
+    "family_relevant": true,
+    "location": {
+      "name": "Doneraile Court and Estate",
+      "address": "Doneraile",
+      "city": "",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/",
+      "official_url": "https://donerailecourt.admit-one.eu/",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Doneraile%20Court%20and%20Estate%2C%20Doneraile%2C%20Cork%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/doneraileestateopw/",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:12+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-doneraile-court-and-estate-cork-679dea25e8.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Doneraile_Court_-_geograph.org.uk_-_3784825.jpg",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Owen O'Sullivan",
+        "credit": "Photo: Owen O'Sullivan · CC BY-SA 2.0",
+        "alt": "Doneraile Court and Estate viewed from a distance across green grounds.",
+        "gate": "pass",
+        "why": "Place is subject, but people are visible in the grounds.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:06:27+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:06:27+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "under-10",
+      "setting": "",
+      "activity_types": [
+        "playground",
+        "park",
+        "trail-hike",
+        "zoo-wildlife",
+        "nature-reserve"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "step-free",
+        "buggy"
+      ],
+      "price_detail": "Guided tour: Adult : €8.00 Senior : €6.00 Student/Child: €4.00 Family: €20.00 Group rate: €6.00 U12s: Free",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/",
+          "fetched_at": "2026-09-14T03:32:18+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "Doneraile Court is open 7 days a week.",
+          "quote": "Doneraile Court is open 7 days a week",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Tours are available on the hour from 10:00.",
+          "quote": "Tours of Doneraile Court available on the hour from 10:00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Sarah's Tearooms is open 7 days per week.",
+          "quote": "Sarah's Tearooms is open 7 days per week.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Tearooms close at 17:00.",
+          "quote": "Tearooms close at 17:00 with last indoor orders at 16:00.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "The adult guided tour admission price is €8.00.",
+          "quote": "Guided tour: Adult : €8.00",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Children under 12 are free.",
+          "quote": "U12s: Free",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Doneraile Court was built around 1645 by the St Leger family.",
+          "quote": "The house was built by the St Leger family around 1645 on the site of a ruined castle.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "The house is an outstanding example of Georgian architecture.",
+          "quote": "By the time it was refurbished in the mid-eighteenth century it had become an outstanding example of Georgian architecture .",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Elizabeth St Leger was the first woman Freemason in the world in 1712.",
+          "quote": "Elizabeth St Leger made history when she became the first woman Freemason in the world in 1712.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "The parklands are designed in the naturalistic style of Capability Brown.",
+          "quote": "The fine parklands are designed in the naturalistic style of the famous Capability Brown.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        },
+        {
+          "claim": "Red deer, fallow deer, sika deer, and Kerry cattle live on the estate.",
+          "quote": "Lucky visitors might just spot some of the red deer, fallow deer, sika deer and Kerry cattle that live on the estate.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/doneraile-court-and-estate/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T03:36:16+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Doneraile Court: Open 7 days a week. 20 March – 4 November 2026. 10:00 – 17:00 **July and August 2026 : Open 10: 00 – 18:00**. Doneraile Park: The surrounding historic parklands of Doneraile Estate are free to visit during the opening times listed below: Spring/Summer/ Autumn from 29 March 2026 Dail",
+      "duration_hint": "",
+      "seasonal_note": "20 March – 4 November 2026. July and August 2026 open until 18:00."
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-farmleigh-house-and-gardens-edwardian-mansion-dublin",
+    "kind": "place",
+    "title": "Farmleigh House and Gardens: Edwardian Mansion",
+    "slug": "farmleigh-house-and-gardens-edwardian-mansion-dublin",
+    "summary": "Free grounds, gardens and gallery in Phoenix Park; paid house tours available.",
+    "description": "Farmleigh is a 78-acre estate located inside Dublin's Phoenix Park. It is described as an eclectic Edwardian mansion and serves as the Irish state guesthouse. The property was constructed by Edward Cecil Guinness, great-grandson of Arthur Guinness, around a smaller Georgian house in the 1880s. The government purchased the estate in June 1999 to provide accommodation for high-level meetings and visiting guests. The site features a library with a collection of rare books and manuscripts, as well as extensive pleasure-grounds containing Victorian and Edwardian ornamental features, walled and sunken gardens, and scenic lakeside walks. The estate also includes a working farm with a herd of Kerry cows. Admission to the grounds, gardens, and gallery is free. A paid guided tour of the house is available for adults at €8, with reduced rates for seniors (€6), students/children (€4), and families (€20). Free outdoor guided tours are offered at 11:30am and 2:30pm, weather permitting, with tickets collected at the guides desk in the Motorhouse Reception. The grounds open daily from 10am to 6pm, with last entry at 5pm. The Boathouse Café is open daily. Note that Farmleigh House is closed to the public for the remainder of 2026 to accommodate the EU Presidency. The site is located near the Phoenix Park Visitor Centre, approximately 1.9km away.",
+    "family_relevant": true,
+    "location": {
+      "name": "Farmleigh House and Gardens",
+      "address": "Phoenix Park Dublin 15 D15 TD50",
+      "city": "Dublin",
+      "county": "Dublin",
+      "region": "Leinster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Farmleigh%20House%20and%20Gardens%2C%20Phoenix%20Park%20Dublin%2015%20D15%20TD50%2C%20Dublin%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:13+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-farmleigh-house-and-gardens-edwardian-mansion-dublin-c06fa391ae.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:FARMLEIGH_HOUSE_(_GROUNDS_AND_GARDENS_PHOTOGRAPHED_APRIL_2017)-127222.jpg",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "William Murphy",
+        "credit": "Photo: William Murphy · CC BY-SA 2.0",
+        "alt": "A stone gazebo with a weather vane stands in a manicured garden path at Farmleigh House.",
+        "gate": "pass",
+        "why": "Passes as a photo of the gardens, but a person is visible in the background.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:06:50+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:07:13+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "free",
+      "setting": "both",
+      "activity_types": [
+        "park",
+        "museum",
+        "farm",
+        "trail-hike",
+        "library"
+      ],
+      "accessibility": [
+        "wheelchair",
+        "step-free",
+        "buggy",
+        "changing-places-toilet"
+      ],
+      "price_detail": "Admission to the grounds, gardens, and gallery of Farmleigh is free. Admission for guided tour of House: Adult : €8 Senior : €6 Student / Child : €4 Family : €20",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/",
+          "fetched_at": "2026-09-14T03:36:16+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "Farmleigh House and Gardens is an Edwardian mansion and the Irish state guesthouse",
+          "quote": "An eclectic Edwardian mansion and the Irish state guesthouse",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Farmleigh grounds are open daily 10am to 6pm with last entry at 5pm",
+          "quote": "Farmleigh grounds are open daily 10am - 6pm with last entry at 5pm.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "The Boathouse Café is open daily",
+          "quote": "The Boathouse Café is open daily",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Free outdoor guided tours are available at 11:30am and 2:30pm",
+          "quote": "Free outdoor guided tours are available 11:30am and 2:30pm - weather permitting.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Guided tour tickets can be obtained from the guides desk in the Motorhouse Reception",
+          "quote": "Tickets can be obtained from the guides desk in the Motorhouse Reception",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Admission to the grounds, gardens, and gallery of Farmleigh is free",
+          "quote": "Admission to the grounds, gardens, and gallery of Farmleigh is free",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Admission for guided tour of House for an Adult is €8",
+          "quote": "Admission for guided tour of House: Adult : €8",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Farmleigh is a 78-acre estate inside Dublin’s Phoenix Park",
+          "quote": "Farmleigh is a 78-acre estate inside Dublin’s Phoenix Park.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "The government bought Farmleigh in June 1999",
+          "quote": "The government bought it in June 1999 to provide accommodation for high-level meetings and visiting guests of the nation.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Edward Cecil Guinness constructed Farmleigh around a smaller Georgian house in the 1880s",
+          "quote": "Edward Cecil Guinness, great-grandson of Arthur Guinness, constructed Farmleigh around a smaller Georgian house in the 1880s.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "The estate boasts a working farm with a herd of Kerry cows",
+          "quote": "The estate also boasts a working farm with a herd of Kerry cows.",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        },
+        {
+          "claim": "Phoenix Park Visitor Centre is approx. 1.9 km from Farmleigh House and Gardens",
+          "quote": "Phoenix Park Visitor Centre, Ashtown Castle and Biodiversity Centre A rediscovered medieval gem and its demesne Approx. 1.9 km from Farmleigh House and Gardens",
+          "source_url": "https://heritageireland.ie/visit/places-to-visit/farmleigh-house-and-gardens/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T03:38:53+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "10am - 6pm (grounds daily)",
+      "duration_hint": "",
+      "seasonal_note": "Farmleigh will be fully closed to the public on Thursday 10, Friday 11 and Saturday 12 September 2026. Farmleigh House is currently closed for the remainder of 2026 to accommodate the EU Presidency."
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-weekly-traditional-session-at-coughlan-s-cork-cork",
+    "kind": "place",
+    "title": "Weekly Traditional Session at Coughlan's, Cork",
+    "slug": "weekly-traditional-session-at-coughlan-s-cork-cork",
+    "summary": "Informal trad & folk session in the bar, every Monday at 8:30 pm, free to attend.",
+    "description": "Coughlan's, located on Douglas Street in Cork, hosts an informal weekly trad and folk session in the bar. These sessions take place every Monday at 8:30 pm. The event is free to attend. Coughlan's is situated 800 metres from Cork City centre and approximately 7 km from Cork Airport. The venue can be found online at www.coughlans.ie. The sessions are held in the bar and feature traditional music. The listing confirms the event occurs at Coughlan's, Douglas St. The schedule is consistent, happening every Monday at the specified time. There is no mention of specific age restrictions or additional fees beyond the free entry stated. The location is indoors within the bar area. The event is a regular weekly occurrence focusing on trad and folk music.",
+    "family_relevant": true,
+    "location": {
+      "name": "Trad Session",
+      "address": "Coughlan's, Douglas St.",
+      "city": "Cork",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Trad%20Session%2C%20Coughlan%27s%2C%20Douglas%20St.%2C%20Cork%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "https://www.tiktok.com/@lorraineosullivan",
+      "booking_url": "https://www.purecork.ie/whats-on/11200433/trad-session",
+      "links_checked": "2026-09-14T05:01:19+00:00"
+    },
+    "media": {
+      "hero": null,
+      "embeds": [],
+      "checked": "2026-09-14T05:15:01+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "13+"
+      ],
+      "price_band": "free",
+      "setting": "indoor",
+      "activity_types": [
+        "festival"
+      ],
+      "accessibility": [],
+      "price_detail": "FREE",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm",
+          "fetched_at": "2026-09-14T04:07:16+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "Trad Session occurs at Coughlan's, Douglas St.",
+          "quote": "Trad Session - Coughlan's, Douglas St.",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Trad Session is held on Mondays at 8:30 pm.",
+          "quote": "Every Monday @ 8:30 pm",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Trad Session is free.",
+          "quote": "FREE",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Trad Session is an informal weekly trad & folk session in the bar.",
+          "quote": "An informal weekly trad & folk session in the bar on Mondays",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Coughlan's is 7 km from Cork Airport.",
+          "quote": "7 km from Cork Airport",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Coughlan's is 800 m from Cork City centre.",
+          "quote": "800 m from Cork City centre",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Coughlan's website is www.coughlans.ie.",
+          "quote": "www.coughlans.ie",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Playspaces occurs at St. Peters Cork, North Main Street.",
+          "quote": "Playspaces St. Peters Cork, North Main Street",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Playspaces runs from Fri 12th Jun to Fri 18th Sep.",
+          "quote": "Fri 12th Jun - Fri 18th Sep",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Playspaces starts at 10:00.",
+          "quote": "@ 10:00",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Playspaces is free.",
+          "quote": "10:00, FREE",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        },
+        {
+          "claim": "Bounce w/ DJ Dvn occurs at Intermission Bar, 13 Careys Lane, Cork City.",
+          "quote": "Bounce w/ DJ Dvn Intermission Bar, 13 Careys Lane, Cork City",
+          "source_url": "https://www.purecork.ie/whats-on/11200433/trad-session-coughlans-douglas-st-14-sep-2026-8pm"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T04:08:45+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Every Monday @ 8:30 pm",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-university-college-cork-180th-anniversary-events-cork",
+    "kind": "place",
+    "title": "University College Cork: 180th Anniversary Events",
+    "slug": "university-college-cork-180th-anniversary-events-cork",
+    "summary": "UCC celebrates 180 years with family-friendly activities, performances, exhibitions, and tours across campus.",
+    "description": "University College Cork is currently celebrating 180 years of excellence with a range of family-friendly activities, performances, exhibitions, and tours across its campus. The institution was established in 1845 and opened its gates to just 115 students in 1849. Today, it has a student population of over 26,000. UCC is ranked 220 in the prestigious QS World University Ranking and is also recognized as a world leader for societal impact. The university holds a unique distinction in Ireland as the only one awarded Sunday Times University of the Year on five occasions since the award's inception in 2002. Over 90% of its graduates enter employment or further studies. The university supports a global network of 225,000+ alumni. It is noted as the world's first 'Green Campus' and has a significant economic footprint, generating €3.2 million for the Irish economy every day, with a total economic impact of €1.18 billion annually. Additionally, 24% of student intake is through alternative access pathways. Visitors can explore the campus, which features the UCC Library and the Glucksman art gallery, where exhibitions such as The Annals of Inisfallen are displayed.",
+    "family_relevant": true,
+    "location": {
+      "name": "University College Cork",
+      "address": "College Road, Cork",
+      "city": "Cork",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/",
+      "official_url": "https://www.ucc.ie",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=University%20College%20Cork%2C%20College%20Road%2C%20Cork%2C%20Cork%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/universitycollegecork/",
+      "tiktok_url": "https://www.tiktok.com/@graduatecompass",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:20+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-university-college-cork-180th-anniversary-events-cork-ff71002ee0.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:County_Cork_-_University_College_Cork_-_20180830165110.jpg",
+        "licence": "CC BY-SA 4.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+        "attribution": "Michael O'Sheil",
+        "credit": "Photo: Michael O'Sheil · CC BY-SA 4.0",
+        "alt": "Wide view of University College Cork's stone buildings and green lawn under a blue sky.",
+        "gate": "hero",
+        "why": "Real photo of University College Cork's exterior grounds with no person as subject.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:07:57+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:07:57+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "both",
+      "activity_types": [
+        "museum",
+        "theatre-show",
+        "workshop-class",
+        "seasonal"
+      ],
+      "accessibility": [],
+      "price_detail": "",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/",
+          "fetched_at": "2026-09-14T04:24:01+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is celebrating 180 years of excellence with family-friendly activities.",
+          "quote": "Celebrating 180 years of excellence Celebrate 180 years of University College Cork this year with family-friendly activities, performances, exhibitions, tours, and more across campus",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "The institution was established in 1845.",
+          "quote": "Established in 1845",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "The university opened to 115 students in 1849.",
+          "quote": "our beautiful university opened its gates to just 115 students in 1849",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "The student population is over 26,000.",
+          "quote": "We now have a student population of over 26,000",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "It is ranked 220 in the QS World University Ranking.",
+          "quote": "UCC ranks 220 in the prestigious QS World University Ranking",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "It is ranked as a world leader for societal impact.",
+          "quote": "Ranked as world leader for societal impact",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "It has over 90% of graduates in employment or further studies.",
+          "quote": "Over 90% of our graduates are in employment or further studies",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "There are 225,000+ alumni worldwide.",
+          "quote": "225,000+ Alumni worldwide",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "It is the only university in Ireland awarded Sunday Times University of the Year five times since 2002.",
+          "quote": "The only university in Ireland to be awarded the Sunday Times University of the Year on five occasions since the inception of the award in 2002",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "It generated €3.2 million for the Irish economy every day.",
+          "quote": "&euro;3.2 million generated by UCC every day for the Irish economy",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "The total economic impact annually is €1.18 billion.",
+          "quote": "&euro;1.18 billion total economic impact annually",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        },
+        {
+          "claim": "24% of student intake is through alternative access pathways.",
+          "quote": "24% student intake through alternative access pathways",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/university-college-cork/"
+        }
+      ],
+      "confidence": 0.85,
+      "last_checked": "2026-09-14T04:25:48+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-mtu-blackrock-castle-observatory-and-science-centre-cork",
+    "kind": "place",
+    "title": "MTU Blackrock Castle Observatory and Science Centre",
+    "slug": "mtu-blackrock-castle-observatory-and-science-centre-cork",
+    "summary": "A 16th-century castle in Cork with a space science centre, observatory, and castle tours.",
+    "description": "MTU Blackrock Castle is a 16th-century castle located in Cork. It operates as a collaboration between Munster Technological University and Cork City Council. The venue houses a Space Science Centre and Observatory. Admission includes access to the observatory's award-winning science centre and a self-guided tour of the 16th-century castle. The site is open Monday to Sunday from 10:00 to 20:00. The standard last entry time is 19:00. However, this week the venue is taking last entry into the exhibit at 5pm, with exit required by 6pm due to unforeseen circumstances. No booking is required, and walk-ins are welcome. Admission prices are €11 for adults, €9 for students or older adults, and €7 for children. Children under 5 years are free. There are upcoming events, including a 'Solar Eclipse' exhibition on June 12th, 2026, and solar eclipse viewing on August 12th. The location is at Castle Rd, Blackrock, Cork, Ireland. The venue offers regular tours, school tours, and education programs bringing space to the classroom.",
+    "family_relevant": true,
+    "location": {
+      "name": "MTU Blackrock Castle Cork",
+      "address": "Castle Rd, Blackrock",
+      "city": "Cork",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/",
+      "official_url": "https://www.bco.ie/",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=MTU%20Blackrock%20Castle%20Cork%2C%20Castle%20Rd%2C%20Blackrock%2C%20Cork%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/blackrockcastleobservatory/",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:24+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-mtu-blackrock-castle-observatory-and-science-centre-cork-e092e876ba.jpg",
+        "source": "official-site",
+        "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/",
+        "licence": "",
+        "licence_url": "",
+        "attribution": "www.corkcity.ie",
+        "credit": "Photo: www.corkcity.ie",
+        "alt": "Blackrock Castle Cork under a vibrant rainbow, stone towers and walls by the river.",
+        "gate": "hero",
+        "why": "Full exterior view of Blackrock Castle with rainbow, no people as subject.",
+        "placeholder": true,
+        "checked": "2026-09-14T05:08:09+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:15:03+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "10-25",
+      "setting": "indoor",
+      "activity_types": [
+        "museum",
+        "workshop-class"
+      ],
+      "accessibility": [],
+      "price_detail": "Adult – €11, Student/OAP – €9, Child (children under 5 years are free) – €7, Family (2 adults, 2 children) – €32",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/",
+          "fetched_at": "2026-09-14T04:25:48+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is MTU Blackrock Castle Cork.",
+          "quote": "MTU Blackrock Castle Cork",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The venue is a collaboration between Munster Technological University and Cork City Council.",
+          "quote": "An exciting collaboration between Munster Technological University and Cork City Council",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The venue is a 16th century castle.",
+          "quote": "16th century castle",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The venue houses a Space Science Centre and Observatory.",
+          "quote": "home to a Space Science Centre and Observatory",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The venue will take last entry at 5pm and require exit by 6pm this week.",
+          "quote": "we will be taking last entry into the exhibit at 5pm (exit by 6pm) this week",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The venue is open Monday to Sunday from 10:00 to 20:00.",
+          "quote": "Open Monday to Sunday 10:00 - 20:00",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The last entry time is 19:00.",
+          "quote": "Last entry: 19:00",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "Admission includes access to the observatory's science centre, a self guided tour of the 16th century castle, and more.",
+          "quote": "your admission includes access to the observatory&#8217;s award winning science centre, a self guided tour of the 16th century castle, and more",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "There is an exhibition called 'Solar Eclipse' on June 12th 2026.",
+          "quote": "‘Solar Eclipse’ An exhibition at Blackrock Castle Observatory. June 12th 2026",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The adult admission price is €11.",
+          "quote": "Adult &#8211; €11",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The student/OAP admission price is €9.",
+          "quote": "Student/OAP &#8211; €9",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        },
+        {
+          "claim": "The child admission price is €7, and children under 5 years are free.",
+          "quote": "Child (children under 5 years are free) &#8211; €7",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/blackrock-castle/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T04:28:15+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Monday to Sunday 10:00 - 20:00. Last entry: 19:00. Note: this week taking last entry at 5pm (exit by 6pm).",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-shandon-tower-bells-st-anne-s-church-cork",
+    "kind": "place",
+    "title": "Shandon Tower, Bells & St. Anne's Church",
+    "slug": "shandon-tower-bells-st-anne-s-church-cork",
+    "summary": "Historic church in Cork City with tower views and playable bells.",
+    "description": "St. Anne's Church, Shandon Tower & Bells is located at Church Street, Shandon, Cork City, T23 YN88. St. Anne's is the oldest church still in continuous use in Cork City with weekly church services and an active worshipping congregation since 1722. The church and tower offer an interesting and memorable experience for young and old alike. Visitors can play the famous Shandon Bells, see the inner workings of the four-faced liar clock, and climb the tower to see the 360-degree views of Cork. Because visitors have to pass the bells at the top of the tower, ear defenders are provided at the entrance. The historic church is a member of the Church of Ireland and belongs to the worldwide Anglican (Episcopal) Communion. It is described as one of the most important early 18th-century churches in Ireland. The venue hosts a Christmas Market in 2026, specifically the Giving Thanks Christmas Market on 20–21 November 2026. The church also hosts special events to mark significant occasions in the Christian calendar, such as Christmas, Easter, Pentecost and Harvest Festival. Current opening hours are Monday to Saturday from 10:00 to 16:30, with last entry at 16:00. Sunday opening hours are from 12:00 to 16:30. A Sunday worship service is held at 10:15 am. The telephone number for the venue is +353 214505906.",
+    "family_relevant": true,
+    "location": {
+      "name": "Shandon Tower and Bells",
+      "address": "Church Street, Shandon",
+      "city": "Cork City",
+      "county": "Cork",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/",
+      "official_url": "https://www.stanneshandon.ie/",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Shandon%20Tower%20and%20Bells%2C%20Church%20Street%2C%20Shandon%2C%20Cork%2C%20Ireland",
+      "instagram_url": "https://www.instagram.com/stanneshandon/",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:25+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-shandon-tower-bells-st-anne-s-church-cork-2cf77d5036.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Shandon_bells_cork.jpg",
+        "licence": "CC BY-SA 3.0",
+        "licence_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+        "attribution": "",
+        "credit": "Photo: wikimedia-commons · CC BY-SA 3.0",
+        "alt": "The Shandon Tower and Bells in Cork, Ireland, a stone clock tower with a weather vane against a blue sky.",
+        "gate": "hero",
+        "why": "Clear photo of Shandon Tower filling the frame with no people as subject.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:08:45+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:08:45+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "both",
+      "activity_types": [
+        "festival",
+        "workshop-class"
+      ],
+      "accessibility": [
+        "elder-friendly",
+        "sensory-friendly"
+      ],
+      "price_detail": "",
+      "rainy_ok": null
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/",
+          "fetched_at": "2026-09-14T04:28:16+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue includes St. Anne's Church, Shandon Tower, and Bells.",
+          "quote": "Shandon Tower and Bells St. Anne&#039;s Church, Shandon Tower &amp; Bells",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "The venue is located at Church Street, Shandon, Cork City, T23 YN88.",
+          "quote": "Visit Us: Church Street, Shandon, Cork City, T23 YN88",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "The telephone number for the venue is +353 214505906.",
+          "quote": "Call Us: +353 214505906",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "St. Anne's has been in continuous use since 1722.",
+          "quote": "St. Anne&#8217;s is the oldest church still in continuous use in Cork City with weekly church services and an active worshipping congregation since 1722!",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "The venue offers a 360-degree view of Cork from the tower.",
+          "quote": "climbing the tower to see the 360 degree views of Cork",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "Visitors can play the Shandon Bells.",
+          "quote": "playing the famous Shandon Bells",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "Ear defenders are provided to visitors due to the bells at the top of the tower.",
+          "quote": "Because you have to pass the bells at the top of the tower you are provided with ear defenders at the entrance.",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "The opening hours on Monday to Saturday are 10:00 to 16:30.",
+          "quote": "Current Opening Hours: Mon - Sat 10:00 to 16:30",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "The last entry time is 16:00.",
+          "quote": "Last Entry 16:00.",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        },
+        {
+          "claim": "The venue hosts a Christmas Market in 2026.",
+          "quote": "Giving Thanks Christmas Market 2026 (20–21 November 2026)",
+          "source_url": "https://www.corkcity.ie/en/things-to-do/attractions/shandon-tower-and-bells/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T04:29:59+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Mon - Sat 10:00 to 16:30, Sun 12:00 to 16:30",
+      "duration_hint": "",
+      "seasonal_note": ""
+    }
+  },
+  {
+    "schema_version": 1,
+    "id": "place-muckross-house-gardens-and-traditional-farms-kerry",
+    "kind": "place",
+    "title": "Muckross House, Gardens and Traditional Farms",
+    "slug": "muckross-house-gardens-and-traditional-farms-kerry",
+    "summary": "Victorian mansion, gardens, and 1930s working farms in Killarney National Park.",
+    "description": "Muckross House, Gardens and Traditional Farms are located in The National Park, Killarney, Co Kerry, just 6km from the town centre. The present-day Muckross House was completed in 1843 and preserved as a late 19th-century mansion with original furnishings and period rooms. The grounds feature beautifully landscaped gardens, including a Victorian Walled Garden that the Garden Restaurant overlooks. Visitors can relax there with homemade treats and enjoy views of Torc and Mangerton mountains.\n\nMuckross Traditional Farms recreates 1930s rural Ireland, using traditional horsepower and machinery. Here, families can meet friendly farm animals, visit a blacksmith’s forge, carpenter’s workshop, and schoolhouse, and enjoy a woodland playground and petting farm. A free shuttle bus is available for those with little legs.\n\nOpening times vary by season. Muckross House and Gardens are open daily all year round except the Christmas period. Muckross Traditional Farms is open from mid-March to February with varying schedules, but closes fully from November to February. No pre-booking is required; tickets can be purchased on arrival. Parking is free for cars and coaches. Most areas are wheelchair accessible, though some historic sections have limited access. A courtesy transit wheelchair is available for use inside Muckross House only. The Craft Centre offers hand-thrown pottery and local textiles.",
+    "family_relevant": true,
+    "location": {
+      "name": "Muckross House & Traditional Farms",
+      "address": "The National Park, Killarney, Co Kerry. Ireland",
+      "city": "Killarney",
+      "county": "Kerry",
+      "region": "Munster",
+      "country": "IE",
+      "lat": null,
+      "lon": null,
+      "ireland": true
+    },
+    "links": {
+      "source_url": "https://www.familyfun.ie/muckross-house-gardens/",
+      "official_url": "",
+      "maps_url": "https://www.google.com/maps/search/?api=1&query=Muckross%20House%20%26%20Traditional%20Farms%2C%20The%20National%20Park%2C%20Killarney%2C%20Co%20Kerry.%20Ireland%2C%20Kerry%2C%20Ireland",
+      "instagram_url": "",
+      "tiktok_url": "",
+      "booking_url": "",
+      "links_checked": "2026-09-14T05:01:26+00:00"
+    },
+    "media": {
+      "hero": {
+        "url": "/media/place/place-muckross-house-gardens-and-traditional-farms-kerry-21a34cac59.jpg",
+        "source": "wikimedia-commons",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Traditional_farm,_Muckross_House_-_geograph.org.uk_-_5060390.jpg",
+        "licence": "CC BY-SA 2.0",
+        "licence_url": "https://creativecommons.org/licenses/by-sa/2.0",
+        "attribution": "Rossographer",
+        "credit": "Photo: Rossographer · CC BY-SA 2.0",
+        "alt": "White stone farm building with red roof and green lawn at Muckross House.",
+        "gate": "hero",
+        "why": "Real photo of the farm building, no person as subject.",
+        "placeholder": false,
+        "checked": "2026-09-14T05:08:57+00:00"
+      },
+      "embeds": [],
+      "checked": "2026-09-14T05:08:57+00:00"
+    },
+    "taxonomy": {
+      "age_bands": [
+        "0-2",
+        "3-5",
+        "6-9",
+        "10-12",
+        "13+"
+      ],
+      "price_band": "unknown",
+      "setting": "both",
+      "activity_types": [
+        "park",
+        "museum",
+        "farm",
+        "playground",
+        "craft"
+      ],
+      "accessibility": [
+        "wheelchair"
+      ],
+      "price_detail": "",
+      "rainy_ok": true
+    },
+    "provenance": {
+      "sources": [
+        {
+          "url": "https://www.familyfun.ie/muckross-house-gardens/",
+          "fetched_at": "2026-09-14T04:30:57+00:00"
+        }
+      ],
+      "facts": [
+        {
+          "claim": "The venue is located in Killarney, Co Kerry, Ireland.",
+          "quote": "Address: The National Park, Killarney, Co Kerry. Ireland",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "The venue is 6km from Killarney town centre.",
+          "quote": "Muckross House &amp; Traditional Farms is just 6km from Killarney town centre",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Muckross House was completed in 1843.",
+          "quote": "The present-day Muckross House was built for Henry Arthur Herbert and his family and completed in 1843.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Muckross House and Gardens are open daily all year round except the Christmas period.",
+          "quote": "Muckross House and Gardens are open daily all year round (except the Christmas period).",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Muckross Traditional Farms is closed from November to February.",
+          "quote": "Muckross Traditional Farms will close for the season from November to February.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "No pre-booking is required to visit.",
+          "quote": "No pre-booking is required.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Tickets can be purchased on arrival.",
+          "quote": "Simply purchase tickets on arrival at the House or Traditional Farms Reception.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Parking is free.",
+          "quote": "Parking is free, with separate parking facilities available for cars and coaches.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "A courtesy transit wheelchair is available for use inside Muckross House only.",
+          "quote": "A courtesy transit wheelchair is available for visitors with reduced mobility for use inside Muckross House only.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "The Garden Restaurant overlooks the Victorian Walled Garden.",
+          "quote": "The Garden Restaurant overlooks the charming Victorian Walled Garden",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Muckross pottery is hand-thrown and decorated.",
+          "quote": "Muckross pottery is hand-thrown and decorated",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        },
+        {
+          "claim": "Kerry Airport is located 15km (9 miles) from Killarney town.",
+          "quote": "Kerry Airport is located 15km (9 miles) from the town.",
+          "source_url": "https://www.familyfun.ie/muckross-house-gardens/"
+        }
+      ],
+      "confidence": 0.92,
+      "last_checked": "2026-09-14T04:33:29+00:00",
+      "produced_by": [
+        "classify",
+        "facts",
+        "extract",
+        "write"
+      ]
+    },
+    "status": "on-air",
+    "reason": "",
+    "hint": "",
+    "place": {
+      "opening_hours": "Muckross House and Gardens: Daily all year round except the Christmas period. Jan-Mar: 9.15am - 5.30pm (Last Admission 4pm). Apr-Jun: 9.15am - 6pm (Last Admission 4.40pm). Jul-Aug: 9.15am - 7pm (Last Admission 5.40pm). Sep-Oct: 9.15am - 6pm (Last Admission 4.40pm). Nov-Dec: 9.15am - 5.30pm (Last Adm",
+      "duration_hint": "",
+      "seasonal_note": "Muckross House and Gardens are open daily all year round (except the Christmas period). Muckross Traditional Farms will close for the season from November to February."
     }
   }
 ]
