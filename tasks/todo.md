@@ -32,6 +32,8 @@
 - [ ] Irish council playground CSVs on data.gov.ie are mostly Irish Transverse Mercator only (no WGS84 column); those rows are skipped rather than reprojected — adding `pyproj` would unlock them — dispatched, in progress
 - [ ] follow-up gap found while phase 3 was starting: the 96 migrated records in `staged/needs_input.json` (phase 1b) are NOT exposed anywhere in the admin portal — phase 5's "Needs input" area reads `/admin/api/social/staged` → `staged/social_candidates.json` only, a different file. Someone should add a route + area tab for `needs_input.json` (or merge the two files/routes) so those 96 records are actually resubmittable, not just sitting on disk.
 
+- [x] `334a01e`: gate now accepts a recognised Northern Ireland county (Antrim/Armagh/Derry/Down/Fermanagh/Tyrone) as on the island of Ireland instead of hard-rejecting anything not country=IE — `facets.json`'s `ni` flag existed for exactly this and was never wired in, and the search lane's county rotation starts at Antrim so it was burning real query budget on guaranteed rejections. Holidays untouched (never subject to this check). 205 tests, verified live against a real Belfast-shaped record.
+
 ## Phase 4 — links + media (maps, official, Instagram/TikTok, licensed hero, embeds, vision gate, alt)
 ## Phase 5 — admin portal IA (8 areas)
 - [x] 0ca9087: eight areas, hash routes, badges, paginated everywhere, keyboard j/k/a/r, undo semantics, explicit "not available yet" states (64/64 browser checks). Plug points for phase 1 (`needsInputFeed`, `decisionHistory`) and phase 2 (`llmLanes`). Left disabled until endpoints exist: bulk actions, add source, photo upload, settings editing
