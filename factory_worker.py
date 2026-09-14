@@ -1092,7 +1092,15 @@ def _build_record(kind, candidate, source, facts, name, details, written, verdic
     record["title"] = str(written.get("title") or "").strip()[:contract.MAX_TITLE]
     record["summary"] = str(written.get("summary") or "").strip()[:contract.MAX_SUMMARY]
     record["description"] = str(written.get("description") or "").strip()
-    record["family_relevant"] = verdict.get("family_relevant") is not False
+    # Same trust-the-lane rule as the kind override in `promote()`: a
+    # candidate the lane already vetted (holidays_seed only ever seeds real
+    # family destinations) keeps `family_relevant` true regardless of
+    # classify()'s guess. Without this, gate.qa()'s own `family_relevant`
+    # check (gate.py, separate from promote()'s) still rejected a trusted
+    # holiday on the exact same Ireland-first misreading -- the promote()
+    # fix alone stopped the early rejection but this field fed the later one.
+    trusted_kind = str(candidate.get("kind_hint") or "").strip().lower() in contract.KINDS
+    record["family_relevant"] = trusted_kind or verdict.get("family_relevant") is not False
 
     # A discovery lane that read the location out of open data (OSM, Wikidata,
     # a council CSV) knows it better than any model reading prose: its
@@ -1292,7 +1300,13 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
     kind = kind_hint if kind_hint in contract.KINDS else str(verdict.get("kind") or "").strip().lower()
     if kind not in contract.KINDS:
         return None, f"not an event, place or holiday: {why or kind or 'no verdict'}", ""
-    if verdict.get("family_relevant") is False:
+    # Same reasoning as the kind override just above: a candidate the lane
+    # already vetted for family relevance (holidays_seed only ever seeds
+    # "destinations Irish families actually travel to with children") should
+    # not be re-litigated by a classify prompt that is written Ireland-first
+    # and, found immediately after the kind fix above, reads "not Ireland" as
+    # "not family-relevant" for a holiday abroad.
+    if not kind_hint and verdict.get("family_relevant") is False:
         return None, f"not family-relevant: {why}", ""
 
     facts, name = gather_facts(text)
@@ -1400,6 +1414,29 @@ MAX_CANDIDATES_PER_CYCLE = int(ENV.get("MAX_CANDIDATES_PER_CYCLE", "60"))
 # Research stops at this fraction of the cycle wall so the state write at the
 # end always happens; the rest of the desk is picked up by the next cycle.
 _RESEARCH_SHARE = 0.8
+# `promote()` is four sequential free-model calls per candidate, 60-90s each
+# -- researching one candidate at a time (found 2026-09-14, Victor: "your
+# pace is ridiculous") meant a cycle could only ever get through a couple
+# dozen candidates before the wall, no matter how many the discovery lanes
+# found. Candidates are independent (each writes its own record; the shared
+# stores are already lock-protected), so `run_discovery_cycle` now researches
+# `DISCOVERY_WORKERS` at a time, the same pattern `staging.sweep_pending()`
+# already uses for its own backlog.
+DISCOVERY_WORKERS = int(ENV.get("DISCOVERY_WORKERS", "6"))
+MAX_ITEM_SECS = int(ENV.get("MAX_ITEM_SECS", "300"))
+
+
+def _promote_within_budget(item):
+    """`promote()` on its own thread with a hard wall -- a worker thread
+    cannot be killed, so a call stuck past `MAX_ITEM_SECS` is abandoned (it
+    still finishes and publishes under the usual lock if it ever returns)
+    while the pool moves on to the next candidate."""
+    runner = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+    try:
+        return runner.submit(promote, item, prefetched=item.get("text"),
+                              prefill=item.get("prefill")).result(timeout=MAX_ITEM_SECS)
+    finally:
+        runner.shutdown(wait=False)
 # The desk and the ledger name the same verdict differently on purpose: the
 # desk speaks `staging.py`'s vocabulary, so one admin view can render both
 # candidate files, while the ledger records the contract's own word.
@@ -1427,27 +1464,36 @@ def run_discovery_cycle(budget=None, only=None):
 
     outcomes = {"on-air": 0, "needs-input": 0, "rejected": 0, "lane-failed": 0}
     deadline = time.time() + CYCLE_WALL_SECS * _RESEARCH_SHARE
-    for index, item in enumerate(staged, 1):
-        if time.time() > deadline:
-            log(f"cycle wall reached after {index - 1} candidates — the rest wait for the next run")
-            break
-        record, reason, missing_field = promote(
-            item, prefetched=item.get("text"), prefill=item.get("prefill"))
-        if record and publish_record(record):
-            status, kind = "on-air", record["kind"]
-        elif record:
-            status, kind = "rejected", record["kind"]
-            reason = "already published under this id"
-        elif reason.startswith("no model lane answered"):
-            status, kind = "lane-failed", item.get("kind_hint", "")
-        else:
-            status = "needs-input" if missing_field else "rejected"
-            kind = item.get("kind_hint", "")
-        outcomes[status] += 1
-        ledger.record(item["source_url"], kind, status)
-        candidates.set_candidate_status(item["source_url"], _DESK_STATUS[status],
-                                        reason, missing_field)
-        log(f"  [{index}/{len(staged)}] {status} — {item['source_url'][:70]} {reason[:60]}")
+    done = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=DISCOVERY_WORKERS) as pool:
+        futures = {}
+        for item in staged:
+            if time.time() > deadline:
+                log(f"cycle wall reached after submitting {len(futures)} candidates — the rest wait for the next run")
+                break
+            futures[pool.submit(_promote_within_budget, item)] = item
+        for future in concurrent.futures.as_completed(futures):
+            item = futures[future]
+            done += 1
+            try:
+                record, reason, missing_field = future.result()
+            except concurrent.futures.TimeoutError:
+                record, reason, missing_field = None, f"timed out after {MAX_ITEM_SECS}s", ""
+            if record and publish_record(record):
+                status, kind = "on-air", record["kind"]
+            elif record:
+                status, kind = "rejected", record["kind"]
+                reason = "already published under this id"
+            elif reason.startswith("no model lane answered"):
+                status, kind = "lane-failed", item.get("kind_hint", "")
+            else:
+                status = "needs-input" if missing_field else "rejected"
+                kind = item.get("kind_hint", "")
+            outcomes[status] += 1
+            ledger.record(item["source_url"], kind, status)
+            candidates.set_candidate_status(item["source_url"], _DESK_STATUS[status],
+                                            reason, missing_field)
+            log(f"  [{done}/{len(futures)}] {status} — {item['source_url'][:70]} {reason[:60]}")
 
     # Re-read under the lock rather than saving the copy loaded above: a
     # concurrent sweep's record_llm_stats() and gate.record_drops() write the

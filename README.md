@@ -71,6 +71,21 @@ kept in `factory_state.json["lane_cursor"]`.
 Every lane writes a `{lane, key, found, new, errors, ms}` row into
 `factory_state.json["lanes"]`, which is what the admin Sources area reads.
 
+`run_all()` splits whatever budget is left over however many lanes are still
+runnable this cycle, so one hungry lane can never spend the whole budget and
+starve the ones after it in `LANE_ORDER`. This is not theoretical: before
+2026-09-14, `listings`/`feeds`/`sitemaps` alone reliably filled the entire
+per-cycle budget, so `opendata_places`/`wikidata`/`ticketmaster`/
+`holidays_seed` had never once run since launch — the holidays catalogue was
+empty, not just thin.
+
+A lane that already knows what kind its own candidate is (`holidays_seed`
+hands a curated destination's own pages, always a holiday) sets
+`kind_hint` on the candidate, and `promote()` trusts it over `classify()`'s
+guess. Without this, a destination's Wikivoyage article read as "place" by
+the classify step got rejected by the on-island-of-Ireland gate for being
+abroad — correct for a real place, wrong for a holiday the model misread.
+
 ### Model routing
 
 `llm.complete(prompt, kind)` is the only way this project talks to a model.
