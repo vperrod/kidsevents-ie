@@ -1167,6 +1167,85 @@ def _build_record(kind, candidate, source, facts, name, details, written, verdic
     return contract.derive(record)
 
 
+# Every field name `gate.qa()`'s `_needs(...)` calls can name, and where it
+# lives on a record. `facts` and `sources` append rather than overwrite --
+# a curator adding a second source domain, or confirming a date they can see
+# on the page, does not erase what a fact-checked run already found.
+PATCHABLE_FIELDS = {
+    "title": ("scalar", ["title"]),
+    "summary": ("scalar", ["summary"]),
+    "description": ("scalar", ["description"]),
+    "county": ("scalar", ["location", "county"]),
+    "address": ("scalar", ["location", "address"]),
+    "country": ("scalar", ["location", "country"]),
+    "start_date": ("scalar", ["event", "start_date"]),
+    "date_evidence": ("scalar", ["event", "date_evidence"]),
+    "price_band": ("scalar", ["taxonomy", "price_band"]),
+    "age_bands": ("list", ["taxonomy", "age_bands"]),
+    "activity_types": ("list", ["taxonomy", "activity_types"]),
+    "holiday_types": ("list", ["holiday", "holiday_types"]),
+    "best_seasons": ("list", ["holiday", "best_seasons"]),
+    "facts": ("fact", None),
+    "sources": ("source", None),
+}
+
+
+def _set_path(record, path, value):
+    node = record
+    for key in path[:-1]:
+        node = node.setdefault(key, {})
+    node[path[-1]] = value
+
+
+def _as_list(value):
+    if isinstance(value, list):
+        return [str(v).strip() for v in value if str(v).strip()]
+    return [part.strip() for part in str(value or "").split(",") if part.strip()]
+
+
+def apply_patch(record, patch):
+    """A curator's fix for exactly the field `missing_field` named -- never a
+    value the curator didn't type. `facts` is the one place a human, not a
+    source page, supplies a "fact": it is stamped `curator-confirmed` rather
+    than pretending it is a verbatim quote from the original page."""
+    for field, value in (patch or {}).items():
+        kind_of_field = PATCHABLE_FIELDS.get(field)
+        if not kind_of_field or value in (None, ""):
+            continue
+        shape, path = kind_of_field
+        if shape == "scalar":
+            _set_path(record, path, str(value).strip())
+        elif shape == "list":
+            _set_path(record, path, _as_list(value))
+        elif shape == "fact":
+            record.setdefault("provenance", {}).setdefault("facts", []).append(
+                {"claim": "curator-confirmed", "quote": str(value).strip()[:300]})
+        elif shape == "source":
+            record.setdefault("provenance", {}).setdefault("sources", []).append(
+                {"url": str(value).strip(), "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
+    return record
+
+
+def patch_and_regate(record, patch):
+    """Apply a curator's patch to a needs-input record and ask the gate again.
+    No re-fetch happens here (`sources_text=""`): a date_evidence quote that
+    was already verified against the real page when the record was first
+    built stays verified; a new one only a curator typed cannot be re-checked
+    against a page this function never sees, which is exactly why `facts`
+    patches are stamped `curator-confirmed` instead of a plain quote."""
+    apply_patch(record, patch)
+    contract.derive(record)
+    return gate.qa(record, "", on_air_titles(record["kind"]))
+
+
+def publish_needs_input_record(record):
+    """A patched record that just passed the gate: publish it and say so, the
+    same status the four-step pipeline gives a record on its first pass."""
+    record["status"] = "on-air"
+    record["reason"] = ""
+    return publish_record(record)
+
+
 def promote(candidate, hint="", prefetched=None, prefill=None):
     """Turn one candidate into a publishable contract record.
 

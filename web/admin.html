@@ -933,6 +933,13 @@
           runPipeline: () => post("/admin/api/pipeline/run", {}),
           approve: (source_url, hint) => post("/admin/api/social/approve", { source_url, hint }),
           reject: (source_url, note) => post("/admin/api/social/reject", { source_url, note }),
+          // Full contract records the gate could not publish -- a different
+          // file and shape from the social candidates above (their
+          // `missing_field` names one structured field, not a free-text hint).
+          catalogueNeedsInput: () => req("/admin/api/needs_input"),
+          resubmitCatalogueRecord: (id, patch) =>
+            post("/admin/api/needs_input/resubmit", { id, patch }),
+          rejectCatalogueRecord: (id) => post("/admin/api/needs_input/reject", { id }),
           // Not served by today's API. Phase 1 fills these in; until then the
           // views render an explicit "not available yet" state instead.
           needsInputFeed: null,
@@ -1168,6 +1175,7 @@
           catalogue: "events",
           cat: { page: 1, size: 25, q: "", county: "all", status: "all", selected: new Set() },
           queue: { view: "queue", groupPage: {}, size: 25, open: null, acted: [], restored: new Set() },
+          catQueue: { page: 1, size: 25 },
           log: { q: "" },
           photos: { page: 1, size: 25 },
           claims: { page: 1, size: 25 },
@@ -1185,6 +1193,7 @@
           holidays: Api.holidays,
           staged: Api.staged,
           claims: Api.claims,
+          catalogueNeedsInput: Api.catalogueNeedsInput,
         };
         const ok = (k) => store[k] && store[k].ok;
         const val = (k, fallback) => (ok(k) ? store[k].data : fallback);
@@ -1599,6 +1608,7 @@
           if (!S.queue.open) S.queue.open = new Set(groups.length ? [groups[0][0]] : []);
           el.innerHTML =
             head +
+            `<h2>From social</h2>` +
             (items.length === 0
               ? `<p class="notice">The queue is clear — every collected candidate has a decision. New posts land here after the next social collection.</p>`
               : `<p class="small muted" style="margin-bottom:12px">${items.length} candidate${
@@ -1627,12 +1637,15 @@
                         </div>
                       </details>`;
                   })
-                  .join(""));
+                  .join("")) +
+            `<h2 style="margin-top:28px">From the catalogue</h2>` +
+            renderCatalogueQueue();
 
           $("#q-view").onchange = (e) => {
             S.queue.view = e.target.value;
             renderNeedsInput();
           };
+          wireCatalogueQueue(el);
           $$("[data-reject-all]", el).forEach(
             (b) => (b.onclick = () => rejectGroup((groups[Number(b.dataset.rejectAll)] || [""])[0])),
           );
@@ -1663,7 +1676,7 @@
             const reason = (groups[Number(d.dataset.gi)] || [""])[0];
             d.ontoggle = () => (d.open ? S.queue.open.add(reason) : S.queue.open.delete(reason));
           });
-          $$(".qcard", el).forEach((card) => {
+          $$(".qcard[data-url]", el).forEach((card) => {
             const url = card.dataset.url;
             $("[data-act='approve']", card).onclick = () => approveCandidate(url, card);
             $("[data-act='reject']", card).onclick = () => rejectCandidate(url, card);
@@ -1784,6 +1797,159 @@
           renderNeedsInput();
           refreshBadges();
           toast(`Rejected ${done} of ${items.length}.`);
+        }
+
+        /* ───────────── needs input: catalogue records ─────────────
+         * A different file and shape from the social queue above: these are
+         * already events/places/holidays, one field away from on-air. The
+         * curator edits exactly the field `missing_field` names, never a
+         * free-text hint — the server maps it back onto the record. */
+        const PATCH_FORM = {
+          title: { label: "Title", multi: false },
+          summary: { label: "One-line summary", multi: false },
+          description: { label: "Description (a few sentences, real prose)", multi: false, area: true },
+          county: { label: "County", multi: false },
+          address: { label: "Address", multi: false },
+          country: { label: "Country (ISO code, e.g. IE)", multi: false },
+          start_date: { label: "Start date (YYYY-MM-DD)", multi: false },
+          date_evidence: { label: "Quote from the source naming the date", multi: false },
+          price_band: { label: "Price band (free / under-10 / 10-25 / 25-plus)", multi: false },
+          age_bands: { label: "Age bands (comma-separated, e.g. 3-5, 6-9)", multi: true },
+          activity_types: { label: "Activity types (comma-separated)", multi: true },
+          holiday_types: { label: "Holiday types (comma-separated)", multi: true },
+          best_seasons: { label: "Seasons (comma-separated)", multi: true },
+          facts: { label: "What you know is true (quote it if you can)", multi: false },
+          sources: { label: "A second source URL", multi: false },
+        };
+        function catalogueQueueItems() {
+          const d = val("catalogueNeedsInput", {});
+          return (d && d.records) || [];
+        }
+        function catalogueQueueCard(r) {
+          const field = PATCH_FORM[r.missing_field] || { label: r.missing_field || "the missing field" };
+          const where = [r.location && r.location.county, r.kind].filter(Boolean).join(" · ");
+          return `<article class="qcard" tabindex="0" data-id="${esc(r.id)}" aria-label="${esc(r.title)}">
+            <div class="chips"><span class="chip">${esc(r.kind)}</span>${
+              where ? `<span class="chip">${esc(where)}</span>` : ""
+            }</div>
+            <p class="cap"><b>${esc(r.title || "(no title yet)")}</b></p>
+            ${r.reason ? `<p class="why">${esc(r.reason)}</p>` : ""}
+            <div class="hint-row">
+              <label class="small muted" for="patch-${esc(r.id)}">${esc(field.label)}</label>
+              ${
+                field.area
+                  ? `<textarea id="patch-${esc(r.id)}" data-patch rows="3" placeholder="${esc(field.label)}"></textarea>`
+                  : `<input type="text" id="patch-${esc(r.id)}" data-patch placeholder="${esc(field.label)}" />`
+              }
+            </div>
+            <div class="acts">
+              <button class="btn primary" data-cat-act="resubmit">Resubmit</button>
+              <button class="btn danger" data-cat-act="reject">Reject</button>
+            </div>
+            <p class="qerr" data-err hidden></p>
+          </article>`;
+        }
+        function renderCatalogueQueue() {
+          if (!ok("catalogueNeedsInput"))
+            return failed("catalogueNeedsInput", "the catalogue needs-input queue");
+          const items = catalogueQueueItems();
+          if (!items.length)
+            return `<p class="notice">Nothing in the catalogue is waiting on a curator right now.</p>`;
+          const size = S.catQueue.size;
+          const lastPage = pageCount(items.length, size);
+          const p = Math.min(S.catQueue.page, lastPage);
+          const slice = items.slice((p - 1) * size, (p - 1) * size + size);
+          return (
+            `<p class="small muted" style="margin-bottom:12px">${items.length} record${
+              items.length === 1 ? "" : "s"
+            } the gate could not publish yet.</p>` +
+            pager("catq", p, items.length, size) +
+            slice.map(catalogueQueueCard).join("")
+          );
+        }
+        async function resubmitCatalogueRecord(id, card) {
+          const field = $("[data-patch]", card);
+          const value = (field && field.value) || "";
+          if (!value.trim()) {
+            const err = $("[data-err]", card);
+            err.hidden = false;
+            err.textContent = "Type a value before resubmitting.";
+            return;
+          }
+          const record = catalogueQueueItems().find((r) => r.id === id) || {};
+          const go = await askConfirm(
+            "Resubmit this record?",
+            "It runs through the publishing gate again with your correction. If it clears, it goes live on the public site.",
+            "Resubmit",
+          );
+          if (!go) return;
+          const err = $("[data-err]", card);
+          err.hidden = true;
+          try {
+            const patch = {};
+            patch[record.missing_field] = value.trim();
+            const result = await Api.resubmitCatalogueRecord(id, patch);
+            toast(result.status === "on-air" ? "Published. It is on the public site now." : "Updated.");
+            store.catalogueNeedsInput = { ok: true, data: await Api.catalogueNeedsInput() };
+            renderNeedsInput();
+            refreshBadges();
+          } catch (e) {
+            err.hidden = false;
+            err.textContent =
+              e.status === 422
+                ? "Still not enough to publish: " + txt(e.message)
+                : "Could not resubmit: " + txt(e.message);
+          }
+        }
+        async function rejectCatalogueRecord(id, card) {
+          const go = await askConfirm(
+            "Reject this record?",
+            "It leaves the queue and is kept as a rejected record. Nothing is deleted.",
+            "Reject",
+          );
+          if (!go) return;
+          try {
+            await Api.rejectCatalogueRecord(id);
+            toast("Rejected.");
+            store.catalogueNeedsInput = { ok: true, data: await Api.catalogueNeedsInput() };
+            renderNeedsInput();
+            refreshBadges();
+          } catch (e) {
+            const err = $("[data-err]", card);
+            if (err) {
+              err.hidden = false;
+              err.textContent = "Could not reject: " + txt(e.message);
+            }
+          }
+        }
+        function wireCatalogueQueue(el) {
+          $$(".qcard[data-id]", el).forEach((card) => {
+            const id = card.dataset.id;
+            $$("[data-cat-act]", card).forEach((b) => {
+              b.onclick = () =>
+                b.dataset.catAct === "resubmit"
+                  ? resubmitCatalogueRecord(id, card)
+                  : rejectCatalogueRecord(id, card);
+            });
+          });
+          const p = $("[data-pager='catq']", el);
+          if (p) {
+            p.querySelectorAll("[data-step]").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  const lastPage = pageCount(catalogueQueueItems().length, S.catQueue.size);
+                  S.catQueue.page = Math.min(Math.max(1, S.catQueue.page + Number(b.dataset.step)), lastPage);
+                  renderNeedsInput();
+                }),
+            );
+            const sizeSel = p.querySelector("[data-size]");
+            if (sizeSel)
+              sizeSel.onchange = () => {
+                S.catQueue.size = Number(sizeSel.value);
+                S.catQueue.page = 1;
+                renderNeedsInput();
+              };
+          }
         }
 
         /* ───────────── sources ───────────── */
@@ -2163,7 +2329,9 @@
 
         /* ───────────── badges + chrome ───────────── */
         function refreshBadges() {
-          const pending = ok("staged") ? queueItems().length : null;
+          const socialPending = ok("staged") ? queueItems().length : 0;
+          const catPending = ok("catalogueNeedsInput") ? catalogueQueueItems().length : 0;
+          const pending = ok("staged") || ok("catalogueNeedsInput") ? socialPending + catPending : null;
           const fails = ((val("pipeline", {}) || {}).history || []).filter((r) => !r.success).length;
           const set = (k, n, bad) =>
             $$(`[data-badge="${k}"]`).forEach((b) => {
@@ -2246,7 +2414,11 @@
             if (!card) return;
             e.preventDefault();
             card.focus();
-            key === "a" ? approveCandidate(card.dataset.url, card) : rejectCandidate(card.dataset.url, card);
+            if (card.dataset.id) {
+              key === "a" ? resubmitCatalogueRecord(card.dataset.id, card) : rejectCatalogueRecord(card.dataset.id, card);
+            } else {
+              key === "a" ? approveCandidate(card.dataset.url, card) : rejectCandidate(card.dataset.url, card);
+            }
           }
         });
 

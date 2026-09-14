@@ -354,6 +354,30 @@ venv/bin/python3 migrate_contract.py --apply    # backup to ~/backups/kidsevents
 See `EVENT_DATA_CONTRACT.md` for what the public site must show for every
 event, and `DESIGN.md` for the front-end.
 
+### Needs-input catalogue records
+
+`staged/needs_input.json` holds full contract records — already an event,
+place or holiday, one field away from on-air — that `migrate_contract.py` or
+`promote()`'s gate could not publish. This is a different file and a
+different shape from the social candidates in `staged/social_candidates.json`
+(the admin's "From social" section): a catalogue record's `missing_field`
+names exactly one structured thing that is wrong (`county`, `description`,
+`address`, `activity_types`, `facts`, …), never a free-text hint.
+
+`GET /admin/api/needs_input` lists them; the admin's "Needs input" area shows
+both sources side by side, one form field matching the actual `missing_field`
+per catalogue card. `POST /admin/api/needs_input/resubmit` (`{id, patch}`)
+applies a curator's correction — `factory_worker.apply_patch()` maps each
+`PATCHABLE_FIELDS` name onto its real nested path — then asks `gate.qa()`
+again with no re-fetch (`sources_text=""`): a `date_evidence` quote already
+verified against the real page when the record was first built stays
+verified, and a value only a curator now typed cannot be re-checked against a
+page this call never sees. That is why a `facts` patch is stamped
+`{"claim": "curator-confirmed", "quote": …}` rather than pretending to be a
+verbatim source quote. A record that clears the gate publishes through the
+same `publish_record()` every other path uses and leaves the queue;
+`POST /admin/api/needs_input/reject` marks one rejected without deleting it.
+
 ## Sources
 
 `sources.json` holds the curated deep listing URLs, keyed by county (plus

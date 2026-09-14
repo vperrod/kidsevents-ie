@@ -31,6 +31,7 @@ FACTORY_SCRIPT = os.path.join(BASE_DIR, "factory_worker.py")
 PIPELINE_LOG = os.path.join(BASE_DIR, "pipeline.log")
 
 CLAIMS_FILE = os.path.join(BASE_DIR, "staged", "claims.json")
+NEEDS_INPUT_FILE = os.path.join(BASE_DIR, "staged", "needs_input.json")
 ADMIN_STATE_FILE = os.path.join(BASE_DIR, "admin_state.json")
 FACTORY_STATE_FILE = os.path.join(BASE_DIR, "factory_state.json")
 MEMBERS_DB = os.path.join(BASE_DIR, "members.sqlite3")
@@ -559,6 +560,73 @@ def admin_claims():
     claims = _read_store(CLAIMS_FILE, [])
     claims.sort(key=lambda c: c.get("received_at", ""), reverse=True)
     return jsonify({"claims": claims, "total": len(claims)})
+
+
+@app.route("/admin/api/needs_input")
+def admin_needs_input():
+    """Catalogue records the gate could not publish, with the one nameable
+    field a curator's note would fix -- distinct from `/admin/api/social/
+    staged`, which is raw social candidates awaiting their first classification.
+    These already are events/places/holidays; they just need one correction."""
+    records = [r for r in _read_store(NEEDS_INPUT_FILE, []) if r.get("status") == "needs-input"]
+    by_missing_field = {}
+    for record in records:
+        key = record.get("missing_field") or "unspecified"
+        by_missing_field[key] = by_missing_field.get(key, 0) + 1
+    return jsonify({"records": records, "total": len(records), "by_missing_field": by_missing_field})
+
+
+@app.route("/admin/api/needs_input/resubmit", methods=["POST"])
+def admin_needs_input_resubmit():
+    """Apply a curator's patch to one needs-input catalogue record and ask the
+    gate again. Publishes it on air if that clears the block; otherwise the
+    record stays here with an updated reason, same shape as the social
+    approve route's "still needs manual info" response."""
+    body = request.get_json(silent=True) or {}
+    record_id = body.get("id", "")
+    patch = body.get("patch") or {}
+    if not record_id or not isinstance(patch, dict):
+        return jsonify({"error": "id and patch are required"}), 400
+
+    with factory_worker.output_lock():
+        records = _read_store(NEEDS_INPUT_FILE, [])
+        record = next((r for r in records if r.get("id") == record_id), None)
+        if not record:
+            return jsonify({"error": "record not found"}), 404
+        ok, reason, missing_field = factory_worker.patch_and_regate(record, patch)
+        if ok:
+            published = factory_worker.publish_needs_input_record(record)
+            remaining = [r for r in records if r.get("id") != record_id]
+            factory_worker.write_json_atomic(NEEDS_INPUT_FILE, remaining)
+            if not published:
+                return jsonify({"error": "already on air"}), 409
+            return jsonify({"status": "on-air", "id": record_id})
+        record["status"] = "needs-input" if missing_field else "rejected"
+        record["reason"] = reason
+        record["missing_field"] = missing_field
+        factory_worker.write_json_atomic(NEEDS_INPUT_FILE, records)
+        return jsonify({"status": record["status"], "reason": reason,
+                        "missing_field": missing_field}), 422
+
+
+@app.route("/admin/api/needs_input/reject", methods=["POST"])
+def admin_needs_input_reject():
+    """Mark one needs-input catalogue record rejected -- never deleted, the
+    same audit-trail rule the social candidates follow."""
+    body = request.get_json(silent=True) or {}
+    record_id = body.get("id", "")
+    if not record_id:
+        return jsonify({"error": "id is required"}), 400
+
+    with factory_worker.output_lock():
+        records = _read_store(NEEDS_INPUT_FILE, [])
+        record = next((r for r in records if r.get("id") == record_id), None)
+        if not record:
+            return jsonify({"error": "record not found"}), 404
+        record["status"] = "rejected"
+        record["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        factory_worker.write_json_atomic(NEEDS_INPUT_FILE, records)
+    return jsonify({"status": "rejected", "id": record_id})
 
 
 @app.route("/admin/api/social/staged")
