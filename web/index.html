@@ -341,6 +341,9 @@
         color: var(--pine);
         font-size: 20px;
       }
+      .save[hidden] {
+        display: none;
+      }
       .save[aria-pressed="true"] {
         background: var(--pine);
         color: #fff;
@@ -683,6 +686,21 @@
         margin: 10px 0;
         font: 600 33px/0.98 var(--serif);
         letter-spacing: -0.055em;
+      }
+      /* Places and holidays are a catalogue, same as events: the card is a
+         photo, an eyebrow and a title that opens the shared detail view --
+         not the description/facts/links/claim-link the card used to carry
+         inline. The button resets to look exactly like the h2 it replaces. */
+      .holidaycard h2 button {
+        all: unset;
+        cursor: pointer;
+        font: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+      }
+      .holidaycard h2 button:hover,
+      .holidaycard h2 button:focus-visible {
+        text-decoration: underline;
       }
       .holidaycard p {
         color: var(--quiet);
@@ -2235,6 +2253,7 @@
                 e.venue_address,
                 e.city,
                 e.county,
+                e.location,
                 e.country || "Ireland",
               ]
                 .filter(Boolean)
@@ -2304,11 +2323,17 @@
           kinds.push("Indoor");
         return kinds.length ? [...new Set(kinds)] : ["Activity"];
       }
-      function priceLabel(e) {
+      // `compact` is for a badge chip, not a sentence: the taxonomy's
+      // price_detail is sometimes a full clause ("Enjoy a complimentary
+      // self-guided visit to the...") rather than a short price, and that
+      // reads fine as a fact-row value in the detail view but not crammed
+      // into a chip on the catalogue card.
+      function priceLabel(e, compact) {
         const text = eventText(e);
         if (/\bfree\b|€\s?0\b|\bno charge\b/.test(text)) return "Free";
-        if (e.cost || /€|\beuro\b|ticket|admission|paid/.test(text))
-          return clean(e.cost) || "Paid";
+        const cost = clean(e.cost);
+        if (cost) return compact && cost.length > 24 ? "Paid" : cost;
+        if (/€|\beuro\b|ticket|admission|paid/.test(text)) return "Paid";
         return "Cost to check";
       }
       function ageLabel(e) {
@@ -2352,7 +2377,7 @@
       }
       function eventRow(e) {
         let isSaved = saved.includes(key(e));
-        const badges = [...eventKinds(e), priceLabel(e), ageLabel(e)]
+        const badges = [...eventKinds(e), priceLabel(e, true), ageLabel(e)]
           .slice(0, 4)
           .map(
             (label) =>
@@ -2427,13 +2452,6 @@
           }),
         );
       }
-      function holidayMapUrl(item) {
-        const query =
-          item.latitude && item.longitude
-            ? `${item.latitude},${item.longitude}`
-            : item.location;
-        return `https://www.google.com/maps/search/?${new URLSearchParams({ api: "1", query })}`;
-      }
       // The hero is a licensed photograph, so the credit line is not optional:
       // it ships with the image or the image does not ship.
       function cardHero(item) {
@@ -2441,22 +2459,20 @@
         if (!src.startsWith("media/")) return "";
         return `<figure class="cardhero"><img src="${esc(src)}" alt="${esc(item.image_alt || item.title || "")}" loading="lazy"/>${item.image_credit ? `<figcaption>${esc(item.image_credit)}</figcaption>` : ""}</figure>`;
       }
-      function linkRow(item) {
-        return [
-          [item.official_url, "Official site"],
-          [item.source_url, "Original source"],
-          [holidayMapUrl(item), "Google Maps"],
-          [item.instagram_url, "Instagram"],
-          [item.tiktok_url, "TikTok"],
-          [item.booking_url, "Check options"],
-        ]
-          .filter(([url]) => safeUrl(url))
-          .map(([url, label]) => dataLink(url, label))
-          .join("");
-      }
-      function placeCard(item, eyebrowParts) {
+      // A catalogue card, same density as an event row: photo, eyebrow, a
+      // title that opens the shared detail view. The description, facts,
+      // links and claim link used to live inline on the card -- now they
+      // live in the one detail view every kind opens into, same as events.
+      function catalogCard(item, eyebrowParts) {
         const eyebrow = eyebrowParts.filter(Boolean).map(clean).join(" · ");
-        return `<article class="holidaycard">${cardHero(item)}${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.description)}</p><div class="holidayfacts"><b>Price:</b> ${esc(item.price_range)}<br><b>Ages:</b> ${esc(item.age_group)}<br><b>Where:</b> ${esc(item.location)}</div><div class="holidaylinks">${linkRow(item)}</div><button class="linkbutton claimlink" type="button" data-claim="${esc(claimKey(item))}">Is this your venue? Claim or update this listing</button></article>`;
+        const badges = [priceLabel(item, true), ageLabel(item)]
+          .filter(Boolean)
+          .map(
+            (label) =>
+              `<span class="badge ${label === "Free" ? "free" : ""}">${esc(label)}</span>`,
+          )
+          .join("");
+        return `<article class="holidaycard">${cardHero(item)}${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ""}<h2><button class="openEvent" type="button" data-key="${esc(claimKey(item))}">${esc(item.title)}</button></h2><div class="badges">${badges}</div></article>`;
       }
       const claimKey = (item) => item.id || item.source_url || item.title || "";
       function indexRecord(item) {
@@ -2473,7 +2489,7 @@
             : "No curated holiday ideas are on air yet.";
         $("#holidayCards").innerHTML = selected.length
           ? selected
-              .map((item) => placeCard(item, [item.region, item.category]))
+              .map((item) => catalogCard(item, [item.region, item.category]))
               .join("")
           : holidays.length
             ? NOTHING_MATCHES
@@ -2501,7 +2517,7 @@
         $("#placeCards").innerHTML = selected.length
           ? selected
               .map((item) =>
-                placeCard(item, [item.county || item.region, item.category]),
+                catalogCard(item, [item.county || item.region, item.category]),
               )
               .join("")
           : NOTHING_MATCHES;
@@ -2522,14 +2538,21 @@
         current = e;
         $("#detailSource").textContent =
           `Captured from ${clean((e.source || e.all_sources?.[0] || "original listing").split(":")[0])}`;
-        $("#detailTitle").textContent = clean(e.title) || "Untitled event";
-        let loc = [e.venue_name, e.venue_address, e.city, e.county]
-          .filter(Boolean)
-          .map(clean)
-          .join(" · ");
+        $("#detailTitle").textContent = clean(e.title) || "Untitled listing";
+        let loc =
+          [e.venue_name, e.venue_address, e.city, e.county]
+            .filter(Boolean)
+            .map(clean)
+            .join(" · ") || clean(e.location || "");
         $("#detailLocation").textContent =
-          loc || "Exact venue was not provided by the source";
-        $("#detailDate").textContent = formatDate(e.start_date || e.date);
+          loc || "Exact location was not provided by the source";
+        // Places and holidays are evergreen, no date to show or save-for-later
+        // against -- same record shape as an event otherwise, so everything
+        // else in this view renders exactly the same way.
+        const dated = Boolean(e.start_date || e.date);
+        $("#detailDate").closest(".fact").hidden = !dated;
+        $("#detailDate").textContent = dated ? formatDate(e.start_date || e.date) : "";
+        $("#detailSave").hidden = !dated;
         $("#detailCost").textContent = priceLabel(e);
         $("#detailAge").textContent = ageLabel(e);
         $("#detailConfidence").textContent = completenessLabel(e);
@@ -2709,8 +2732,16 @@
         }
         let open = e.target.closest(".openEvent");
         if (open) {
-          detailTrigger = open;
-          openEvent(events[Number(open.dataset.event)]);
+          // Events carry their own index (data-event); place/holiday cards
+          // carry the same lookup key the claim links already use.
+          const record =
+            open.dataset.event != null
+              ? events[Number(open.dataset.event)]
+              : recordIndex.get(open.dataset.key);
+          if (record) {
+            detailTrigger = open;
+            openEvent(record);
+          }
           return;
         }
         let claim = e.target.closest("[data-claim]");
