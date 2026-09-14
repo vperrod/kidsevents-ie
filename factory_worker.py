@@ -1281,8 +1281,15 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
     verdict = classify(text, candidate)
     if not verdict:
         return None, "no model lane answered the classify step", ""
-    kind = str(verdict.get("kind") or "").strip().lower()
     why = str(verdict.get("why") or "").strip()[:120]
+    # A lane that already knows what its own candidate is (holidays_seed hands
+    # a curated destination's own Wikivoyage/Wikidata pages, always a holiday)
+    # beats a free-text guess: found 2026-09-14, a classify call read a
+    # destination's Wikivoyage article as "place" and the on-island-of-Ireland
+    # gate then rejected Benidorm for being in Spain -- correct for a real
+    # place, wrong for a hinted holiday the model misread.
+    kind_hint = str(candidate.get("kind_hint") or "").strip().lower()
+    kind = kind_hint if kind_hint in contract.KINDS else str(verdict.get("kind") or "").strip().lower()
     if kind not in contract.KINDS:
         return None, f"not an event, place or holiday: {why or kind or 'no verdict'}", ""
     if verdict.get("family_relevant") is False:

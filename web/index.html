@@ -1712,7 +1712,10 @@
             <div class="holidayfilters">
               <h2>Choose the shape of the day.</h2>
               <p id="holidayResultText" role="status" aria-live="polite">Loading holiday ideas…</p>
-              <div data-facets></div>
+              <details class="todayfilters">
+                <summary>Filter these</summary>
+                <div data-facets></div>
+              </details>
             </div>
           </div>
           <div class="holidaycards" id="holidayCards"></div>
@@ -1727,7 +1730,10 @@
           </p>
           <div class="holidayfilters">
             <p id="placeResultText" role="status" aria-live="polite">Loading places…</p>
-            <div data-facets></div>
+            <details class="todayfilters">
+              <summary>Filter these</summary>
+              <div data-facets></div>
+            </details>
           </div>
           <div class="holidaycards" id="placeCards"></div>
         </section>

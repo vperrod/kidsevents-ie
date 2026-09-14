@@ -24,8 +24,10 @@ from datetime import datetime, timedelta, timezone
 import factory_worker
 from discovery import common, ledger
 
-# Order is priority: the cheap lanes that lean on the existing crawl/search
-# infrastructure run first, so a budget-limited cycle spends it on them.
+# Iteration order only -- it decides tie-breaks and row order in the admin
+# Sources view, not who gets budget. `run_all()` splits the per-cycle budget
+# evenly over whichever lanes are runnable this cycle, so a lane's position
+# here no longer lets it starve the ones after it (see run_all's comment).
 LANE_ORDER = ["listings", "feeds", "sitemaps", "search",
               "opendata_places", "wikidata", "ticketmaster", "holidays_seed"]
 WEEKLY_DAYS = 7
@@ -58,6 +60,20 @@ def run_all(budget, factory_state=None, only=None):
     seen_ledger = ledger.load()
     picked, rows, cursors, ran, calls = [], [], {}, [], {}
 
+    # Lanes that will actually compete for this cycle's budget: configured,
+    # selected by `only` if given, enabled, and (for weekly lanes) due. A flat
+    # "whatever's left" budget let listings/feeds/sitemaps -- always due --
+    # spend the whole cycle every single time, so opendata_places/wikidata/
+    # ticketmaster/holidays_seed had never once run since launch (found
+    # 2026-09-14: the holidays catalogue was empty, not just thin). Splitting
+    # what is left evenly over however many runnable lanes remain gives every
+    # one of them a real turn instead of only the first few in LANE_ORDER.
+    runnable = [name for name in LANE_ORDER
+                if name in config and (not only or name in only)
+                and (config[name] or {}).get("enabled")
+                and (not (config[name] or {}).get("weekly")
+                     or _is_due_weekly(name, factory_state, now))]
+
     for name in LANE_ORDER:
         if name not in config or (only and name not in only):
             continue                       # a lane with no config block does not exist
@@ -68,10 +84,12 @@ def run_all(budget, factory_state=None, only=None):
         if lane_config.get("weekly") and not _is_due_weekly(name, factory_state, now):
             rows.append(_row(name, "-", 0, 0, ["not due this week"], 0))
             continue
-        remaining = budget - len(picked)
-        if remaining <= 0:
+        remaining_total = budget - len(picked)
+        if remaining_total <= 0:
             rows.append(_row(name, "-", 0, 0, ["budget spent"], 0))
             continue
+        share = max(1, remaining_total // (len(runnable) - runnable.index(name)))
+        remaining = min(remaining_total, share)
 
         state = {"config": lane_config, "budget": remaining, "errors": [],
                  "factory_state": factory_state, "cursor": None, "calls": None}
