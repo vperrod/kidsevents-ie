@@ -220,6 +220,13 @@ browser looking at it, only when a detail modal opens. Files live in
 `web/media/<kind>/` (git-ignored, served by Flask's static route at `/media/…`)
 and `media_index.json` records what each one is and where it came from.
 
+Both refreshes run nightly, links first so a record has its official site
+before media looks for one: `kidsevents-links-refresh.timer` (03:00 UTC) and
+`kidsevents-media-refresh.timer` (03:30 UTC, `After=` the links unit), both
+`Type=oneshot` matching `kidsevents-factory.timer`, unit files in
+`~/.config/systemd/user/` on the VM (not tracked in this repo — a plain
+`ExecStart=venv/bin/python3 links.py refresh 200` / `media.py refresh`).
+
 ### Storage
 
 Every JSON store is written with `write_json_atomic()` (temp file in the same
