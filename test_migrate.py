@@ -115,9 +115,11 @@ def test_an_adult_legacy_event_is_rejected():
 
 
 def test_a_british_legacy_event_is_rejected():
+    """Not a Northern Irish county, so still off the island of Ireland — the
+    gate accepts GB only via a recognised NI county now (test_gate.py)."""
     _record, _verdict, reason, _missing, _dropped = migrate_contract.classify_record(
         _legacy_event(country="United Kingdom"), "event", [])
-    assert reason == "country is GB, not IE"
+    assert reason == "country is GB, not on the island of Ireland"
 
 
 def test_a_short_description_is_held_for_input_not_rejected():

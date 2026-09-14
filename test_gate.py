@@ -149,7 +149,19 @@ def test_a_caption_titled_candidate_is_rejected():
 def test_an_event_outside_ireland_is_rejected():
     record = _event()
     record["location"]["country"] = "GB"
-    assert gate.qa(contract.derive(record), SOURCES_TEXT) == (False, "country is GB, not IE", "")
+    assert gate.qa(contract.derive(record), SOURCES_TEXT) == (
+        False, "country is GB, not on the island of Ireland", "")
+
+
+def test_a_northern_irish_event_is_not_rejected_for_its_country():
+    """facets.json flags six counties `ni: true`; the gate used to reject any
+    country other than IE outright, so a real Belfast listing (country GB)
+    could never go on air even though the taxonomy was built to hold it."""
+    record = _event()
+    record["location"].update({"country": "GB", "city": "Belfast", "county": "Antrim"})
+    ok, reason, missing_field = gate.qa(contract.derive(record), SOURCES_TEXT)
+    assert "not on the island of Ireland" not in reason
+    assert "country is" not in reason
 
 
 def test_irish_coordinates_that_are_not_in_ireland_are_rejected():

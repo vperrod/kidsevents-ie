@@ -232,8 +232,9 @@ def qa(record, sources_text="", on_air_titles=()):
     over = _already_over(record) if kind == "event" else ""
     if over:
         return _reject(over)
-    if kind in ("event", "place") and not location.get("ireland"):
-        return _reject(f"country is {location.get('country') or 'unknown'}, not IE")
+    on_island = location.get("ireland") or contract.is_northern_ireland(location.get("county"))
+    if kind in ("event", "place") and not on_island:
+        return _reject(f"country is {location.get('country') or 'unknown'}, not on the island of Ireland")
     if _outside_ireland(location):
         return _reject(f"says Ireland but the coordinates are at {location.get('lat')},{location.get('lon')}")
     if _is_nav_list(record.get("description")):
