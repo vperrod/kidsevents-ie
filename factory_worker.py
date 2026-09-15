@@ -288,13 +288,26 @@ _RETRYABLE_STATUS = {429, 502, 503}
 _BACKOFF_SECS = [3.0, 6.0, 12.0]
 
 
+MAX_RETRY_AFTER_SECS = 30.0
+
+
 def _retry_after(error):
-    """Honour a server's Retry-After header (seconds) if it sent one."""
+    """Honour a server's Retry-After header (seconds) if it sent one, capped
+    at MAX_RETRY_AFTER_SECS. Found 2026-09-15: galwaycomedyfestival.ie sent
+    "Retry-After: 3600" on a 503, and this was sleeping the full hour,
+    literally, inside one candidate's research_fetch -- three attempts in a
+    row is up to three hours one URL can hold a worker thread. Since the
+    2026-09-14 parallel-research change, the cycle function doesn't return
+    until every submitted thread does, so that one URL was silently keeping
+    daemon.lock held long after "cycle outcomes" logged, blocking every
+    later scheduled or manual trigger with "another cycle is running" for
+    hours with no visible error. A slow site should cost this one candidate
+    a short wait, never the whole pipeline's ability to run again."""
     headers = getattr(error, "headers", None) or {}
     value = headers.get("Retry-After")
     if value:
         try:
-            return float(value)
+            return min(float(value), MAX_RETRY_AFTER_SECS)
         except ValueError:
             return 0.0
     return 0.0
