@@ -23,9 +23,11 @@ import fcntl
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 import threading
+import random
 import time
 import urllib.parse
 import urllib.request
@@ -152,6 +154,7 @@ def load_env():
 ENV = load_env()
 SEARCHGW = ENV.get("SEARCHGW_BASE", "http://127.0.0.1:8890")
 CRAWL_WALL_SECS = int(ENV.get("CRAWL_WALL_SECS", "240"))
+CRAWL_PAGE_CONCURRENCY = max(1, min(2, int(ENV.get("CRAWL_PAGE_CONCURRENCY", "2"))))
 # One cycle per run: the hourly timer must never start a second cycle on top
 # of a slow one (they would fight over the same stores and the same shared
 # local-model slots). CYCLE_WALL_SECS is the hard stop for a cycle that hangs.
@@ -229,17 +232,38 @@ def _post_json(url, payload, headers=None, timeout=180):
 # Research fetch — the source text every later step is grounded in
 # ---------------------------------------------------------------------------
 
-# A plain desktop Chrome UA is what makes an Instagram permalink return the
-# server-rendered HTML (which carries `"caption":{"text":...}`) instead of the
-# JS shell. Verified from this VM 2026-09-13; the mini PC's IP gets the shell,
-# so this VM-side fetch is the only caption source for the keyword-search lane.
-RESEARCH_UA = {
-    "User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                   "Chrome/131.0.0.0 Safari/537.36"),
+# A small pool of desktop Chrome UAs. Cycling them keeps the VM crawler from
+# being fingerprinted and hard-blocked by yourdaysout / IG / TikTok across the
+# many fetches a sweep makes. Every member is Chrome 13x on purpose: IG only
+# server-renders the `"caption":{"text":...}` JSON the caption scraper parses
+# when it sees a Chrome UA (verified from this VM 2026-09-13; the mini PC's IP
+# gets the JS shell, so this VM-side fetch is the only caption source for the
+# keyword-search lane).
+_BASE_HEADERS = {
     "Accept-Language": "en-IE,en;q=0.9",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 }
-FETCH_GAP_SECS = 2
+RESEARCH_UAS = [
+    {**_BASE_HEADERS, "User-Agent": ("Mozilla/5.0 (X11; Linux x86_64) "
+                                     "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                     "Chrome/131.0.0.0 Safari/537.36")},
+    {**_BASE_HEADERS, "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                                     "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                     "Chrome/130.0.0.0 Safari/537.36")},
+    {**_BASE_HEADERS, "User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                     "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                     "Chrome/132.0.0.0 Safari/537.36")},
+]
+# Backward-compatible name used by older discovery/research paths and by
+# third-party lane helpers. Keeping one canonical header prevents a missing
+# symbol from turning an otherwise recoverable fetch into a lane failure.
+RESEARCH_UA = RESEARCH_UAS[0]
+
+def _research_ua():
+    """A rotating Chrome UA so repeated fetches aren't all fingerprinted alike."""
+    return random.choice(RESEARCH_UAS)
+
+FETCH_GAP_SECS = 4
 RESEARCH_MAX_CHARS = 6000
 _fetch_clock = {}
 _fetch_lock = threading.Lock()
@@ -258,13 +282,92 @@ def _throttle(platform):
         _fetch_clock[platform] = time.time()
 
 
-def _http_text(url, timeout=25):
-    request = urllib.request.Request(url, headers=RESEARCH_UA)
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return response.read().decode("utf-8", "ignore")
+# Statuses that mean "slow down", not "this URL is bad" -- retry these with
+# backoff instead of failing the candidate straight to needs-input.
+_RETRYABLE_STATUS = {429, 502, 503}
+_BACKOFF_SECS = [3.0, 6.0, 12.0]
+
+
+def _retry_after(error):
+    """Honour a server's Retry-After header (seconds) if it sent one."""
+    headers = getattr(error, "headers", None) or {}
+    value = headers.get("Retry-After")
+    if value:
+        try:
+            return float(value)
+        except ValueError:
+            return 0.0
+    return 0.0
+
+
+def _http_text(url, timeout=25, retries=3):
+    """Fetch `url` as decoded HTML, retrying transient 429/503/502 responses.
+
+    A single blocked request is the #1 reason candidates fall to
+    needs-input "caption" -- retrying with backoff and a rotated UA lets the
+    readable detail pages (yourdaysout event pages, etc.) through so the
+    four-step pipeline actually has text to write a contract-length description
+    from. Hard failures (401/403/404, a genuinely blocked URL) still raise and
+    are filed by the caller as needs-input.
+    """
+    last = None
+    for attempt in range(retries + 1):
+        try:
+            request = urllib.request.Request(url, headers=_research_ua())
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return response.read().decode("utf-8", "ignore")
+        except urllib.error.HTTPError as error:
+            last = error
+            if error.code in _RETRYABLE_STATUS and attempt < retries:
+                wait = _retry_after(error) or _BACKOFF_SECS[attempt]
+                log("_http_text %s: HTTP %s -- retry %d/%d after %.0fs" % (
+                    urllib.parse.urlparse(url).netloc, error.code,
+                    attempt + 1, retries, wait))
+                time.sleep(wait)
+                continue
+            raise
+    # Only reachable when a retryable error exhausted its attempts: re-raise
+    # the last one. (A success returns inside the loop; a hard error raises.)
+    assert last is not None
+    raise last
+
+
+MINI_PC_HOST = os.environ.get("MINI_PC_HOST", "mini-pc")
+
+
+def _mini_pc_authenticated_fetch(url, timeout=60):
+    """Read a page through the mini PC's already-logged-in Chrome session
+    (same account fetch.py's discovery lanes use), via SSH to a small bridge
+    script there (verify_fetch.py). A bare unauthenticated request from this
+    VM gets an Instagram/TikTok anti-bot wall -- a real browser with real
+    cookies mostly doesn't. Returns "" (never raises) on any failure: SSH
+    unreachable, the shared browser session busy, opencli erroring -- callers
+    fall back to their own unauthenticated attempt exactly as before this
+    existed (found and wired 2026-09-15, Victor: "I thought using our skill
+    was enough" -- it was capable, it just wasn't plumbed into this step)."""
+    try:
+        result = subprocess.run(
+            ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=8", MINI_PC_HOST,
+             "cd ~/tools/kidsevents-social && python3 verify_fetch.py " + shlex.quote(url)],
+            capture_output=True, text=True, timeout=timeout)
+        if result.returncode != 0:
+            log(f"mini-pc verify_fetch {url[:70]}: ssh exit {result.returncode}: "
+                f"{result.stderr.strip()[:200]}")
+            return ""
+        data = json.loads(result.stdout.strip().splitlines()[-1]) if result.stdout.strip() else {}
+        if data.get("error"):
+            log(f"mini-pc verify_fetch {url[:70]}: {data['error']}")
+            return ""
+        return data.get("text") or ""
+    except Exception as error:
+        log(f"mini-pc verify_fetch {url[:70]}: {error}")
+        return ""
 
 
 def _instagram_caption(url):
+    authenticated = _mini_pc_authenticated_fetch(url)
+    if authenticated:
+        return authenticated
     html = _http_text(url)
     match = _IG_CAPTION_RE.search(html)
     caption = json.loads('"' + match.group(1) + '"') if match else ""
@@ -273,11 +376,17 @@ def _instagram_caption(url):
 
 
 def _tiktok_caption(url):
-    """TikTok's oEmbed endpoint is keyless and returns the caption as `title`."""
+    """TikTok's oEmbed endpoint is keyless and returns the caption as `title`
+    -- usually enough on its own, so it goes first; the authenticated bridge
+    only runs when oEmbed comes back empty (a private/removed/rate-limited
+    video)."""
     data = json.loads(_http_text(
         "https://www.tiktok.com/oembed?" + urllib.parse.urlencode({"url": url})))
     author = data.get("author_name") or ""
-    return "\n".join(x for x in (f"Account: {author}" if author else "", data.get("title", "")) if x)
+    oembed = "\n".join(x for x in (f"Account: {author}" if author else "", data.get("title", "")) if x)
+    if oembed:
+        return oembed
+    return _mini_pc_authenticated_fetch(url)
 
 
 def _page_text(url):
@@ -318,6 +427,20 @@ def research_fetch(candidate):
         log(f"research_fetch {url[:70]}: {error}")
 
     text = _merge_text(caption, fetched)
+    # Social posts are often short pointers (“visit this farm…”) rather than
+    # complete listings. Before parking them for a missing description, use the
+    # author/caption as a search key to locate the venue's own page and address.
+    # This is especially important for evergreen places: they do not need an
+    # event date, but they do need a verifiable location.
+    if platform in ("instagram", "tiktok") and len(text.split()) < 120:
+        try:
+            query = " ".join(x for x in (candidate.get("author", ""), caption[:180], "Ireland") if x)
+            for page in web_search(query, limit=2, kind="place"):
+                extra = page.get("markdown", "")
+                if extra:
+                    text = _merge_text(text, extra)
+        except Exception as error:
+            log(f"social enrichment {host}: {error}")
     source = {"url": url, "fetched_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
     if not text.strip():
         return "", source, "caption"
@@ -355,6 +478,10 @@ def classify(text, candidate=None):
         + '{"kind": "event" for something happening on specific dates, "place" for a venue or '
           'activity a family can visit any time, "holiday" for a destination to travel to, '
           'or "none" if it is none of those,\n'
+        + 'Important: a social post may describe an evergreen place, attraction, playground, '
+          'farm, museum, beach, trail or activity without giving a date. If it names or clearly '
+          'describes a visitable location and no specific date is stated, classify it as "place", '
+          'not "event". Only use "event" when the source states something happening on a date.\n'
         + '"family_relevant": true only if children can come and it is aimed at or welcoming to '
           'families - false for adult comedy, gigs, club nights, age-gated (16+/18+) events, '
           'trade or adult-only shopping events,\n'
@@ -476,8 +603,13 @@ def _src_gateway(query, limit, kind=None):
         req = urllib.request.Request(f"{SEARCHGW}/search?{q}", headers=SEARCH_UA)
         with urllib.request.urlopen(req, timeout=90) as r:
             data = json.loads(r.read().decode("utf-8", "ignore"))
-        return [{"url": x["url"], "title": x.get("title", ""), "source": f"gw:{x.get('engine', '')}"}
-                for x in data.get("results", []) if x.get("url")][:limit]
+        rows = []
+        for x in data.get("results", []):
+            url, title = x.get("url"), x.get("title", "")
+            if not url or _JUNK_URL_RE.search(url) or _LOW_SIGNAL_TEXT_RE.search(f"{title} {url}"):
+                continue
+            rows.append({"url": url, "title": title, "source": f"gw:{x.get('engine', '')}"})
+        return rows[:limit]
     except Exception as e:
         log(f"searchgw unreachable: {e}")
         return []
@@ -485,7 +617,17 @@ def _src_gateway(query, limit, kind=None):
 
 _DISCOVERY_SOURCES = [_src_gateway]
 
-_JUNK_URL_RE = re.compile(r"[Ss]pecial:|[?&]search=|/search\\?|facebook.com/(login|recover)")
+_JUNK_URL_RE = re.compile(
+    r"[Ss]pecial:|[?&]search=|/search\?|facebook.com/(login|recover)|"
+    r"/(?:recipes?|calculators?|apps?|advice|tips|pregnancy|quotes?|poems?|"
+    r"indoor-activities|activities-for-kids)(?:[/\?#]|$)|"
+    r"(?:nhs\.uk|abcmouse\.com|booking\.com)/"
+)
+_LOW_SIGNAL_TEXT_RE = re.compile(
+    r"\b(?:recipe|recipes|cake ideas|mobile apps?|pregnancy|parenting advice|"
+    r"quotes?|poem|calculator|indoor activities?|rainy[- ]day ideas)\b",
+    re.IGNORECASE,
+)
 
 
 def _discover_urls(query, limit=12, kind=None):
@@ -551,12 +693,19 @@ def _crawl_pages(discovered, limit, skip_chrome_filter=False,
     out = []
     seen = set()
     try:
+        import psutil
+        children_before = {p.pid for p in psutil.Process(os.getpid()).children(recursive=True)}
+    except Exception:
+        psutil = None
+        children_before = set()
+    timed_out = False
+    try:
         loop = asyncio.new_event_loop()
         try:
             asyncio.set_event_loop(loop)
             async def extract():
                 async with AsyncWebCrawler() as crawler:
-                    gate = asyncio.Semaphore(6)
+                    gate = asyncio.Semaphore(CRAWL_PAGE_CONCURRENCY)
                     async def fetch(item):
                         if "markdown" in item:
                             return item, None
@@ -613,8 +762,25 @@ def _crawl_pages(discovered, limit, skip_chrome_filter=False,
             task.cancel()
             loop.run_until_complete(asyncio.wait({task}, timeout=15))
             log(f"crawl4ai abandoned after {CRAWL_WALL_SECS}s")
+            timed_out = True
         finally:
             loop.close()
+            if timed_out and psutil is not None:
+                current = [p for p in psutil.Process(os.getpid()).children(recursive=True)
+                           if p.pid not in children_before]
+                for proc in current:
+                    try:
+                        proc.terminate()
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        pass
+                _, alive = psutil.wait_procs(current, timeout=3)
+                for proc in alive:
+                    try:
+                        proc.kill()
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        pass
+                if current:
+                    log(f"crawl4ai timeout reaped {len(current)} child process(es)")
     except Exception as e:
         log(f"crawl4ai failed: {e}")
     return out
@@ -1285,6 +1451,29 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
         return None, ("No caption or page text could be read from this post (a rate-limited "
                       "fetch) -- nothing to classify from. Add a note below with what it's "
                       "about."), missing or "caption"
+
+    # A source whose entire fetched text is shorter than the smallest contract
+    # description floor cannot satisfy MIN_DESCRIPTION_WORDS for ANY kind without
+    # the write step inventing facts, which _NO_INVENTING forbids -- so the gate
+    # would reject it on `description` no matter what. That wastes the four model
+    # calls (classify/facts/extract/write) below plus the research fetch. Park it
+    # as needs-input and skip the steps. A real curator note (folded into `text`
+    # above via `hint`) can still push a candidate over the floor, so this is
+    # recoverable -- needs-input, not rejected.
+    _source_words = len(text.split())
+    _min_description = min(contract.MIN_DESCRIPTION_WORDS.values())
+    is_social = str(candidate.get("platform", "")).lower() in ("instagram", "tiktok")
+    if _source_words < _min_description and not is_social:
+        return None, (
+            "Source text is only %d words, below the %d-word minimum the contract "
+            "requires for a description (events %d, places/holidays %d). The write "
+            "step uses only the facts above and cannot invent them -- add a richer "
+            "source link or a curator note with the missing details below."
+        ) % (
+            _source_words, _min_description,
+            contract.MIN_DESCRIPTION_WORDS["event"],
+            contract.MIN_DESCRIPTION_WORDS["place"],
+        ), "description"
 
     verdict = classify(text, candidate)
     if not verdict:
