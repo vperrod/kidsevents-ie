@@ -13,6 +13,7 @@ and removed. Never touches `rejected` records -- those are a settled verdict.
 """
 import argparse
 import concurrent.futures
+import fcntl
 import sys
 import time
 import urllib.parse
@@ -24,8 +25,8 @@ import factory_worker
 
 BASE = Path(__file__).resolve().parent
 NEEDS_INPUT_FILE = BASE / "staged" / "needs_input.json"
+LOCK_FILE = BASE / "staged" / "reprocess_needs_input.lock"
 WORKERS = int(__import__("os").environ.get("REPROCESS_WORKERS", "3") or 3)
-MAX_ITEM_SECS = int(__import__("os").environ.get("MAX_ITEM_SECS", "450") or 450)
 
 
 def candidate_for(record):
@@ -72,12 +73,17 @@ def process_one(record_id):
         return records[idx]["status"]
 
 
-def run_within_budget(record_id):
-    runner = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+def process_safely(record_id):
+    """process_one, never raising. Same fix as staging.py's sweep
+    (2026-09-15): no second, outer timeout wall above research_fetch's and
+    promote()'s own already-real timeouts -- that pattern doesn't fail fast
+    on a blocked page, it burns the whole outer budget and then can't even
+    free the worker, since Python threads can't be killed."""
     try:
-        return runner.submit(process_one, record_id).result(timeout=MAX_ITEM_SECS)
-    finally:
-        runner.shutdown(wait=False)
+        return process_one(record_id)
+    except Exception as error:
+        factory_worker.log(f"reprocess {record_id[:70]}: {error}")
+        return "error"
 
 
 def main():
@@ -85,29 +91,38 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     args = ap.parse_args()
 
-    records = factory_worker.load_json_store(NEEDS_INPUT_FILE, [])
-    ids = [r["id"] for r in records if r.get("status") == "needs-input"]
-    if args.limit:
-        ids = ids[:args.limit]
-    print(f"{len(ids)} needs-input records to re-research", file=sys.stderr, flush=True)
+    LOCK_FILE.parent.mkdir(exist_ok=True)
+    lock_fh = open(LOCK_FILE, "w")
+    try:
+        fcntl.flock(lock_fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        print("another reprocess run is already in progress -- skipping", file=sys.stderr)
+        return 0
 
-    outcomes = Counter()
-    started = time.time()
-    with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as pool:
-        futures = {pool.submit(run_within_budget, rid): rid for rid in ids}
-        for done, future in enumerate(concurrent.futures.as_completed(futures), 1):
-            rid = futures[future]
-            try:
+    try:
+        records = factory_worker.load_json_store(NEEDS_INPUT_FILE, [])
+        ids = [r["id"] for r in records if r.get("status") == "needs-input"]
+        if args.limit:
+            ids = ids[:args.limit]
+        print(f"{len(ids)} needs-input records to re-research", file=sys.stderr, flush=True)
+
+        outcomes = Counter()
+        started = time.time()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=WORKERS) as pool:
+            futures = {pool.submit(process_safely, rid): rid for rid in ids}
+            for done, future in enumerate(concurrent.futures.as_completed(futures), 1):
+                rid = futures[future]
                 status = future.result()
-            except concurrent.futures.TimeoutError:
-                status = f"timed out after {MAX_ITEM_SECS}s"
-            outcomes[status] += 1
-            print(f"  [{done}/{len(ids)}] {status} — {rid[:70]}", file=sys.stderr, flush=True)
+                outcomes[status] += 1
+                print(f"  [{done}/{len(ids)}] {status} — {rid[:70]}", file=sys.stderr, flush=True)
 
-    elapsed = (time.time() - started) / 60
-    print(f"\n{len(ids)} processed in {elapsed:.1f} min", file=sys.stderr)
-    for status, count in outcomes.most_common():
-        print(f"  {count:4d}  {status}", file=sys.stderr)
+        elapsed = (time.time() - started) / 60
+        print(f"\n{len(ids)} processed in {elapsed:.1f} min", file=sys.stderr)
+        for status, count in outcomes.most_common():
+            print(f"  {count:4d}  {status}", file=sys.stderr)
+    finally:
+        fcntl.flock(lock_fh, fcntl.LOCK_UN)
+        lock_fh.close()
 
 
 if __name__ == "__main__":
