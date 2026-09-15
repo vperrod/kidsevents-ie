@@ -26,6 +26,7 @@ silently clobber each other's writes.
 """
 
 import concurrent.futures
+import fcntl
 import json
 import os
 import sys
@@ -36,6 +37,16 @@ import factory_worker
 
 BASE = Path(__file__).resolve().parent
 STAGED_FILE = BASE / "staged" / "social_candidates.json"
+# One sweep at a time. Without this, the scheduled timer firing again mid-run
+# (a sweep can legitimately take longer than the timer interval) or a second
+# manual invocation picks the SAME pending candidate, both classify it
+# independently, and whichever write lands last silently overwrites the
+# other's verdict -- found 2026-09-15: a candidate whose place had genuinely
+# gone on-air was left showing status "rejected" from a second, later,
+# unluckier concurrent classification pass. mark_candidate's per-write lock
+# only makes each individual write atomic; it does nothing to stop two
+# sweeps from racing to write different verdicts for the same candidate.
+SWEEP_LOCK_FILE = BASE / "staged" / "sweep.lock"
 AUTO_APPROVE = os.environ.get("AUTO_APPROVE", "on").strip().lower() != "off"
 # Classification is nearly all waiting on a model, so a few in flight at once
 # turns a backlog from hours into minutes. Three is what the mini PC's two
@@ -99,7 +110,21 @@ def apply_verdict(candidate, record, reason, missing_field, hint=""):
             candidate.pop("missing_field", None)
         return False
     kind = record["kind"]
-    factory_worker.publish_record(record)
+    published = factory_worker.publish_record(record)
+    if not published:
+        # publish_record() only says no for a duplicate id (already on-air,
+        # nothing lost) or record["status"] != "on-air" (a real bug upstream --
+        # promote() should never hand back anything else here). Telling those
+        # apart matters: silently calling both "approved" is what let 69 of 78
+        # historical approvals vanish with no trace (found 2026-09-15).
+        store = factory_worker.STORE_FOR_KIND[kind]
+        already_live = any(other.get("id") == record["id"]
+                           for other in factory_worker.load_json_store(store, []))
+        if not already_live:
+            candidate["status"] = "rejected"
+            candidate["reason"] = f"publish_record() refused it (status was {record.get('status')!r}) -- not on-air, needs investigation"
+            candidate.pop("missing_field", None)
+            return False
     candidate["status"] = "approved"
     candidate["review_note"] = f"Approved: classified as a{'n' if kind == 'event' else ''} {kind}."
     candidate.pop("reason", None)
@@ -208,7 +233,18 @@ def main():
               file=sys.stderr)
         return 2
     if sys.argv[1] == "sweep":
-        checked, approved = sweep_pending()
+        SWEEP_LOCK_FILE.parent.mkdir(exist_ok=True)
+        lock_fh = open(SWEEP_LOCK_FILE, "w")
+        try:
+            fcntl.flock(lock_fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            print("another sweep is already running -- skipping", file=sys.stderr)
+            return 0
+        try:
+            checked, approved = sweep_pending()
+        finally:
+            fcntl.flock(lock_fh, fcntl.LOCK_UN)
+            lock_fh.close()
         print(f"Swept {checked} pending candidates, auto-approved {approved}.")
         return 0
     try:
