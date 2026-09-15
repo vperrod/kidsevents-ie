@@ -52,10 +52,6 @@ AUTO_APPROVE = os.environ.get("AUTO_APPROVE", "on").strip().lower() != "off"
 # turns a backlog from hours into minutes. Three is what the mini PC's two
 # local slots plus the gateway lanes absorb without either queueing.
 SWEEP_WORKERS = int(os.environ.get("SWEEP_WORKERS", "3") or 3)
-# An item that is still unresolved after this long is left needs_review rather
-# than holding the sweep: with four model calls per item and several lanes to
-# fall through, a pathological item can otherwise stall a whole worker.
-MAX_ITEM_SECS = int(os.environ.get("MAX_ITEM_SECS", "300") or 300)
 
 REVIEW_NOTE = (
     "Verify destination, dates, age guidance and price on the organiser "
@@ -180,17 +176,29 @@ def write_staged(candidates):
     return len(additions)
 
 
-def approve_within_budget(source_url):
-    """try_approve_by_url with a hard MAX_ITEM_SECS wall. A worker thread
-    cannot be killed, so the overdue classification is abandoned on its own
-    thread (it ends when its lane timeouts do, and if it eventually succeeds
-    it applies its verdict under the usual lock) while the sweep moves on.
-    Raises TimeoutError when the budget is blown."""
-    runner = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+def approve_safely(source_url):
+    """try_approve_by_url, never raising. WanderTold's pattern (see
+    rereseach_catalog.process()): every step this calls down to -- the fetch,
+    the crawl, each hermes call -- already has its own real timeout, so a
+    blocked or slow page fails in seconds and the item just moves to its next
+    step, the same as it does everywhere else in this codebase.
+
+    Until 2026-09-15 this instead wrapped the WHOLE item in a second, outer
+    MAX_ITEM_SECS wall on its own single-use executor: an anti-bot block deep
+    in one step didn't fail fast, it burned the entire budget, and giving up
+    couldn't even free the worker -- Python threads can't be killed, so the
+    abandoned classification kept running (and kept using CPU, a search
+    gateway slot, a hermes call) after the sweep had already moved on and
+    counted it as a timeout. WanderTold has no equivalent of this: it never
+    wraps one venue's whole pipeline in a second ceiling above its steps'
+    own, which is why the exact same anti-bot walls (242 of them on
+    WanderTold in the six hours this was found) never stall it the way they
+    were stalling this sweep."""
     try:
-        return runner.submit(try_approve_by_url, source_url).result(timeout=MAX_ITEM_SECS)
-    finally:
-        runner.shutdown(wait=False)
+        return try_approve_by_url(source_url)
+    except Exception as error:
+        factory_worker.log(f"sweep {source_url[:70]}: {error}")
+        return False
 
 
 def sweep_pending():
@@ -209,15 +217,12 @@ def sweep_pending():
         pending_urls = pending_urls[:limit]
     approved = done = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=SWEEP_WORKERS) as pool:
-        futures = {pool.submit(approve_within_budget, url): url for url in pending_urls}
+        futures = {pool.submit(approve_safely, url): url for url in pending_urls}
         for future in concurrent.futures.as_completed(futures):
             url = futures[future]
             done += 1
-            try:
-                ok = future.result()
-                status = "approved" if ok else "still needs review"
-            except concurrent.futures.TimeoutError:
-                ok, status = False, f"timed out after {MAX_ITEM_SECS}s"
+            ok = future.result()
+            status = "approved" if ok else "still needs review"
             if ok:
                 approved += 1
             print(f"  [{done}/{len(pending_urls)}] {status} — {url[:70]}",
