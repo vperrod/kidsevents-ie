@@ -17,6 +17,12 @@ firebase-service-account*.json
 
 # Scraper output
 events_output.json
+factory_state.json
+holidays_output.json
+places_output.json
+routing.jsonl
+*.log
+daemon.lock
 
 # Social review queue and organiser claims (runtime state, both under staged/)
 staged/

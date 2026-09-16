@@ -130,7 +130,7 @@ def verify_url(url, timeout=12):
         return False
     for method in ("HEAD", "GET"):
         request = urllib.request.Request(url, method=method,
-                                         headers=factory_worker.RESEARCH_UA)
+                                         headers=factory_worker._research_ua())
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
                 return response.status == 200

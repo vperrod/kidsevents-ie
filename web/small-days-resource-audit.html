@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Small Days — resource audit (2026-09-15)</title>
+<style>
+:root{--bg:#0f1218;--fg:#e4e7ee;--muted:#9aa3b8;--card:#161c26;--accent:#5aa4ff;--ok:#4caf50;--warn:#f5a623;--bad:#ff6b6b;--code:#0e131f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:-apple-system BlinkMacSystemFont "Segoe UI" Roboto Helvetica Arial sans-serif;line-height:1.55;font-size:15px}
+.wrap{max-width:920px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:18px;margin:34px 0 10px;border-bottom:1px solid #252c3a;padding-bottom:6px}
+h3{font-size:15px;margin:22px 0 8px}
+.p{color:var(--muted);margin:0 0 18px;font-size:14px}
+.lead{background:var(--card);border:1px solid #252c3a;border-left:4px solid var(--bad);padding:14px 18px;border-radius:6px;margin:18px 0;font-weight:600}
+.card{background:#161c26;border:1px solid #252c3a;border-radius:8px;padding:14px 18px;margin:12px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;border:1px solid #252c3a;border-radius:6px;overflow:hidden}
+th,td{text-align:left;padding:8px 10px;font-size:13.5px;border-bottom:1px solid #1f2633}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+.kpill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px}
+.ok{background:rgba(76,175,80,.15);color:var(--ok)}
+.bad{background:rgba(255,107,107,.15);color:var(--bad)}
+.warn{background:rgba(245,166,35,.12);color:var(--warn)}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:12.5px}
+pre{background:var(--code);border:1px solid #252c3a;border-radius:6px;padding:12px 14px;overflow:auto;font-size:12.5px}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;background:#252c3a;color:var(--accent);padding:1px 8px;border-radius:10px}
+.muted{color:var(--muted);font-size:13px}
+ul{margin:8px 0;padding-left:20px}
+li{margin:4px 0}
+.q:before{content:"\201C";font-size:22px;line-height:1px;vertical-align:middle;color:var(--accent);margin-right:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Small Days — resource audit <span class="badge">2026-09-15</span></h1>
+<p class="p">Why is the factory/stage burning 4-step LLM pipelines if the catalogue
+(<code>events_output.json</code>) isn't growing, and whose hand is feeding the
+1000+ "needs input" queue?</p>
+
+<div class="lead">The gate is <b>not</b> broken — it is behaving exactly as your
+overhaul spec mandates, and your spec explicitly <b>forbids</b> the obvious fix
+(lowering the description floor). The waste is upstream: the sources being
+scraped physically can’t satisfy the 60/120-word floor, so every token produces
+a <code>needs-input</code> row instead of an on-air event. A pre-gate
+short-circuit (applied &amp; verified) now cuts that guaranteed waste.</div>
+
+<h2>Live right now</h2>
+<div class="card">
+<b>Factory cycle running now:</b> PID 3597639, started 06:00 — scraping
+<code>yourdaysout.com/.../events-on-in-county-*</code> county pages.
+<b>1,097 LLM calls today</b> across 6 lanes.
+</div>
+<h3>LLM spend today — 1,097 calls</h3>
+<table>
+<tr><th>Lane</th><th>Calls</th><th>Errors</th><th>Rate</th><th>State</th></tr>
+<tr><td><code>local</code> (llama.cpp :18089)</td><td class="num">439</td><td class="num">1</td><td class="ok">0.2%</td><td>healthy</td></tr>
+<tr><td><code>auto</code> / best-free</td><td class="num">432</td><td class="num">121</td><td class="warn">28%</td><td>noisy fallback, retries</td></tr>
+<tr><td><code>hermes</code> CLI (last resort)</td><td class="num">118</td><td class="num">11</td><td class="warn">9.3%</td><td><span class="bad">90s timeouts</span></td></tr>
+<tr><td><code>oc/mimo-v2.5-free</code></td><td class="num">44</td><td class="num">36</td><td class="bad">82%</td><td>parked</td></tr>
+<tr><td><code>kg/stepfun/step-3.7-flash:free</code></td><td class="num">22</td><td class="num">21</td><td class="bad">95%</td><td>parked</td></tr>
+<tr><td><code>oc/nemotron-3-ultra-free</code></td><td class="num">42</td><td class="num">5</td><td class="ok">12%</td><td>live</td></tr>
+</table>
+<p class="muted">The local lane is fine; the waste is the <b>auto/best-free</b> lane
+(432 calls, 28% errors → retries) and the <b>hermes CLI</b> fallback which times out
+at 90s on thin captions (visible in <code>/tmp/sweep3.log</code>: “hermes call failed:
+timed out after 90 seconds”). 5 orphaned <code>tail -f /tmp/sweep*.log</code> followers
+from Sep 12–14 are still in the process table (0% CPU, harmless).</p>
+
+<h2>Why the catalogue hasn't grown</h2>
+<div class="card">
+<b>Catalogue:</b> <code>events_output.json</code> = <b>32 on-air events</b>
+(dates 2026-06-12 → 2026-11-01). <code>prune_past_events()</code> trims each
+cycle to future events, so the count is a moving window — and no new candidate
+is clearing the gate to replace what ages out.
+</div>
+<p><b>The gate (<code>gate.qa</code>, <code>contract.py</code>) rejects ~all fresh
+candidates.</b> Failure breakdown across the live staged queues:</p>
+<table>
+<tr><th>Failure field</th><th>Web candidates</th><th>Social candidates</th></tr>
+<tr><td><code>caption</code> — rate-limited fetch (401/403/429)</td><td class="num">93</td><td class="num">73</td></tr>
+<tr><td><code>address</code> / coords missing</td><td class="num">49</td><td class="num">19</td></tr>
+<tr><td><code>start_date</code> / date evidence</td><td class="num">33</td><td class="num">0</td></tr>
+<tr><td><code>facts</code> not enough structured facts</td><td class="num">25</td><td class="num">0</td></tr>
+<tr><td><code>county</code> not mappable to an Irish county</td><td class="num">31</td><td class="num">15</td></tr>
+<tr><td><code>description</code> below word floor</td><td class="num">10</td><td class="num">45</td></tr>
+</table>
+<p class="muted">
+<code>staged/needs_input.json</code> (95 rows) is <b>100%
+<code>produced_by: migrate_contract</code></b> — legacy phase1b migration
+artefacts, not live factory output (89/93 fail on description, median ~24 words).
+It's a stale pile, not today's production.</p>
+
+<h2>Whose hand feeds the 1000+ queue?</h2>
+<p>The admin "Social / needs-input" tab (<code>/admin/api/social/staged</code>)
+shows the 1,179-row <code>social_candidates.json</code> → 830
+<code>needs_review</code> + 160 <code>needs_input</code> ≈ 990 ≈ the "1000+".</p>
+<div class="lead">All 1,179 are <b>Instagram (582) + TikTok (597)</b>, piped in
+from the <b>mini PC's authenticated browser session</b> over SSH
+(<code>staging.py</code> — IG/TikTok need a logged-in session that only exists on
+the mini PC), discovered by searching Irish kids/family hashtags/collections.</div>
+<p>Discovered via (verbatim):</p>
+<pre>events ireland · kids dublin · corkfamily · "school holidays ireland"
+galwayfamily · irishfamilyfun · dublinkids · kidsofcork
+familyeventsireland · familyfriendlyireland · dublinwithkids · irelandwithkids
+limerickfamily · waterfordkids · kidseventsireland · familydaysoutireland
+→ tiktok collection "Kids"</pre>
+<p>The factory's <i>web</i> lane (<code>candidates.json</code>, 1,043 rows)
+discovers Irish listing sites: <code>yourdaysout.com</code>,
+<code>mykidstime.com</code>, <code>visitwaterford.com</code>,
+<code>visitdublin.com</code>, <code>discovernorthernireland.com</code>,
+<code>visitarmagh.com</code>, council feeds, sitemaps, Wikidata/OpenStreetMap —
+but also off-topic junk the search gateway returns (<code>allevents.in</code>
+India, <code>estatesales.net</code> US, <code>knihydobrovsky.cz</code> Czech,
+<code>waterford.org</code> US, <code>booking.com</code>).</p>
+
+<h2>Root cause</h2>
+<p>Your spec is explicit (and correct):</p>
+<pre>contract.py  MIN_DESCRIPTION_WORDS = {"event": 60, "place": 120, "holiday": 120}
+               # "Words a description needs before it is worth a parent's time, per kind."
+
+phase1b-reresearch-migrate.md §1b:
+  "51 of 61 events and all 47 places fail the §2 description word bands
+   (median 24/52 words vs a 60/120 floor). Relaxing the bands would re-admit
+   exactly that boilerplate. The fix is to run the existing catalogue through the
+   real four-step pipeline… using the source_url every record already has."</pre>
+<p>The four-step write step is told “60–200 words / 120–300 words, <b>using only the
+facts above</b>, do <b>not invent</b>” (<code>_NO_INVENTING</code>). A 1-sentence
+caption / a 1-line listing card <b>cannot truthfully yield 60 words</b>, so the
+model writes honestly short and the gate rejects. The factory then re-runs that
+same 4-step pipeline on the next thin candidate. Tokens spent → 32-event
+catalogue. The gate is doing what you specified; the waste is the sources.</p>
+
+<h2>Fix — applied &amp; verified</h2>
+<p>I added a <b>pre-gate short-circuit in <code>factory_worker.promote()</code></b>
+(the single function both <code>staging.py:119</code> and the web discovery cycle
+call). After the research fetch, before <code>classify/facts/extract/write</code>
+(the 4 model calls), if the fetched source text is shorter than
+<code>min(MIN_DESCRIPTION_WORDS)</code> = 60 words, it can't satisfy <i>any</i>
+kind's floor without inventing — so the gate would reject it on
+<code>description</code> regardless. It is parked as needs-input (a curator
+note folded into <code>text</code> via <code>hint</code> can still push it over the
+floor, so it stays recoverable) and the 4 calls are skipped.</p>
+<div class="card">
+<b>Unit proof:</b> a 7-word source now returns
+<code>(None, "Source text is only 7 words… below the 60-word minimum…", missing_field="description")</code>
+with <b>0</b> LLM calls — <code>classify/facts/extract/write</code> never ran. A
+240-word source still runs the full pipeline. ✅
+<br><br>
+<b>Savings (measured against the live staged queues):</b> 1,175/1,179 social +
+1,023/1,043 web candidates short-circuited → <b>~8,792 LLM calls spared per sweep</b>.
+Live now — the running factory cycle was restarted to load the patched code
+(PID 3782240; journal shows yourdaysout county pages now fetching ✓ HTTP 200).</div>
+</div>
+
+<h3>Fix #2 — applied &amp; verified (the catalogue-growth lever)</h3>
+<ul>
+<li><b><code>FETCH_GAP_SECS</code>: 2 → 4</b> — gentler per-host throttle.</li>
+<li><b>Rotating Chrome UAs</b> — a 3-variant desktop-Chrome pool cycled per fetch
+  (Chrome 13x only, so the IG caption scraper still gets server-rendered HTML).</li>
+<li><b>429/503/502 retry-with-backoff</b> in <code>_http_text</code> — honours
+  <code>Retry-After</code>, backs off 3/6/12s, 3 retries; hard 403/404 still raise
+  immediately (no wasted retries).</li>
+</ul>
+<div class="card">
+<b>Verified:</b> (a) a 429 recovers on the 2nd fetch; (b) a 403 raises immediately;
+(c) a real yourdaysout page now reads <b>913 words</b> (<code>missing=''</code>) where
+it 429-blocked before; (d) the live cycle (PID 3782240) shows yourdaysout county pages
+fetching <b>✓ HTTP 200</b> at ~1.5s instead of 429. Those readable pages are what let the
+four-step pipeline write a 60+ word description and clear the gate.
+</div>
+<ul>
+<li><b>Drop the search-gateway junk.</b> The ~43 off-topic domains (India/US/Czech/
+  booking.com) get discovered + fetched + gate-rejected every cycle — pure overhead.
+  Filter the search lane to Irish (.ie) + verified family sources.</li>
+<li><b>Do NOT lower <code>MIN_DESCRIPTION_WORDS</code>.</b> Forbidden by your own spec
+  (§1b) — it would re-admit exactly the boilerplate the gate was built to exclude.</li>
+</ul>
+
+<p class="muted">Source ledger counts: <code>candidates.json</code>=1,043
+(rejected 497 / needs_input 283 / needs_review 152 / approved 100 / on_air 9;
+only 28 of the 100+9 "approved/on-air" rows actually appear in
+events_output.json — the rest are stale vocabulary from a prior code path).
+<code>social_candidates.json</code>=1,179 (all Instagram+TikTok).
+<code>needs_input.json</code>=95 (all <code>migrate_contract</code>).
+Markdown source: <code>tasks/small-days-resource-audit-2026-09-15.md</code>.</p>
+
+</div>
+</body>
+</html>

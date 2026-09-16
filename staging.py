@@ -220,7 +220,15 @@ def sweep_pending():
     stale in-memory copy -- SWEEP_WORKERS at a time, and logs progress since a
     backlog can be hundreds deep and each item costs a real LLM call.
     Returns (checked, approved)."""
-    pending_urls = [c["source_url"] for c in load_staged() if c.get("status") == "needs_review"]
+    # Re-run legacy items whose first pass incorrectly treated a location as a
+    # dated event (or lacked an address). The classifier now explicitly maps
+    # evergreen attractions to `place`, so these can become publishable after
+    # research without asking Victor to supply an event date.
+    retryable = {"start_date", "address", "county", "description"}
+    pending_urls = [c["source_url"] for c in load_staged()
+                    if c.get("status") == "needs_review"
+                    or (c.get("status") == "needs_input" and
+                        c.get("missing_field") in retryable)]
     # SWEEP_LIMIT caps one run -- a 600-deep backlog is hours of real LLM calls,
     # and a short sweep is how you check the gate before spending them.
     limit = int(os.environ.get("SWEEP_LIMIT", "0") or 0)

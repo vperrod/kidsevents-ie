@@ -15,12 +15,20 @@ means in practice.
 """
 
 from datetime import date
+import re
+import urllib.parse
 
 import contract
 import factory_worker
 from discovery import common
 
 _JUNK = ("pinterest.", "facebook.com/login", "/search?", "tripadvisor.")
+_IRELAND_HINT = re.compile(
+    r"ireland|eire|dublin|cork|galway|limerick|waterford|kilkenny|sligo|"
+    r"wexford|kerry|donegal|mayo|wicklow|meath|kildare|louth|clare|"
+    r"tipperary|westmeath|roscommon|offaly|longford|monaghan|cavan|carlow",
+    re.IGNORECASE,
+)
 
 
 def templates_for(month, templates=None):
@@ -73,5 +81,8 @@ def run(state):
         out.extend(common.candidate("search", county, result["url"],
                                     title=result.get("title", ""), county=county)
                    for result in results
-                   if not any(junk in result["url"].lower() for junk in _JUNK))
+                   if not any(junk in result["url"].lower() for junk in _JUNK)
+                   and (urllib.parse.urlparse(result["url"]).netloc.lower().endswith(".ie")
+                        or _IRELAND_HINT.search(
+                            f"{result.get('title', '')} {result['url']}")))
     return out
