@@ -8,16 +8,23 @@ daemon. That collector pipes its findings into this script over SSH:
     ssh azureuser@claude-dev-vperrod.westeurope.cloudapp.azure.com \\
         "cd /home/azureuser/kidsevents-ie && venv/bin/python3 staging.py append"
 
-AUTO_APPROVE (same pattern as WanderTold's factory, on by default -- Victor
-2026-09-12: "I don't have time to review all manually"): every newly staged
-candidate is immediately run through the same enrichment gate the admin
-Approve button uses (factory_worker.promote -- a real research fetch and four
-grounded model steps, published only if the QA gate passes; never invented).
-A candidate that doesn't clear that gate becomes `needs_input` with the one
-`missing_field` a curator's note could supply, or `rejected` when nothing
-anybody types would help -- auto-approve is a tighter gate applied
-automatically, not a lower one. Set AUTO_APPROVE=off in .env to go back to
-fully manual review.
+Auto-approve (Victor 2026-09-12: "I don't have time to review all
+manually"): every staged candidate eventually runs through the same
+enrichment gate the admin Approve button uses (factory_worker.promote -- a
+real research fetch and four grounded model steps, published only if the QA
+gate passes; never invented). A candidate that doesn't clear that gate
+becomes `needs_input` with the one `missing_field` a curator's note could
+supply, or `rejected` when nothing anybody types would help -- auto-approve
+is a tighter gate applied automatically, not a lower one.
+
+Until 2026-09-16 `append` ran that gate synchronously, one candidate at a
+time, right here -- fine for a handful of new items, but a real
+classification is minutes long and the mini PC's collector calls `append`
+over a single SSH connection with a 600s ceiling. A run that found 19 new
+candidates blew that budget and the whole SSH call timed out, losing the
+run. `append` now only stages (`needs_review`, fast); `kidsevents-social-sweep`
+(scheduled, see sweep_pending below) does the actual auto-approving on its
+own next pass, with no per-call time pressure.
 
 All read-modify-write access to this file goes through factory_worker's
 shared lock -- confirmed live 2026-09-12 that the sweep and a concurrent
@@ -47,7 +54,6 @@ STAGED_FILE = BASE / "staged" / "social_candidates.json"
 # only makes each individual write atomic; it does nothing to stop two
 # sweeps from racing to write different verdicts for the same candidate.
 SWEEP_LOCK_FILE = BASE / "staged" / "sweep.lock"
-AUTO_APPROVE = os.environ.get("AUTO_APPROVE", "on").strip().lower() != "off"
 # Classification is nearly all waiting on a model, so a few in flight at once
 # turns a backlog from hours into minutes. Three is what the mini PC's two
 # local slots plus the gateway lanes absorb without either queueing.
@@ -144,9 +150,17 @@ def try_approve_by_url(source_url, hint=""):
 
 
 def write_staged(candidates):
-    """Append new candidates, deduplicated by source_url. Returns the count added
-    (auto-approved candidates count as added -- they still land in the ledger,
-    just already published)."""
+    """Append new candidates, deduplicated by source_url. Returns the count added.
+
+    Used to also auto-approve synchronously here, one candidate at a time,
+    right after staging -- fine for the usual handful of new items, but the
+    mini PC's collector calls this over a single SSH connection from
+    `submit.py` with a 600s ceiling, and a real classification is a crawl
+    plus up to four model calls, several minutes each. A run that found 19
+    new candidates (2026-09-16) blew that budget and the whole SSH call
+    timed out, failing the run and leaving its find uncommitted. AUTO_APPROVE
+    still means Victor never has to review these by hand -- it just happens
+    on kidsevents-social-sweep's own next pass instead of blocking here."""
     with factory_worker.output_lock():
         existing = load_staged()
         seen = {item.get("source_url") for item in existing}
@@ -170,9 +184,6 @@ def write_staged(candidates):
                 }
             )
         save_staged(existing + additions)
-    if AUTO_APPROVE:
-        for candidate in additions:
-            try_approve_by_url(candidate["source_url"])
     return len(additions)
 
 
