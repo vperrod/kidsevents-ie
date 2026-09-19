@@ -479,6 +479,113 @@ _NO_INVENTING = ("Use ONLY what the source text below actually says. Do not inve
                  "Leave a field empty rather than guessing it.\n\n")
 
 
+# Fields a model can supply from the source text alone, extractively. Everything here is
+# something the gate asks for that appears in the source if it appears at all. Deliberately
+# NOT here: `sources` (a holiday needs a second independent source — that is a fetch, not a
+# question) and anything media-related.
+FILLABLE_FIELDS = {
+    "title", "summary", "description", "county", "address", "country", "destination",
+    "activity_types", "facts", "price_band", "age_bands", "best_seasons", "holiday_types",
+    "start_date",
+}
+
+_FIELD_ASK = {
+    "county": "the Irish county the place, event or venue is in, one of the 32 (for example "
+              "\"Dublin\", \"Cork\", \"Galway\")",
+    "address": "the postal address, or the street and town, of the venue",
+    "country": "the ISO country code where it is, \"IE\" for the Republic of Ireland, "
+               "\"GB\" for Northern Ireland or Britain",
+    "destination": "the destination name for a holiday",
+    "start_date": "the date it starts, as YYYY-MM-DD, plus the exact words from the source "
+                  "that state that date",
+    "price_band": "the price band as one of: free, cheap, mid, expensive",
+    "age_bands": "the age bands it suits, from: baby, toddler, child, tween, teen, family",
+    "activity_types": "one to four activity types that describe what a family does there "
+                      "(for example: playground, farm, museum, walk, beach, indoor, outdoor, "
+                      "arts, sports, nature, animals, water, seasonal)",
+    "best_seasons": "the best seasons, from: spring, summer, autumn, winter",
+    "holiday_types": "the holiday types, for example: beach, city, ski, resort, all-inclusive",
+    "facts": "up to 6 quotable facts",
+    "title": "a clear title of at most 120 characters, not the raw caption",
+    "summary": "a one-line summary",
+    "description": "a description written only from what the source states",
+}
+
+
+def fill_missing_field(record, field, text, candidate=None):
+    """One model call asking for the single field the gate said was missing.
+
+    Returns True when the record was changed. The prompt is extractive and the gate is
+    re-run by the caller, so a model that guesses cannot get anything published: the
+    quote-in-the-source rules still apply.
+    """
+    ask = _FIELD_ASK.get(field)
+    if not ask:
+        return False
+    kind = record.get("kind", "place")
+    prompt = (
+        "You fill in ONE missing field for a family-days-out guide record in Ireland.\n\n"
+        + _NO_INVENTING
+        + f"The record is a {kind}. It needs {ask}.\n"
+        + "If the source text does not state it, reply with an empty value — do not guess, "
+          "do not infer from the domain name, and do not use general knowledge about the "
+          "place. An empty answer is a correct answer.\n\n"
+        + (f"Values already recorded (for context only): "
+           f"{ {k: v for k, v in record.items() if k in ('name', 'city', 'county', 'address', 'title')} }\n\n"
+           if field not in ("title", "summary", "description") else "")
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + ("Reply ONLY a JSON object: "
+           '{"value": the value, or "" if the source does not state it, '
+           '"quote": the exact words from the source that establish it, copied character '
+           'for character, or ""}'
+           if field not in ("facts", "title", "summary", "description", "start_date") else
+           'Reply ONLY a JSON object: {"value": the value, or "" if absent, '
+           '"quote": the exact words from the source, copied character for character, or ""}')
+    )
+    obj = extract_obj(hermes(prompt, kind="fill")) or {}
+    value = obj.get("value")
+    quote = str(obj.get("quote") or "").strip()
+    if field == "start_date":
+        date_evidence = quote
+        value = str(value or "").strip()
+        if not value or not date_evidence:
+            return False
+        # The gate checks the evidence really is in the source; only set it when it is.
+        if _fold_spaces(date_evidence) not in _fold_spaces(text):
+            log(f"fill start_date: quote not in source for {record.get('id', '')} — ignored")
+            return False
+        record["start_date"] = value
+        record["date_evidence"] = date_evidence
+        return True
+    if field == "facts":
+        if not value or not isinstance(value, list):
+            return False
+        added = 0
+        for fact in value[:6]:
+            if not isinstance(fact, dict):
+                continue
+            claim = str(fact.get("claim") or "").strip()
+            fact_quote = str(fact.get("quote") or "").strip()
+            if claim and fact_quote and _fold_spaces(fact_quote) in _fold_spaces(text):
+                record.setdefault("facts", []).append({"claim": claim, "quote": fact_quote})
+                added += 1
+        return bool(added)
+    value = value if isinstance(value, (list, str)) else str(value or "")
+    if isinstance(value, list):
+        value = [str(v).strip() for v in value if str(v).strip()][:6]
+        if not value:
+            return False
+    else:
+        value = value.strip()
+        if not value:
+            return False
+    limit = getattr(contract, f"MAX_{field.upper()}", None)
+    if isinstance(value, str) and isinstance(limit, int):
+        value = value[:limit]
+    record[field] = value
+    return True
+
+
 def classify(text, candidate=None):
     """Step 1 — what is this, is it for families, and where?"""
     author = (candidate or {}).get("author", "")
@@ -505,6 +612,52 @@ def classify(text, candidate=None):
         + '"why": at most 120 characters saying why}'
     )
     return extract_obj(hermes(prompt, kind="classify"))
+
+
+def _classify_and_facts_parallel(text, candidate=None):
+    """Run classify + facts prompts in parallel for speed."""
+    import llm
+    author = (candidate or {}).get("author", "")
+    
+    # Generate prompts
+    class_prompt = (
+        "You sort sources for a family-days-out guide in Ireland.\n\n"
+        + _NO_INVENTING
+        + (f"Account/author: {author}\n" if author else "")
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + 'Reply ONLY a JSON object:\n'
+        + '{"kind": "event" for something happening on specific dates, "place" for a venue or '
+          'activity a family can visit any time, "holiday" for a destination to travel to, '
+          'or "none" if it is none of those,\n'
+        + '"family_relevant": true only if children can come and it is aimed at or welcoming to '
+          'families - false for adult comedy, gigs, club nights, age-gated (16+/18+) events,\n'
+        + '"country": ISO code of where it is - "IE" for Ireland,\n'
+        + '"is_venue_account": true only if the account is the venue,\n'
+        + '"why": at most 120 characters}'
+    )
+    facts_prompt = (
+        "You pull quotable facts out of a source for a family-days-out guide.\n\n"
+        + _NO_INVENTING
+        + f"Source text:\n<data>{text[:RESEARCH_MAX_CHARS]}</data>\n\n"
+        + 'Reply ONLY a JSON object:\n'
+        + '{"facts": [{"claim": ..., "quote": ...}] (max 12), "name": venue name}'
+    )
+    
+    # Run in parallel
+    results = llm.parallel([(class_prompt, "classify"), (facts_prompt, "facts")])
+    verdict = extract_obj(results[0]) if results else {}
+    facts_text = results[1] if len(results) > 1 else ""
+    
+    # Process facts
+    obj = extract_obj(facts_text) or {}
+    haystack = _fold_spaces(text)
+    facts = []
+    for fact in (obj.get("facts") or [])[:12]:
+        if isinstance(fact, dict):
+            quote = str(fact.get("quote") or "").strip()
+            if quote and _fold_spaces(quote) in haystack:
+                facts.append({"claim": str(fact.get("claim") or "")[:300], "quote": quote[:300]})
+    return verdict, facts, str(obj.get("name") or "")[:200]
 
 
 def gather_facts(text):
@@ -1488,30 +1641,19 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
             contract.MIN_DESCRIPTION_WORDS["place"],
         ), "description"
 
-    verdict = classify(text, candidate)
+    verdict, facts, name = _classify_and_facts_parallel(text, candidate)
     if not verdict:
         return None, "no model lane answered the classify step", ""
     why = str(verdict.get("why") or "").strip()[:120]
-    # A lane that already knows what its own candidate is (holidays_seed hands
-    # a curated destination's own Wikivoyage/Wikidata pages, always a holiday)
-    # beats a free-text guess: found 2026-09-14, a classify call read a
-    # destination's Wikivoyage article as "place" and the on-island-of-Ireland
-    # gate then rejected Benidorm for being in Spain -- correct for a real
-    # place, wrong for a hinted holiday the model misread.
-    kind_hint = str(candidate.get("kind_hint") or "").strip().lower()
-    kind = kind_hint if kind_hint in contract.KINDS else str(verdict.get("kind") or "").strip().lower()
-    if kind not in contract.KINDS:
-        return None, f"not an event, place or holiday: {why or kind or 'no verdict'}", ""
-    # Same reasoning as the kind override just above: a candidate the lane
-    # already vetted for family relevance (holidays_seed only ever seeds
-    # "destinations Irish families actually travel to with children") should
-    # not be re-litigated by a classify prompt that is written Ireland-first
-    # and, found immediately after the kind fix above, reads "not Ireland" as
-    # "not family-relevant" for a holiday abroad.
-    if not kind_hint and verdict.get("family_relevant") is False:
+    # family_relevant check
+    if not candidate.get("kind_hint") and verdict.get("family_relevant") is False:
         return None, f"not family-relevant: {why}", ""
 
-    facts, name = gather_facts(text)
+    kind = str(verdict.get("kind") or "").strip().lower()
+    if kind not in contract.KINDS:
+        return None, f"not an event, place or holiday: {why or kind or 'no verdict'}", ""
+
+    # Facts already extracted in parallel above
     # An empty answer from a step is a lane outage, not a verdict: `extract_obj`
     # returns None for "" and every step falls back to {}. Saying so here is
     # what keeps the discovery ledger honest -- a write step that never
@@ -1534,6 +1676,19 @@ def promote(candidate, hint="", prefetched=None, prefill=None):
         return None, "record does not match the contract: " + "; ".join(problems[:3]), ""
 
     ok, reason, missing_field = gate.qa(record, text, on_air_titles(kind))
+    # Ask a model for the named field before anyone is asked for it. At most two fills per
+    # call: filling one field can reveal the next (a real candidate filled `facts` and then
+    # failed on `start_date` — the same kind of question, one field later), and two extra
+    # calls is still bounded. The gate decides again after each fill, so this can only turn
+    # a parked candidate into a publishable one when the source really did contain the
+    # answer.
+    for _ in range(2):
+        if ok or missing_field not in FILLABLE_FIELDS:
+            break
+        if not fill_missing_field(record, missing_field, text, candidate):
+            break
+        log(f"field fill: {missing_field} supplied for {record.get('id', '')}")
+        ok, reason, missing_field = gate.qa(record, text, on_air_titles(kind))
     if not ok:
         record["status"] = "needs-input" if missing_field else "rejected"
         record["reason"] = reason
@@ -1664,6 +1819,27 @@ def run_discovery_cycle(budget=None, only=None):
     log(f"discovery: {len(found)} candidates from {len(ran)} lanes, "
         f"{len(staged)} to research (new, plus any due for a recheck)")
 
+    # Desk drain (2026-09-16): top the cycle's work list up with the candidates already on
+    # the desk whose research got no answer from a model lane. Nothing re-picked them —
+    # they only came back if a lane re-found the same URL after its recheck window — so 147
+    # of them were queued while each cycle researched only what it had just found. Oldest
+    # first, inside the same per-cycle budget, with an attempt ceiling so this cannot
+    # become the endless retry the social sweep had.
+    _cap = int(ENV.get("DESK_MAX_ATTEMPTS", "3"))
+    _budget = budget or MAX_CANDIDATES_PER_CYCLE
+    if len(staged) < _budget:
+        _have = {i["source_url"] for i in staged}
+        _stuck = [i for i in candidates.load_candidates()
+                  if i.get("status") == "needs_review"
+                  and i.get("source_url") not in _have
+                  and int(i.get("research_attempts") or 0) < _cap]
+        _stuck.sort(key=lambda i: str(i.get("fetched_at", "")))
+        _room = _budget - len(staged)
+        if _stuck[:_room]:
+            log(f"desk drain: retrying {len(_stuck[:_room])} earlier needs_review "
+                f"candidate(s) ({len(_stuck)} stuck, cap {_cap} attempts)")
+            staged.extend(_stuck[:_room])
+
     outcomes = {"on-air": 0, "needs-input": 0, "rejected": 0, "lane-failed": 0}
     deadline = time.time() + CYCLE_WALL_SECS * _RESEARCH_SHARE
     done = 0
@@ -1680,13 +1856,19 @@ def run_discovery_cycle(budget=None, only=None):
             try:
                 record, reason, missing_field = future.result()
             except concurrent.futures.TimeoutError:
+                # The item's whole budget is a wall above its steps' own timeouts, so
+                # hitting it means a step stalled — usually the local model being busy with
+                # the social sweep. That is a resource outage, not a verdict about the
+                # candidate (2026-09-16: three good items per cycle were thrown away as
+                # `rejected` this way). `lane-failed` puts it back on the desk.
                 record, reason, missing_field = None, f"timed out after {MAX_ITEM_SECS}s", ""
             if record and publish_record(record):
                 status, kind = "on-air", record["kind"]
             elif record:
                 status, kind = "rejected", record["kind"]
                 reason = "already published under this id"
-            elif reason.startswith("no model lane answered"):
+            elif (reason.startswith("no model lane answered")
+                  or reason.startswith("timed out after")):
                 status, kind = "lane-failed", item.get("kind_hint", "")
             else:
                 status = "needs-input" if missing_field else "rejected"

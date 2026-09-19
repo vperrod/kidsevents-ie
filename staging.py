@@ -58,6 +58,9 @@ SWEEP_LOCK_FILE = BASE / "staged" / "sweep.lock"
 # turns a backlog from hours into minutes. Three is what the mini PC's two
 # local slots plus the gateway lanes absorb without either queueing.
 SWEEP_WORKERS = int(os.environ.get("SWEEP_WORKERS", "3") or 3)
+# How many times the sweep may automatically re-classify the same candidate before it
+# leaves the queue alone (an admin resubmit is never capped — see sweep_pending).
+MAX_SWEEP_ATTEMPTS = int(os.environ.get("SWEEP_MAX_ATTEMPTS", "3") or 3)
 
 REVIEW_NOTE = (
     "Verify destination, dates, age guidance and price on the organiser "
@@ -103,6 +106,16 @@ def apply_verdict(candidate, record, reason, missing_field, hint=""):
     if hint:
         candidate["hint"] = hint
     candidate["reviewed_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    candidate["sweep_attempts"] = int(candidate.get("sweep_attempts") or 0) + 1
+    # "no model lane answered" is an outage, not a judgement about the post: park it
+    # back on needs_review so it is picked up when the lanes recover, instead of
+    # stamping it rejected forever (the discovery desk already does this, staging did
+    # not). The attempts counter above still bounds how often it is retried.
+    if (reason or "").startswith("no model lane answered"):
+        candidate["status"] = "needs_review"
+        candidate["reason"] = reason
+        candidate.pop("missing_field", None)
+        return False
     if not record:
         candidate["status"] = "needs_input" if missing_field else "rejected"
         candidate["reason"] = reason
@@ -212,6 +225,32 @@ def approve_safely(source_url):
         return False
 
 
+def _factory_cycle_running():
+    """True while another factory cycle holds the cycle lock.
+
+    The sweep and the factory share the mini PC's two local-model slots. The sweep is the
+    low-yield lane (1.1% of what it classifies publishes) and it runs for up to 45 minutes;
+    when it overlapped a cycle on 2026-09-16 the factory's candidates hit their 300 s wall
+    and were recorded as rejections. So the sweep yields to the factory: it exits at once
+    rather than competing, and its own backlog is picked up on the next hourly pass.
+    """
+    try:
+        handle = open(factory_worker.CYCLE_LOCK_FILE, "w")
+    except OSError:
+        return False
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        return True
+    finally:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+        except OSError:
+            pass
+        handle.close()
+    return False
+
+
 def sweep_pending():
     """Auto-approve every already-staged needs_review candidate (clears a
     backlog collected before AUTO_APPROVE existed, or after it was off).
@@ -225,10 +264,24 @@ def sweep_pending():
     # evergreen attractions to `place`, so these can become publishable after
     # research without asking Victor to supply an event date.
     retryable = {"start_date", "address", "county", "description"}
-    pending_urls = [c["source_url"] for c in load_staged()
-                    if c.get("status") == "needs_review"
-                    or (c.get("status") == "needs_input" and
-                        c.get("missing_field") in retryable)]
+    staged = load_staged()
+    pending_urls, parked = [], []
+    for c in staged:
+        attempts = int(c.get("sweep_attempts") or 0)
+        retry = (c.get("status") == "needs_input" and c.get("missing_field") in retryable)
+        if c.get("status") != "needs_review" and not retry:
+            continue
+        # A first pass is always allowed; only the endless re-run is capped. Without this
+        # the same candidates are re-classified every hour for a verdict that never
+        # changes (measured 2026-09-16: 466 retryable candidates, ~18 h of local-model
+        # time per pass, 0 items gained).
+        if retry and attempts >= MAX_SWEEP_ATTEMPTS:
+            parked.append(c["source_url"])
+            continue
+        pending_urls.append(c["source_url"])
+    if parked:
+        print(f"  {len(parked)} candidate(s) parked after {MAX_SWEEP_ATTEMPTS} attempts "
+              f"— resubmit from the desk to retry one", file=sys.stderr, flush=True)
     # SWEEP_LIMIT caps one run -- a 600-deep backlog is hours of real LLM calls,
     # and a short sweep is how you check the gate before spending them.
     limit = int(os.environ.get("SWEEP_LIMIT", "0") or 0)
@@ -257,6 +310,9 @@ def main():
               file=sys.stderr)
         return 2
     if sys.argv[1] == "sweep":
+        if _factory_cycle_running():
+            print("factory cycle running — sweep yields this pass", file=sys.stderr)
+            return 0
         SWEEP_LOCK_FILE.parent.mkdir(exist_ok=True)
         lock_fh = open(SWEEP_LOCK_FILE, "w")
         try:

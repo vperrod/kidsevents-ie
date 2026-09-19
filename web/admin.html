@@ -932,6 +932,8 @@
           claims: () => req("/admin/api/claims").then((d) => (d && d.claims) || []),
           runPipeline: () => post("/admin/api/pipeline/run", {}),
           approve: (source_url, hint) => post("/admin/api/social/approve", { source_url, hint }),
+          approveStatus: (source_url) =>
+            req(`/admin/api/social/approve/status?source_url=${encodeURIComponent(source_url)}`),
           reject: (source_url, note) => post("/admin/api/social/reject", { source_url, note }),
           // Full contract records the gate could not publish -- a different
           // file and shape from the social candidates above (their
@@ -1061,12 +1063,21 @@
 
         let confirmResolve = null;
         function askConfirm(title, body, confirmLabel) {
+          // If a previous confirm never resolved (e.g. an error path left the
+          // Promise pending), settle it as cancelled first so this call is fresh.
+          if (confirmResolve) confirmResolve(false);
           const scrim = $("#confirm-scrim");
-          $("#confirm-title").textContent = title;
-          $("#confirm-body").textContent = body;
-          $("#confirm-yes").textContent = confirmLabel || "Confirm";
+          const titleEl = $("#confirm-title");
+          const bodyEl = $("#confirm-body");
+          const yesEl = $("#confirm-yes");
+          if (!scrim || !titleEl || !bodyEl || !yesEl) {
+            return Promise.reject(new Error("confirm dialog is missing from the page"));
+          }
+          titleEl.textContent = title;
+          bodyEl.textContent = body;
+          yesEl.textContent = confirmLabel || "Confirm";
           scrim.hidden = false;
-          $("#confirm-yes").focus();
+          yesEl.focus();
           return new Promise((resolve) => {
             confirmResolve = (v) => {
               scrim.hidden = true;
@@ -1733,21 +1744,59 @@
             "Resubmit",
           );
           if (!go) return;
-          const err = $("[data-err]", card);
-          err.hidden = true;
+          const err = ($("[data-err]", card) || {});
+          if (err) err.hidden = true;
           try {
-            await Api.approve(url, hint.trim());
-            recordDecision(url, "approved");
-            toast("Published. It is on the public site now.");
+            const kick = await Api.approve(url, hint.trim());
+            if (kick.status !== "processing") {
+              // Synchronous response (should not happen after the async change)
+              if (kick.published) {
+                recordDecision(url, "approved");
+                toast("Published. It is on the public site now.");
+              } else {
+                err.hidden = false;
+                err.textContent = "Still not enough to publish: " + txt(kick.reason || "unknown");
+              }
+              renderNeedsInput();
+              refreshBadges();
+              return;
+            }
+            // Poll for the background result
+            const result = await pollApproveStatus(url);
+            if (result.status === "done" && result.published) {
+              recordDecision(url, "approved");
+              toast("Published. It is on the public site now.");
+            } else if (result.status === "done" && !result.published) {
+              err.hidden = false;
+              err.textContent = "Still not enough to publish: " + txt(result.reason || "unknown");
+            } else if (result.status === "error") {
+              err.hidden = false;
+              err.textContent = "Could not resubmit: " + txt(result.error);
+            } else {
+              err.hidden = false;
+              err.textContent = "Could not resubmit: timed out waiting for classification";
+            }
             renderNeedsInput();
             refreshBadges();
           } catch (e) {
-            err.hidden = false;
-            err.textContent =
-              e.status === 422
-                ? "Still not enough to publish: " + txt(e.message)
-                : "Could not resubmit: " + txt(e.message);
+            if (err) {
+              err.hidden = false;
+              err.textContent = "Could not resubmit: " + txt(e.message);
+            }
           }
+        }
+        async function pollApproveStatus(url, intervalMs = 3000, maxWaitMs = 300000) {
+          const deadline = Date.now() + maxWaitMs;
+          while (Date.now() < deadline) {
+            await new Promise((r) => setTimeout(r, intervalMs));
+            try {
+              const result = await Api.approveStatus(url);
+              if (result && result.status !== "running" && result.status !== "unknown") return result;
+            } catch (_) {
+              // poll failed, keep waiting
+            }
+          }
+          return { status: "timeout" };
         }
         async function rejectCandidate(url, card) {
           const go = await askConfirm(

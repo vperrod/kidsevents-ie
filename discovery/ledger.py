@@ -20,6 +20,12 @@ import factory_worker
 LEDGER_FILE = Path(__file__).resolve().parent / "ledger.json"
 RECHECK_DAYS = {"event": 3, "place": 30, "holiday": 60}
 DEFAULT_RECHECK_DAYS = 3
+# A settled "rejected" verdict does not deserve the normal clock: a page does not
+# become an event because three days passed. Rejected URLs used to come back every 3
+# days and re-spend a crawl plus three model calls each to reach the same verdict
+# (2026-09-16: 788 rejected entries doing this). Long but not infinite — a page can
+# genuinely change shape, and an admin resubmit bypasses the ledger entirely.
+REJECTED_RECHECK_DAYS = int(factory_worker.ENV.get("REJECTED_RECHECK_DAYS", "90") or 90)
 
 
 def load():
@@ -27,6 +33,8 @@ def load():
 
 
 def _recheck_days(entry, kind_hint):
+    if (entry or {}).get("status") == "rejected":
+        return REJECTED_RECHECK_DAYS
     kind = (entry or {}).get("kind") or kind_hint or ""
     return RECHECK_DAYS.get(kind, DEFAULT_RECHECK_DAYS)
 

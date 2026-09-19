@@ -1,87 +1,87 @@
 {
-  "listings": {
-    "enabled": true,
-    "pages_per_cycle": 10,
-    "split_max": 10
-  },
-  "feeds": {
-    "enabled": true,
-    "urls": [
-      {
-        "url": "https://monaghan.ie/events/?ical=1",
-        "key": "monaghan-council",
-        "county": "Monaghan"
-      },
-      {
-        "url": "https://www.mykidstime.com/feed/",
-        "key": "mykidstime"
-      },
-      {
-        "url": "https://www.familyfun.ie/feed/",
-        "key": "familyfun"
-      },
-      {
-        "url": "https://visitwaterford.com/feed/",
-        "key": "visitwaterford",
-        "county": "Waterford"
-      },
-      {
-        "url": "https://www.heritageireland.ie/feed/",
-        "key": "heritageireland"
-      },
-      {
-        "url": "https://www.dublinzoo.ie/feed/",
-        "key": "dublinzoo",
-        "county": "Dublin"
-      }
-    ],
-    "items_per_feed": 20
-  },
-  "sitemaps": {
-    "enabled": true,
-    "domains": [
-      "https://yourdaysout.com",
-      "https://www.familyfun.ie",
-      "https://www.mykidstime.com",
-      "https://www.heritageireland.ie",
-      "https://www.discoverireland.ie",
-      "https://visitwaterford.com",
-      "https://thisisgalway.ie"
-    ],
-    "domains_per_cycle": 3,
-    "urls_per_domain": 15
-  },
-  "search": {
-    "enabled": true,
-    "max_queries": 40,
-    "results_per_query": 6
-  },
-  "opendata_places": {
-    "enabled": true,
-    "weekly": true,
-    "failte_api_key": "",
-    "rows_per_dataset": 60,
-    "overpass_sleep_secs": 10,
-    "ckan_queries": [
-      "playground",
-      "tourism attractions",
-      "parks"
-    ]
-  },
-  "wikidata": {
-    "enabled": true,
-    "weekly": true,
-    "limit": 300
-  },
-  "ticketmaster": {
-    "enabled": true,
-    "size": 100,
-    "daily_call_cap": 50
-  },
-  "holidays_seed": {
-    "enabled": true,
-    "weekly": true,
-    "seed_size": 50,
-    "batch": 40
-  }
+ "listings": {
+  "enabled": true,
+  "pages_per_cycle": 10,
+  "split_max": 10
+ },
+ "feeds": {
+  "enabled": true,
+  "urls": [
+   {
+    "url": "https://monaghan.ie/events/?ical=1",
+    "key": "monaghan-council",
+    "county": "Monaghan"
+   },
+   {
+    "url": "https://www.mykidstime.com/feed/",
+    "key": "mykidstime"
+   },
+   {
+    "url": "https://www.familyfun.ie/feed/",
+    "key": "familyfun"
+   },
+   {
+    "url": "https://visitwaterford.com/feed/",
+    "key": "visitwaterford",
+    "county": "Waterford"
+   },
+   {
+    "url": "https://www.heritageireland.ie/feed/",
+    "key": "heritageireland"
+   },
+   {
+    "url": "https://www.dublinzoo.ie/feed/",
+    "key": "dublinzoo",
+    "county": "Dublin"
+   }
+  ],
+  "items_per_feed": 20
+ },
+ "sitemaps": {
+  "enabled": true,
+  "domains": [
+   "https://yourdaysout.com",
+   "https://www.familyfun.ie",
+   "https://www.mykidstime.com",
+   "https://www.heritageireland.ie",
+   "https://www.discoverireland.ie",
+   "https://visitwaterford.com",
+   "https://thisisgalway.ie"
+  ],
+  "domains_per_cycle": 3,
+  "urls_per_domain": 15
+ },
+ "search": {
+  "enabled": true,
+  "max_queries": 40,
+  "results_per_query": 6
+ },
+ "opendata_places": {
+  "enabled": true,
+  "weekly": true,
+  "failte_api_key": "",
+  "rows_per_dataset": 60,
+  "overpass_sleep_secs": 10,
+  "ckan_queries": [
+   "playground",
+   "tourism attractions",
+   "parks"
+  ]
+ },
+ "wikidata": {
+  "enabled": true,
+  "weekly": true,
+  "limit": 300
+ },
+ "ticketmaster": {
+  "enabled": true,
+  "size": 100,
+  "daily_call_cap": 50
+ },
+ "holidays_seed": {
+  "enabled": true,
+  "weekly": true,
+  "seed_size": 50,
+  "batch": 40
+ }
 }

@@ -41,6 +41,8 @@ _factory_state = {
     "last_run": None,
     "last_result": None,
 }
+# Track async social approve results: source_url -> {"status": "running|done|error", "result": ..., "error": ...}
+_social_approve_state = {}
 # The server is threaded now, so "is a run already going?" is a check-and-set
 # two requests can otherwise both win -- that starts two factory processes on
 # one output file.
@@ -664,7 +666,9 @@ def _set_candidate_status(source_url, status, note=None):
 @app.route("/admin/api/social/approve", methods=["POST"])
 def admin_social_approve():
     """Classify one staged candidate as a dated event or an evergreen place
-    and publish it accordingly. An optional `hint` (a curator's note typed on
+    and publish it accordingly. Runs in a background thread so the browser
+    does not time out — the 4-step LLM gate takes 2-3 min per candidate.
+    An optional `hint` (a curator's note typed on
     the admin page — a date, a venue name) is folded into the classification;
     plain re-clicking Approve with no hint just retries the same gate."""
     body = request.get_json(silent=True) or {}
@@ -676,13 +680,34 @@ def admin_social_approve():
     if not candidate:
         return jsonify({"error": "Candidate not found"}), 404
 
-    published = staging.try_approve_by_url(source_url, hint=hint)
-    if not published:
-        updated = next((c for c in staging.load_staged() if c.get("source_url") == source_url), None)
-        reason = (updated or {}).get("reason", "No usable date or identifiable place could be read from this post.")
-        return jsonify({"error": "still needs manual info", "message": reason}), 422
+    # Run the promotion in a background thread so the HTTP request returns immediately
+    key = source_url
+    _social_approve_state[key] = {"status": "running"}
 
-    return jsonify({"status": "approved", "published": True})
+    def _do_approve():
+        try:
+            published = staging.try_approve_by_url(source_url, hint=hint)
+            updated = next((c for c in staging.load_staged() if c.get("source_url") == source_url), None)
+            reason = (updated or {}).get("reason", "No usable date or identifiable place could be read from this post.")
+            if published:
+                _social_approve_state[key] = {"status": "done", "published": True}
+            else:
+                _social_approve_state[key] = {"status": "done", "published": False, "reason": reason}
+        except Exception as e:
+            _social_approve_state[key] = {"status": "error", "error": str(e)}
+
+    threading.Thread(target=_do_approve, daemon=True).start()
+    return jsonify({"status": "processing", "message": "Classification is running in the background"})
+
+
+@app.route("/admin/api/social/approve/status", methods=["GET"])
+def admin_social_approve_status():
+    """Check the result of a background approval. Query param: source_url"""
+    source_url = request.args.get("source_url", "")
+    result = _social_approve_state.get(source_url)
+    if result is None:
+        return jsonify({"status": "unknown"})
+    return jsonify(result)
 
 
 @app.route("/admin/api/social/reject", methods=["POST"])

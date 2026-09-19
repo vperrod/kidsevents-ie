@@ -28,6 +28,7 @@ import io
 import json
 import re
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -420,20 +421,24 @@ def gate_photo(data, name, county=""):
     """
     prompt = _gate_prompt(name, county)
     image_b64 = base64.b64encode(to_jpeg(data, GATE_MAX_PX)).decode()
-    lanes = []
-    if local_free():
-        lanes.append((llm.LOCAL_LLM_URL, "local", 90))
-    lanes.append((llm.OMNIROUTE_URL, llm.AUTO_LANE, 120))
-    for base_url, model, timeout in lanes:
-        try:
-            text = _ask_vision(base_url, model, prompt, image_b64, timeout)
-        except Exception as error:
-            factory_worker.log(f"vision gate {model}: {str(error)[:120]}")
-            continue
-        verdict, why, alt = _read_verdict(text)
-        if verdict:
-            return verdict, why, alt
-    return "skip", "no vision lane answered", ""
+    # The local Qwen3.5-35B-A3B is the only working vision lane. When busy
+    # (slots held by the WT factory), wait up to 45s for one to free rather
+    # than returning "skip" which permanently abandons the image.
+    deadline = time.time() + 45
+    while not local_free():
+        if time.time() >= deadline:
+            factory_worker.log("vision gate: local busy, waited 45s, skipping")
+            return "skip", "local busy after 45s wait", ""
+        time.sleep(2)
+    try:
+        text = _ask_vision(llm.LOCAL_LLM_URL, "local", prompt, image_b64, 90)
+    except Exception as error:
+        factory_worker.log(f"vision gate local: {str(error)[:120]}")
+        return "skip", "local vision lane failed", ""
+    verdict, why, alt = _read_verdict(text)
+    if verdict:
+        return verdict, why, alt
+    return "skip", "no vision verdict from local lane", ""
 
 
 def _read_verdict(text):

@@ -156,6 +156,10 @@ def set_candidate_status(source_url, status, reason="", missing_field=""):
         for item in items:
             if item.get("source_url") == source_url:
                 item["status"] = status
+                # Bound the automatic retries: a `needs_review` verdict means no model
+                # lane answered, and without a counter the same candidates are retried
+                # every cycle forever (the social sweep had exactly that defect).
+                item["research_attempts"] = int(item.get("research_attempts") or 0) + 1
                 item["reviewed_at"] = now_iso()
                 if reason:
                     item["reason"] = reason[:300]
