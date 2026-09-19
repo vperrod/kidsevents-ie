@@ -90,12 +90,11 @@ LOCAL_PROBE_TIMEOUT = 1
 
 OMNIROUTE_URL = _env("OMNIROUTE_URL", "http://127.0.0.1:20128").rstrip("/")
 AUTO_LANE = "auto/best-free"
-# OmniRoute lanes that are currently working (2026-09-17):
-#   - pollinations/openai/gpt-oss-20b: FREE confirmed
-#   - opencode-zen/glm-5.2: PAID (cost ~$0.0015/request) — keep as fallback only
-# All other OmniRoute lanes remain broken (expired creds, Cloudflare 403, credits exhausted).
+# OmniRoute named lanes — none currently reliable enough for the default roster.
+# pollinations/openai/gpt-oss-20b rotted to 41% success (2026-09-19) and is parked.
+# auto/best-free (OmniRoute's own pick) holds at 100% and covers the gap.
 DEFAULT_LANES = [
-    "pollinations/openai/gpt-oss-20b",
+    # "pollinations/openai/gpt-oss-20b",  # rotted — leave blank unless a lane proves stable
 ]
 ROUTING_LANES = [x.strip() for x in _env("ROUTING_LANES", ",".join(DEFAULT_LANES)).split(",") if x.strip()]
 LANE_PARK_SECS = int(_env("LANE_PARK_SECS", "600"))
