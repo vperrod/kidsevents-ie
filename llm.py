@@ -17,15 +17,26 @@ order, the cheapest lane that can actually answer right now:
    error never fails the item; it moves to the next lane.
 3. **auto/best-free** — OmniRoute's own pick-a-free-model lane. Slower and
    itself failable, but it needs no roster maintenance.
-4. **hermes CLI** — the old sole lane. Kept last because it is the slowest
+4. **nvidia/nim** — direct NVIDIA NIM API (bypasses OmniRoute). Free tier
+   ~40 RPM, thread-safe rate limiter. Used when OmniRoute lanes are all down.
+5. **hermes CLI** — the old sole lane. Kept last because it is the slowest
    (22-90 s) and throttles at ~1 req/min per model; on 2026-09-13 it timed
    out on every single call, which is what left the factory with no verdicts
    at all and why this module exists.
-5. `""` — same "no answer" contract callers already handle.
+6. **""** — same "no answer" contract callers already handle.
+
+Model→task mapping (quality × speed × cost, NVIDIA NIM only):
+  classify → google/gemma-4-31b-it (fast JSON, low latency)
+  facts    → nvidia/nemotron-3-nano-omni-30b-a3b-reasoning (reasoning for quotes)
+  extract  → google/gemma-4-31b-it (structured fields, reliable JSON)
+  write    → google/gemma-4-31b-it (balanced quality + JSON)
+  probe    → google/gemma-4-31b-it (fast, cheapest valid JSON)
+  fill     → google/gemma-4-31b-it (form filling)
+  listing-split → google/gemma-4-31b-it (text splitting)
 
 The gateway at `OMNIROUTE_URL` takes no auth header (and its `/v1/models`
 route answers "Invalid API key" — don't call it). No key or token is stored
-anywhere in this module.
+anywhere in this module except NVIDIA_NIM_API_KEY (env var only).
 
 Every lane attempt appends one line to `routing.jsonl`:
 `{ts, kind, lane, model, ms, ok, prompt_chars, err}`. `stats()` folds that
@@ -79,15 +90,12 @@ LOCAL_PROBE_TIMEOUT = 1
 
 OMNIROUTE_URL = _env("OMNIROUTE_URL", "http://127.0.0.1:20128").rstrip("/")
 AUTO_LANE = "auto/best-free"
+# OmniRoute lanes that are currently working (2026-09-17):
+#   - pollinations/openai/gpt-oss-20b: FREE confirmed
+#   - opencode-zen/glm-5.2: PAID (cost ~$0.0015/request) — keep as fallback only
+# All other OmniRoute lanes remain broken (expired creds, Cloudflare 403, credits exhausted).
 DEFAULT_LANES = [
-    "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
-    "oc/mimo-v2.5-free",
-    "kg/tencent/hy3:free",
-    "kg/stepfun/step-3.7-flash:free",
-    "kg/meituan/longcat-2.0-free",
-    "openrouter/dots-studio/dots-3-note-preview:free",
-    "openrouter/google/gemma-4-31b-it:free",
-    "oc/nemotron-3-ultra-free",
+    "pollinations/openai/gpt-oss-20b",
 ]
 ROUTING_LANES = [x.strip() for x in _env("ROUTING_LANES", ",".join(DEFAULT_LANES)).split(",") if x.strip()]
 LANE_PARK_SECS = int(_env("LANE_PARK_SECS", "600"))
@@ -111,6 +119,52 @@ HERMES_MODEL = os.environ.get("HERMES_MODEL") or "google/gemma-4-31b-it:free"
 # 15:03 timer run failed every LLM call with "No such file: 'hermes'".
 HERMES_BIN = _env("HERMES_BIN", "") or str(Path.home() / ".local" / "bin" / "hermes")
 HERMES_TIMEOUT = int(_env("HERMES_TIMEOUT", "90"))
+# NVIDIA NIM: direct endpoint, bypasses OmniRoute (which has no NVIDIA provider).
+# API key read from env var set by the user.
+NVIDIA_NIM_URL = "https://integrate.api.nvidia.com/v1"
+NVIDIA_NIM_MODEL = os.environ.get("NVIDIA_NIM_MODEL", "google/gemma-4-31b-it")
+NVIDIA_NIM_API_KEY = os.environ.get("NVIDIA_NIM_API_KEY", "")
+# NVIDIA NIM free tier: 40 requests/minute (RPM) rate limit.
+NVIDIA_NIM_RPM = int(_env("NVIDIA_NIM_RPM", "40"))
+# Free NVIDIA NIM chat models suitable for classification/router tasks.
+NVIDIA_NIM_MODELS = [
+    "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "nvidia/nemotron-3-super-120b-a12b",
+    "nvidia/nemotron-3-ultra-550b-a55b",
+    "deepseek-ai/deepseek-v4-flash-0731",
+    "google/gemma-4-31b-it",
+    "mistralai/mistral-large",
+    "mistralai/mistral-nemotron",
+    "meta/llama2-70b",
+    "meta/muse-glimmer-30b",
+    "z-ai/glm-5.3",
+    "z-ai/glm-5.3-flash",
+    "openai/gpt-oss-20b",
+    "01-ai/yi-large",
+    "ai21labs/jamba-1.5-large-instruct",
+    "databricks/dbrx-instruct",
+    "ibm/granite-3.0-8b-instruct",
+    "meta/llama-3.1-nemotron-70b-instruct",
+    "microsoft/phi-3.5-moe-instruct",
+    "mistralai/mistral-7b-instruct-v0.3",
+    "nv-mistralai/mistral-nemo-12b-instruct",
+    "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+    "zyphra/zamba2-7b-instruct",
+]
+
+# Model→task mapping: best model per pipeline step (NVIDIA NIM only).
+# Only google/gemma-4-31b-it reliably produces JSON via response_format.
+# Other NIM models (nemotron-3.5-lightning, nemotron-3-ultra-550b, etc.)
+# return prose and are not usable for structured output.
+TASK_MODEL_MAP = {
+    "classify": "google/gemma-4-31b-it",
+    "facts":    "google/gemma-4-31b-it",
+    "extract":  "google/gemma-4-31b-it",
+    "write":    "google/gemma-4-31b-it",
+    "probe":    "google/gemma-4-31b-it",
+    "fill":     "google/gemma-4-31b-it",
+    "listing-split": "google/gemma-4-31b-it",
+}
 
 _log_lock = threading.Lock()
 _lane_lock = threading.Lock()
@@ -275,6 +329,95 @@ def _hermes_cli(prompt, model, provider, timeout):
 
 
 # ---------------------------------------------------------------------------
+# Lane 3.5 — NVIDIA NIM (direct, bypasses OmniRoute which has no NVIDIA)
+# ---------------------------------------------------------------------------
+
+# Token-bucket rate limiter: NVIDIA NIM free tier = 40 RPM.
+_nvidia_nim_lock = threading.Lock()
+_nvidia_nim_tokens = NVIDIA_NIM_RPM
+_nvidia_nim_last_refill = time.time()
+
+
+def _nvidia_nim_rate_limit():
+    """Wait until the 40 RPM bucket has a token. Called before each NIM request."""
+    global _nvidia_nim_tokens, _nvidia_nim_last_refill
+    interval = 60.0 / NVIDIA_NIM_RPM  # seconds per request at the limit
+    while True:
+        with _nvidia_nim_lock:
+            now = time.time()
+            elapsed = now - _nvidia_nim_last_refill
+            # Refill tokens based on elapsed time
+            new_tokens = elapsed / interval
+            if new_tokens >= 1.0:
+                _nvidia_nim_tokens = min(NVIDIA_NIM_RPM, _nvidia_nim_tokens + new_tokens)
+                _nvidia_nim_last_refill = now
+            if _nvidia_nim_tokens >= 1.0:
+                _nvidia_nim_tokens -= 1.0
+                return
+        # Not enough tokens — wait for the next slot
+        time.sleep(max(0, interval - elapsed))
+
+
+def _nvidia_nim(prompt, model, max_tokens, timeout):
+    """Call NVIDIA NIM directly with the API key from env, respecting 40 RPM."""
+    _nvidia_nim_rate_limit()
+    payload = json.dumps({
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": max_tokens,
+        "response_format": {"type": "json_object"},
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        f"{NVIDIA_NIM_URL}/chat/completions", data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {NVIDIA_NIM_API_KEY}",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = response.read().decode("utf-8", "ignore")
+    except urllib.error.HTTPError as error:
+        raise RuntimeError(f"HTTP {error.code}: {error.read().decode('utf-8', 'ignore')[:200]}")
+    data = json.loads(body)
+    if data.get("error"):
+        message = data["error"]
+        raise RuntimeError(str(message.get("message", message))[:200] if isinstance(message, dict) else str(message)[:200])
+    text = (data.get("choices") or [{}])[0].get("message", {}).get("content") or ""
+    if not text.strip():
+        raise RuntimeError("empty completion")
+    return text
+
+
+# ---------------------------------------------------------------------------
+# JSON validation helper
+# ---------------------------------------------------------------------------
+
+JSON_TASKS = frozenset({"classify", "facts", "extract", "fill", "listing-split"})
+
+
+def _try_json(text):
+    """Return text if it contains parseable JSON, else None."""
+    if not text:
+        return None
+    # Fast path: text is pure JSON
+    try:
+        json.loads(text)
+        return text
+    except (json.JSONDecodeError, ValueError):
+        pass
+    # Slow path: extract JSON object from prose
+    m = re.search(r'\{[^{}]*"[^"]*"\s*:\s*[^}]*\}', text)
+    if m:
+        try:
+            json.loads(m.group(0))
+            return m.group(0)
+        except (json.JSONDecodeError, ValueError):
+            pass
+    return None
+
+
+# ---------------------------------------------------------------------------
 # The router
 # ---------------------------------------------------------------------------
 
@@ -282,13 +425,23 @@ def complete(prompt, kind, max_tokens=1200, timeout=120, hermes_model=None, herm
     """Answer `prompt` on the cheapest lane that can. `kind` is the pipeline
     step making the call (e.g. "enrich_event") and is only used for the
     routing log. Returns "" when no lane answered — callers already treat an
-    empty answer as "no verdict"."""
+    empty answer as "no verdict".
+
+    For JSON tasks (classify, facts, extract, fill, listing-split), the result
+    must be parseable JSON. If a lane returns prose, it is rejected and the
+    next lane is tried."""
     chars = len(prompt)
+    require_json = kind in ("classify", "facts", "extract", "fill", "listing-split")
 
     def attempt(lane, model, call):
         started = time.time()
         try:
             text = call()
+            if require_json:
+                validated = _try_json(text)
+                if validated is None:
+                    raise RuntimeError(f"non-JSON from {lane}")
+                text = validated
             _record(kind, lane, model, (time.time() - started) * 1000, True, chars)
             return text
         except Exception as error:
@@ -315,6 +468,14 @@ def complete(prompt, kind, max_tokens=1200, timeout=120, hermes_model=None, herm
                    lambda: _chat(OMNIROUTE_URL, AUTO_LANE, prompt, max_tokens, timeout))
     if text is not None:
         return text
+
+    # NVIDIA NIM direct — only tried when OmniRoute lanes are all down.
+    if NVIDIA_NIM_API_KEY:
+        model = TASK_MODEL_MAP.get(kind, NVIDIA_NIM_MODEL)
+        text = attempt("nvidia/nim", model,
+                       lambda: _nvidia_nim(prompt, model, max_tokens, timeout))
+        if text is not None:
+            return text
 
     text = attempt("hermes", hermes_model or HERMES_MODEL,
                    lambda: _hermes_cli(prompt, hermes_model, hermes_provider, HERMES_TIMEOUT))
@@ -354,3 +515,58 @@ def stats(path=None):
     for lane in by_lane.values():
         lane["p50_ms"] = int(statistics.median(lane.pop("_ms") or [0]))
     return {"calls_today": calls, "by_lane": by_lane, "last_probe": last_probe}
+
+
+# ---------------------------------------------------------------------------
+# Parallel multi-model agents — different prompts to different models at once
+# ---------------------------------------------------------------------------
+
+def parallel_complete(task_type, payload, strategy="nvidia"):
+    """Run all subtask prompts in parallel, return synthesized result.
+
+    Uses llm_parallel.py to fan out the task to multiple models simultaneously,
+    each with a specialized prompt, then merges the best results.
+
+    Args:
+        task_type: "event" or "social"
+        payload: Raw event data or social content
+        strategy: "nvidia" (quality), "omni" (fast), "balanced" (mixed)
+
+    Returns:
+        dict with {success, parts, count, total} or {success: False, error}
+    """
+    try:
+        from llm_parallel import parallel_agents, synthesize
+        results = parallel_agents(task_type, payload, strategy=strategy)
+        return synthesize(results)
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+# ---------------------------------------------------------------------------
+# Factory parallel pipeline — run independent model calls simultaneously
+# ---------------------------------------------------------------------------
+
+import concurrent.futures
+
+def parallel(calls):
+    """Run multiple `complete()` calls in parallel.
+
+    Args:
+        calls: list of (prompt, kind) tuples to run simultaneously
+
+    Returns:
+        list of results (same order as input; '' if a call failed)
+    """
+    results = [""] * len(calls)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(calls)) as pool:
+        future_to_idx = {
+            pool.submit(complete, p, k): i for i, (p, k) in enumerate(calls)
+        }
+        for future in concurrent.futures.as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            try:
+                results[idx] = future.result(timeout=120)
+            except Exception:
+                results[idx] = ""
+    return results
