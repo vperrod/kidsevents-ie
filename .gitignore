@@ -48,3 +48,9 @@ media_index.json
 .DS_Store
 Thumbs.db
 .output.lock
+
+# Editor/agent backups, one-shot patch scripts, parallel-routing log
+*.bak-*
+*.fat-slices-*
+patch_wandertold.py
+routing_parallel.jsonl
